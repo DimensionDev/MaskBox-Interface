@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import styles from './app.module.less';
+
+const logo = new URL('./logo.svg', import.meta.url).toString();
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className={styles.app}>
+      <header className={styles.appHeader}>
+        <img src={logo} className={styles.appLogo} alt="logo" />
         <p>Hello Vite + React!</p>
         <p>
           <button type="button" onClick={() => setCount((count) => count + 1)}>
@@ -20,7 +22,7 @@ function App() {
         </p>
         <p>
           <a
-            className="App-link"
+            className={styles.appLink}
             href="https://reactjs.org"
             target="_blank"
             rel="noopener noreferrer"
@@ -29,7 +31,7 @@ function App() {
           </a>
           {' | '}
           <a
-            className="App-link"
+            className={styles.appLink}
             href="https://vitejs.dev/guide/features.html"
             target="_blank"
             rel="noopener noreferrer"
