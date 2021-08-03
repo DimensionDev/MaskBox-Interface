@@ -7,7 +7,8 @@
     "serve": "vite preview",
     "eslint": "eslint \"src/**/*.{ts,tsx}\"",
     "prettier": "prettier \"src/**/*.{css,less,ts,tsx}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "gen:assets": "node ./scripts/gen-assets.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
+import { logoImage } from '@/assets';
 
 import styles from './app.module.less';
-
-const logo = new URL('./logo.svg', import.meta.url).toString();
 
 function App() {
   const [count, setCount] = useState(0);
@@ -10,7 +9,7 @@ function App() {
   return (
     <div className={styles.app}>
       <header className={styles.appHeader}>
-        <img src={logo} className={styles.appLogo} alt="logo" />
+        <img src={logoImage} className={styles.appLogo} alt="logo" />
         <p>Hello Vite + React!</p>
         <p>
           <button type="button" onClick={() => setCount((count) => count + 1)}>
