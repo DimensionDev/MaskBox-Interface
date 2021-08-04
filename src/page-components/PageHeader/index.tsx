@@ -1,4 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
+import { Link } from 'react-router-dom';
 import { logoImage } from '@/assets';
 import { NeonButton } from '@/components';
 import classnames from 'classnames';
@@ -11,17 +12,17 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
       <div className={styles.brand}>
-        <a className={styles.logo} href="/" title="NFTBOX">
+        <Link to="/" className={styles.logo} title="NFTBOX">
           <img src={logoImage} height="36" width="36" alt="NFTBOX" />
-        </a>
+        </Link>
       </div>
       <nav className={styles.nav}>
-        <a className={styles.navItem} href="/#Market">
+        <Link className={styles.navItem} to="/market">
           Market
-        </a>
-        <a className={styles.navItem} href="/#faqs">
+        </Link>
+        <Link className={styles.navItem} to="/faqs">
           FAQS
-        </a>
+        </Link>
       </nav>
       <div className={styles.operations}>
         <NeonButton>Connect Wallet</NeonButton>
