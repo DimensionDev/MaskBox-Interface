@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
-import styles from './index.module.less';
+import { MysteryBox } from '@/page-components';
 
 export const Home: FC = () => {
   return (
-    <div>
-      <h1>home</h1>
-    </div>
+    <>
+      <MysteryBox value="200 usdt" />
+    </>
   );
 };

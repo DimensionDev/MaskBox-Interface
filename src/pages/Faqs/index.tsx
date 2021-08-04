@@ -4,7 +4,7 @@ import styles from './index.module.less';
 export const Faqs: FC = () => {
   return (
     <div>
-      <h1>home</h1>
+      <h1>faqs</h1>
     </div>
   );
 };

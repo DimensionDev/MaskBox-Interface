@@ -1,0 +1,56 @@
+.container {
+  height: 908px;
+  background-image: url(bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .boxGroup {
+    width: 800px;
+    height: 400px;
+  }
+}
+.boxGroup {
+  position: relative;
+  .comp {
+    position: absolute;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+  .box {
+    width: 804px;
+    height: 753px;
+    left: 181px;
+    top: -50px;
+    background-image: url(./open-box.png);
+  }
+  .lisa {
+    height: 353px;
+    width: 340px;
+    left: 10px;
+    top: 20px;
+    background-image: url(./lisa.png);
+  }
+  .sunflower {
+    height: 318px;
+    width: 276px;
+    right: 16px;
+    top: 20px;
+    background-image: url(./sunflower.png);
+  }
+}
+.buttonGroup {
+  margin-top: 50px;
+  text-align: center;
+  .value {
+    font-size: 20px;
+    line-height: 26px;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  .button {
+    margin-top: 20px;
+  }
+}
