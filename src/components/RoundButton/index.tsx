@@ -1,9 +1,10 @@
 import classnames from 'classnames';
-import React, { ButtonHTMLAttributes, FC } from 'react';
+import React, { FC } from 'react';
+import { BaseButton, ButtonProps } from '../BaseButton';
 import styles from './index.module.less';
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {}
+interface Props extends ButtonProps {}
 
 export const RoundButton: FC<Props> = ({ className, ...rest }) => {
-  return <button className={classnames(styles.roundButton, className)} {...rest} />;
+  return <BaseButton className={classnames(styles.roundButton, className)} {...rest} />;
 };
