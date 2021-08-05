@@ -1,37 +1,19 @@
-import React, { FC } from 'react';
 import { ArticleSection, NewsletterBox, NFTList } from '@/components';
-import { MysteryBox } from '@/page-components';
-
+import { mockNfts } from '@/data';
+import { BuyBox, MysteryBox, ShareBox } from '@/page-components';
+import React, { FC, useState } from 'react';
 import styles from './index.module.less';
 
-const nfts = [
-  {
-    id: '1',
-    imageUrl: 'https://picsum.photos/400/300',
-    name: '1559 Supporter 718/1559',
-    probability: '1%',
-  },
-  {
-    id: '2',
-    imageUrl: 'https://picsum.photos/400/300',
-    name: '1559 Supporter 718/1559',
-    probability: '1%',
-  },
-  {
-    id: '3',
-    imageUrl: 'https://picsum.photos/400/300',
-    name: '1559 Supporter 718/1559',
-    probability: '1%',
-  },
-];
-
 export const Home: FC = () => {
+  const [buyBoxOpen, setBuyBoxOpen] = useState(false);
+  const [shareBoxOpen, setShareBoxOpen] = useState(false);
+
   return (
     <>
-      <MysteryBox value="200 usdt" />
+      <MysteryBox value="200 usdt" onOpen={() => setBuyBoxOpen(true)} />
       <div className={styles.main}>
         <ArticleSection title="Series Content">
-          <NFTList list={nfts}></NFTList>
+          <NFTList list={mockNfts} />
         </ArticleSection>
         <ArticleSection title="Rule Introduction">
           Life is full of surprises in all forms of vibrant and luscious splendours. This year My
@@ -72,6 +54,12 @@ export const Home: FC = () => {
         </ArticleSection>
         <NewsletterBox />
       </div>
+      <BuyBox
+        open={buyBoxOpen}
+        onClose={() => setBuyBoxOpen(false)}
+        onShare={() => setShareBoxOpen(true)}
+      />
+      <ShareBox open={shareBoxOpen} onClose={() => setShareBoxOpen(false)} />
     </>
   );
 };

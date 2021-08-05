@@ -1,4 +1,5 @@
 export * from './BaseButton';
+export * from './Dialog';
 export * from './RoundButton';
 export * from './NeonButton';
 export * from './ThickButton';
