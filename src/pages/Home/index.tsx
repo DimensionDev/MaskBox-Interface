@@ -13,7 +13,7 @@ export const Home: FC = () => {
       <MysteryBox value="200 usdt" onOpen={() => setBuyBoxOpen(true)} />
       <div className={styles.main}>
         <ArticleSection title="Series Content">
-          <NFTList list={mockNfts} />
+          <NFTList nfts={mockNfts} />
         </ArticleSection>
         <ArticleSection title="Rule Introduction">
           Life is full of surprises in all forms of vibrant and luscious splendours. This year My

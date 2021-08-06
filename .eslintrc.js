@@ -40,6 +40,7 @@ module.exports = {
   },
   rules: {
     'react/prop-types': 0,
+    'react/display-name': 0,
     '@typescript-eslint/no-empty-interface': 0,
     '@typescript-eslint/explicit-module-boundary-types': 0,
   },

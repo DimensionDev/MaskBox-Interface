@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import classnames from 'classnames';
+import React, { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
 interface NFT {
@@ -27,14 +28,14 @@ export const NFTItem: FC<Props> = ({ name, imageUrl, probability }) => {
   );
 };
 
-interface NFTListProps {
-  list: NFT[];
+interface NFTListProps extends HTMLProps<HTMLUListElement> {
+  nfts: NFT[];
 }
 
-export const NFTList: FC<NFTListProps> = ({ list }) => {
+export const NFTList: FC<NFTListProps> = ({ nfts, className, ...rest }) => {
   return (
-    <ul className={styles.nftList}>
-      {list.map((nft) => (
+    <ul className={classnames(styles.nftList, className)} {...rest}>
+      {nfts.map((nft) => (
         <li key={nft.id} className={styles.nftItem}>
           <NFTItem {...nft} />
         </li>

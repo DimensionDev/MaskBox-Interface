@@ -8,7 +8,8 @@
     "eslint": "eslint \"src/**/*.{ts,tsx}\"",
     "prettier": "prettier \"src/**/*.{css,less,ts,tsx}\"",
     "typecheck": "tsc --noEmit",
-    "gen:assets": "node ./scripts/gen-assets.js"
+    "gen:assets": "node ./scripts/generate-assets.js",
+    "gen:icons": "node ./scripts/generate-icons.js"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
@@ -25,6 +26,7 @@
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@types/prettier": "^2.3.2",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.8",

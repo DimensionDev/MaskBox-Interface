@@ -15,10 +15,7 @@ const generateCode = (fileNames) => {
     return exp;
   });
 
-  return `/* eslint-disable */
-    /* 此文件由 scripts/gen-assets.js 自动生成 */
-    ${lines.join(',\n')}
-    `;
+  return lines.join('\n\n');
 };
 
 const codeFile = path.resolve(BASE_DIR, 'index.ts');

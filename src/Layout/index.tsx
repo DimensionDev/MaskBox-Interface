@@ -7,7 +7,7 @@ export const Layout: FC = ({ children }) => {
   return (
     <div className={styles.container}>
       <PageHeader className={styles.header} />
-      <main className={styles.main}>{children}</main>
+      <div className={styles.body}>{children}</div>
       <PageFooter className={styles.footer} />
     </div>
   );
