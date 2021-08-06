@@ -1,0 +1,52 @@
+.overlay {
+  background: rgba(15, 15, 15, 0.5);
+  backdrop-filter: blur(20px);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px;
+  .title {
+    font-size: 40px;
+    line-height: 48px;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    color: #fcfcfd;
+  }
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    width: 360px;
+    height: 6px;
+    background: #fcfcfd;
+  }
+  &::before {
+    left: 0;
+    transform: translateX(-100%);
+  }
+  &::after {
+    right: 0;
+    transform: translateX(100%);
+  }
+  .countdown {
+    margin-top: 46px;
+  }
+}
