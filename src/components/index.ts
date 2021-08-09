@@ -7,5 +7,6 @@ export * from './Icon';
 export * from './NeonButton';
 export * from './NewsletterBox';
 export * from './NFTItem';
+export * from './Overlay';
 export * from './RoundButton';
 export * from './ThickButton';
