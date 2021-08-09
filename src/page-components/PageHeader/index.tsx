@@ -1,5 +1,5 @@
 import React, { FC, HTMLProps } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { logoImage } from '@/assets';
 import { Icon, NeonButton } from '@/components';
 import classnames from 'classnames';
@@ -17,12 +17,12 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         </Link>
       </div>
       <nav className={styles.nav}>
-        <Link className={styles.navItem} to="/market">
+        <NavLink className={styles.navItem} activeClassName={styles.activeNav} to="/market">
           Market
-        </Link>
-        <Link className={styles.navItem} to="/faqs">
+        </NavLink>
+        <NavLink className={styles.navItem} activeClassName={styles.activeNav} to="/faqs">
           FAQS
-        </Link>
+        </NavLink>
       </nav>
       <div className={styles.operations}>
         <NeonButton className={styles.button}>Connect Wallet</NeonButton>
