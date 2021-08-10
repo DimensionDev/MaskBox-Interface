@@ -4,3 +4,12 @@
   background-position: center;
   flex-shrink: 0;
 }
+.spinning {
+  animation: spinning 2s infinite linear;
+}
+
+@keyframes spinning {
+  to {
+    transform: rotate(360deg);
+  }
+}

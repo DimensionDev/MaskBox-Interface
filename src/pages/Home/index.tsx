@@ -1,6 +1,6 @@
 import { ArticleSection, NewsletterBox, NFTList } from '@/components';
 import { mockNfts } from '@/data';
-import { BuyBox, MysteryBox, StatusOverlay, ShareBox } from '@/page-components';
+import { BuyBox, MysteryBox, ShareBox, StatusOverlay } from '@/page-components';
 import React, { FC, useState } from 'react';
 import styles from './index.module.less';
 

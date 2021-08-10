@@ -14,15 +14,20 @@ const getIcon = (name: IconType) => {
 };
 
 export const Icon: FC<IconProps> = memo(({ type, size, className, style, ...rest }) => {
+  const iconSize = size ?? 24;
   const iconStyle = useMemo(
     () => ({
-      height: `${size}px`,
-      width: `${size}px`,
+      height: `${iconSize}px`,
+      width: `${iconSize}px`,
       backgroundImage: `url(${getIcon(type)})`,
-      backgroundSize: `${size}px`,
+      backgroundSize: `${iconSize}px`,
       ...style,
     }),
-    [size, type],
+    [iconSize, type],
   );
   return <span {...rest} className={classnames(styles.icon, className)} style={iconStyle} />;
 });
+
+export const LoadingIcon: FC = () => {
+  return <Icon type="loading" size={24} className={styles.spinning} />;
+};

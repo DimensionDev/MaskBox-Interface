@@ -10,3 +10,4 @@ export * from './NFTItem';
 export * from './Overlay';
 export * from './RoundButton';
 export * from './ThickButton';
+export * from './Toast';
