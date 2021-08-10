@@ -1,0 +1,32 @@
+diff --git a/node_modules/safe-event-emitter/index.js b/node_modules/safe-event-emitter/index.js
+index 48e4cb0..9ade25c 100644
+--- a/node_modules/safe-event-emitter/index.js
++++ b/node_modules/safe-event-emitter/index.js
+@@ -1,6 +1,17 @@
+-const util = require('util')
+ const EventEmitter = require('events/')
+ 
++const inherits = function(ctor, superCtor) {
++  ctor.super_ = superCtor;
++  ctor.prototype = Object.create(superCtor.prototype, {
++    constructor: {
++      value: ctor,
++      enumerable: false,
++      writable: true,
++      configurable: true
++    }
++  });
++};
++
+ var R = typeof Reflect === 'object' ? Reflect : null
+ var ReflectApply = R && typeof R.apply === 'function'
+   ? R.apply
+@@ -15,7 +26,7 @@ function SafeEventEmitter() {
+   EventEmitter.call(this)
+ }
+ 
+-util.inherits(SafeEventEmitter, EventEmitter)
++inherits(SafeEventEmitter, EventEmitter)
+ 
+ SafeEventEmitter.prototype.emit = function (type) {
+   // copied from https://github.com/Gozala/events/blob/master/events.js

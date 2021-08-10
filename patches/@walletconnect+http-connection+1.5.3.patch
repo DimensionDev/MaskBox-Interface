@@ -1,0 +1,13 @@
+diff --git a/node_modules/@walletconnect/http-connection/dist/esm/index.js b/node_modules/@walletconnect/http-connection/dist/esm/index.js
+index 0ca9a31..fac02d7 100644
+--- a/node_modules/@walletconnect/http-connection/dist/esm/index.js
++++ b/node_modules/@walletconnect/http-connection/dist/esm/index.js
+@@ -1,7 +1,5 @@
+ import EventEmitter from "eventemitter3";
+-import { XMLHttpRequest } from "xhr2-cookies";
+-import { getFromWindow } from "@walletconnect/utils";
+-const XHR = getFromWindow("XMLHttpRequest") || XMLHttpRequest;
++const XHR =  XMLHttpRequest;
+ class HTTPConnection extends EventEmitter {
+     constructor(url) {
+         super();

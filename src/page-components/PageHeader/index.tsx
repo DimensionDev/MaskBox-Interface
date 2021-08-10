@@ -1,5 +1,8 @@
 import { logoImage } from '@/assets';
 import { Icon, NeonButton } from '@/components';
+import { useWeb3Context } from '@/contexts';
+import { getNetworkName } from '@/lib';
+import { formatAddres } from '@/utils';
 import classnames from 'classnames';
 import React, { FC, HTMLProps } from 'react';
 import { Link, NavLink } from 'react-router-dom';
@@ -8,6 +11,7 @@ import styles from './index.module.less';
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
+  const { account, providerChainId, connectWeb3 } = useWeb3Context();
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
       <div className={styles.brand}>
@@ -23,12 +27,23 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           FAQS
         </NavLink>
       </nav>
-      <div className={styles.operations}>
-        <NeonButton className={styles.button}>Connect Wallet</NeonButton>
-        <Link className={styles.button} to="/profile">
-          <Icon type="lisa" size={36} />
-        </Link>
-      </div>
+      {account ? (
+        <div className={styles.operations}>
+          <NeonButton className={styles.button}>{getNetworkName(providerChainId!)}</NeonButton>
+          <NeonButton className={styles.button} title={account}>
+            {formatAddres(account)}
+          </NeonButton>
+          <Link className={styles.button} to="/profile">
+            <Icon type="lisa" size={36} />
+          </Link>
+        </div>
+      ) : (
+        <div className={styles.operations}>
+          <NeonButton className={styles.button} onClick={connectWeb3}>
+            Connect Wallet
+          </NeonButton>
+        </div>
+      )}
     </div>
   );
 };
