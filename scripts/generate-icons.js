@@ -7,16 +7,23 @@ const EXTNAMES = ['.svg', '.png'];
 
 const generateCode = (fileNames) => {
   const nameMap = {};
+  const lines = [];
   const names = fileNames.map((fileName) => {
     const name = path.parse(fileName).name;
     nameMap[name] = fileName;
+    lines.push(`const ${name} = new URL("./icons/${fileName}", import.meta.url).href`);
     return name;
   });
 
-  return `export type IconType = ${names.map((n) => JSON.stringify(n)).join(' | ')}
+  const declareType = `export type IconType = ${names.map((n) => JSON.stringify(n)).join(' | ')}`;
+  const map = `export const iconNameMap = ${JSON.stringify(nameMap)}`;
+  const defaultExport = `const icons = {${names.join(',')}}\nexport default icons`;
 
-  export const iconNameMap = ${JSON.stringify(nameMap)}
-  `;
+  return `
+  ${declareType}
+  ${map}
+  ${lines.join('\n')}
+  ${defaultExport}`;
 };
 
 const codeFile = path.resolve(BASE_DIR, 'icon-data.ts');

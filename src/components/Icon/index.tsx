@@ -1,6 +1,6 @@
 import React, { FC, memo, useMemo } from 'react';
 import classnames from 'classnames';
-import { IconType, iconNameMap } from './icon-data';
+import icons, { IconType, iconNameMap } from './icon-data';
 
 import styles from './index.module.less';
 
@@ -19,7 +19,7 @@ export const Icon: FC<IconProps> = memo(({ type, size, className, style, ...rest
     () => ({
       height: `${iconSize}px`,
       width: `${iconSize}px`,
-      backgroundImage: `url(${getIcon(type)})`,
+      backgroundImage: `url(${icons[type]})`,
       backgroundSize: `${iconSize}px`,
       ...style,
     }),
