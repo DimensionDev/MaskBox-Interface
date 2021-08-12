@@ -1,2 +1,2 @@
 export * from './chainUrls';
-export * from './networkNames';
+export * from './networks';

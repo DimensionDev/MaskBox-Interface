@@ -11,13 +11,16 @@ const generateCode = (fileNames) => {
   const names = fileNames.map((fileName) => {
     const name = path.parse(fileName).name;
     nameMap[name] = fileName;
-    lines.push(`const ${name} = new URL("./icons/${fileName}", import.meta.url).href`);
+    lines.push(`export const ${name}Icon = new URL("./icons/${fileName}", import.meta.url).href`);
     return name;
   });
 
   const declareType = `export type IconType = ${names.map((n) => JSON.stringify(n)).join(' | ')}`;
   const map = `export const iconNameMap = ${JSON.stringify(nameMap)}`;
-  const defaultExport = `const icons = {${names.join(',')}}\nexport default icons`;
+  const defaultExport = `const icons = {
+    ${names.map((name) => `${name}:${name}Icon`).join(',')}
+  }
+  export default icons`;
 
   return `
   ${declareType}
