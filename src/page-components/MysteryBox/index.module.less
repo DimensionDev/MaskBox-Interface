@@ -7,6 +7,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-top: 150px;
   .boxGroup {
     width: 800px;
     height: 400px;
@@ -25,6 +26,21 @@
     left: 181px;
     top: -50px;
     background-image: url(./open-box.png);
+  }
+  .painting {
+    width: 313px;
+    height: 377px;
+    background-image: url(./painting.png);
+    background-position: left top;
+    background-size: 277px;
+    left: 260px;
+    bottom: 293px;
+    height: 139.5px;
+    &.open {
+      height: 377px;
+      bottom: 40px;
+      animation: openBox 2s ease;
+    }
   }
   .lisa {
     height: 353px;
@@ -51,6 +67,22 @@
     font-weight: bold;
   }
   .button {
+    justify-content: center;
     margin-top: 20px;
+  }
+}
+
+@keyframes openBox {
+  0% {
+    height: 139px;
+    bottom: 293px;
+  }
+  50% {
+    height: 377px;
+    bottom: 293px;
+  }
+  100% {
+    height: 377px;
+    bottom: 40px;
   }
 }
