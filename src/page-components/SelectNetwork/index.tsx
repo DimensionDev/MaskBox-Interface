@@ -1,6 +1,6 @@
 import { Dialog, DialogProps } from '@/components';
 import { useWeb3Context } from '@/contexts';
-import { networks } from '@/lib';
+import { getNetworkName, networks } from '@/lib';
 import classnames from 'classnames';
 import React, { FC } from 'react';
 import styles from './index.module.less';
@@ -28,7 +28,7 @@ export const SelectNetwork: FC<Props> = (props) => {
       className={classnames(props.className, styles.selectNetwork)}
       title="Select a Network"
     >
-      <p className={styles.note}>Select a Network</p>
+      <p className={styles.note}>You are currently on the {getNetworkName(providerChainId!)}</p>
       <ul className={styles.networks}>
         {networks.map((network) => {
           return (
