@@ -11,7 +11,7 @@ export const Home: FC = () => {
 
   return (
     <>
-      <MysteryBox value="200 usdt" onOpen={() => setBuyBoxOpen(true)} />
+      <MysteryBox value="200 USDT" onOpen={() => setBuyBoxOpen(true)} />
       <div className={styles.main}>
         <ArticleSection title="Series Content">
           <NFTList nfts={mockNfts} />

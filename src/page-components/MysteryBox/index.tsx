@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { LoadingIcon, ThickButton } from '@/components';
+import { useWeb3Context } from '@/contexts';
 import classnames from 'classnames';
-import { ThickButton } from '@/components';
-
+import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 
 interface Props {
@@ -10,17 +10,20 @@ interface Props {
 }
 
 export const MysteryBox: FC<Props> = ({ value, onOpen }) => {
+  const [opened, setOpened] = useState(false);
   const [open, setOpen] = useState(false);
   const paintingRef = useRef<HTMLDivElement>(null);
+  const { account, connectWeb3 } = useWeb3Context();
 
   useEffect(() => {
     if (!paintingRef.current) {
       return;
     }
     const animationendFn = () => {
+      setOpened(true);
       setTimeout(() => {
         onOpen?.();
-      }, 150);
+      }, 200);
     };
     paintingRef.current?.addEventListener('animationend', animationendFn);
     return () => {
@@ -36,13 +39,25 @@ export const MysteryBox: FC<Props> = ({ value, onOpen }) => {
         <div
           ref={paintingRef}
           className={classnames(styles.comp, styles.painting, open ? styles.open : null)}
-        />
+        >
+          {opened && (
+            <div className={styles.spinner}>
+              <LoadingIcon size={30} />
+            </div>
+          )}
+        </div>
       </div>
       <div className={styles.buttonGroup}>
         <p className={styles.value}>{value}</p>
-        <ThickButton className={styles.button} onClick={() => setOpen(true)}>
-          Open Red Packet
-        </ThickButton>
+        {account ? (
+          <ThickButton className={styles.button} onClick={() => setOpen(true)}>
+            Open Mystery Boxes
+          </ThickButton>
+        ) : (
+          <ThickButton className={styles.button} onClick={connectWeb3}>
+            Connect Wallet
+          </ThickButton>
+        )}
       </div>
     </div>
   );

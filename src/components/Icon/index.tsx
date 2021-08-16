@@ -25,8 +25,15 @@ export const Icon: FC<IconProps> = memo(({ type, iconUrl, size, className, style
   return <span {...rest} className={classnames(styles.icon, className)} style={iconStyle} />;
 });
 
-export const LoadingIcon: FC = () => {
-  return <Icon type="loading" size={24} className={styles.spinning} />;
+export const LoadingIcon: FC<Omit<IconProps, 'type'>> = (props) => {
+  return (
+    <Icon
+      size={24}
+      className={classnames(props.className, styles.spinning)}
+      {...props}
+      type="loading"
+    />
+  );
 };
 
 export type { IconType };

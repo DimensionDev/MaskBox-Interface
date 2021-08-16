@@ -26,7 +26,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           Market
         </NavLink>
         <NavLink className={styles.navItem} activeClassName={styles.activeNav} to="/faqs">
-          FAQS
+          FAQs
         </NavLink>
       </nav>
       {account ? (

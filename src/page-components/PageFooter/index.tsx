@@ -1,5 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import classnames from 'classnames';
+import { NavLink } from 'react-router-dom';
 
 import styles from './index.module.less';
 
@@ -19,7 +20,7 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
           <a href="#">Telegram</a>
         </li>
         <li className={styles.link}>
-          <a href="#">FAQS</a>
+          <NavLink to="/faqs">FAQs</NavLink>
         </li>
         <li className={styles.link}>
           <a href="#">GitHub</a>
