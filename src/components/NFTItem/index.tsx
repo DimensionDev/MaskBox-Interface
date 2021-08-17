@@ -1,17 +1,16 @@
+import { CollectionInfo, NFTInfo } from '@/contracts';
 import classnames from 'classnames';
 import React, { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
-interface NFT {
-  id: string;
+export interface NFTItemProps extends NFTInfo {
   name: string;
-  imageUrl: string;
-  probability: string;
+  imageUrl?: string;
 }
 
-interface Props extends NFT {}
+const imagePlaceholder = 'https://picsum.photos/400/300';
 
-export const NFTItem: FC<Props> = ({ name, imageUrl, probability }) => {
+export const NFTItem: FC<NFTItemProps> = ({ name, percentage, imageUrl = imagePlaceholder }) => {
   return (
     <div className={styles.nft}>
       <div className={styles.image}>
@@ -21,23 +20,27 @@ export const NFTItem: FC<Props> = ({ name, imageUrl, probability }) => {
         <h3 className={styles.name}>{name}</h3>
         <p className={styles.meta}>
           <span className={styles.metaName}>Probability</span>
-          <span className={styles.metaValue}>{probability}</span>
+          <span className={styles.metaValue}>{percentage ?? '-'}%</span>
         </p>
       </div>
     </div>
   );
 };
 
-interface NFTListProps extends HTMLProps<HTMLUListElement> {
-  nfts: NFT[];
+interface CollectionProps extends HTMLProps<HTMLUListElement> {
+  collection?: CollectionInfo;
 }
 
-export const NFTList: FC<NFTListProps> = ({ nfts, className, ...rest }) => {
+export const Collection: FC<CollectionProps> = ({ collection, className, ...rest }) => {
+  if (!collection) return null;
+
+  const { _name: name, _nft_list: nfts = [] } = collection;
+
   return (
     <ul className={classnames(styles.nftList, className)} {...rest}>
       {nfts.map((nft) => (
-        <li key={nft.id} className={styles.nftItem}>
-          <NFTItem {...nft} />
+        <li key={nft.latest_nft_id?._hex} className={styles.nftItem}>
+          <NFTItem {...nft} name={name} />
         </li>
       ))}
     </ul>

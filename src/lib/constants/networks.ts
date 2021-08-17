@@ -23,6 +23,7 @@ type Network = {
 
 export const networkIcons: Record<number, string> = {
   1: ethereumIcon,
+  4: ethereumIcon,
   56: binanceIcon,
   137: polygonIcon,
 };

@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { avatarImage } from '@/assets';
 import styles from './index.module.less';
-import { ArticleSection, Empty, NeonButton, NFTList } from '@/components';
+import { ArticleSection, Empty, NeonButton, Collection } from '@/components';
 import { myNfts } from '@/data';
 
 export const Profile: FC = () => {
@@ -18,7 +18,15 @@ export const Profile: FC = () => {
               <Empty description="Opps, There’s Nothing left here" />
             </div>
           ) : (
-            <NFTList className={styles.nftList} nfts={myNfts}></NFTList>
+            <Collection
+              className={styles.nftList}
+              /* eslint-disable-next-line */
+              // @ts-ignore
+              collection={{
+                _name: 'Mirror Editions',
+                _nft_list: myNfts,
+              }}
+            />
           )}
         </ArticleSection>
         {!randomEmpty && (

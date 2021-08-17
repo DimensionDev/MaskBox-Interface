@@ -38,7 +38,7 @@ export function useCountdown(end: number): Remains & { finished: boolean } {
   const [finished, setFinished] = useState(false);
   const endDate = useMemo(() => new Date(end), [end]);
   useEffect(() => {
-    let timer: number;
+    let timer: ReturnType<typeof setTimeout>;
     const tick = (): void => {
       if (Date.now() >= end) {
         setFinished(true);

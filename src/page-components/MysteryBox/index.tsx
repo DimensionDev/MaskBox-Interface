@@ -25,9 +25,10 @@ export const MysteryBox: FC<Props> = ({ value, onOpen }) => {
         onOpen?.();
       }, 200);
     };
-    paintingRef.current?.addEventListener('animationend', animationendFn);
+    const paintingEle = paintingRef.current;
+    paintingEle.addEventListener('animationend', animationendFn);
     return () => {
-      paintingRef.current?.removeEventListener('animationend', animationendFn);
+      paintingEle.removeEventListener('animationend', animationendFn);
     };
   }, [paintingRef.current, onOpen]);
   return (

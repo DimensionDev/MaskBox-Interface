@@ -1,20 +1,34 @@
-import { ArticleSection, NewsletterBox, NFTList } from '@/components';
-import { mockNfts } from '@/data';
+import { ArticleSection, Collection, Empty, NewsletterBox } from '@/components';
+import { useMBoxContract } from '@/contexts';
+import { CollectionInfo } from '@/contracts';
+import { DEFAULT_COLLECTION_ID } from '@/lib';
 import { BuyBox, MysteryBox, ShareBox, StatusOverlay } from '@/page-components';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styles from './index.module.less';
 
 export const Home: FC = () => {
   const [buyBoxOpen, setBuyBoxOpen] = useState(false);
   const [shareBoxOpen, setShareBoxOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const { getCollectionInfo } = useMBoxContract();
+  const [info, setInfo] = useState<CollectionInfo>();
+
+  useEffect(() => {
+    getCollectionInfo(DEFAULT_COLLECTION_ID).then((cinfo) => {
+      if (cinfo) setInfo(cinfo);
+    });
+  }, [getCollectionInfo]);
 
   return (
     <>
       <MysteryBox value="200 USDT" onOpen={() => setBuyBoxOpen(true)} />
       <div className={styles.main}>
         <ArticleSection title="Series Content">
-          <NFTList nfts={mockNfts} />
+          {info?._nft_list.length ? (
+            <Collection collection={info} />
+          ) : (
+            <Empty description="No NFTs yet" />
+          )}
         </ArticleSection>
         <ArticleSection title="Rule Introduction">
           Life is full of surprises in all forms of vibrant and luscious splendours. This year My
