@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { PageHeader, PageFooter } from '@/page-components';
 
 import styles from './index.module.less';
 
-export const Layout: FC = ({ children }) => {
+export const Layout: FC = memo(({ children }) => {
   return (
     <div className={styles.container}>
       <PageHeader className={styles.header} />
@@ -11,4 +11,4 @@ export const Layout: FC = ({ children }) => {
       <PageFooter className={styles.footer} />
     </div>
   );
-};
+});

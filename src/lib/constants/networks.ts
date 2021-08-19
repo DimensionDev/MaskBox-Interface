@@ -35,3 +35,10 @@ export const networks: Network[] = ([1, 56, 137] as const).map((chainId) => {
     iconUrl: networkIcons[chainId],
   };
 });
+
+export const networkExplorers: Record<number, string> = {
+  1: 'https://etherscan.io/tx/',
+  4: 'https://rinkeby.etherscan.io/tx/',
+  56: 'https://bscscan.com/tx/',
+  137: 'https://polygonscan.com/tx/',
+};
