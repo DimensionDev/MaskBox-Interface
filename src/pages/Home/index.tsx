@@ -1,14 +1,39 @@
 import { ArticleSection, Collection, Empty, NewsletterBox } from '@/components';
 import { useMBoxContract } from '@/contexts';
 import { BuyBox, MysteryBox, ShareBox, StatusOverlay } from '@/page-components';
-import React, { FC, memo, useState } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import styles from './index.module.less';
 
 export const Home: FC = memo(() => {
-  const [buyBoxOpen, setBuyBoxOpen] = useState(false);
   const [shareBoxOpen, setShareBoxOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const { collectionInfo: info, collectionPrice: price } = useMBoxContract();
+
+  console.log('info', info);
+  const startTime = info?._start_time ? info._start_time * 1000 : 0;
+  const endTime = info?._end_time ? info._end_time * 1000 : 0;
+
+  const [buyBoxOpen, setBuyBoxOpen] = useState(() => {
+    console.log('startTime', startTime, 'endTime', endTime);
+    if (!startTime || !endTime) {
+      return false;
+    }
+    const now = Date.now();
+    return now > startTime && now < endTime;
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setBuyBoxOpen(() => {
+        if (!startTime || !endTime) {
+          return false;
+        }
+        const now = Date.now();
+        return now > startTime && now < endTime;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [startTime, endTime]);
 
   console.log('info', info, price);
   return (
@@ -23,12 +48,12 @@ export const Home: FC = memo(() => {
           )}
         </ArticleSection>
         <ArticleSection title="Rule Introduction">
-          Life is full of surprises in all forms of vibrant and luscious splendours. This year My
+          `Life is full of surprises in all forms of vibrant and luscious splendours. This year My
           Neighbour Alice brings an NFT festival referencing the real-world Midsummer celebrations
           during the summer solstice in Scandinavia. This Special Mystery Basket is hand-picked by
           Alice for you and your loved ones to celebrate the hottest season of the year - Midsummer.
           The Midsummer with Alice is a time of merriment and festivities. Festival bonfires are lit
-          around all of Alice's farms and villages to celebrate this special occasion.
+          around all of Alice's farms and villages to celebrate this special occasion.`
         </ArticleSection>
         <ArticleSection title="Product Description">
           In the Midsummer with Alice NFT festival, there will be 40.000 Mystery Baskets on sale,
@@ -67,7 +92,9 @@ export const Home: FC = memo(() => {
         onShare={() => setShareBoxOpen(true)}
       />
       <ShareBox open={shareBoxOpen} onClose={() => setShareBoxOpen(false)} />
-      {dismissed ? null : <StatusOverlay onClick={() => setDismissed(true)} />}
+      {dismissed ? null : (
+        <StatusOverlay start={startTime} end={endTime} onClick={() => setDismissed(true)} />
+      )}
     </>
   );
 });

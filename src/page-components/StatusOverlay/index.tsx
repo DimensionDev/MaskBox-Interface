@@ -1,17 +1,21 @@
 import { Countdown, Overlay } from '@/components';
 import classnames from 'classnames';
-import React, { FC, HTMLProps, useMemo } from 'react';
+import React, { FC, HTMLProps, useState } from 'react';
 import styles from './index.module.less';
 
-const end = new Date(2021, 8, 3).getTime();
+interface Props extends HTMLProps<HTMLDivElement> {
+  start: number;
+  end: number;
+}
 
-interface Props extends HTMLProps<HTMLDivElement> {}
+export const StatusOverlay: FC<Props> = ({ start, end, ...props }) => {
+  const [isEnded, setIsEnded] = useState(end > Date.now());
 
-export const StatusOverlay: FC<Props> = (props) => {
-  const randomEnd = useMemo(() => Math.random() > 0.5, []);
+  if (!start || !end) return null;
+
   return (
     <Overlay {...props} className={classnames(styles.container, props.className)}>
-      {randomEnd ? (
+      {isEnded ? (
         <div className={styles.box}>
           <h2 className={styles.title}>Ended</h2>
         </div>
@@ -19,7 +23,7 @@ export const StatusOverlay: FC<Props> = (props) => {
         <div className={styles.box}>
           <h2 className={styles.title}>Seascape Zombie Fighter Mystery Box</h2>
           <p className={styles.subtitle}>start sale in</p>
-          <Countdown className={styles.countdown} end={end} />
+          <Countdown className={styles.countdown} end={start} onEnded={() => setIsEnded(true)} />
         </div>
       )}
     </Overlay>

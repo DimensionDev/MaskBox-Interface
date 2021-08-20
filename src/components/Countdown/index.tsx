@@ -5,12 +5,13 @@ import classnames from 'classnames';
 
 import styles from './index.module.less';
 
-interface Props extends HTMLProps<HTMLDivElement> {
+interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onEnded'> {
   end: number;
+  onEnded?: () => void;
 }
 
-export const Countdown: FC<Props> = ({ end, className, ...rest }) => {
-  const { days, hours, minutes, seconds } = useCountdown(end);
+export const Countdown: FC<Props> = ({ end, className, onEnded, ...rest }) => {
+  const { days, hours, minutes, seconds } = useCountdown(end, onEnded);
 
   return (
     <div className={classnames(styles.countdown, className)} {...rest}>

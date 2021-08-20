@@ -30,7 +30,7 @@ function calcRemains(date: Date): Remains {
   };
 }
 
-export function useCountdown(end: number): Remains & { finished: boolean } {
+export function useCountdown(end: number, onEnded?: () => void): Remains & { finished: boolean } {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -43,6 +43,7 @@ export function useCountdown(end: number): Remains & { finished: boolean } {
       if (Date.now() >= end) {
         setFinished(true);
         clearTimeout(timer);
+        onEnded?.();
         return;
       }
       const {
@@ -65,7 +66,7 @@ export function useCountdown(end: number): Remains & { finished: boolean } {
     return () => {
       clearTimeout(timer);
     };
-  }, [setDays, setHours, setMinutes, setSeconds, end, endDate]);
+  }, [setDays, setHours, setMinutes, setSeconds, end, endDate, onEnded]);
 
   return {
     finished,
