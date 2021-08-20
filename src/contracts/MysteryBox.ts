@@ -1,10 +1,12 @@
-interface Uint256 {
-  _hex: string;
-  toString(): string;
-}
+import { BigNumber } from 'ethers';
+
+// interface Uint256 {
+//   _hex: string;
+//   toString(): string;
+// }
 
 export interface NFTInfo {
-  latest_nft_id: Uint256;
+  latest_nft_id: BigNumber;
   total: number;
   sold: number;
   percentage: number;
@@ -12,8 +14,8 @@ export interface NFTInfo {
 
 export interface PaymentInfo {
   token_addr: string;
-  price: Uint256;
-  receivable_amount: Uint256;
+  price: BigNumber;
+  receivable_amount: BigNumber;
 }
 
 /** response of getCollectionInfo */

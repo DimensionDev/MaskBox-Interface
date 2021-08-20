@@ -1,11 +1,25 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { avatarImage } from '@/assets';
 import styles from './index.module.less';
 import { ArticleSection, Empty, NeonButton, Collection } from '@/components';
-import { myNfts } from '@/data';
+import { useNFTContract } from '@/contexts';
+import { BigNumber } from 'ethers';
 
 export const Profile: FC = () => {
-  const randomEmpty = useMemo(() => Math.random() > 0.8, []);
+  const { tokens, getMyTokens } = useNFTContract();
+  useEffect(() => {
+    getMyTokens();
+  }, [getMyTokens]);
+  const isEmpty = tokens.length === 0;
+
+  const myNfts = useMemo(() => {
+    return tokens.map((uri, index) => ({
+      latest_nft_id: BigNumber.from(index),
+      // imageUrl: uri,
+    }));
+  }, [tokens]);
+
+  console.log('my tokens', tokens);
   return (
     <article>
       <header className={styles.header}>
@@ -13,7 +27,7 @@ export const Profile: FC = () => {
       </header>
       <main className={styles.main}>
         <ArticleSection title="My Collectibles">
-          {randomEmpty ? (
+          {isEmpty ? (
             <div className={styles.emptyContainer}>
               <Empty description="Opps, There’s Nothing left here" />
             </div>
@@ -29,7 +43,7 @@ export const Profile: FC = () => {
             />
           )}
         </ArticleSection>
-        {!randomEmpty && (
+        {!isEmpty && (
           <div className={styles.buttonGroup}>
             <NeonButton>Load More</NeonButton>
           </div>

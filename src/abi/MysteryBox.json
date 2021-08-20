@@ -65,10 +65,16 @@
         "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "collection_id",
+        "type": "uint256"
+      },
+      {
         "indexed": false,
-        "internalType": "bytes32",
-        "name": "request_id",
-        "type": "bytes32"
+        "internalType": "uint8",
+        "name": "number_of_nft",
+        "type": "uint8"
       }
     ],
     "name": "NFTDrawn",
@@ -94,7 +100,13 @@
     "type": "event"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_collection_id",
+        "type": "uint256"
+      }
+    ],
     "name": "claimNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -121,7 +133,7 @@
         "type": "uint256"
       }
     ],
-    "name": "collectionMap",
+    "name": "collection_map",
     "outputs": [
       {
         "internalType": "address",
@@ -135,7 +147,7 @@
       },
       {
         "internalType": "uint32",
-        "name": "draw_limit",
+        "name": "purchase_limit",
         "type": "uint32"
       },
       {
@@ -176,7 +188,7 @@
       },
       {
         "internalType": "uint32",
-        "name": "_draw_limit",
+        "name": "_purchase_limit",
         "type": "uint32"
       },
       {
@@ -232,40 +244,6 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "drawInfoMap",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "collection_id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rand",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "internalType": "uint8",
-        "name": "number_of_nft",
-        "type": "uint8"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "_collection_id",
         "type": "uint256"
@@ -303,7 +281,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "_requestId",
+        "name": "",
         "type": "bytes32"
       },
       {
@@ -339,7 +317,7 @@
       },
       {
         "internalType": "uint32",
-        "name": "_draw_limit",
+        "name": "_purchase_limit",
         "type": "uint32"
       },
       {
@@ -442,10 +420,39 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_owner",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_collection_id",
+        "type": "uint256"
       },
+      {
+        "internalType": "address",
+        "name": "_user_addr",
+        "type": "address"
+      }
+    ],
+    "name": "getPurchaseInfo",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "_purchase_limit",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_purchased_number",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "_history",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "address",
         "name": "_linkAccessor",
@@ -455,6 +462,11 @@
         "internalType": "address",
         "name": "_nftHandle",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_fee",
+        "type": "uint256"
       }
     ],
     "name": "initialize",
@@ -464,6 +476,11 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_collection_id",
+        "type": "uint256"
+      },
       {
         "internalType": "address",
         "name": "_user_addr",
@@ -521,6 +538,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -560,6 +584,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "total_fee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -570,6 +607,19 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unused_fee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]

@@ -1,27 +1,19 @@
 import { ArticleSection, Collection, Empty, NewsletterBox } from '@/components';
 import { useMBoxContract } from '@/contexts';
-import { CollectionInfo } from '@/contracts';
-import { DEFAULT_COLLECTION_ID } from '@/lib';
 import { BuyBox, MysteryBox, ShareBox, StatusOverlay } from '@/page-components';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, memo, useState } from 'react';
 import styles from './index.module.less';
 
-export const Home: FC = () => {
+export const Home: FC = memo(() => {
   const [buyBoxOpen, setBuyBoxOpen] = useState(false);
   const [shareBoxOpen, setShareBoxOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-  const { getCollectionInfo } = useMBoxContract();
-  const [info, setInfo] = useState<CollectionInfo>();
+  const { collectionInfo: info, collectionPrice: price } = useMBoxContract();
 
-  useEffect(() => {
-    getCollectionInfo(DEFAULT_COLLECTION_ID).then((cinfo) => {
-      if (cinfo) setInfo(cinfo);
-    });
-  }, [getCollectionInfo]);
-
+  console.log('info', info, price);
   return (
     <>
-      <MysteryBox value="200 USDT" onOpen={() => setBuyBoxOpen(true)} />
+      <MysteryBox price={price} onOpen={() => setBuyBoxOpen(true)} />
       <div className={styles.main}>
         <ArticleSection title="Series Content">
           {info?._nft_list.length ? (
@@ -78,4 +70,4 @@ export const Home: FC = () => {
       {dismissed ? null : <StatusOverlay onClick={() => setDismissed(true)} />}
     </>
   );
-};
+});

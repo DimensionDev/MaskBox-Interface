@@ -4,7 +4,7 @@ import React, { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
 export interface NFTItemProps extends NFTInfo {
-  name: string;
+  name?: string;
   imageUrl?: string;
 }
 
@@ -17,11 +17,13 @@ export const NFTItem: FC<NFTItemProps> = ({ name, percentage, imageUrl = imagePl
         <img src={imageUrl} alt={name} width="200" height="150" />
       </div>
       <div className={styles.info}>
-        <h3 className={styles.name}>{name}</h3>
-        <p className={styles.meta}>
-          <span className={styles.metaName}>Probability</span>
-          <span className={styles.metaValue}>{percentage ?? '-'}%</span>
-        </p>
+        {name && <h3 className={styles.name}>{name}</h3>}
+        {percentage && (
+          <p className={styles.meta}>
+            <span className={styles.metaName}>Probability</span>
+            <span className={styles.metaValue}>{percentage ?? '-'}%</span>
+          </p>
+        )}
       </div>
     </div>
   );
@@ -39,7 +41,7 @@ export const Collection: FC<CollectionProps> = ({ collection, className, ...rest
   return (
     <ul className={classnames(styles.nftList, className)} {...rest}>
       {nfts.map((nft) => (
-        <li key={nft.latest_nft_id?._hex} className={styles.nftItem}>
+        <li key={nft.latest_nft_id.toString()} className={styles.nftItem}>
           <NFTItem {...nft} name={name} />
         </li>
       ))}

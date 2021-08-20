@@ -1,19 +1,22 @@
-import { LoadingIcon, ThickButton } from '@/components';
-import { useWeb3Context } from '@/contexts';
+import { LoadingIcon, showToast, ThickButton } from '@/components';
+import { useMBoxContract, useWeb3Context } from '@/contexts';
+import { Price } from '@/lib';
 import classnames from 'classnames';
+import { utils } from 'ethers';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 
 interface Props {
-  value: string;
+  price: Price;
   onOpen?: () => void;
 }
 
-export const MysteryBox: FC<Props> = ({ value, onOpen }) => {
+export const MysteryBox: FC<Props> = ({ price, onOpen }) => {
   const [opened, setOpened] = useState(false);
   const [open, setOpen] = useState(false);
   const paintingRef = useRef<HTMLDivElement>(null);
   const { account, connectWeb3 } = useWeb3Context();
+  const { claim } = useMBoxContract();
 
   useEffect(() => {
     if (!paintingRef.current) {
@@ -31,6 +34,19 @@ export const MysteryBox: FC<Props> = ({ value, onOpen }) => {
       paintingEle.removeEventListener('animationend', animationendFn);
     };
   }, [paintingRef.current, onOpen]);
+
+  const handleClaim = async () => {
+    const closeToast = showToast({
+      title: 'Claiming',
+    });
+    await claim();
+    closeToast();
+    showToast({
+      title: 'Claimed',
+      message: 'NFT claimed',
+    });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.boxGroup}>
@@ -49,9 +65,11 @@ export const MysteryBox: FC<Props> = ({ value, onOpen }) => {
         </div>
       </div>
       <div className={styles.buttonGroup}>
-        <p className={styles.value}>{value}</p>
+        <p className={styles.value}>
+          {utils.formatUnits(price.value, price.decimals)} {price.symbol}
+        </p>
         {account ? (
-          <ThickButton className={styles.button} onClick={() => setOpen(true)}>
+          <ThickButton className={styles.button} onClick={handleClaim}>
             Open Mystery Boxes
           </ThickButton>
         ) : (
