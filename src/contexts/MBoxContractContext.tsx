@@ -1,6 +1,14 @@
 import { MysteryBoxABI } from '@/abi';
 import { CollectionInfo } from '@/contracts';
-import { DEFAULT_COLLECTION_ID, Price, ZERO, ZERO_ADDRESS, ZERO_PPRICE } from '@/lib';
+import {
+  contractAddresses,
+  DEFAULT_COLLECTION_ID as COLLECTION_ID,
+  drawTxParameters,
+  Price,
+  ZERO,
+  ZERO_ADDRESS,
+  ZERO_PPRICE,
+} from '@/lib';
 import { BigNumber, Contract, ContractInterface, ethers } from 'ethers';
 import noop from 'lodash-es/noop';
 import React, { FC, memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -35,7 +43,7 @@ export const MBoxContractContext = React.createContext<ContextOptions>({
 export const useMBoxContract = () => useContext(MBoxContractContext);
 
 // Rinkeby
-const contractAddress = '0xc7490c79823B6f1DD3608B369C72C7c59329d7f9';
+const contractAddress = contractAddresses.Rinkeby.MysteryBox;
 
 const mboxContract = new Contract(contractAddress, MysteryBoxABI);
 
@@ -71,7 +79,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
   console.log('payment from list', payment);
 
   useEffect(() => {
-    getCollectionInfo(DEFAULT_COLLECTION_ID).then((cinfo) => {
+    getCollectionInfo(COLLECTION_ID).then((cinfo) => {
       if (cinfo) setInfo(cinfo);
     });
   }, [getCollectionInfo]);
@@ -119,9 +127,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     fetchTransactionIninfo();
   }, [fetchTransactionIninfo]);
 
-  // TODO refetch allowance
   const approve = useCallback(async () => {
-    console.log('payment', payment, 'ethersProvider', ethersProvider);
     if (!payment || !ethersProvider) return Promise.resolve(false);
 
     const abi = ['function approve(address, uint256) returns (boolean)'];
@@ -135,18 +141,17 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     if (!payment || !ethersProvider) return;
     const tx = await mboxContract
       .connect(ethersProvider.getSigner())
-      .drawNFT(BigNumber.from(DEFAULT_COLLECTION_ID), nftCount, paymentIndex, {
-        gasLimit: ethers.utils.hexlify(500000),
-        gasPrice: ethers.utils.parseUnits('5', 'gwei'),
-      });
-    await tx.wait();
+      .drawNFT(BigNumber.from(COLLECTION_ID), nftCount, paymentIndex, drawTxParameters);
+    await tx.wait(3);
     return tx;
   }, [payment, nftCount, ethersProvider]);
 
-  const claim = useCallback(() => {
-    if (!ethersProvider) return;
-    return mboxContract.connect(ethersProvider.getSigner()).claimNFT();
-  }, [ethersProvider]);
+  const claim = useCallback(async () => {
+    if (!ethersProvider || !account) return;
+    const ready = await mboxContract.connect(ethersProvider).isReadyToClaim(COLLECTION_ID, account);
+    console.log('isReadyToClaim', ready);
+    return mboxContract.connect(ethersProvider.getSigner()).claimNFT(COLLECTION_ID);
+  }, [account, ethersProvider]);
 
   const contextValue = useMemo(
     () => ({

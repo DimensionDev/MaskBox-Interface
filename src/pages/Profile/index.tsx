@@ -2,8 +2,8 @@ import React, { FC, useEffect, useMemo } from 'react';
 import { avatarImage } from '@/assets';
 import styles from './index.module.less';
 import { ArticleSection, Empty, NeonButton, Collection } from '@/components';
-import { myNfts } from '@/data';
 import { useNFTContract } from '@/contexts';
+import { BigNumber } from 'ethers';
 
 export const Profile: FC = () => {
   const { tokens, getMyTokens } = useNFTContract();
@@ -11,6 +11,13 @@ export const Profile: FC = () => {
     getMyTokens();
   }, [getMyTokens]);
   const isEmpty = tokens.length === 0;
+
+  const myNfts = useMemo(() => {
+    return tokens.map((uri, index) => ({
+      latest_nft_id: BigNumber.from(index),
+      // imageUrl: uri,
+    }));
+  }, [tokens]);
 
   console.log('my tokens', tokens);
   return (

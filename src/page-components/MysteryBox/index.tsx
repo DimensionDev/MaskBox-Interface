@@ -35,7 +35,7 @@ export const MysteryBox: FC<Props> = ({ price, onOpen }) => {
     };
   }, [paintingRef.current, onOpen]);
 
-  const handleCalim = async () => {
+  const handleClaim = async () => {
     const closeToast = showToast({
       title: 'Claiming',
     });
@@ -69,7 +69,7 @@ export const MysteryBox: FC<Props> = ({ price, onOpen }) => {
           {utils.formatUnits(price.value, price.decimals)} {price.symbol}
         </p>
         {account ? (
-          <ThickButton className={styles.button} onClick={handleCalim}>
+          <ThickButton className={styles.button} onClick={handleClaim}>
             Open Mystery Boxes
           </ThickButton>
         ) : (

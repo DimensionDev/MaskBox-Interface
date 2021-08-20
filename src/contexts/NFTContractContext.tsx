@@ -1,4 +1,5 @@
 import { MysterBoxNFTABI } from '@/abi';
+import { contractAddresses } from '@/lib';
 import { BigNumber, Contract, ContractInterface } from 'ethers';
 import React, { memo, useCallback, useContext, useMemo, useState } from 'react';
 import { FC } from 'react';
@@ -20,7 +21,7 @@ export const NFTContractContext = React.createContext<ContextOptions>({
 export const useNFTContract = () => useContext(NFTContractContext);
 
 // Rinkeby
-const contractAddress = '0x0Ba0dda8F21165672d711D939ca162ec97Ef178d';
+const contractAddress = contractAddresses.Rinkeby.MysteryBoxNFT;
 const nftContract = new Contract(contractAddress, MysterBoxNFTABI as unknown as ContractInterface);
 
 export const NFTContractProvider: FC = memo(({ children }) => {
@@ -61,7 +62,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
     console.log('balance', balance);
     const getTokens = new Array(balance)
       .fill(0)
-      .map((_, index) => getMyToken(BigNumber.from(index + 1)));
+      .map((_, index) => getMyToken(BigNumber.from(index)));
     const list = await Promise.all(getTokens);
     setTokens(list);
     return list;
