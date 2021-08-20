@@ -6,8 +6,7 @@ import styles from './index.module.less';
 
 export const Home: FC = memo(() => {
   const [shareBoxOpen, setShareBoxOpen] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
-  const { collectionInfo: info, collectionPrice: price } = useMBoxContract();
+  const { collectionInfo: info, collectionPrice: price, getCollectionInfo } = useMBoxContract();
 
   console.log('info', info);
   const startTime = info?._start_time ? info._start_time * 1000 : 0;
@@ -35,7 +34,6 @@ export const Home: FC = memo(() => {
     return () => clearInterval(timer);
   }, [startTime, endTime]);
 
-  console.log('info', info, price);
   return (
     <>
       <MysteryBox price={price} onOpen={() => setBuyBoxOpen(true)} />
@@ -92,9 +90,7 @@ export const Home: FC = memo(() => {
         onShare={() => setShareBoxOpen(true)}
       />
       <ShareBox open={shareBoxOpen} onClose={() => setShareBoxOpen(false)} />
-      {dismissed ? null : (
-        <StatusOverlay start={startTime} end={endTime} onClick={() => setDismissed(true)} />
-      )}
+      <StatusOverlay start={startTime} end={endTime} />
     </>
   );
 });
