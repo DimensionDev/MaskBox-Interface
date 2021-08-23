@@ -1,7 +1,7 @@
 import { logoImage } from '@/assets';
 import { Icon, NeonButton } from '@/components';
-import { useWeb3Context } from '@/contexts';
-import { getNetworkIcon, getNetworkName } from '@/lib';
+import { useMBoxContract, useWeb3Context } from '@/contexts';
+import { getNetworkIcon, getNetworkName, selections } from '@/lib';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
 import React, { FC, HTMLProps, useState } from 'react';
@@ -14,12 +14,20 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   const { account, providerChainId, connectWeb3 } = useWeb3Context();
   const [selectNetworkVisible, setSelectNetworkVisible] = useState(false);
+  const { collectionId, setCollectionId } = useMBoxContract();
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
       <div className={styles.brand}>
         <Link to="/" className={styles.logo} title="NFTBOX">
           <img src={logoImage} height="36" width="36" alt="NFTBOX" />
         </Link>
+        <select value={collectionId} onChange={(ev) => setCollectionId(parseInt(ev.target.value))}>
+          {selections.map((sel) => (
+            <option key={sel.id} value={sel.id}>
+              {sel.name}
+            </option>
+          ))}
+        </select>
       </div>
       <nav className={styles.nav}>
         <NavLink className={styles.navItem} activeClassName={styles.activeNav} to="/market">
