@@ -1,4 +1,4 @@
-export const DEFAULT_COLLECTION_ID = 3;
+export const DEFAULT_COLLECTION_ID = 1;
 
 export const selections = [
   {

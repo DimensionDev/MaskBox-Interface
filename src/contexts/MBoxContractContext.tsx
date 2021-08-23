@@ -150,7 +150,8 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     if (!ethersProvider || !account) return;
     const ready = await mboxContract.connect(ethersProvider).isReadyToClaim(collectionId, account);
     console.log('isReadyToClaim', ready);
-    return mboxContract.connect(ethersProvider.getSigner()).claimNFT(collectionId);
+    const result = await mboxContract.connect(ethersProvider.getSigner()).claimNFT(collectionId);
+    return result;
   }, [account, collectionId, ethersProvider]);
 
   const contextValue = useMemo(
