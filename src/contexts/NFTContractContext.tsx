@@ -1,8 +1,7 @@
 import { MysterBoxNFTABI } from '@/abi';
 import { contractAddresses } from '@/lib';
 import { BigNumber, Contract, ContractInterface } from 'ethers';
-import React, { memo, useCallback, useContext, useMemo, useState } from 'react';
-import { FC } from 'react';
+import React, { FC, memo, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useWeb3Context } from './Web3Context';
 
 interface ContextOptions {
@@ -28,33 +27,35 @@ export const NFTContractProvider: FC = memo(({ children }) => {
   const { ethersProvider, account } = useWeb3Context();
   const [tokens, setTokens] = useState<any[]>([]);
 
-  const contract = useMemo(() => {
-    if (!ethersProvider) return null;
-    return nftContract.connect(ethersProvider);
+  const contract = useRef(nftContract);
+
+  useEffect(() => {
+    if (ethersProvider) {
+      contract.current = nftContract.connect(ethersProvider);
+    }
   }, [ethersProvider]);
 
   const getMyBalance = useCallback(async () => {
-    if (!contract || !account) return 0;
+    if (!account) return 0;
 
-    const balance = await contract
+    const balance = await contract.current
       .balanceOf(account)
       .catch((getMyBalanceError: Error) => console.error({ getMyBalanceError }));
 
     console.log('balance', balance);
     return (balance as BigNumber).toNumber();
-  }, [account, contract]);
+  }, [account]);
 
   const getMyToken = useCallback(
     async (index: BigNumber) => {
-      if (!contract) return '';
-      const tokenId = await contract
+      const tokenId = await contract.current
         .tokenOfOwnerByIndex(account, index)
         .catch((getMyTokenError: Error) => console.error({ getMyTokenError }));
-      const uri = await contract.tokenURI(tokenId);
+      const uri = await contract.current.tokenURI(tokenId);
       console.log('tokenURI', uri);
       return uri;
     },
-    [account, contract],
+    [account],
   );
 
   const getMyTokens = useCallback(async () => {

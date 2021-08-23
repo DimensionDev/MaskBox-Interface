@@ -1,4 +1,4 @@
-import { MysteryBoxABI } from '@/abi';
+import { ERC20_ABI, MysteryBoxABI } from '@/abi';
 import { CollectionInfo } from '@/contracts';
 import {
   contractAddresses,
@@ -11,7 +11,16 @@ import {
 } from '@/lib';
 import { BigNumber, Contract, ContractInterface } from 'ethers';
 import noop from 'lodash-es/noop';
-import React, { FC, memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useWeb3Context } from './Web3Context';
 
 interface ContextOptions {
@@ -49,7 +58,7 @@ export const useMBoxContract = () => useContext(MBoxContractContext);
 // Rinkeby
 const contractAddress = contractAddresses.Rinkeby.MysteryBox;
 
-const mboxContract = new Contract(contractAddress, MysteryBoxABI);
+const mboxContract = new Contract(contractAddress, MysteryBoxABI as unknown as ContractInterface);
 
 export const MBoxContractProvider: FC = memo(({ children }) => {
   const { account, ethersProvider } = useWeb3Context();
@@ -62,16 +71,15 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
   const [paymentIndex, setPaymentIndex] = useState(1);
   const [collectionId, setCollectionId] = useState(DEFAULT_COLLECTION_ID);
 
-  const getCollectionInfo = useCallback(async () => {
-    if (!contractAddress || !ethersProvider) {
-      return null;
+  const contract = useRef(mboxContract);
+  useEffect(() => {
+    if (ethersProvider) {
+      contract.current = contract.current.connect(ethersProvider);
     }
-    const contract = new Contract(
-      contractAddress,
-      MysteryBoxABI as unknown as ContractInterface,
-      ethersProvider,
-    );
-    const info: CollectionInfo = await contract
+  }, [ethersProvider]);
+
+  const getCollectionInfo = useCallback(async () => {
+    const info: CollectionInfo = await contract.current
       .getCollectionInfo(collectionId)
       .then((cinfo: CollectionInfo) => {
         setInfo(cinfo);
@@ -79,7 +87,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
       })
       .catch((collectionInfoError: Error) => console.error({ collectionInfoError }));
     return info;
-  }, [contractAddress, collectionId, ethersProvider]);
+  }, [collectionId]);
 
   const payment = info?._payment_list[paymentIndex];
   console.log('payment from list', payment);
@@ -98,13 +106,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
         setBalance(v);
       });
     } else {
-      const abi = [
-        'function decimals() view returns (uint8)',
-        'function symbol() view returns (string)',
-        'function allowance(address, address) view returns (uint256)',
-        'function balanceOf(address) view returns (uint256)',
-      ];
-      const tokenContract = new Contract(payment.token_addr, abi, ethersProvider);
+      const tokenContract = new Contract(payment.token_addr, ERC20_ABI, ethersProvider);
       Promise.all([
         tokenContract.decimals(),
         tokenContract.symbol(),
