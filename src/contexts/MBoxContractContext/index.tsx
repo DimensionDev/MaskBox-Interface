@@ -11,36 +11,26 @@ import {
 } from '@/lib';
 import { BigNumber, Contract, ContractInterface } from 'ethers';
 import noop from 'lodash-es/noop';
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { useWeb3Context } from './Web3Context';
+import React, { FC, memo, useCallback, useContext, useEffect, useRef } from 'react';
+import { useWeb3Context } from '../Web3Context';
+import { MboxState, useMbox } from './useMbox';
 
 interface ContextOptions {
-  estimateGas: BigNumber;
   myBalance: BigNumber;
   myAllowance: BigNumber;
   collectionInfo?: CollectionInfo;
   collectionPrice: Price;
-  getCollectionInfo(): Promise<CollectionInfo | null>;
+  nftCount: number;
+  collectionId: number;
   approve(): Promise<boolean>;
   buy(): Promise<{ hash: string } | void>;
   claim(): Promise<void>;
-  nftCount: number;
-  setNftCount: React.Dispatch<React.SetStateAction<number>>;
-  collectionId: number;
-  setCollectionId: React.Dispatch<React.SetStateAction<number>>;
+  setMbox: React.Dispatch<React.SetStateAction<MboxState>>;
+  getCollectionInfo(): Promise<CollectionInfo | null>;
+  checkIsReadyToClaim(): Promise<void>;
 }
 
 export const MBoxContractContext = React.createContext<ContextOptions>({
-  estimateGas: ZERO,
   myBalance: ZERO,
   myAllowance: ZERO,
   collectionPrice: ZERO_PPRICE,
@@ -49,9 +39,9 @@ export const MBoxContractContext = React.createContext<ContextOptions>({
   buy: () => Promise.resolve(),
   claim: () => Promise.resolve(),
   nftCount: 1,
-  setNftCount: noop,
   collectionId: DEFAULT_COLLECTION_ID,
-  setCollectionId: noop,
+  setMbox: noop,
+  checkIsReadyToClaim: () => Promise.resolve(),
 });
 export const useMBoxContract = () => useContext(MBoxContractContext);
 
@@ -62,14 +52,10 @@ const mboxContract = new Contract(contractAddress, MysteryBoxABI as unknown as C
 
 export const MBoxContractProvider: FC = memo(({ children }) => {
   const { account, ethersProvider } = useWeb3Context();
-  const [info, setInfo] = useState<CollectionInfo>();
-  const [price, setPrice] = useState<Price>(ZERO_PPRICE);
-  const [balance, setBalance] = useState<BigNumber>(ZERO);
-  const [allowance, setAllowance] = useState<BigNumber>(ZERO);
-  const [estimateGas, setEstimateGas] = useState<BigNumber>(ZERO);
-  const [nftCount, setNftCount] = useState(1);
-  const [paymentIndex, setPaymentIndex] = useState(1);
-  const [collectionId, setCollectionId] = useState(DEFAULT_COLLECTION_ID);
+  const [
+    { info, price, balance, allowance, nftCount, paymentIndex, collectionId, isReadyToClaim },
+    setMbox,
+  ] = useMbox();
 
   const contract = useRef(mboxContract);
   useEffect(() => {
@@ -78,15 +64,29 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     }
   }, [ethersProvider]);
 
+  const checkIsReadyToClaim = useCallback(async () => {
+    if (!account) return;
+    const result = await contract.current.isReadyToClaim(collectionId, account);
+    setMbox((state) => ({
+      ...state,
+      isReadyToClaim: result,
+    }));
+
+    return result;
+  }, [collectionId, account]);
+
   const getCollectionInfo = useCallback(async () => {
-    const info: CollectionInfo = await contract.current
-      .getCollectionInfo(collectionId)
-      .then((cinfo: CollectionInfo) => {
-        setInfo(cinfo);
-        return cinfo;
-      })
-      .catch((collectionInfoError: Error) => console.error({ collectionInfoError }));
-    return info;
+    try {
+      const info: CollectionInfo = await contract.current.getCollectionInfo(collectionId);
+      setMbox((state) => ({
+        ...state,
+        info,
+      }));
+      return info;
+    } catch (collectionInfoError) {
+      console.error({ collectionInfoError });
+      return null;
+    }
   }, [collectionId]);
 
   const payment = info?._payment_list[paymentIndex];
@@ -96,14 +96,20 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     if (!payment || !ethersProvider || !account) return;
 
     if (payment.token_addr === ZERO_ADDRESS) {
-      setPrice({
-        isNative: true,
-        value: BigNumber.from(payment.price),
-        decimals: 18,
-        symbol: 'eth',
-      });
-      ethersProvider.getBalance(account).then((v) => {
-        setBalance(v);
+      setMbox((state) => ({
+        ...state,
+        price: {
+          isNative: true,
+          value: BigNumber.from(payment.price),
+          decimals: 18,
+          symbol: 'eth',
+        },
+      }));
+      ethersProvider.getBalance(account).then((balance) => {
+        setMbox((state) => ({
+          ...state,
+          balance,
+        }));
       });
     } else {
       const tokenContract = new Contract(payment.token_addr, ERC20_ABI, ethersProvider);
@@ -113,14 +119,17 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
         tokenContract.allowance(account, contractAddress),
         tokenContract.balanceOf(account),
       ]).then(([decimals, tokenSymbol, allowance, balance]) => {
-        setPrice({
-          isNative: false,
-          value: BigNumber.from(payment.price),
-          decimals: decimals,
-          symbol: tokenSymbol,
-        });
-        setAllowance(BigNumber.from(allowance));
-        setBalance(BigNumber.from(balance));
+        setMbox((state) => ({
+          ...state,
+          price: {
+            isNative: false,
+            value: BigNumber.from(payment.price),
+            decimals: decimals,
+            symbol: tokenSymbol,
+          },
+          allowance: BigNumber.from(allowance),
+          balance: BigNumber.from(balance),
+        }));
       });
     }
   }, [payment, account, ethersProvider]);
@@ -156,37 +165,21 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     return result;
   }, [account, collectionId, ethersProvider]);
 
-  const contextValue = useMemo(
-    () => ({
-      estimateGas,
-      myAllowance: allowance,
-      myBalance: balance,
-      collectionPrice: price,
-      collectionInfo: info,
-      getCollectionInfo,
-      approve,
-      buy,
-      claim,
-      nftCount,
-      setNftCount,
-      collectionId,
-      setCollectionId,
-    }),
-    [
-      estimateGas,
-      allowance,
-      balance,
-      price,
-      info,
-      getCollectionInfo,
-      approve,
-      buy,
-      claim,
-      nftCount,
-      collectionId,
-      setCollectionId,
-    ],
-  );
+  const contextValue = {
+    myAllowance: allowance,
+    myBalance: balance,
+    collectionPrice: price,
+    collectionInfo: info,
+    claim,
+    nftCount,
+    collectionId,
+    isReadyToClaim,
+    setMbox,
+    approve,
+    buy,
+    checkIsReadyToClaim,
+    getCollectionInfo,
+  };
 
   return (
     <MBoxContractContext.Provider value={contextValue}>{children}</MBoxContractContext.Provider>

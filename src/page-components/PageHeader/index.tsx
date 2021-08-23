@@ -14,14 +14,22 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   const { account, providerChainId, connectWeb3 } = useWeb3Context();
   const [selectNetworkVisible, setSelectNetworkVisible] = useState(false);
-  const { collectionId, setCollectionId } = useMBoxContract();
+  const { collectionId, setMbox } = useMBoxContract();
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
       <div className={styles.brand}>
         <Link to="/" className={styles.logo} title="NFTBOX">
           <img src={logoImage} height="36" width="36" alt="NFTBOX" />
         </Link>
-        <select value={collectionId} onChange={(ev) => setCollectionId(parseInt(ev.target.value))}>
+        <select
+          value={collectionId}
+          onChange={(ev) =>
+            setMbox((state) => ({
+              ...state,
+              collectionId: parseInt(ev.target.value),
+            }))
+          }
+        >
           {selections.map((sel) => (
             <option key={sel.id} value={sel.id}>
               {sel.name}

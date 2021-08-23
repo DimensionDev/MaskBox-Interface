@@ -94,7 +94,7 @@ export const Home: FC = memo(() => {
         onShare={() => setShareBoxOpen(true)}
       />
       <ShareBox open={shareBoxOpen} onClose={() => setShareBoxOpen(false)} />
-      <StatusOverlay start={startTime} end={endTime} />
+      <StatusOverlay name={info?._name ?? '-'} start={startTime} end={endTime} />
     </>
   );
 });

@@ -4,11 +4,12 @@ import React, { FC, HTMLProps, memo, useState } from 'react';
 import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {
+  name: string;
   start: number;
   end: number;
 }
 
-export const StatusOverlay: FC<Props> = memo(({ start, end, ...props }) => {
+export const StatusOverlay: FC<Props> = memo(({ name, start, end, ...props }) => {
   const [started, setStarted] = useState(false);
 
   console.log('start', start, 'end', end);
@@ -27,7 +28,7 @@ export const StatusOverlay: FC<Props> = memo(({ start, end, ...props }) => {
         </div>
       ) : (
         <div className={styles.box}>
-          <h2 className={styles.title}>Seascape Zombie Fighter Mystery Box</h2>
+          <h2 className={styles.title}>{name}</h2>
           <p className={styles.subtitle}>start sale in</p>
           <Countdown className={styles.countdown} end={start} onEnded={() => setStarted(true)} />
         </div>
