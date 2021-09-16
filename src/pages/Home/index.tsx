@@ -6,7 +6,12 @@ import styles from './index.module.less';
 
 export const Home: FC = memo(() => {
   const [shareBoxOpen, setShareBoxOpen] = useState(false);
-  const { collectionInfo: info, collectionPrice: price, getCollectionInfo } = useMBoxContract();
+  const {
+    collectionInfo: info,
+    collectionPrice: price,
+    getCollectionInfo,
+    checkIsReadyToClaim,
+  } = useMBoxContract();
 
   console.log('info', info);
   const startTime = info?._start_time ? info._start_time * 1000 : 0;
@@ -24,6 +29,10 @@ export const Home: FC = memo(() => {
   useEffect(() => {
     getCollectionInfo();
   }, [getCollectionInfo]);
+
+  useEffect(() => {
+    checkIsReadyToClaim();
+  }, [checkIsReadyToClaim]);
 
   useEffect(() => {
     const timer = setInterval(() => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const ETH_PRICE_POLLING_DELAY = 5 * 1000;
+const ETH_PRICE_POLLING_DELAY = 1 * 1000;
 function createTrackHook<T = number>(initialize: T, updater: (...args: any[]) => Promise<T>) {
   return function useTrack(tokenId?: string, currency?: string) {
     const [value, setValue] = useState(initialize);
@@ -11,9 +11,7 @@ function createTrackHook<T = number>(initialize: T, updater: (...args: any[]) =>
         clearTimeout(timer);
         const result = await updater(tokenId, currency);
         setValue(result);
-        timer = setTimeout(() => {
-          updater(tokenId, currency);
-        }, ETH_PRICE_POLLING_DELAY);
+        timer = setTimeout(tick, ETH_PRICE_POLLING_DELAY);
       };
       tick();
       return () => clearTimeout(timer);

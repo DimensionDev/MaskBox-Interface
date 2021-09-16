@@ -12,9 +12,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 export const StatusOverlay: FC<Props> = memo(({ name, start, end, ...props }) => {
   const [started, setStarted] = useState(false);
 
-  console.log('start', start, 'end', end);
   const showEnded = end && end < Date.now();
-  console.log('showEnded', showEnded);
 
   const isOnSale = started && !showEnded;
 

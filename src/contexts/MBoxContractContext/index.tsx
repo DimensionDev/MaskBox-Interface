@@ -22,6 +22,7 @@ interface ContextOptions {
   collectionPrice: Price;
   nftCount: number;
   collectionId: number;
+  isReadyToClaim: boolean;
   approve(): Promise<boolean>;
   buy(): Promise<{ hash: string } | void>;
   claim(): Promise<void>;
@@ -33,6 +34,7 @@ interface ContextOptions {
 export const MBoxContractContext = React.createContext<ContextOptions>({
   myBalance: ZERO,
   myAllowance: ZERO,
+  isReadyToClaim: false,
   collectionPrice: ZERO_PPRICE,
   getCollectionInfo: () => Promise.resolve(null),
   approve: () => Promise.resolve(false),
