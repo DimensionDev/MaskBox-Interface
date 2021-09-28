@@ -4,7 +4,7 @@ import { BuyBox, MysteryBox, ShareBox, StatusOverlay } from '@/page-components';
 import React, { FC, memo, useEffect, useState } from 'react';
 import styles from './index.module.less';
 
-export const Home: FC = memo(() => {
+export const Details: FC = memo(() => {
   const [shareBoxOpen, setShareBoxOpen] = useState(false);
   const {
     collectionInfo: info,
