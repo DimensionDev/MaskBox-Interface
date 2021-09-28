@@ -2,12 +2,20 @@ import classnames from 'classnames';
 import { ButtonHTMLAttributes, FC } from 'react';
 import styles from './index.module.less';
 
+type VariantType = 'default';
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'small' | 'middle' | 'large';
   fullWidth?: boolean;
+  variant?: VariantType;
 }
 
-export const BaseButton: FC<ButtonProps> = ({ className, size, fullWidth, ...rest }) => {
+const variantMap: Record<VariantType, string> = {
+  default: styles.variantDefault,
+};
+
+export const BaseButton: FC<ButtonProps> = ({ className, size, fullWidth, variant, ...rest }) => {
+  const variantClass = variantMap[variant ?? 'default'];
   return (
     <button
       className={classnames(
@@ -17,6 +25,7 @@ export const BaseButton: FC<ButtonProps> = ({ className, size, fullWidth, ...res
           [styles.fullWidth]: fullWidth,
         },
         size ? styles[size] : null,
+        variantClass,
       )}
       {...rest}
     />

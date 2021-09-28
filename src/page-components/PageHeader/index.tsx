@@ -1,8 +1,9 @@
 import { logoImage } from '@/assets';
-import { Icon, NeonButton } from '@/components';
+import { Icon, BaseButton as Button } from '@/components';
 import { useMBoxContract, useWeb3Context } from '@/contexts';
 import { getNetworkIcon, getNetworkName, selections } from '@/lib';
 import { formatAddres } from '@/utils';
+import { RouteKeys } from '@/configs';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
@@ -15,11 +16,12 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   const { account, providerChainId, connectWeb3 } = useWeb3Context();
   const [selectNetworkVisible, setSelectNetworkVisible] = useState(false);
   const { collectionId, setMbox } = useMBoxContract();
+
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
       <div className={styles.brand}>
         <Link to="/" className={styles.logo} title="NFTBOX">
-          <img src={logoImage} height="36" width="36" alt="NFTBOX" />
+          <img src={logoImage} width="171" height="51" alt="NFTBOX" />
         </Link>
         <select
           value={collectionId}
@@ -38,32 +40,46 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         </select>
       </div>
       <nav className={styles.nav}>
-        <NavLink className={styles.navItem} activeClassName={styles.activeNav} to="/market">
-          Market
+        <NavLink className={styles.navItem} activeClassName={styles.activeNav} to={RouteKeys.Home}>
+          Home
         </NavLink>
-        <NavLink className={styles.navItem} activeClassName={styles.activeNav} to="/faqs">
+        <NavLink
+          className={styles.navItem}
+          activeClassName={styles.activeNav}
+          to={RouteKeys.Details}
+        >
+          Mystery
+        </NavLink>
+        <NavLink
+          className={styles.navItem}
+          activeClassName={styles.activeNav}
+          to={RouteKeys.Profile}
+        >
+          My Items
+        </NavLink>
+        <NavLink className={styles.navItem} activeClassName={styles.activeNav} to={RouteKeys.Faqs}>
           FAQs
         </NavLink>
       </nav>
       {account ? (
         <div className={styles.operations}>
-          <NeonButton className={styles.button} onClick={() => setSelectNetworkVisible(true)}>
+          <Button className={styles.button} onClick={() => setSelectNetworkVisible(true)}>
             <Icon className={styles.icon} iconUrl={getNetworkIcon(providerChainId!)} size={18} />
             {getNetworkName(providerChainId!)}
-          </NeonButton>
-          <NeonButton className={styles.button} title={account}>
+          </Button>
+          <Button className={styles.button} title={account}>
             <Icon className={styles.icon} type="wallet" size={16} />
             {formatAddres(account)}
-          </NeonButton>
+          </Button>
           <Link className={styles.button} to="/profile">
             <Icon type="lisa" size={36} />
           </Link>
         </div>
       ) : (
         <div className={styles.operations}>
-          <NeonButton className={styles.button} onClick={connectWeb3}>
+          <Button className={styles.button} onClick={connectWeb3}>
             Connect Wallet
-          </NeonButton>
+          </Button>
         </div>
       )}
       <SelectNetwork open={selectNetworkVisible} onClose={() => setSelectNetworkVisible(false)} />

@@ -6,21 +6,49 @@
   align-items: center;
   justify-content: center;
   white-space: nowrap;
+  border-radius: 24px;
+  height: 30px;
+  padding: 4px 14px;
   &.small {
     height: 24px;
+    border-radius: 24px;
     font-size: 12px;
   }
-  height: 30px;
   &.middle {
     height: 30px;
+    border-radius: 30px;
     font-size: 14px;
   }
   &.large {
     height: 36px;
+    border-radius: 36px;
     font-size: 16px;
   }
   &.fullWidth {
     display: inline-block;
     width: 100%;
   }
+  &.small {
+    height: 24px;
+    border-radius: 24px;
+    font-size: 12px;
+  }
+  &.middle {
+    height: 30px;
+    border-radius: 30px;
+    font-size: 14px;
+  }
+  &.large {
+    height: 36px;
+    border-radius: 36px;
+    font-size: 16px;
+  }
+  &.fullWidth {
+    display: inline-block;
+    width: 100%;
+  }
+}
+.variantDefault {
+  background-color: var(--button-default-bg, #1e202c);
+  color: var(--button-default-color, #ffffff);
 }
