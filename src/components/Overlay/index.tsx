@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC, HTMLProps } from 'react';
+import { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {}

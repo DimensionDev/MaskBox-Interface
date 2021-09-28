@@ -1,6 +1,6 @@
 import { Countdown, Overlay } from '@/components';
 import classnames from 'classnames';
-import React, { FC, HTMLProps, memo, useState } from 'react';
+import { FC, HTMLProps, memo, useState } from 'react';
 import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {

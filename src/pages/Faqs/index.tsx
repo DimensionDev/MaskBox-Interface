@@ -1,5 +1,5 @@
 import { ArticleSection } from '@/components';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styles from './index.module.less';
 
 export const Faqs: FC = () => {

@@ -4,7 +4,7 @@ import { useMBoxContract, useWeb3Context } from '@/contexts';
 import { getNetworkIcon, getNetworkName, selections } from '@/lib';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
-import React, { FC, HTMLProps, useState } from 'react';
+import { FC, HTMLProps, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { SelectNetwork } from '../SelectNetwork';
 import styles from './index.module.less';

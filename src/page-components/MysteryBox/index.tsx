@@ -3,7 +3,7 @@ import { useMBoxContract, useWeb3Context } from '@/contexts';
 import { Price } from '@/lib';
 import classnames from 'classnames';
 import { utils } from 'ethers';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import styles from './index.module.less';
 
 interface Props {

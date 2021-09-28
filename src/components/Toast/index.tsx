@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import toast from 'react-hot-toast';
 import { Icon, LoadingIcon } from '../Icon';
 

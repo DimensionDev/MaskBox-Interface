@@ -4,7 +4,7 @@ import { useTrackTokenPrice } from '@/hooks';
 import { getCoingeckoTokenId, getNetworkExplorer } from '@/lib';
 import { formatAddres } from '@/utils';
 import { utils } from 'ethers';
-import React, { FC, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import styles from './index.module.less';
 
 interface Props extends DialogProps {

@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps } from 'react';
+import { FC, HTMLProps } from 'react';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 

@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps } from 'react';
+import { FC, HTMLProps } from 'react';
 import { useCountdown } from './useCountdown';
 import { tenify } from '@/utils';
 import classnames from 'classnames';

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { avatarImage } from '@/assets';
 import styles from './index.module.less';
 import { ArticleSection, Empty, NeonButton, Collection } from '@/components';

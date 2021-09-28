@@ -1,6 +1,5 @@
-import { PaymentInfo } from '@/contracts';
-import { BigNumber, Contract, ethers } from 'ethers';
-import { chainUrls, networkExplorers, networkIcons, networkNames, ZERO_ADDRESS } from './constants';
+import { BigNumber } from 'ethers';
+import { chainUrls, networkExplorers, networkIcons, networkNames } from './constants';
 
 export const getRPCUrl = (chainId: keyof typeof chainUrls) => {
   return chainUrls[chainId || 1].rpc;

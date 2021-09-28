@@ -1,5 +1,5 @@
 import { Dialog, DialogProps, NFTItem, RoundButton } from '@/components';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { mockNfts } from '@/data';
 import styles from './index.module.less';
 

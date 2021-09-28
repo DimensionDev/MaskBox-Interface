@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { RoundButton } from '../RoundButton';
 import styles from './index.module.less';
 

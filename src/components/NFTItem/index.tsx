@@ -1,6 +1,6 @@
 import { CollectionInfo, NFTInfo } from '@/contracts';
 import classnames from 'classnames';
-import React, { FC, HTMLProps } from 'react';
+import { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
 export interface NFTItemProps extends NFTInfo {

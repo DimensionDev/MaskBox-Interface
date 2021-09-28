@@ -1,7 +1,7 @@
 import { ArticleSection, Collection, Empty, NewsletterBox } from '@/components';
 import { useMBoxContract } from '@/contexts';
 import { BuyBox, MysteryBox, ShareBox, StatusOverlay } from '@/page-components';
-import React, { FC, memo, useEffect, useState } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import styles from './index.module.less';
 
 export const Details: FC = memo(() => {

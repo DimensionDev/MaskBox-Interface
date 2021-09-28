@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import { FC, memo } from 'react';
 import { PageHeader, PageFooter } from '@/page-components';
 
 import styles from './index.module.less';

@@ -2,7 +2,7 @@ import { Dialog, DialogProps } from '@/components';
 import { useWeb3Context } from '@/contexts';
 import { getNetworkName, networks } from '@/lib';
 import classnames from 'classnames';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styles from './index.module.less';
 
 interface Props extends DialogProps {}

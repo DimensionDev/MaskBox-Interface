@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { BaseButton, ButtonProps } from '../BaseButton';
 import styles from './index.module.less';
 

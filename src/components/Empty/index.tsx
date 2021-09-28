@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { FC, HTMLProps } from 'react';
+import { FC, HTMLProps } from 'react';
 import { Icon } from '../Icon';
 import styles from './index.module.less';
 

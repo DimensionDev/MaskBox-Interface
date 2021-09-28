@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, { ButtonHTMLAttributes, FC } from 'react';
+import { ButtonHTMLAttributes, FC } from 'react';
 import styles from './index.module.less';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
