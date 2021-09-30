@@ -1,33 +1,117 @@
 .footer {
   display: flex;
-  padding: 30px 20px 20px;
+  padding: 80px 20px 20px;
   box-sizing: border-box;
-  border-top: 2px solid transparent;
-  color: #ebebf1;
   font-size: 16px;
-  justify-content: space-between;
   align-items: center;
-  border-image: linear-gradient(
-      91.26deg,
-      #8ad4ec 0%,
-      #ef96ff 21.74%,
-      #ff56a9 54.03%,
-      #ffaa6c 85.28%
-    )
-    2;
+  background-color: var(--footer-background, #f0f2f6);
+  color: var(--text-primary, #1e202c);
+  .inner {
+    width: 1120px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
-.links {
+.info {
   display: flex;
+  .left {
+    width: 352px;
+  }
+  .right {
+    margin-left: 30px;
+  }
+}
+
+.brand {
+  .slogan {
+    font-size: 18px;
+    line-height: 24px;
+    color: #1e202c;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+}
+
+.newsletter {
+  margin-top: 32px;
+  .newsletterTitle {
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-primary, #1e202c);
+    font-weight: bold;
+  }
+  .form {
+    margin-top: 10px;
+    position: relative;
+    .input {
+      border: 2px solid var(--light-divider, #c1c7de);
+      height: 48px;
+      box-sizing: border-box;
+      width: 352px;
+      border-radius: 48px;
+      padding-left: 16px;
+      outline: none;
+      font-size: 14px;
+      color: var(--text-primary, #1e202c);
+    }
+    .button {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+    }
+  }
+}
+
+.linkGroups {
+  display: flex;
+  flex-direction: row;
+  .linkGroup {
+    padding-left: 32px;
+  }
+}
+.linkGroup {
+  width: 215px;
+  .groupTitle {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .link {
+    margin-top: 40px;
+  }
+}
+
+.links {
   .link {
     line-height: 24px;
     margin-right: 30px;
     font-size: 16px;
     a {
-      color: #ebebf1;
+      color: var(--text-light-secondary, #8c92ab);
       text-decoration: none;
       &:hover {
         text-decoration: underline;
       }
     }
+  }
+}
+
+.floor {
+  margin-top: 48px;
+  border-top: 1px solid var(--light-divider, #c1c7de);
+  padding-top: 32px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-light-secondary, #8c92ab);
+  font-size: 12px;
+  .gdpr {
+    color: var(--text-primary, #1e202c);
+  }
+}
+.gdpr {
+  .acceptButton {
+    font-weight: bold;
+    color: #0057ff;
+    text-decoration: none;
+    margin-left: 16px;
   }
 }

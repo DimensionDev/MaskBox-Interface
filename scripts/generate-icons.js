@@ -5,11 +5,13 @@ const prettier = require('prettier');
 const BASE_DIR = path.resolve(__dirname, '../src/components/Icon');
 const EXTNAMES = ['.svg', '.png'];
 
+const kebabToCamel = (str) => str.replace(/-(\w)/g, (_, m) => m.toUpperCase());
+
 const generateCode = (fileNames) => {
   const nameMap = {};
   const lines = [];
   const names = fileNames.map((fileName) => {
-    const name = path.parse(fileName).name;
+    const name = kebabToCamel(path.parse(fileName).name);
     nameMap[name] = fileName;
     lines.push(`export const ${name}Icon = new URL("./icons/${fileName}", import.meta.url).href`);
     return name;

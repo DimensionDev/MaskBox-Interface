@@ -7,40 +7,22 @@
   justify-content: center;
   white-space: nowrap;
   border-radius: 24px;
-  height: 30px;
-  padding: 4px 14px;
+  height: 40px;
+  border-radius: 6px;
+  padding: 12px 20px;
   &.small {
-    height: 24px;
-    border-radius: 24px;
+    height: 32px;
+    padding: 8px 16px;
     font-size: 12px;
   }
   &.middle {
-    height: 30px;
-    border-radius: 30px;
+    height: 40px;
+    padding: 12px 20px;
     font-size: 14px;
   }
   &.large {
-    height: 36px;
-    border-radius: 36px;
-    font-size: 16px;
-  }
-  &.fullWidth {
-    display: inline-block;
-    width: 100%;
-  }
-  &.small {
-    height: 24px;
-    border-radius: 24px;
-    font-size: 12px;
-  }
-  &.middle {
-    height: 30px;
-    border-radius: 30px;
-    font-size: 14px;
-  }
-  &.large {
-    height: 36px;
-    border-radius: 36px;
+    height: 48px;
+    padding: 14px 24px;
     font-size: 16px;
   }
   &.fullWidth {
@@ -48,7 +30,50 @@
     width: 100%;
   }
 }
+.round {
+  border-radius: 40px;
+  &.small {
+    border-radius: 32px;
+  }
+  &.middle {
+    border-radius: 40px;
+  }
+  &.large {
+    border-radius: 48px;
+  }
+}
+.circle {
+  border-radius: 40px;
+  width: 40px;
+  &.small {
+    width: 32px;
+  }
+  &.middle {
+    width: 40px;
+  }
+  &.large {
+    width: 48px;
+  }
+}
+.iconHolder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &.leftIcon {
+    margin-right: 10px;
+  }
+  &.rightIcon {
+    margin-left: 10px;
+  }
+}
+
 .variantDefault {
+}
+.schemeDefault {
   background-color: var(--button-default-bg, #1e202c);
+  color: var(--button-default-color, #ffffff);
+}
+.schemePrimary {
+  background-color: var(--button-primary-bg, #0057ff);
   color: var(--button-default-color, #ffffff);
 }
