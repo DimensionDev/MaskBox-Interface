@@ -10,6 +10,8 @@
   height: 40px;
   border-radius: 6px;
   padding: 12px 20px;
+  transition: background-color var(--theme-transition-duration, 0.1s) ease,
+    color var(--theme-transition-duration, 0.1s) ease;
   &.small {
     height: 32px;
     padding: 8px 16px;
@@ -67,13 +69,15 @@
   }
 }
 
-.variantDefault {
-}
 .schemeDefault {
   background-color: var(--button-default-bg, #1e202c);
   color: var(--button-default-color, #ffffff);
 }
 .schemePrimary {
   background-color: var(--button-primary-bg, #0057ff);
-  color: var(--button-default-color, #ffffff);
+  color: var(--button-primary-color, #ffffff);
+}
+.schemeLight {
+  background-color: var(--button-light-bg, #f0f2f6);
+  color: var(--button-light-color, #000000);
 }
