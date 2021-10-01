@@ -44,6 +44,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         </div>
         <nav className={styles.nav}>
           <NavLink
+            exact
             className={styles.navItem}
             activeClassName={styles.activeNav}
             to={RouteKeys.Home}

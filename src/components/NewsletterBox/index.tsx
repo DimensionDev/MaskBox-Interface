@@ -1,24 +1,20 @@
-import { FC } from 'react';
-import { RoundButton } from '../RoundButton';
+import { FC, HTMLProps } from 'react';
+import { BaseButton as Button, Icon } from '@/components';
 import styles from './index.module.less';
+import classnames from 'classnames';
 
-export const NewsletterBox: FC = () => {
+interface Props extends HTMLProps<HTMLDivElement> {}
+
+export const NewsletterBox: FC<Props> = ({ className, ...rest }) => {
   return (
-    <div className={styles.newsletter}>
-      <div className={styles.texts}>
-        <h2 className={styles.title}>NFTBOX Newsletter</h2>
-        <p className={styles.desc}>Follow us for more information about NFTBOX</p>
-      </div>
-      <div className={styles.form}>
-        <input
-          className={styles.inputBox}
-          placeholder="Please input your email address"
-          type="email"
-        />
-        <RoundButton className={styles.submitButton} size="large">
-          Submit
-        </RoundButton>
-      </div>
+    <div className={classnames(styles.newsletter, className)} {...rest}>
+      <div className={styles.newsletterTitle}>Join Newsletter</div>
+      <form className={styles.form}>
+        <input className={styles.input} type="email" placeholder="Enter your email" />
+        <Button className={styles.button} size="small" colorScheme="primary" circle>
+          <Icon type="arrowRight" size={24} />
+        </Button>
+      </form>
     </div>
   );
 };
