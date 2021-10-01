@@ -1,9 +1,8 @@
 import { logoImage } from '@/assets';
-import { BaseButton as Button, Icon } from '@/components';
+import { NewsletterBox } from '@/components';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
 import { NavLink } from 'react-router-dom';
-
 import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {}
@@ -18,15 +17,7 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
               <img src={logoImage} width="171" height="51" alt="NFTBOX" />
               <p className={styles.slogan}>The New Creative Economy.</p>
             </div>
-            <div className={styles.newsletter}>
-              <div className={styles.newsletterTitle}>Join Newsletter</div>
-              <form className={styles.form}>
-                <input className={styles.input} type="email" placeholder="Enter your email" />
-                <Button className={styles.button} size="small" colorScheme="primary" circle>
-                  <Icon type="arrowRight" size={24} />
-                </Button>
-              </form>
-            </div>
+            <NewsletterBox className={styles.newsletter} />
           </div>
           <div className={classnames(styles.linkGroups, styles.right)}>
             <dl className={styles.linkGroup}>

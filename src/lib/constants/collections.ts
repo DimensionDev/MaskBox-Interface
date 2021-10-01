@@ -11,6 +11,6 @@ export const selections = [
   },
   {
     id: 3,
-    name: 'unstarted (will start at 8/27)',
+    name: 'unstarted (until 8/27)',
   },
 ];

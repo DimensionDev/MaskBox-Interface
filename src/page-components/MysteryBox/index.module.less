@@ -1,98 +1,29 @@
-.container {
-  height: 908px;
-  background-image: url(bg.jpg);
-  background-repeat: no-repeat;
-  background-position: center;
+.mysteryBox {
+  font-family: Helvetica Neue;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 150px;
-  .boxGroup {
-    width: 800px;
-    height: 400px;
+  .interaction {
+    margin-left: 28px;
   }
 }
-.boxGroup {
-  position: relative;
-  .comp {
-    position: absolute;
-    background-repeat: no-repeat;
-    pointer-events: none;
-  }
-  .box {
-    width: 804px;
-    height: 753px;
-    left: 181px;
-    top: -50px;
-    background-image: url(./open-box.png);
-  }
-  .painting {
-    width: 313px;
-    height: 377px;
-    background-image: url(./painting.png);
-    background-position: left top;
-    background-size: 277px;
-    left: 260px;
-    bottom: 293px;
-    height: 139.5px;
-    &.open {
-      height: 377px;
-      bottom: 40px;
-      animation: openBox 0.2s ease;
-    }
-  }
-  .lisa {
-    height: 353px;
-    width: 340px;
-    left: 10px;
-    top: 20px;
-    background-image: url(./lisa.png);
-  }
-  .sunflower {
-    height: 318px;
-    width: 276px;
-    right: 16px;
-    top: 20px;
-    background-image: url(./sunflower.png);
+.media {
+  width: 480px;
+  height: 360px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.interaction {
+  .drawButton {
+    width: 400px;
+    margin-top: 28px;
   }
 }
-.painting {
-  .spinner {
-    height: 30px;
-    width: 30px;
-    position: absolute;
-    bottom: 80px;
-    left: 135px;
+.infoList {
+  .name {
+    font-size: 34px;
   }
-}
-.buttonGroup {
-  margin-top: 50px;
-  text-align: center;
-  .value {
-    font-size: 20px;
-    line-height: 26px;
-    color: #ffffff;
-    font-weight: bold;
-  }
-  .button {
-    justify-content: center;
-    margin-top: 20px;
-    margin-left: 23px;
-  }
-}
-
-@keyframes openBox {
-  0% {
-    height: 139px;
-    bottom: 293px;
-  }
-  50% {
-    height: 377px;
-    bottom: 293px;
-  }
-  100% {
-    height: 377px;
-    bottom: 40px;
+  .infoRow {
+    font-size: 18px;
+    line-height: 24px;
+    margin-top: 28px;
   }
 }

@@ -44,6 +44,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         </div>
         <nav className={styles.nav}>
           <NavLink
+            exact
             className={styles.navItem}
             activeClassName={styles.activeNav}
             to={RouteKeys.Home}
@@ -87,9 +88,6 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
                 <Icon className={styles.icon} type="wallet" size={16} />
                 {formatAddres(account)}
               </Button>
-              <Link className={styles.button} to="/profile">
-                <Icon type="lisa" size={36} />
-              </Link>
             </>
           ) : (
             <Button className={styles.button} onClick={connectWeb3}>

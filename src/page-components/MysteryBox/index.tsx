@@ -1,82 +1,27 @@
-import { LoadingIcon, showToast, ThickButton } from '@/components';
-import { useMBoxContract, useWeb3Context } from '@/contexts';
-import { Price } from '@/lib';
+import { BaseButton as Button } from '@/components';
 import classnames from 'classnames';
-import { utils } from 'ethers';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
-interface Props {
-  price: Price;
-  onOpen?: () => void;
-}
+interface Props extends HTMLProps<HTMLDivElement> {}
 
-export const MysteryBox: FC<Props> = ({ price, onOpen }) => {
-  const [opened, setOpened] = useState(false);
-  const [open, setOpen] = useState(false);
-  const paintingRef = useRef<HTMLDivElement>(null);
-  const { account, connectWeb3 } = useWeb3Context();
-  const { claim } = useMBoxContract();
-
-  useEffect(() => {
-    if (!paintingRef.current) {
-      return;
-    }
-    const animationendFn = () => {
-      setOpened(true);
-      setTimeout(() => {
-        onOpen?.();
-      }, 200);
-    };
-    const paintingEle = paintingRef.current;
-    paintingEle.addEventListener('animationend', animationendFn);
-    return () => {
-      paintingEle.removeEventListener('animationend', animationendFn);
-    };
-  }, [paintingRef.current, onOpen]);
-
-  const handleClaim = async () => {
-    const closeToast = showToast({
-      title: 'Claiming',
-    });
-    await claim();
-    closeToast();
-    showToast({
-      title: 'Claimed',
-      message: 'NFT claimed',
-    });
-  };
-
+export const MysteryBox: FC<Props> = ({ className, ...rest }) => {
   return (
-    <div className={styles.container}>
-      <div className={styles.boxGroup}>
-        <div className={classnames(styles.comp, styles.lisa)} />
-        <div className={classnames(styles.comp, styles.sunflower)} />
-        <div className={classnames(styles.comp, styles.box)} />
-        <div
-          ref={paintingRef}
-          className={classnames(styles.comp, styles.painting, open ? styles.open : null)}
-        >
-          {opened && (
-            <div className={styles.spinner}>
-              <LoadingIcon size={30} />
-            </div>
-          )}
-        </div>
+    <div className={classnames(styles.mysteryBox, className)} {...rest}>
+      <div className={styles.media}>
+        <img src={new URL('./mock-cover.jpg', import.meta.url).href} alt="name" />
       </div>
-      <div className={styles.buttonGroup}>
-        <p className={styles.value}>
-          {utils.formatUnits(price.value, price.decimals)} {price.symbol}
-        </p>
-        {account ? (
-          <ThickButton className={styles.button} onClick={handleClaim}>
-            Open Mystery Boxes
-          </ThickButton>
-        ) : (
-          <ThickButton className={styles.button} onClick={connectWeb3}>
-            Connect Wallet
-          </ThickButton>
-        )}
+      <div className={styles.interaction}>
+        <dl className={styles.infoList}>
+          <dt className={styles.name}>Hash Monkey</dt>
+          <dd className={styles.infoRow}>Lucky Draw</dd>
+          <dd className={styles.infoRow}>Get your unique card (NFT) by lucky draw</dd>
+          <dd className={styles.infoRow}>11/2304</dd>
+          <dd className={styles.infoRow}>limit : 5</dd>
+        </dl>
+        <Button className={styles.drawButton} colorScheme="primary">
+          Draw( 20.00 USDT/Time )
+        </Button>
       </div>
     </div>
   );

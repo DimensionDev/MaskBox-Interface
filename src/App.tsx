@@ -4,11 +4,9 @@ import { Routes } from './Routes';
 import { Layout } from './Layout';
 
 import { MBoxContractProvider, NFTContractProvider, ThemeProvider, Web3Provider } from './contexts';
-
-import styles from './app.module.less';
-
 import './base.less';
 import './theme.module.less';
+import styles from './app.module.less';
 
 function App() {
   return (
