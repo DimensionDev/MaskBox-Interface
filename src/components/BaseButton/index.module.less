@@ -31,6 +31,9 @@
     display: inline-block;
     width: 100%;
   }
+  &[disabled] {
+    cursor: not-allowed;
+  }
 }
 .round {
   border-radius: 40px;
@@ -76,8 +79,17 @@
 .schemePrimary {
   background-color: var(--button-primary-bg, #0057ff);
   color: var(--button-primary-color, #ffffff);
+  /* TODO: replace with css variables */
+  &[disabled] {
+    background: #99afff;
+  }
 }
 .schemeLight {
   background-color: var(--button-light-bg, #f0f2f6);
   color: var(--button-light-color, #000000);
+}
+/* TODO: replace with css variables */
+.schemeDanger {
+  background-color: #fb2047;
+  color: #fff;
 }

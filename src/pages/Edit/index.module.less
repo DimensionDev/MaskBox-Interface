@@ -1,0 +1,73 @@
+.editPage {
+  color: var(--text-primary, #1e202c);
+  box-sizing: border-box;
+  width: 1120px;
+  padding-right: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 120px;
+}
+.section {
+  margin-top: 10px;
+  .sectionTitle {
+    font-family: Helvetica Neue;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 34px;
+    line-height: 40px;
+  }
+  .field {
+    margin-top: 16px;
+  }
+}
+.field {
+  .cell {
+    margin-top: 16px;
+  }
+}
+.rowFieldGroup {
+  display: flex;
+  justify-content: space-between;
+  .field {
+    width: 286px;
+  }
+}
+.textarea {
+  font-family: Helvetica Neue;
+  height: 200px;
+  width: 100%;
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #c1c7de;
+  box-sizing: border-box;
+  border-radius: 6px;
+  resize: vertical;
+  max-height: 60vh;
+  &:invalid {
+    border: 1px solid var(--input-invalid-border, #fb2047);
+  }
+  &:valid:not(:placeholder-shown) {
+    border: 1px solid var(--input-valid-border, #2bc128);
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  .button {
+    margin-right: 16px;
+  }
+}
+
+.selectedNft {
+  padding: 8px 12px;
+  background: #ffffff;
+  border: 1px solid #c1c7de;
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+
+.buttonList {
+  .button {
+    margin-top: 16px;
+  }
+}

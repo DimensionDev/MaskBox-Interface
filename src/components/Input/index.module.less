@@ -1,0 +1,31 @@
+.input {
+  border-radius: 6px;
+  border: 1px solid var(--light-border, #c1c7de);
+  background-color: var(--input-bg, #fff);
+  box-sizing: border-box;
+  &.small {
+    height: 32px;
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+  &.middle {
+    height: 40px;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  &.large {
+    height: 48px;
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+  &.fullWidth {
+    width: 100%;
+  }
+  outline-color: var(--light-focus-border, #0057ff);
+  &:invalid {
+    border: 1px solid var(--input-invalid-border, #fb2047);
+  }
+  &:valid:not(:placeholder-shown) {
+    border: 1px solid var(--input-valid-border, #2bc128);
+  }
+}

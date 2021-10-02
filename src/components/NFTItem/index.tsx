@@ -3,18 +3,24 @@ import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
-export interface NFTItemProps extends NFTInfo {
+export interface NFTItemProps extends NFTInfo, HTMLProps<HTMLDivElement> {
   name?: string;
   imageUrl?: string;
 }
 
 const imagePlaceholder = 'https://picsum.photos/400/300';
 
-export const NFTItem: FC<NFTItemProps> = ({ name, percentage, imageUrl = imagePlaceholder }) => {
+export const NFTItem: FC<NFTItemProps> = ({
+  name,
+  percentage,
+  className,
+  imageUrl = imagePlaceholder,
+  ...rest
+}) => {
   return (
-    <div className={styles.nft}>
+    <div className={classnames(styles.nft, className)} {...rest}>
       <div className={styles.image}>
-        <img src={imageUrl} alt={name} width="200" height="150" />
+        <img src={imageUrl} alt={name} height="150" />
       </div>
       <div className={styles.info}>
         {name && <h3 className={styles.name}>{name}</h3>}
