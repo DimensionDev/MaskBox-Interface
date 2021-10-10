@@ -1,4 +1,4 @@
-import { ArticleSection, Collection, Empty } from '@/components';
+import { ArticleSection, Collection, Empty, PickerDialog } from '@/components';
 import { useMBoxContract } from '@/contexts';
 import { BuyBox, MysteryBox, ShareBox, StatusOverlay } from '@/page-components';
 import { FC, memo, useEffect, useState } from 'react';
@@ -77,6 +77,9 @@ export const Details: FC = memo(() => {
       />
       <ShareBox open={shareBoxOpen} onClose={() => setShareBoxOpen(false)} />
       <StatusOverlay name={info?._name ?? '-'} start={startTime} end={endTime} />
+      <PickerDialog open title="Under construction">
+        <p className={styles.wip}>This page is under construction</p>
+      </PickerDialog>
     </>
   );
 });

@@ -6,6 +6,7 @@ import { Layout } from './Layout';
 import {
   MBoxContractProvider,
   NFTContractProvider,
+  RSS3Provider,
   ThemeProvider,
   UploadProvider,
   Web3Provider,
@@ -22,9 +23,11 @@ function App() {
           <Web3Provider>
             <NFTContractProvider>
               <MBoxContractProvider>
-                <Layout>
-                  <Routes />
-                </Layout>
+                <RSS3Provider>
+                  <Layout>
+                    <Routes />
+                  </Layout>
+                </RSS3Provider>
               </MBoxContractProvider>
             </NFTContractProvider>
           </Web3Provider>

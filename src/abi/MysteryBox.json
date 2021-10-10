@@ -5,13 +5,13 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "owner",
+        "name": "creator",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "collection_id",
+        "name": "box_id",
         "type": "uint256"
       },
       {
@@ -42,17 +42,47 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "owner",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "nft_address",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "collection_id",
+        "name": "box_id",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "start_time",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "end_time",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "sell_all",
+        "type": "bool"
       }
     ],
-    "name": "CollectionCreated",
+    "name": "CreationSuccess",
     "type": "event"
   },
   {
@@ -60,24 +90,30 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "uint256",
+        "name": "box_id",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
         "internalType": "address",
-        "name": "owner",
+        "name": "customer",
         "type": "address"
       },
       {
         "indexed": true,
-        "internalType": "uint256",
-        "name": "collection_id",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "nft_address",
+        "type": "address"
       },
       {
         "indexed": false,
-        "internalType": "uint8",
-        "name": "number_of_nft",
-        "type": "uint8"
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
       }
     ],
-    "name": "NFTDrawn",
+    "name": "OpenSuccess",
     "type": "event"
   },
   {
@@ -103,11 +139,16 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_collection_id",
+        "name": "box_id",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "nft_id_list",
+        "type": "uint256[]"
       }
     ],
-    "name": "claimNFT",
+    "name": "addNftIntoBox",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -116,7 +157,7 @@
     "inputs": [
       {
         "internalType": "uint256[]",
-        "name": "_collection_ids",
+        "name": "box_ids",
         "type": "uint256[]"
       }
     ],
@@ -128,95 +169,14 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "collection_map",
-    "outputs": [
-      {
         "internalType": "address",
-        "name": "owner",
+        "name": "nft_address",
         "type": "address"
       },
       {
         "internalType": "string",
         "name": "name",
         "type": "string"
-      },
-      {
-        "internalType": "uint32",
-        "name": "purchase_limit",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "start_time",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "end_time",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "total_quantity",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "drawn_quantity",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "claimed_quantity",
-        "type": "uint32"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_name",
-        "type": "string"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_purchase_limit",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_start_time",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_end_time",
-        "type": "uint32"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint8",
-            "name": "percentage",
-            "type": "uint8"
-          },
-          {
-            "internalType": "uint32",
-            "name": "total",
-            "type": "uint32"
-          }
-        ],
-        "internalType": "struct MysteryBox.NFTOption[]",
-        "name": "_nft_options",
-        "type": "tuple[]"
       },
       {
         "components": [
@@ -232,11 +192,41 @@
           }
         ],
         "internalType": "struct MysteryBox.PaymentOption[]",
-        "name": "_payment",
+        "name": "payment",
         "type": "tuple[]"
+      },
+      {
+        "internalType": "uint32",
+        "name": "personal_limit",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "start_time",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "end_time",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "sell_all",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "nft_id_list",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address",
+        "name": "qualification",
+        "type": "address"
       }
     ],
-    "name": "createCollection",
+    "name": "createBox",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -245,132 +235,26 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_collection_id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_number_of_nft",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint8",
-        "name": "_payment_token_index",
-        "type": "uint8"
-      }
-    ],
-    "name": "drawNFT",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "fee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
+        "name": "box_id",
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_rand",
-        "type": "uint256"
-      }
-    ],
-    "name": "fulfillRandomness",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_collection_id",
-        "type": "uint256"
-      }
-    ],
-    "name": "getCollectionInfo",
+    "name": "getBoxInfo",
     "outputs": [
       {
         "internalType": "address",
-        "name": "_owner",
+        "name": "creator",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "nft_address",
         "type": "address"
       },
       {
         "internalType": "string",
-        "name": "_name",
+        "name": "name",
         "type": "string"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_purchase_limit",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_start_time",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_end_time",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_total_quantity",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_drawn_quantity",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_claimed_quantity",
-        "type": "uint32"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "latest_nft_id",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint32",
-            "name": "total",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "sold",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint8",
-            "name": "percentage",
-            "type": "uint8"
-          }
-        ],
-        "internalType": "struct MysteryBox.NFTInfo[]",
-        "name": "_nft_list",
-        "type": "tuple[]"
       },
       {
         "components": [
@@ -391,8 +275,38 @@
           }
         ],
         "internalType": "struct MysteryBox.PaymentInfo[]",
-        "name": "_payment_list",
+        "name": "payment",
         "type": "tuple[]"
+      },
+      {
+        "internalType": "uint32",
+        "name": "personal_limit",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "started",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "expired",
+        "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "remaining",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "total",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "qualification",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -401,16 +315,26 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_user_addr",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "box_id",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "cursor",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
       }
     ],
-    "name": "getPurchaseHistory",
+    "name": "getNftListForSale",
     "outputs": [
       {
         "internalType": "uint256[]",
-        "name": "_history",
+        "name": "nft_id_list",
         "type": "uint256[]"
       }
     ],
@@ -421,30 +345,20 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_collection_id",
+        "name": "box_id",
         "type": "uint256"
       },
       {
         "internalType": "address",
-        "name": "_user_addr",
+        "name": "customer",
         "type": "address"
       }
     ],
-    "name": "getPurchaseInfo",
+    "name": "getPurchasedNft",
     "outputs": [
       {
-        "internalType": "uint32",
-        "name": "_purchase_limit",
-        "type": "uint32"
-      },
-      {
-        "internalType": "uint32",
-        "name": "_purchased_number",
-        "type": "uint32"
-      },
-      {
         "internalType": "uint256[]",
-        "name": "_history",
+        "name": "nft_id_list",
         "type": "uint256[]"
       }
     ],
@@ -452,23 +366,7 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_linkAccessor",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_nftHandle",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_fee",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [],
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -478,50 +376,28 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_collection_id",
+        "name": "box_id",
         "type": "uint256"
       },
       {
-        "internalType": "address",
-        "name": "_user_addr",
-        "type": "address"
-      }
-    ],
-    "name": "isReadyToClaim",
-    "outputs": [
+        "internalType": "uint8",
+        "name": "amount",
+        "type": "uint8"
+      },
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "linkAccessor",
-    "outputs": [
+        "internalType": "uint8",
+        "name": "payment_token_index",
+        "type": "uint8"
+      },
       {
-        "internalType": "contract ILinkAccessor",
-        "name": "",
-        "type": "address"
+        "internalType": "bytes",
+        "name": "proof",
+        "type": "bytes"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "mysteryBoxNFT",
-    "outputs": [
-      {
-        "internalType": "contract IMysteryBoxNFT",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "openBox",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -547,58 +423,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_fee",
-        "type": "uint256"
-      }
-    ],
-    "name": "setFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_linkAccessor",
-        "type": "address"
-      }
-    ],
-    "name": "setLinkAccessor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_nftHandle",
-        "type": "address"
-      }
-    ],
-    "name": "setNftHandle",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "total_fee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "newOwner",
         "type": "address"
@@ -607,19 +431,6 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "unused_fee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]

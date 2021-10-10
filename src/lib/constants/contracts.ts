@@ -1,9 +1,19 @@
 import { ethers } from 'ethers';
 
-export const contractAddresses = {
+export const chainShortNameMap: Record<number, string> = {
+  1: 'Mainnet',
+  4: 'Rinkeby',
+};
+
+export const contractAddresses: Record<string, Record<string, string>> = {
   Rinkeby: {
-    MysteryBox: '0xBc972613eeb3f1CE0fa2B5B82A38447d5516a7b0',
-    MysteryBoxNFT: '0x49E4cA04206ae703674F716d32622f35AfFfD2B0',
+    MysteryBox: '0x0dFB34D213f613Dda67a2924F60b5301d42ABFb7',
+    MysteryBoxNFT: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
+    LinkAccessor: '0xFBCFD05989E63B59A9155b7cC3aF51701B1283De',
+  },
+  Mainnet: {
+    MysteryBox: '0xbFcf8210F5B6764D86a9C5252218ad627A6a949d',
+    MysteryBoxNFT: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
     LinkAccessor: '0xFBCFD05989E63B59A9155b7cC3aF51701B1283De',
   },
 };
