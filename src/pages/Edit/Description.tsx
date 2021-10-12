@@ -126,6 +126,7 @@ export const Description: FC = () => {
           fullWidth
           disabled={!fullfilled}
           colorScheme="primary"
+          size="large"
           onClick={() => {
             history.push('/edit/meta');
           }}

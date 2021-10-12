@@ -82,14 +82,15 @@ export const Meta: FC = () => {
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Contract</h2>
       <div className={styles.field}>
-        <label className={styles.fieldName}>Price per box (in eth)</label>
+        <label className={styles.fieldName}>Price per box (in Ether)</label>
         <Input
           min="0"
           step="0.01"
           type="number"
           className={styles.cell}
-          placeholder="Price in eth"
+          placeholder="Price in Ether"
           fullWidth
+          size="large"
           value={formData.pricePerBox}
           onChange={bindField('pricePerBox')}
         />
@@ -102,6 +103,7 @@ export const Meta: FC = () => {
           className={styles.cell}
           placeholder="Limit of purchase per wallet"
           fullWidth
+          size="large"
           value={formData.limit ?? ''}
           onChange={(evt) =>
             updateField('limit', evt.currentTarget.value ? parseInt(evt.currentTarget.value) : null)
@@ -110,11 +112,12 @@ export const Meta: FC = () => {
       </div>
 
       <div className={styles.field}>
-        <label className={styles.fieldName}>NFT Contract </label>
+        <label className={styles.fieldName}>NFT Contract</label>
         <div className={styles.cell}>
           <Input
             placeholder="Enter the contract address"
             fullWidth
+            size="large"
             value={formData.nftContractAddress}
             onChange={bindField('nftContractAddress')}
           />
@@ -166,6 +169,7 @@ export const Meta: FC = () => {
             className={styles.cell}
             placeholder="Date"
             fullWidth
+            size="large"
             type="datetime-local"
             value={formData.startAt}
             onChange={bindField('startAt')}
@@ -177,6 +181,7 @@ export const Meta: FC = () => {
             className={styles.cell}
             placeholder="Date"
             fullWidth
+            size="large"
             type="datetime-local"
             value={formData.endAt}
             onChange={bindField('endAt')}
@@ -190,6 +195,7 @@ export const Meta: FC = () => {
           className={styles.cell}
           placeholder="eg. 0x0c8FB5C985E00fb1D232b7B9700089492Fb4B9A8"
           fullWidth
+          size="large"
           value={formData.whiteList}
           onChange={bindField('whiteList')}
         />
@@ -200,6 +206,7 @@ export const Meta: FC = () => {
           <Button
             className={styles.button}
             fullWidth
+            size="large"
             colorScheme="primary"
             onClick={approveAll}
             disabled={checkingApprove}
@@ -208,18 +215,8 @@ export const Meta: FC = () => {
           </Button>
         )}
         <Button
-          title={validations.join('\n')}
           className={styles.button}
-          fullWidth
-          colorScheme="primary"
-          disabled={!isReady}
-          onClick={create}
-        >
-          Create Mystery box
-        </Button>
-        <Button
-          className={styles.button}
-          fullWidth
+          size="large"
           onClick={() => {
             if (history.length > 1) {
               history.goBack();
@@ -229,6 +226,17 @@ export const Meta: FC = () => {
           }}
         >
           Go back
+        </Button>
+        <Button
+          title={validations.join('\n')}
+          className={styles.button}
+          fullWidth
+          size="large"
+          colorScheme="primary"
+          disabled={!isReady}
+          onClick={create}
+        >
+          Create Mystery box
         </Button>
       </div>
       <div className={styles.field}>

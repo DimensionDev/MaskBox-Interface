@@ -1,5 +1,6 @@
 .button {
   cursor: pointer;
+  position: relative;
   background-color: transparent;
   border: none;
   display: flex;
@@ -33,6 +34,20 @@
   }
   &[disabled] {
     cursor: not-allowed;
+  }
+  &:not([disabled])::after {
+    content: '';
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  &:hover::after {
+    display: block;
   }
 }
 .round {
