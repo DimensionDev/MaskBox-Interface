@@ -113,7 +113,7 @@ export const Meta: FC = () => {
         <label className={styles.fieldName}>NFT Contract </label>
         <div className={styles.cell}>
           <Input
-            placeholder="Drop down to select or enter the contract address"
+            placeholder="Enter the contract address"
             fullWidth
             value={formData.nftContractAddress}
             onChange={bindField('nftContractAddress')}
@@ -188,7 +188,7 @@ export const Meta: FC = () => {
         <label className={styles.fieldName}>White list contract </label>
         <Input
           className={styles.cell}
-          placeholder="eg. 0x"
+          placeholder="eg. 0x0c8FB5C985E00fb1D232b7B9700089492Fb4B9A8"
           fullWidth
           value={formData.whiteList}
           onChange={bindField('whiteList')}
@@ -239,13 +239,13 @@ export const Meta: FC = () => {
         </ul>
       </div>
       <TokenPickerDialog open={false} />
-      <PickerDialog title="Share" open onClose={() => setUrlBoxVisible(false)}>
+      <PickerDialog title="Share" open={urlBoxVisible} onClose={() => setUrlBoxVisible(false)}>
         <div className={styles.urlBoxContent}>
           <p>
             Copy following url, and <a href={shareLink}> share</a> on twitter
           </p>
           <div className={styles.url}>
-            <a href={shareLink}>{boxUrl || 'http://box.mask.io/#/details?chain=1&box=2'}</a>
+            <a href={shareLink}>{boxUrl}</a>
           </div>
         </div>
       </PickerDialog>
