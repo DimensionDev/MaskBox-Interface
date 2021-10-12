@@ -1,6 +1,8 @@
 import classnames from 'classnames';
+import { omit, pick } from 'lodash-es';
 import { FC } from 'react';
 import toast from 'react-hot-toast';
+import { ToastOptions } from 'react-hot-toast/dist/core/types';
 import { Icon, LoadingIcon } from '../Icon';
 
 import styles from './index.module.less';
@@ -10,7 +12,6 @@ type VariantType = 'success' | 'warning' | 'error';
 export interface CustomToastContentProps {
   title: string;
   message?: string | React.ReactNode;
-  icon?: React.ReactNode;
   processing?: boolean;
   variant?: VariantType;
   onDismiss?: () => void;
@@ -42,18 +43,26 @@ export const ToastContent: FC<CustomToastContentProps> = ({
   );
 };
 
-interface ShowToastOptions extends Omit<CustomToastContentProps, 'onDismiss'> {}
+interface ShowToastOptions extends Omit<CustomToastContentProps, 'onDismiss'>, ToastOptions {}
 
 const ariaProps = {
   className: styles.toastAriaContainerFix,
 } as const;
 
 export function showToast(options: ShowToastOptions) {
+  const contentOptions = pick<ShowToastOptions, 'title' | 'message' | 'processing' | 'variant'>(
+    options,
+    'title',
+    'message',
+    'processing',
+    'variant',
+  );
+  const restOptions = omit(options, 'title', 'message', 'processing', 'variant');
   const toastId = toast(
     (t) => {
       return (
         <ToastContent
-          {...options}
+          {...contentOptions}
           onDismiss={() => {
             toast.dismiss(t.id);
           }}
@@ -64,6 +73,8 @@ export function showToast(options: ShowToastOptions) {
       /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
       // @ts-ignore
       ariaProps,
+      duration: options.processing ? Infinity : undefined,
+      ...restOptions,
     },
   );
   return () => {

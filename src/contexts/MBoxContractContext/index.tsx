@@ -1,9 +1,9 @@
 import { ERC20_ABI, MysteryBoxABI } from '@/abi';
 import { CollectionInfo } from '@/contracts';
 import {
-  contractAddresses,
   DEFAULT_COLLECTION_ID,
   drawTxParameters,
+  getContractAddressConfig,
   Price,
   ZERO,
   ZERO_ADDRESS,
@@ -11,7 +11,7 @@ import {
 } from '@/lib';
 import { BigNumber, Contract, ContractInterface } from 'ethers';
 import noop from 'lodash-es/noop';
-import React, { FC, memo, useCallback, useContext, useEffect, useRef } from 'react';
+import React, { FC, memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { useWeb3Context } from '../Web3Context';
 import { MboxState, useMbox } from './useMbox';
 
@@ -27,8 +27,9 @@ interface ContextOptions {
   buy(): Promise<{ hash: string } | void>;
   claim(): Promise<void>;
   setMbox: React.Dispatch<React.SetStateAction<MboxState>>;
-  getCollectionInfo(): Promise<CollectionInfo | null>;
+  getCollectionInfo(): Promise<CollectionInfo | null | undefined>;
   checkIsReadyToClaim(): Promise<void>;
+  contractAddress: string;
 }
 
 export const MBoxContractContext = React.createContext<ContextOptions>({
@@ -44,30 +45,34 @@ export const MBoxContractContext = React.createContext<ContextOptions>({
   collectionId: DEFAULT_COLLECTION_ID,
   setMbox: noop,
   checkIsReadyToClaim: () => Promise.resolve(),
+  contractAddress: '',
 });
 export const useMBoxContract = () => useContext(MBoxContractContext);
 
-// Rinkeby
-const contractAddress = contractAddresses.Rinkeby.MysteryBox;
-
-const mboxContract = new Contract(contractAddress, MysteryBoxABI as unknown as ContractInterface);
-
 export const MBoxContractProvider: FC = memo(({ children }) => {
-  const { account, ethersProvider } = useWeb3Context();
+  const { account, ethersProvider, providerChainId } = useWeb3Context();
   const [
     { info, price, balance, allowance, nftCount, paymentIndex, collectionId, isReadyToClaim },
     setMbox,
   ] = useMbox();
 
-  const contract = useRef(mboxContract);
+  const contractAddress = useMemo(
+    () => (providerChainId ? getContractAddressConfig(providerChainId).MysteryBox : ''),
+    [providerChainId],
+  );
+  const contract = useRef<Contract>();
   useEffect(() => {
-    if (ethersProvider) {
-      contract.current = contract.current.connect(ethersProvider);
+    if (ethersProvider && contractAddress) {
+      contract.current = new Contract(
+        contractAddress,
+        MysteryBoxABI as unknown as ContractInterface,
+        ethersProvider,
+      );
     }
-  }, [ethersProvider]);
+  }, [ethersProvider, contractAddress]);
 
   const checkIsReadyToClaim = useCallback(async () => {
-    if (!account) return;
+    if (!account || !contract.current) return;
     const result = await contract.current.isReadyToClaim(collectionId, account);
     setMbox((state) => ({
       ...state,
@@ -78,6 +83,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
   }, [collectionId, account]);
 
   const getCollectionInfo = useCallback(async () => {
+    if (!contract.current) return;
     try {
       const info: CollectionInfo = await contract.current.getCollectionInfo(collectionId);
       setMbox((state) => ({
@@ -151,8 +157,8 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
   }, [payment, ethersProvider]);
 
   const buy = useCallback(async () => {
-    if (!payment || !ethersProvider) return;
-    const tx = await mboxContract
+    if (!payment || !ethersProvider || !contract.current) return;
+    const tx = await contract.current
       .connect(ethersProvider.getSigner())
       .drawNFT(BigNumber.from(collectionId), nftCount, paymentIndex, drawTxParameters);
     await tx.wait(3);
@@ -160,10 +166,14 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
   }, [payment, nftCount, ethersProvider]);
 
   const claim = useCallback(async () => {
-    if (!ethersProvider || !account) return;
-    const ready = await mboxContract.connect(ethersProvider).isReadyToClaim(collectionId, account);
+    if (!ethersProvider || !account || !contract.current) return;
+    const ready = await contract.current
+      .connect(ethersProvider)
+      .isReadyToClaim(collectionId, account);
     console.log('isReadyToClaim', ready);
-    const result = await mboxContract.connect(ethersProvider.getSigner()).claimNFT(collectionId);
+    const result = await contract.current
+      .connect(ethersProvider.getSigner())
+      .claimNFT(collectionId);
     return result;
   }, [account, collectionId, ethersProvider]);
 
@@ -181,6 +191,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     buy,
     checkIsReadyToClaim,
     getCollectionInfo,
+    contractAddress,
   };
 
   return (

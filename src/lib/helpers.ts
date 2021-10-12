@@ -1,5 +1,12 @@
 import { BigNumber } from 'ethers';
-import { chainUrls, networkExplorers, networkIcons, networkNames } from './constants';
+import {
+  chainShortNameMap,
+  chainUrls,
+  contractAddresses,
+  networkExplorers,
+  networkIcons,
+  networkNames,
+} from './constants';
 
 export const getRPCUrl = (chainId: keyof typeof chainUrls) => {
   return chainUrls[chainId || 1].rpc;
@@ -11,6 +18,11 @@ export const logError = (error: { [key: string]: Error }) => {
 
 export const getNetworkName = (chainId: number) => {
   return networkNames[chainId] || 'Unknown Network';
+};
+
+export const getContractAddressConfig = (chainId: number) => {
+  const shortName = chainShortNameMap[chainId];
+  return contractAddresses[shortName];
 };
 
 export const getNetworkIcon = (chainId: number) => {

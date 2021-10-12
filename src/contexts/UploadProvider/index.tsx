@@ -1,12 +1,15 @@
+import { showToast } from '@/components';
 import { createContext, FC, useContext, useMemo, useState } from 'react';
 
+type UploadResult = string;
+
 interface IUploadContext {
-  upload: () => Promise<any>;
+  upload: () => Promise<UploadResult>;
   uploading: boolean;
 }
 
 const UploadContext = createContext<IUploadContext>({
-  upload: () => Promise.resolve({}),
+  upload: () => Promise.resolve(''),
   uploading: false,
 });
 
@@ -22,19 +25,36 @@ const createInput = () => {
   return inputEl;
 };
 
+const ONE_MB = 1 * 1024 * 1024;
+
 export const UploadProvider: FC = ({ children }) => {
   const [uploading, setUploading] = useState(false);
 
   const upload = useMemo(() => {
-    const uploadFile = async (file: File) => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // TODO upload file
+    const uploadFile = async (file: File): Promise<UploadResult | undefined> => {
+      if (file.size > ONE_MB) {
+        showToast({
+          variant: 'error',
+          title: 'File size of cover image up to 1MB',
+        });
+        return;
+      }
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', (evt) => {
+          if (evt.target) {
+            const result = evt.target.result as string;
+            resolve(result);
+          }
+        });
+        reader.readAsDataURL(file);
+      });
     };
 
     return async () => {
       const inputEl = createInput();
       document.body.appendChild(inputEl);
-      const result = await new Promise((resolve, reject) => {
+      const result = await new Promise<string | undefined>((resolve, reject) => {
         inputEl.addEventListener('change', (ev: Event) => {
           const file = (ev.target as HTMLInputElement)?.files?.[0];
           if (file) {

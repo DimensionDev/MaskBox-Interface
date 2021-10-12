@@ -9,13 +9,21 @@
     align-items: center;
   }
 }
+.item {
+  position: relative;
+  .checkbox {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+}
 .addItem {
   display: flex;
   justify-content: center;
   align-items: center;
   background: #f0f2f6;
   width: 175px;
-  height: 100%;
+  height: 210px;
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
@@ -24,4 +32,6 @@
   width: 175px;
   border-radius: 8px;
   overflow: hidden;
+  display: flex;
+  cursor: pointer;
 }

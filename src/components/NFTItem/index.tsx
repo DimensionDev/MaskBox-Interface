@@ -1,54 +1,37 @@
-import { CollectionInfo, NFTInfo } from '@/contracts';
+import { ERC721Token } from '@/types';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
-export interface NFTItemProps extends NFTInfo, HTMLProps<HTMLDivElement> {
-  name?: string;
-  imageUrl?: string;
+export interface NFTItemProps extends HTMLProps<HTMLDivElement> {
+  token: ERC721Token;
 }
 
 const imagePlaceholder = 'https://picsum.photos/400/300';
 
-export const NFTItem: FC<NFTItemProps> = ({
-  name,
-  percentage,
-  className,
-  imageUrl = imagePlaceholder,
-  ...rest
-}) => {
+export const NFTItem: FC<NFTItemProps> = ({ className, token, ...rest }) => {
   return (
     <div className={classnames(styles.nft, className)} {...rest}>
       <div className={styles.image}>
-        <img src={imageUrl} alt={name} height="150" />
+        <img src={token.image ?? imagePlaceholder} alt={token.name} height="100%" />
       </div>
       <div className={styles.info}>
-        {name && <h3 className={styles.name}>{name}</h3>}
-        {percentage && (
-          <p className={styles.meta}>
-            <span className={styles.metaName}>Probability</span>
-            <span className={styles.metaValue}>{percentage ?? '-'}%</span>
-          </p>
-        )}
+        {token.name && <h3 className={styles.name}>{token.name}</h3>}
       </div>
     </div>
   );
 };
 
 interface CollectionProps extends HTMLProps<HTMLUListElement> {
-  collection?: CollectionInfo;
+  tokens: ERC721Token[];
 }
 
-export const Collection: FC<CollectionProps> = ({ collection, className, ...rest }) => {
-  if (!collection) return null;
-
-  const { _name: name, _nft_list: nfts = [] } = collection;
-
+export const Collection: FC<CollectionProps> = ({ tokens, className, ...rest }) => {
   return (
     <ul className={classnames(styles.nftList, className)} {...rest}>
-      {nfts.map((nft) => (
-        <li key={nft.latest_nft_id.toString()} className={styles.nftItem}>
-          <NFTItem {...nft} name={name} />
+      {tokens.map((token) => (
+        <li key={token.tokenId.toString()} className={styles.nftItem}>
+          <NFTItem token={token} />
         </li>
       ))}
     </ul>

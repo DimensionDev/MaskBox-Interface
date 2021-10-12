@@ -9,7 +9,6 @@ export interface NFTInfo {
   latest_nft_id: BigNumber;
   total: number;
   sold: number;
-  percentage: number;
 }
 
 export interface PaymentInfo {

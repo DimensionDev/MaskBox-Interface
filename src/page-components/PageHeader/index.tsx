@@ -1,12 +1,12 @@
 import { logoImage } from '@/assets';
-import { Icon, BaseButton as Button } from '@/components';
-import { ThemeType, useMBoxContract, useTheme, useWeb3Context } from '@/contexts';
-import { getNetworkIcon, getNetworkName, selections } from '@/lib';
-import { formatAddres } from '@/utils';
+import { BaseButton as Button, Icon } from '@/components';
 import { RouteKeys } from '@/configs';
+import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
+import { getNetworkIcon, getNetworkName } from '@/lib';
+import { formatAddres } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useHistory } from 'react-router-dom';
 import { SelectNetwork } from '../SelectNetwork';
 import styles from './index.module.less';
 
@@ -15,9 +15,9 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   const { account, providerChainId, connectWeb3 } = useWeb3Context();
   const [selectNetworkVisible, setSelectNetworkVisible] = useState(false);
-  const { collectionId, setMbox } = useMBoxContract();
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === ThemeType.Dark;
+  const history = useHistory();
 
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
@@ -26,21 +26,6 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           <Link to="/" className={styles.logo} title="NFTBOX">
             <img src={logoImage} width="171" height="51" alt="NFTBOX" />
           </Link>
-          <select
-            value={collectionId}
-            onChange={(ev) =>
-              setMbox((state) => ({
-                ...state,
-                collectionId: parseInt(ev.target.value),
-              }))
-            }
-          >
-            {selections.map((sel) => (
-              <option key={sel.id} value={sel.id}>
-                {sel.name}
-              </option>
-            ))}
-          </select>
         </div>
         <nav className={styles.nav}>
           <NavLink
@@ -87,6 +72,16 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
               <Button className={styles.button} title={account}>
                 <Icon className={styles.icon} type="wallet" size={16} />
                 {formatAddres(account)}
+              </Button>
+              <Button
+                className={styles.button}
+                colorScheme="primary"
+                title={account}
+                onClick={() => {
+                  history.push('/edit');
+                }}
+              >
+                Create
               </Button>
             </>
           ) : (
