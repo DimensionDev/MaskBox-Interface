@@ -239,12 +239,14 @@ export const Meta: FC = () => {
         </ul>
       </div>
       <TokenPickerDialog open={false} />
-      <PickerDialog title="Share" open={urlBoxVisible} onClose={() => setUrlBoxVisible(false)}>
-        <p>
-          Copy following url, and <a href={shareLink}> share on twitter</a>
-        </p>
-        <div className={styles.url}>
-          <a href={shareLink}>{boxUrl}</a>
+      <PickerDialog title="Share" open onClose={() => setUrlBoxVisible(false)}>
+        <div className={styles.urlBoxContent}>
+          <p>
+            Copy following url, and <a href={shareLink}> share</a> on twitter
+          </p>
+          <div className={styles.url}>
+            <a href={shareLink}>{boxUrl || 'http://box.mask.io/#/details?chain=1&box=2'}</a>
+          </div>
         </div>
       </PickerDialog>
       <NFTPickerDialog

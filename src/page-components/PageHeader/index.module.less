@@ -1,6 +1,5 @@
 .pageHeader {
   height: 74px;
-  padding: 16px 20px;
   box-sizing: border-box;
   background: var(--background, '#ffffff');
   transition: background-color var(--theme-transition-duration, 0.1s) ease;
@@ -10,6 +9,8 @@
     width: 1120px;
     margin-left: auto;
     margin-right: auto;
+    align-items: center;
+    height: 100%;
   }
 }
 .nav {
@@ -18,7 +19,8 @@
   justify-content: center;
   font-family: Manrope;
   .navItem {
-    font-size: 20px;
+    font-size: 14px;
+    line-height: 16px;
     white-space: nowrap;
     color: var(--nav-text, #8c92ab);
     transition: color var(--theme-transition-duration, 0.1s) ease;
