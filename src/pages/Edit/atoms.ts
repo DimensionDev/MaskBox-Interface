@@ -54,7 +54,7 @@ export const descriptionFullfilledAtom = atom((get) => {
   const activitiesFullFilled = formData.activities.reduce((result, activity) => {
     return result && !!activity.title && !!activity.body;
   }, true);
-  return !!formData.name && activitiesFullFilled;
+  return !!formData.name && formData.cover && activitiesFullFilled;
 });
 
 export const metaFullfilledAtom = atom((get) => {
@@ -86,6 +86,7 @@ export const validationsAtom = atom<string[]>((get) => {
       validations.push(`Please fullfill for Activity Description ${index + 1}`);
     }
   });
+  if (!formData.cover) validations.push('Please provide Mystery thumbnail');
   if (!formData.pricePerBox) validations.push('Please provide price for a box');
   if (!formData.limit || formData.limit < 1)
     validations.push('Limit of purchase per wallet is at least 1');

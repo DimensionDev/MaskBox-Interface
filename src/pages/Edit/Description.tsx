@@ -14,6 +14,8 @@ import {
 } from './atoms';
 import styles from './index.module.less';
 
+const wip = true;
+
 export const Description: FC = () => {
   const { upload, uploading } = useUpload();
   const fullfilled = useAtomValue(descriptionFullfilledAtom);
@@ -62,15 +64,26 @@ export const Description: FC = () => {
       <div className={styles.field}>
         <label className={styles.fieldName}>Mystery thumbnail</label>
         {/* TODO let uploadBox tab selectable */}
-        <UploadBox
-          className={classnames(styles.uploadBox, styles.cell)}
-          uploading={uploading}
-          previewUrl={formData.cover}
-          onClick={async () => {
-            const url = await upload();
-            setFormData((fd) => ({ ...fd, cover: url }));
-          }}
-        />
+        {wip ? (
+          <Input
+            className={styles.cell}
+            placeholder="eg. https://mask.io/assets/images/meme-1.jpg"
+            fullWidth
+            size="large"
+            value={formData.cover}
+            onChange={bindField('cover')}
+          />
+        ) : (
+          <UploadBox
+            className={classnames(styles.uploadBox, styles.cell)}
+            uploading={uploading}
+            previewUrl={formData.cover}
+            onClick={async () => {
+              const url = await upload();
+              setFormData((fd) => ({ ...fd, cover: url }));
+            }}
+          />
+        )}
       </div>
 
       {formData.activities.map((activity, index, list) => (
