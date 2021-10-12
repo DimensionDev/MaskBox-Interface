@@ -16,3 +16,4 @@ export * from './UploadBox';
 export * from './NFTSelectList';
 export * from './PickerDialog';
 export * from './TokenList';
+export * from './Textarea';

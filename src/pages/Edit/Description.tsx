@@ -1,4 +1,4 @@
-import { BaseButton as Button, Input, UploadBox } from '@/components';
+import { BaseButton as Button, Input, Textarea, UploadBox } from '@/components';
 import { useUpload } from '@/contexts';
 import classnames from 'classnames';
 import { useAtom } from 'jotai';
@@ -59,7 +59,7 @@ export const Description: FC = () => {
           onChange={bindField('name')}
         />
       </div>
-      <div className={styles.field} style={{ display: 'none' }}>
+      <div className={styles.field}>
         <label className={styles.fieldName}>Mystery thumbnail</label>
         {/* TODO let uploadBox tab selectable */}
         <UploadBox
@@ -89,8 +89,8 @@ export const Description: FC = () => {
               updateActivityAt(index, (act) => ({ ...act, title: newValue }));
             }}
           />
-          <textarea
-            className={`${styles.cell} ${styles.textarea}`}
+          <Textarea
+            className={styles.cell}
             placeholder="Write Something.."
             value={activity.body}
             onChange={(evt) => {

@@ -1,0 +1,19 @@
+.textarea {
+  font-family: Helvetica Neue;
+  height: 200px;
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--input-bg, #fff);
+  border: 1px solid var(--light-border, #c1c7de);
+  box-sizing: border-box;
+  border-radius: 6px;
+  resize: vertical;
+  max-height: 60vh;
+  color: var(--text-primary, #1e202c);
+  &:invalid {
+    border: 1px solid var(--input-invalid-border, #fb2047);
+  }
+  &:valid:not(:placeholder-shown) {
+    border: 1px solid var(--input-valid-border, #2bc128);
+  }
+}
