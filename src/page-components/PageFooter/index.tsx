@@ -25,10 +25,10 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
               <dd className={styles.groupList}>
                 <ul className={styles.links}>
                   <li className={styles.link}>
-                    <a href="#">Twitter</a>
+                    <a href="https://twitter.com/realMaskNetwork">Twitter</a>
                   </li>
                   <li className={styles.link}>
-                    <a href="#">Telegram</a>
+                    <a href="https://t.me/maskbook_group">Telegram</a>
                   </li>
                 </ul>
               </dd>
@@ -39,7 +39,7 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
               <dd className={styles.groupList}>
                 <ul className={styles.links}>
                   <li className={styles.link}>
-                    <a href="#">Medium</a>
+                    <a href="https://masknetwork.medium.com/">Medium</a>
                   </li>
                   <li className={styles.link}>
                     <NavLink to="/faqs">FAQs</NavLink>

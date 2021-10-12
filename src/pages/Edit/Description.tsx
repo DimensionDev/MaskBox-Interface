@@ -54,6 +54,7 @@ export const Description: FC = () => {
           className={styles.cell}
           placeholder="eg. Punk & Mask Special Edition"
           fullWidth
+          size="large"
           value={formData.name}
           onChange={bindField('name')}
         />
@@ -81,6 +82,7 @@ export const Description: FC = () => {
             className={styles.cell}
             placeholder="eg.Rule Introduction"
             fullWidth
+            size="large"
             value={activity.title}
             onChange={(evt) => {
               const newValue = evt.currentTarget.value;

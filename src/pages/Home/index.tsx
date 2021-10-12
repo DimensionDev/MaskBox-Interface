@@ -14,7 +14,7 @@ export const Home: FC = () => {
         <div className={styles.content}>
           <h2 className={styles.title}>Time to enjoy NFT Mystery on chain !</h2>
           <p className={styles.description}>
-            we are a team for professional NFT Mystery launching. Our team is organized by the top
+            We are a team for professional NFT Mystery launching. Our team is organized by the top
             team in Blockchain field which have amounts of digital art works publishing experiences.
           </p>
           <Button

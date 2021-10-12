@@ -53,7 +53,7 @@ export const Details: FC = memo(() => {
   if (wip) {
     return (
       <PickerDialog open title="Under construction">
-        <p className={styles.wip}>This page is under construction</p>
+        <p className={styles.wip}>This page is under construction.</p>
       </PickerDialog>
     );
   }
@@ -88,7 +88,7 @@ export const Details: FC = memo(() => {
       <ShareBox open={shareBoxOpen} onClose={() => setShareBoxOpen(false)} />
       <StatusOverlay name={info?._name ?? '-'} start={startTime} end={endTime} />
       <PickerDialog open title="Under construction">
-        <p className={styles.wip}>This page is under construction</p>
+        <p className={styles.wip}>This page is under construction.</p>
       </PickerDialog>
     </>
   );

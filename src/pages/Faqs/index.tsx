@@ -8,7 +8,7 @@ export const Faqs: FC = () => {
   if (wip) {
     return (
       <PickerDialog open title="Under construction">
-        <p className={styles.wip}>This page is under construction</p>
+        <p className={styles.wip}>This page is under construction.</p>
       </PickerDialog>
     );
   }
