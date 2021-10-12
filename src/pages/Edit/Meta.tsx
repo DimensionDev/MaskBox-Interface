@@ -24,7 +24,7 @@ export const Meta: FC = () => {
   const validations = useAtomValue(validationsAtom);
   const bindField = useBindFormField();
   const updateField = useUpdateFormField();
-  const { account } = useWeb3Context();
+  const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
   const [boxUrl, setBoxUrl] = useState('');
   const [urlBoxVisible, setUrlBoxVisible] = useState(false);
@@ -33,12 +33,12 @@ export const Meta: FC = () => {
     .href;
 
   const createBox = useCreateMysteryBox();
-  const { isApproveAll, ownedTokens } = useEdit();
+  const { isApproveAll, approveAll, checkingApprove, ownedTokens } = useEdit();
 
   const selectedTokens = ownedTokens;
   console.log({ selectedTokens });
 
-  const { saveBox, getBox } = useRSS3();
+  const { saveBox } = useRSS3();
   const create = useCallback(async () => {
     if (!isReady || validations.length) {
       validations.forEach((validation) => {
@@ -54,27 +54,29 @@ export const Meta: FC = () => {
       processing: true,
       duration: Infinity,
     });
-    const result = await createBox();
-    if (result) {
-      const { args } = result;
-      await saveBox({
-        id: args.box_id.toString(),
-        name: args.name,
-        cover: formData.cover,
-        activities: formData.activities,
+    try {
+      const result = await createBox();
+      if (result) {
+        const { args } = result;
+        await saveBox({
+          id: args.box_id.toString(),
+          name: args.name,
+          cover: formData.cover,
+          activities: formData.activities,
+        });
+        setBoxUrl(`https://box.mask.io/#/details?chain=${providerChainId}&box=${args.box_id}`);
+        setUrlBoxVisible(true);
+      }
+    } catch (err) {
+      showToast({
+        title: `Fails to create: ${(err as Error).message}`,
+        variant: 'error',
       });
-      setBoxUrl(`https://box.mask.io/#/details?chain=${1}&box={args.box_id}`);
-      setUrlBoxVisible(true);
+      throw err;
+    } finally {
+      closeToast();
     }
-
-    closeToast();
   }, [createBox, isReady]);
-
-  const getBoxMetaInfo = useCallback(async () => {
-    if (!account) return;
-    const result = await getBox(account);
-    console.log('box result', { result });
-  }, [getBox, account]);
 
   return (
     <section className={styles.section}>
@@ -194,9 +196,15 @@ export const Meta: FC = () => {
       </div>
 
       <div className={classnames(styles.field, styles.buttonList)}>
-        {!isApproveAll && (
-          <Button className={styles.button} fullWidth colorScheme="primary" onClick={create}>
-            Unlock NFT
+        {!isApproveAll && formData.nftContractAddress && (
+          <Button
+            className={styles.button}
+            fullWidth
+            colorScheme="primary"
+            onClick={approveAll}
+            disabled={checkingApprove}
+          >
+            {checkingApprove ? 'Checking...' : 'Unlock NFT'}
           </Button>
         )}
         <Button

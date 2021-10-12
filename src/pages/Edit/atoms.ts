@@ -35,7 +35,7 @@ const endAt = date.toJSON().split('.')[0];
 const initFormData: FormData = {
   name: '',
   cover: '',
-  activities: [newActivity()],
+  activities: [newActivity(), newActivity(), newActivity()],
   pricePerBox: '',
   tokenAddress: ZERO_ADDRESS,
   limit: 5,
@@ -54,7 +54,7 @@ export const descriptionFullfilledAtom = atom((get) => {
   const activitiesFullFilled = formData.activities.reduce((result, activity) => {
     return result && !!activity.title && !!activity.body;
   }, true);
-  return !!formData.name && !!formData.cover && activitiesFullFilled;
+  return !!formData.name && activitiesFullFilled;
 });
 
 export const metaFullfilledAtom = atom((get) => {
@@ -81,7 +81,6 @@ export const validationsAtom = atom<string[]>((get) => {
   const formData = get(formDataAtom);
   const validations: string[] = [];
   if (!formData.name) validations.push('Please input mystery box name');
-  if (!formData.cover) validations.push('Please add a cover');
   formData.activities.forEach((activity, index) => {
     if (!activity.title || !activity.body) {
       validations.push(`Please fullfill for Activity Description ${index + 1}`);

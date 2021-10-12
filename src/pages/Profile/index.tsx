@@ -1,9 +1,11 @@
 import { FC, useEffect, useMemo } from 'react';
 import { avatarImage } from '@/assets';
 import styles from './index.module.less';
-import { ArticleSection, Empty, NeonButton, Collection } from '@/components';
+import { ArticleSection, Empty, NeonButton, Collection, PickerDialog } from '@/components';
 import { useNFTContract } from '@/contexts';
 import { BigNumber } from 'ethers';
+
+const wip = true;
 
 export const Profile: FC = () => {
   const { tokens, getMyTokens } = useNFTContract();
@@ -19,6 +21,13 @@ export const Profile: FC = () => {
     }));
   }, [tokens]);
 
+  if (wip) {
+    return (
+      <PickerDialog open title="Under construction">
+        <p className={styles.wip}>This page is under construction</p>
+      </PickerDialog>
+    );
+  }
   console.log('my tokens', tokens);
   return (
     <article>

@@ -58,7 +58,7 @@ export const Description: FC = () => {
           onChange={bindField('name')}
         />
       </div>
-      <div className={styles.field}>
+      <div className={styles.field} style={{ display: 'none' }}>
         <label className={styles.fieldName}>Mystery thumbnail</label>
         {/* TODO let uploadBox tab selectable */}
         <UploadBox
@@ -109,7 +109,7 @@ export const Description: FC = () => {
           >
             Add
           </Button>
-          {formData.activities.length > 1 && (
+          {formData.activities.length > 3 && (
             <Button
               className={styles.button}
               colorScheme="danger"

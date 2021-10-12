@@ -31,6 +31,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
       const balance = await contract
         .balanceOf(account)
         .catch((getMyBalanceError: Error) => console.error({ getMyBalanceError }));
+      if (!balance) return 0;
 
       console.log('balance', balance);
       return (balance as BigNumber).toNumber();

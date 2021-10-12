@@ -5,6 +5,8 @@ import { FC, memo, useEffect, useState } from 'react';
 import * as data from './data';
 import styles from './index.module.less';
 
+const wip = true;
+
 export const Details: FC = memo(() => {
   const [shareBoxOpen, setShareBoxOpen] = useState(false);
   const {
@@ -47,6 +49,14 @@ export const Details: FC = memo(() => {
     }, 1000);
     return () => clearInterval(timer);
   }, [startTime, endTime]);
+
+  if (wip) {
+    return (
+      <PickerDialog open title="Under construction">
+        <p className={styles.wip}>This page is under construction</p>
+      </PickerDialog>
+    );
+  }
 
   return (
     <>

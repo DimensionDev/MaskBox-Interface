@@ -1,4 +1,5 @@
 import { MysteryBoxABI } from '@/abi';
+import { showToast } from '@/components';
 import { useWeb3Context } from '@/contexts';
 import { getContractAddressConfig, ZERO_ADDRESS } from '@/lib';
 import { Contract, ContractInterface, ethers } from 'ethers';
@@ -34,7 +35,7 @@ export function useCreateMysteryBox() {
       formData.whiteList || ZERO_ADDRESS,
     );
     await result.wait(1);
-    const logs = await ethersProvider.getLogs(contract.current.filters.CreationSuccess());
+    const logs = await ethersProvider.getLogs(contract.filters.CreationSuccess());
     const parsedLog = abiInterface.parseLog(logs[0]);
     console.log({ result, parsedLog });
     return parsedLog;

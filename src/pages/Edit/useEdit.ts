@@ -1,4 +1,5 @@
 import { MysterBoxNFTABI } from '@/abi';
+import { showToast } from '@/components';
 import { useNFTContract, useWeb3Context } from '@/contexts';
 import { getContractAddressConfig } from '@/lib';
 import { ERC721Token } from '@/types';
@@ -10,6 +11,7 @@ import { formDataAtom } from './atoms';
 export function useEdit() {
   const formData = useAtomValue(formDataAtom);
   const [isApproveAll, setIsApproveAll] = useState(false);
+  const [checkingApprove, setCheckingApprove] = useState(false);
   const { account, ethersProvider, providerChainId } = useWeb3Context();
   const [ownedTokens, setOwnedTokens] = useState<ERC721Token[]>([]);
   const contractAddress = useMemo(
@@ -22,9 +24,11 @@ export function useEdit() {
     setIsApproveAll(false);
     if (!utils.isAddress(formData.nftContractAddress)) return;
 
+    setCheckingApprove(true);
     const contract = new Contract(formData.nftContractAddress, MysterBoxNFTABI, ethersProvider);
     const result = await contract.isApprovedForAll(account, contractAddress);
     setIsApproveAll(result as boolean);
+    setCheckingApprove(false);
   }, [account, formData.nftContractAddress]);
 
   useEffect(() => {
@@ -42,16 +46,31 @@ export function useEdit() {
 
   const approveAll = useCallback(async () => {
     if (!ethersProvider || !formData.nftContractAddress) return;
-    const contract = new Contract(
-      formData.nftContractAddress,
-      MysterBoxNFTABI,
-      ethersProvider.getSigner(),
-    );
-    await contract.setApprovalForAll(contractAddress, true);
-    checkIsApproveAll();
+    const closeToast = showToast({
+      title: 'Unlocking',
+      processing: true,
+    });
+    try {
+      const contract = new Contract(
+        formData.nftContractAddress,
+        MysterBoxNFTABI,
+        ethersProvider.getSigner(),
+      );
+      const tx = await contract.setApprovalForAll(contractAddress, true);
+      await tx.wait(1);
+      checkIsApproveAll();
+    } catch (err) {
+      showToast({
+        title: `Fails to unlock ${(err as Error).message}`,
+        variant: 'error',
+      });
+    } finally {
+      closeToast();
+    }
   }, [ethersProvider, formData.nftContractAddress, checkIsApproveAll]);
 
   return {
+    checkingApprove,
     isApproveAll,
     approveAll,
     ownedTokens,
