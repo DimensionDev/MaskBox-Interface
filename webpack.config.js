@@ -8,7 +8,7 @@ const config = {
   entry: './src/main.tsx',
   target: 'web',
   output: {
-    publicPath: '/Mystery-Box-Interface/',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -55,7 +55,7 @@ const config = {
     }),
   ],
   devServer: {
-    contentBasePublicPath: '/Mystery-Box-Interface',
+    contentBasePublicPath: '/',
     contentBase: path.resolve(__dirname, 'public'),
   },
   resolve: {

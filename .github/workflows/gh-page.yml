@@ -18,7 +18,10 @@ jobs:
         run: yarn install
 
       - name: Build
-        run: yarn build
+        run: |
+          yarn build
+          cp public/CNAME dist
+          cp public/logo.png dist
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

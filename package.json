@@ -10,7 +10,7 @@
     "gen:assets": "node ./scripts/generate-assets.js",
     "gen:icons": "node ./scripts/generate-icons.js"
   },
-  "homepage": "https://dimensiondev.github.io/Mystery-Box-Interface/",
+  "homepage": "https://box.mask.io/",
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
