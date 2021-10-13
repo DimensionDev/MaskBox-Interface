@@ -35,9 +35,6 @@ export const Meta: FC = () => {
   const createBox = useCreateMysteryBox();
   const { isApproveAll, approveAll, checkingApprove, ownedTokens } = useEdit();
 
-  const selectedTokens = ownedTokens;
-  console.log({ selectedTokens });
-
   const { saveBox } = useRSS3();
   const create = useCallback(async () => {
     if (!isReady || validations.length) {
@@ -153,7 +150,7 @@ export const Meta: FC = () => {
         <div className={styles.cell}>
           <div className={styles.selectedNft}>
             <NFTSelectList
-              tokens={selectedTokens}
+              tokens={ownedTokens}
               selectedTokenIds={formData.selectedNFTIds}
               onPick={() => setNftPickerVisible(true)}
             />

@@ -47,7 +47,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
       if (!tokenId) return null;
       const uri = await contract.tokenURI(tokenId);
       const data = await fetchNFTTokenDetail(uri);
-      return { ...data, tokenId: index.toString() } as ERC721Token;
+      return { ...data, tokenId } as ERC721Token;
     },
     [account],
   );

@@ -66,7 +66,7 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
           {!accepted && (
             <div className={styles.gdpr}>
               We use cookies for better service.
-              <a href="javascript:void(0)" className={styles.acceptButton} onClick={accept}>
+              <a className={styles.acceptButton} onClick={accept}>
                 Accept
               </a>
             </div>

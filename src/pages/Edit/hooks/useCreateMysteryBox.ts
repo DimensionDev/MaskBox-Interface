@@ -2,7 +2,7 @@ import { MysteryBoxABI } from '@/abi';
 import { showToast } from '@/components';
 import { useWeb3Context } from '@/contexts';
 import { getContractAddressConfig, ZERO_ADDRESS } from '@/lib';
-import { Contract, ContractInterface, ethers } from 'ethers';
+import { BigNumber, Contract, ContractInterface, ethers } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
