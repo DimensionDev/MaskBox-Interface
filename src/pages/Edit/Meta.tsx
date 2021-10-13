@@ -87,7 +87,6 @@ export const Meta: FC = () => {
       <h2 className={styles.sectionTitle}>Contract</h2>
       <Field className={styles.field} name="Price per box (in Ether)" required>
         <Input
-          min="0"
           type="number"
           placeholder="Price in Ether"
           fullWidth
