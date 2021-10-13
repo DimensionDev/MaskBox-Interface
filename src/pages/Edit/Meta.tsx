@@ -11,7 +11,7 @@ import { NFTPickerDialog, TokenPickerDialog } from '@/page-components';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   formDataAtom,
@@ -82,11 +82,18 @@ export const Meta: FC = () => {
     }
   }, [createBox, isReady]);
 
+  useEffect(() => {
+    if (formData.pricePerBox.startsWith('-')) {
+      updateField('pricePerBox', formData.pricePerBox.slice(1));
+    }
+  }, [formData.pricePerBox]);
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Contract</h2>
       <Field className={styles.field} name="Price per box (in Ether)" required>
         <Input
+          inputMode="decimal"
           type="number"
           placeholder="Price in Ether"
           fullWidth
