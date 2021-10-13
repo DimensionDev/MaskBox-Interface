@@ -4,14 +4,14 @@ import styles from './index.module.less';
 
 type SizeType = 'small' | 'middle' | 'large';
 
-interface Props extends Omit<HTMLProps<HTMLInputElement>, 'size'> {
+export interface InputProps extends Omit<HTMLProps<HTMLInputElement>, 'size'> {
   size?: SizeType;
   fullWidth?: boolean;
   round?: boolean;
   leftAddon?: React.ReactNode;
 }
 
-export const Input: FC<Props> = memo(
+export const Input: FC<InputProps> = memo(
   ({ size = 'middle', className, type, fullWidth, round, leftAddon, ...rest }) => {
     return (
       <div className={classnames(styles.container, className)}>

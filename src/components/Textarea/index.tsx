@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, HTMLProps } from 'react';
 import classnames from 'classnames';
 import styles from './index.module.less';
 

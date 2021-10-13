@@ -51,10 +51,7 @@ export const formDataAtom = atom<FormData>(initFormData);
 
 export const descriptionFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);
-  const activitiesFullFilled = formData.activities.reduce((result, activity) => {
-    return result && !!activity.title && !!activity.body;
-  }, true);
-  return !!formData.name && formData.cover && activitiesFullFilled;
+  return !!formData.name && formData.cover;
 });
 
 export const metaFullfilledAtom = atom((get) => {
@@ -81,11 +78,6 @@ export const validationsAtom = atom<string[]>((get) => {
   const formData = get(formDataAtom);
   const validations: string[] = [];
   if (!formData.name) validations.push('Please input mystery box name');
-  formData.activities.forEach((activity, index) => {
-    if (!activity.title || !activity.body) {
-      validations.push(`Please fullfill for Activity Description ${index + 1}`);
-    }
-  });
   if (!formData.cover) validations.push('Please provide Mystery thumbnail');
   if (!formData.pricePerBox) validations.push('Please provide price for a box');
   if (!formData.limit || formData.limit < 1)
