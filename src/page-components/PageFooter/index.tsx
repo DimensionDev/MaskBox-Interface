@@ -1,5 +1,6 @@
 import { logoImage } from '@/assets';
 import { NewsletterBox } from '@/components';
+import { useGdpr } from '@/hooks';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -8,6 +9,7 @@ import styles from './index.module.less';
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const PageFooter: FC<Props> = ({ className, ...rest }) => {
+  const { accepted, accept } = useGdpr();
   return (
     <footer className={classnames(styles.footer, className)} {...rest}>
       <div className={styles.inner}>
@@ -61,12 +63,14 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
         </div>
         <div className={styles.floor}>
           <div className={styles.copyright}>Copyright &copy; 2021 MASKBOX. All rights reserved</div>
-          <div className={styles.gdpr}>
-            We use cookies for better service.
-            <a href="#" className={styles.acceptButton}>
-              Accept
-            </a>
-          </div>
+          {!accepted && (
+            <div className={styles.gdpr}>
+              We use cookies for better service.
+              <a href="javascript:void(0)" className={styles.acceptButton} onClick={accept}>
+                Accept
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </footer>
