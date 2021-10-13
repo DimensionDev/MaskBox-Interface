@@ -85,7 +85,6 @@ export const Meta: FC = () => {
         <label className={styles.fieldName}>Price per box (in Ether)</label>
         <Input
           min="0"
-          step="0.01"
           type="number"
           className={styles.cell}
           placeholder="Price in Ether"
