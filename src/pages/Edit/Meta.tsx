@@ -78,7 +78,7 @@ export const Meta: FC = () => {
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Contract</h2>
-      <div className={styles.field}>
+      <div className={classnames(styles.field, styles.required)}>
         <label className={styles.fieldName}>Price per box (in Ether)</label>
         <Input
           min="0"
@@ -92,7 +92,7 @@ export const Meta: FC = () => {
         />
       </div>
 
-      <div className={styles.field}>
+      <div className={classnames(styles.field, styles.required)}>
         <label className={styles.fieldName}>Limit of purchase per wallet</label>
         <Input
           type="number"
@@ -107,7 +107,7 @@ export const Meta: FC = () => {
         />
       </div>
 
-      <div className={styles.field}>
+      <div className={classnames(styles.field, styles.required)}>
         <label className={styles.fieldName}>NFT Contract</label>
         <div className={styles.cell}>
           <Input
@@ -159,7 +159,7 @@ export const Meta: FC = () => {
       </div>
 
       <div className={styles.rowFieldGroup}>
-        <div className={styles.field}>
+        <div className={classnames(styles.field, styles.required)}>
           <label className={styles.fieldName}>Start date (UTC+8)</label>
           <Input
             className={styles.cell}
@@ -171,7 +171,7 @@ export const Meta: FC = () => {
             onChange={bindField('startAt')}
           />
         </div>
-        <div className={styles.field}>
+        <div className={classnames(styles.field, styles.required)}>
           <label className={styles.fieldName}>End date (UTC+8)</label>
           <Input
             className={styles.cell}

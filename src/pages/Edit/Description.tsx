@@ -50,7 +50,7 @@ export const Description: FC = () => {
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Description</h2>
-      <div className={styles.field}>
+      <div className={classnames(styles.field, styles.required)}>
         <label className={styles.fieldName}>Mystery box name</label>
         <Input
           className={styles.cell}
@@ -61,7 +61,7 @@ export const Description: FC = () => {
           onChange={bindField('name')}
         />
       </div>
-      <div className={styles.field}>
+      <div className={classnames(styles.field, styles.required)}>
         <label className={styles.fieldName}>Mystery thumbnail</label>
         {/* TODO let uploadBox tab selectable */}
         {wip ? (

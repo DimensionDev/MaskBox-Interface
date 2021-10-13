@@ -30,6 +30,16 @@
     font-size: 16px;
     margin-top: 16px;
   }
+  &.required {
+    .fieldName {
+      &::after {
+        margin-left: 5px;
+        display: inline-block;
+        content: '*';
+        color: #fb2047;
+      }
+    }
+  }
 }
 .selectGroup {
   margin-top: 10px;
