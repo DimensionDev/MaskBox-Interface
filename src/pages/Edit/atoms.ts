@@ -79,7 +79,11 @@ export const validationsAtom = atom<string[]>((get) => {
   const validations: string[] = [];
   if (!formData.name) validations.push('Please input mystery box name');
   if (!formData.cover) validations.push('Please provide Mystery thumbnail');
-  if (!formData.pricePerBox) validations.push('Please provide price for a box');
+  if (!formData.pricePerBox) {
+    validations.push('Please provide price for a box');
+  } else if (parseFloat(formData.pricePerBox) < 0) {
+    validations.push('Price box must be positive');
+  }
   if (!formData.limit || formData.limit < 1)
     validations.push('Limit of purchase per wallet is at least 1');
   if (!formData.nftContractAddress) {
