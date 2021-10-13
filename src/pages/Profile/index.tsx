@@ -1,9 +1,9 @@
-import { FC, useEffect, useMemo } from 'react';
 import { avatarImage } from '@/assets';
-import styles from './index.module.less';
-import { ArticleSection, Empty, NeonButton, Collection, PickerDialog } from '@/components';
+import { ArticleSection, Collection, Empty, NeonButton } from '@/components';
 import { useNFTContract } from '@/contexts';
 import { BigNumber } from 'ethers';
+import { FC, useEffect, useMemo } from 'react';
+import styles from './index.module.less';
 
 const wip = true;
 
@@ -22,11 +22,8 @@ export const Profile: FC = () => {
   }, [tokens]);
 
   if (wip) {
-    return (
-      <PickerDialog open title="Under construction">
-        <p className={styles.wip}>This page is under construction.</p>
-      </PickerDialog>
-    );
+    // eslint-disable-next-line react/jsx-no-undef
+    return <WipDialog />;
   }
   console.log('my tokens', tokens);
   return (
