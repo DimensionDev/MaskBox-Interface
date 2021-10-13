@@ -1,6 +1,6 @@
 import { ArticleSection, Collection, Empty, PickerDialog } from '@/components';
 import { useMBoxContract } from '@/contexts';
-import { BuyBox, MysteryBox, ShareBox, StatusOverlay } from '@/page-components';
+import { BuyBox, MysteryBox, ShareBox, StatusOverlay, WipDialog } from '@/page-components';
 import { FC, memo, useEffect, useState } from 'react';
 import * as data from './data';
 import styles from './index.module.less';
@@ -51,11 +51,7 @@ export const Details: FC = memo(() => {
   }, [startTime, endTime]);
 
   if (wip) {
-    return (
-      <PickerDialog open title="Under construction">
-        <p className={styles.wip}>This page is under construction.</p>
-      </PickerDialog>
-    );
+    return <WipDialog />;
   }
 
   return (

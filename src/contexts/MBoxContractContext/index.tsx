@@ -72,15 +72,8 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
   }, [ethersProvider, contractAddress]);
 
   const checkIsReadyToClaim = useCallback(async () => {
-    if (!account || !contract.current) return;
-    const result = await contract.current.isReadyToClaim(collectionId, account);
-    setMbox((state) => ({
-      ...state,
-      isReadyToClaim: result,
-    }));
-
-    return result;
-  }, [collectionId, account]);
+    return false;
+  }, []);
 
   const getCollectionInfo = useCallback(async () => {
     if (!contract.current) return;
