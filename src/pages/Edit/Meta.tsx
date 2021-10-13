@@ -90,7 +90,24 @@ export const Meta: FC = () => {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.sectionTitle}>Contract</h2>
+      <h2 className={styles.sectionTitle}>
+        Contract
+        <span className={styles.step}>2/2</span>
+        <Button
+          colorScheme="light"
+          className={styles.backButton}
+          size="large"
+          onClick={() => {
+            if (history.length > 1) {
+              history.goBack();
+            } else {
+              history.push('/edit/desc');
+            }
+          }}
+        >
+          Go back
+        </Button>
+      </h2>
       <Field className={styles.field} name="Price per box (in Ether)" required>
         <Input
           inputMode="decimal"
@@ -208,19 +225,6 @@ export const Meta: FC = () => {
             {checkingApprove ? 'Checking...' : 'Unlock NFT'}
           </Button>
         )}
-        <Button
-          className={styles.button}
-          size="large"
-          onClick={() => {
-            if (history.length > 1) {
-              history.goBack();
-            } else {
-              history.push('/edit/desc');
-            }
-          }}
-        >
-          Go back
-        </Button>
         <Button
           title={validations.join('\n')}
           className={styles.button}

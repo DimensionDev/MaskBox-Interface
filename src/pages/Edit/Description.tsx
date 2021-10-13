@@ -49,7 +49,10 @@ export const Description: FC = () => {
 
   return (
     <section className={styles.section}>
-      <h2 className={styles.sectionTitle}>Description</h2>
+      <h2 className={styles.sectionTitle}>
+        Description
+        <span className={styles.step}>1/2</span>
+      </h2>
       <Field className={styles.field} name="Mystery box name" required>
         <Input
           placeholder="eg. Punk & Mask Special Edition"
