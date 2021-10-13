@@ -9,6 +9,7 @@ import {
 import { useRSS3, useWeb3Context } from '@/contexts';
 import { NFTPickerDialog, TokenPickerDialog } from '@/page-components';
 import classnames from 'classnames';
+import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { FC, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -20,9 +21,8 @@ import {
   validationsAtom,
 } from './atoms';
 import { useCreateMysteryBox } from './hooks';
-import { useEdit } from './useEdit';
 import styles from './index.module.less';
-import { utils } from 'ethers';
+import { useEdit } from './useEdit';
 
 export const Meta: FC = () => {
   const history = useHistory();
@@ -190,7 +190,7 @@ export const Meta: FC = () => {
       </Field>
 
       <div className={classnames(styles.field, styles.buttonList)}>
-        {!isApproveAll && formData.nftContractAddress && (
+        {!isApproveAll && utils.isAddress(formData.nftContractAddress) && (
           <Button
             className={styles.button}
             fullWidth

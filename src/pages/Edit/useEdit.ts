@@ -25,9 +25,16 @@ export function useEdit() {
     if (!utils.isAddress(formData.nftContractAddress)) return;
 
     setCheckingApprove(true);
-    const contract = new Contract(formData.nftContractAddress, MysterBoxNFTABI, ethersProvider);
-    const result = await contract.isApprovedForAll(account, contractAddress);
-    setIsApproveAll(result as boolean);
+    try {
+      const contract = new Contract(formData.nftContractAddress, MysterBoxNFTABI, ethersProvider);
+      const result = await contract.isApprovedForAll(account, contractAddress);
+      setIsApproveAll(result as boolean);
+    } catch (err) {
+      showToast({
+        title: `Fails to check approving: ${(err as Error).message}`,
+        variant: 'error',
+      });
+    }
     setCheckingApprove(false);
   }, [account, formData.nftContractAddress]);
 
