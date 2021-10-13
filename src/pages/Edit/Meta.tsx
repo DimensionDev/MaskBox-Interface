@@ -1,4 +1,11 @@
-import { BaseButton as Button, Input, NFTSelectList, PickerDialog, showToast } from '@/components';
+import {
+  BaseButton as Button,
+  Field,
+  Input,
+  NFTSelectList,
+  PickerDialog,
+  showToast,
+} from '@/components';
 import { useRSS3, useWeb3Context } from '@/contexts';
 import { NFTPickerDialog, TokenPickerDialog } from '@/page-components';
 import classnames from 'classnames';
@@ -78,25 +85,20 @@ export const Meta: FC = () => {
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Contract</h2>
-      <div className={classnames(styles.field, styles.required)}>
-        <label className={styles.fieldName}>Price per box (in Ether)</label>
+      <Field className={styles.field} name="Price per box (in Ether)" required>
         <Input
           min="0"
           type="number"
-          className={styles.cell}
           placeholder="Price in Ether"
           fullWidth
           size="large"
           value={formData.pricePerBox}
           onChange={bindField('pricePerBox')}
         />
-      </div>
-
-      <div className={classnames(styles.field, styles.required)}>
-        <label className={styles.fieldName}>Limit of purchase per wallet</label>
+      </Field>
+      <Field className={styles.field} name="Limit of purchase per wallet" required>
         <Input
           type="number"
-          className={styles.cell}
           placeholder="Limit of purchase per wallet"
           fullWidth
           size="large"
@@ -105,64 +107,58 @@ export const Meta: FC = () => {
             updateField('limit', evt.currentTarget.value ? parseInt(evt.currentTarget.value) : null)
           }
         />
-      </div>
+      </Field>
 
-      <div className={classnames(styles.field, styles.required)}>
-        <label className={styles.fieldName}>NFT Contract</label>
-        <div className={styles.cell}>
-          <Input
-            placeholder="Enter the contract address"
-            fullWidth
-            size="large"
-            value={formData.nftContractAddress}
-            onChange={bindField('nftContractAddress')}
-          />
-          {utils.isAddress(formData.nftContractAddress) && (
-            <div className={styles.selectGroup}>
-              <label className={styles.selectType}>
-                <input
-                  type="radio"
-                  value="all"
-                  checked={formData.sellAll}
-                  onChange={(evt) => updateField('sellAll', evt.currentTarget.checked)}
-                />
-                All
-              </label>
-              <label className={styles.selectType}>
-                <input
-                  type="radio"
-                  value="part"
-                  checked={!formData.sellAll}
-                  onChange={(evt) => updateField('sellAll', !evt.currentTarget.checked)}
-                />
-                Selective part
-              </label>
-            </div>
-          )}
-        </div>
-      </div>
+      <Field className={styles.field} name="NFT Contract" required>
+        <Input
+          placeholder="Enter the contract address"
+          fullWidth
+          size="large"
+          value={formData.nftContractAddress}
+          onChange={bindField('nftContractAddress')}
+        />
+        {utils.isAddress(formData.nftContractAddress) && (
+          <div className={styles.selectGroup}>
+            <label className={styles.selectType}>
+              <input
+                type="radio"
+                value="all"
+                checked={formData.sellAll}
+                onChange={(evt) => updateField('sellAll', evt.currentTarget.checked)}
+              />
+              All
+            </label>
+            <label className={styles.selectType}>
+              <input
+                type="radio"
+                value="part"
+                checked={!formData.sellAll}
+                onChange={(evt) => updateField('sellAll', !evt.currentTarget.checked)}
+              />
+              Selective part
+            </label>
+          </div>
+        )}
+      </Field>
 
-      <div
+      <Field
         className={styles.field}
+        name="Select NFT"
+        required
         style={{ display: formData.nftContractAddress && !formData.sellAll ? 'block' : 'none' }}
       >
-        <label className={styles.fieldName}>Select NFT</label>
-        <div className={styles.cell}>
-          <div className={styles.selectedNft}>
-            <NFTSelectList
-              tokens={ownedTokens}
-              selectedTokenIds={formData.selectedNFTIds}
-              onPick={() => setNftPickerVisible(true)}
-            />
-          </div>
+        <div className={styles.selectedNft}>
+          <NFTSelectList
+            tokens={ownedTokens}
+            selectedTokenIds={formData.selectedNFTIds}
+            onPick={() => setNftPickerVisible(true)}
+          />
         </div>
-      </div>
+      </Field>
 
       <div className={styles.rowFieldGroup}>
-        <div className={classnames(styles.field, styles.required)}>
-          <label className={styles.fieldName}>Start date (UTC+8)</label>
+        <Field className={styles.field} name="Start date (UTC+8)" required>
           <Input
-            className={styles.cell}
             placeholder="Date"
             fullWidth
             size="large"
@@ -170,11 +166,9 @@ export const Meta: FC = () => {
             value={formData.startAt}
             onChange={bindField('startAt')}
           />
-        </div>
-        <div className={classnames(styles.field, styles.required)}>
-          <label className={styles.fieldName}>End date (UTC+8)</label>
+        </Field>
+        <Field className={styles.field} name="End date (UTC+8)" required>
           <Input
-            className={styles.cell}
             placeholder="Date"
             fullWidth
             size="large"
@@ -182,20 +176,18 @@ export const Meta: FC = () => {
             value={formData.endAt}
             onChange={bindField('endAt')}
           />
-        </div>
+        </Field>
       </div>
 
-      <div className={styles.field}>
-        <label className={styles.fieldName}>White list contract </label>
+      <Field className={styles.field} name="White list contract">
         <Input
-          className={styles.cell}
           placeholder="eg. 0x0c8FB5C985E00fb1D232b7B9700089492Fb4B9A8"
           fullWidth
           size="large"
           value={formData.whiteList}
           onChange={bindField('whiteList')}
         />
-      </div>
+      </Field>
 
       <div className={classnames(styles.field, styles.buttonList)}>
         {!isApproveAll && formData.nftContractAddress && (

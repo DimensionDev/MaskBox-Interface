@@ -88,6 +88,10 @@ export const validationsAtom = atom<string[]>((get) => {
     validations.push('NFT contract address is not valid');
   }
 
+  if (!formData.sellAll && formData.selectedNFTIds.length < 1) {
+    validations.push('Please select some NFTs');
+  }
+
   const startDateValid = isValidDate(new Date(formData.startAt));
   if (!formData.startAt || !startDateValid) {
     validations.push('Please set a valid start date');

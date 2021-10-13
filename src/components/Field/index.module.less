@@ -1,0 +1,15 @@
+.field {
+  &.required {
+    .fieldName {
+      &::after {
+        margin-left: 5px;
+        display: inline-block;
+        content: '*';
+        color: #fb2047;
+      }
+    }
+  }
+  .content {
+    margin-top: 16px;
+  }
+}

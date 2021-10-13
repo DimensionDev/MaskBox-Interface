@@ -1,4 +1,4 @@
-import { BaseButton as Button, Input, Textarea, UploadBox } from '@/components';
+import { BaseButton as Button, Field, Input, Textarea, UploadBox } from '@/components';
 import { useUpload } from '@/contexts';
 import classnames from 'classnames';
 import { useAtom } from 'jotai';
@@ -50,23 +50,19 @@ export const Description: FC = () => {
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Description</h2>
-      <div className={classnames(styles.field, styles.required)}>
-        <label className={styles.fieldName}>Mystery box name</label>
+      <Field className={styles.field} name="Mystery box name" required>
         <Input
-          className={styles.cell}
           placeholder="eg. Punk & Mask Special Edition"
           fullWidth
           size="large"
           value={formData.name}
           onChange={bindField('name')}
         />
-      </div>
-      <div className={classnames(styles.field, styles.required)}>
-        <label className={styles.fieldName}>Mystery thumbnail</label>
+      </Field>
+      <Field className={styles.field} name="Mystery thumbnail" required>
         {/* TODO let uploadBox tab selectable */}
         {wip ? (
           <Input
-            className={styles.cell}
             placeholder="eg. https://mask.io/assets/images/meme-1.jpg"
             fullWidth
             size="large"
@@ -75,7 +71,7 @@ export const Description: FC = () => {
           />
         ) : (
           <UploadBox
-            className={classnames(styles.uploadBox, styles.cell)}
+            className={styles.uploadBox}
             uploading={uploading}
             previewUrl={formData.cover}
             onClick={async () => {
@@ -84,15 +80,15 @@ export const Description: FC = () => {
             }}
           />
         )}
-      </div>
+      </Field>
 
       {formData.activities.map((activity, index, list) => (
-        <div className={styles.field} key={index}>
-          <label className={styles.fieldName}>
-            Activity description {list.length > 1 ? index + 1 : ''}{' '}
-          </label>
+        <Field
+          className={styles.field}
+          name={`Activity description ${list.length > 1 ? index + 1 : ''}`}
+          key={index}
+        >
           <Input
-            className={styles.cell}
             placeholder="eg.Rule Introduction"
             fullWidth
             size="large"
@@ -111,7 +107,7 @@ export const Description: FC = () => {
               updateActivityAt(index, (act) => ({ ...act, body: newValue }));
             }}
           />
-        </div>
+        </Field>
       ))}
 
       <div className={styles.field}>
