@@ -57,6 +57,7 @@ const config = {
   devServer: {
     contentBasePublicPath: '/',
     contentBase: path.resolve(__dirname, 'public'),
+    hot: true,
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json'],

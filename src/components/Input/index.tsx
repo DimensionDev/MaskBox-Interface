@@ -9,10 +9,11 @@ export interface InputProps extends Omit<HTMLProps<HTMLInputElement>, 'size'> {
   fullWidth?: boolean;
   round?: boolean;
   leftAddon?: React.ReactNode;
+  rightAddon?: React.ReactNode;
 }
 
 export const Input: FC<InputProps> = memo(
-  ({ size = 'middle', className, type, fullWidth, round, leftAddon, ...rest }) => {
+  ({ size = 'middle', className, type, fullWidth, round, leftAddon, rightAddon, ...rest }) => {
     return (
       <div className={classnames(styles.container, className)}>
         {leftAddon ? <span className={styles.leftHolder}>{leftAddon}</span> : null}
@@ -25,6 +26,7 @@ export const Input: FC<InputProps> = memo(
           type={type ?? 'text'}
           {...rest}
         />
+        {rightAddon ? <span className={styles.rightHolder}>{rightAddon}</span> : null}
       </div>
     );
   },

@@ -8,7 +8,7 @@ import { Meta } from './Meta';
 export const Edit: FC = () => {
   return (
     <main className={styles.editPage}>
-      <h1 className={styles.title}>Create Mystery box</h1>
+      <h1 className={styles.title}>Create Maskbox</h1>
       <Provider>
         <Switch>
           <Route exact path="/edit/desc" component={Description}></Route>

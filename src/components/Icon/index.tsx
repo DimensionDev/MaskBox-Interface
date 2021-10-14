@@ -25,13 +25,13 @@ export const Icon: FC<IconProps> = memo(({ type, iconUrl, size, className, style
   return <span {...rest} className={classnames(styles.icon, className)} style={iconStyle} />;
 });
 
-export const LoadingIcon: FC<Omit<IconProps, 'type'>> = (props) => {
+export const LoadingIcon: FC<IconProps> = (props) => {
   return (
     <Icon
       size={24}
       className={classnames(props.className, styles.spinning)}
-      {...props}
       type="loading"
+      {...props}
     />
   );
 };

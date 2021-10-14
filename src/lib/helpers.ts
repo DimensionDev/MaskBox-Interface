@@ -3,9 +3,12 @@ import {
   chainShortNameMap,
   chainUrls,
   contractAddresses,
+  nativeTokens,
   networkExplorers,
   networkIcons,
   networkNames,
+  tokenListUrls,
+  TokenType,
 } from './constants';
 
 export const getRPCUrl = (chainId: keyof typeof chainUrls) => {
@@ -40,6 +43,14 @@ export const getCoingeckoTokenId = (tokenSymbol: string) => {
 
 export const getNetworkExplorer = (chainId: number) => {
   return networkExplorers[chainId];
+};
+
+export const getTokenListUrl = (chainId: number) => {
+  return tokenListUrls[chainId] as string;
+};
+
+export const getNativeToken = (chainId: number): TokenType => {
+  return nativeTokens[chainId];
 };
 
 export type Price = {

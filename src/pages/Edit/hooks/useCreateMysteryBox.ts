@@ -1,8 +1,7 @@
 import { MysteryBoxABI } from '@/abi';
-import { showToast } from '@/components';
 import { useWeb3Context } from '@/contexts';
 import { getContractAddressConfig, ZERO_ADDRESS } from '@/lib';
-import { BigNumber, Contract, ContractInterface, ethers } from 'ethers';
+import { Contract, ContractInterface, ethers } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
@@ -26,7 +25,12 @@ export function useCreateMysteryBox() {
     const result = await contract.createBox(
       formData.nftContractAddress,
       formData.name,
-      [{ token_addr: formData.tokenAddress, price: ethers.utils.parseEther(formData.pricePerBox) }],
+      [
+        {
+          token_addr: formData.tokenAddress,
+          price: ethers.utils.parseUnits(formData.pricePerBox, formData.token?.decimals ?? 18),
+        },
+      ],
       limit,
       Math.floor(new Date(formData.startAt).getTime() / 1000),
       Math.floor(new Date(formData.endAt).getTime() / 1000),

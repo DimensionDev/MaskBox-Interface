@@ -104,7 +104,7 @@
   }
 }
 .validations {
-  color: var(--input-valid-border, #2bc128);
+  color: var(--input-invalid-border, #2bc128);
 }
 
 .urlBoxContent {
@@ -118,4 +118,21 @@
   a {
     margin: 0 0.5em;
   }
+}
+
+.pickButton {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  .tokenIcon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+  .tokenSymbol {
+    margin: 0 10px;
+  }
+  font-size: 16px;
+  color: var(--text-primary, #1e202c);
 }

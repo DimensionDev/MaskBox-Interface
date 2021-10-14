@@ -1,17 +1,21 @@
 import {
   BaseButton as Button,
   Field,
+  Icon,
   Input,
   NFTSelectList,
   PickerDialog,
   showToast,
+  TokenIcon,
 } from '@/components';
 import { useRSS3, useWeb3Context } from '@/contexts';
+import { useTokenList } from '@/hooks';
 import { NFTPickerDialog, TokenPickerDialog } from '@/page-components';
+import { isSameAddress } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   formDataAtom,
@@ -24,6 +28,8 @@ import { useCreateMysteryBox } from './hooks';
 import styles from './index.module.less';
 import { useEdit } from './useEdit';
 
+const timezoneOffset = -new Date().getTimezoneOffset() / 60;
+
 export const Meta: FC = () => {
   const history = useHistory();
   const formData = useAtomValue(formDataAtom);
@@ -35,6 +41,7 @@ export const Meta: FC = () => {
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
   const [boxUrl, setBoxUrl] = useState('');
   const [urlBoxVisible, setUrlBoxVisible] = useState(false);
+  const [tokenBoxVisible, setTokenBoxVisible] = useState(false);
 
   const shareLink = new URL(`https://twitter.com/intent/tweet?text=${encodeURIComponent(boxUrl)}`)
     .href;
@@ -88,6 +95,11 @@ export const Meta: FC = () => {
     }
   }, [formData.pricePerBox]);
 
+  const { tokens } = useTokenList();
+  const selectedPaymentToken = useMemo(() => {
+    return tokens.find((token) => isSameAddress(token.address, formData.tokenAddress));
+  }, [tokens, formData.tokenAddress]);
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>
@@ -108,15 +120,24 @@ export const Meta: FC = () => {
           Go back
         </Button>
       </h2>
-      <Field className={styles.field} name="Price per box (in Ether)" required>
+      <Field className={styles.field} name="Price per box" required>
         <Input
           inputMode="decimal"
           type="number"
-          placeholder="Price in Ether"
+          placeholder="0"
           fullWidth
           size="large"
           value={formData.pricePerBox}
           onChange={bindField('pricePerBox')}
+          rightAddon={
+            <span className={styles.pickButton} onClick={() => setTokenBoxVisible(true)}>
+              {selectedPaymentToken ? (
+                <TokenIcon className={styles.tokenIcon} token={selectedPaymentToken} />
+              ) : null}
+              <span className={styles.tokenSymbol}>{selectedPaymentToken?.symbol || '- - -'}</span>
+              <Icon size={24} type="arrowDown" />
+            </span>
+          }
         />
       </Field>
       <Field className={styles.field} name="Limit of purchase per wallet" required>
@@ -180,7 +201,11 @@ export const Meta: FC = () => {
       </Field>
 
       <div className={styles.rowFieldGroup}>
-        <Field className={styles.field} name="Start date (UTC+8)" required>
+        <Field
+          className={styles.field}
+          name={`Start date (UTC${timezoneOffset > 0 ? '+' + timezoneOffset : timezoneOffset})`}
+          required
+        >
           <Input
             placeholder="Date"
             fullWidth
@@ -190,7 +215,11 @@ export const Meta: FC = () => {
             onChange={bindField('startAt')}
           />
         </Field>
-        <Field className={styles.field} name="End date (UTC+8)" required>
+        <Field
+          className={styles.field}
+          name={`End date (UTC${timezoneOffset > 0 ? '+' + timezoneOffset : timezoneOffset})`}
+          required
+        >
           <Input
             placeholder="Date"
             fullWidth
@@ -244,17 +273,25 @@ export const Meta: FC = () => {
           ))}
         </ul>
       </div>
-      <TokenPickerDialog open={false} />
       <PickerDialog title="Share" open={urlBoxVisible} onClose={() => setUrlBoxVisible(false)}>
         <div className={styles.urlBoxContent}>
           <p>
-            Copy following url, and <a href={shareLink}> share</a> on twitter
+            Copy following url, and <a href={shareLink}>share</a> on twitter
           </p>
           <div className={styles.url}>
             <a href={shareLink}>{boxUrl}</a>
           </div>
         </div>
       </PickerDialog>
+      <TokenPickerDialog
+        open={tokenBoxVisible}
+        onClose={() => setTokenBoxVisible(false)}
+        onPick={(token) => {
+          updateField('tokenAddress', token.address);
+          updateField('token', token);
+          setTokenBoxVisible(false);
+        }}
+      />
       <NFTPickerDialog
         tokens={ownedTokens}
         selectedTokenIds={formData.selectedNFTIds}

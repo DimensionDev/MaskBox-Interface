@@ -1,5 +1,6 @@
 export type IconType =
   | 'add'
+  | 'arrowDown'
   | 'arrowRight'
   | 'binance'
   | 'chevronRight'
@@ -9,6 +10,7 @@ export type IconType =
   | 'ethereum'
   | 'external'
   | 'lisa'
+  | 'loadingDark'
   | 'loading'
   | 'moon'
   | 'polygon'
@@ -22,6 +24,7 @@ export type IconType =
   | 'wallet';
 export const iconNameMap = {
   add: 'add.svg',
+  arrowDown: 'arrow-down.svg',
   arrowRight: 'arrow-right.svg',
   binance: 'binance.svg',
   chevronRight: 'chevron-right.svg',
@@ -31,6 +34,7 @@ export const iconNameMap = {
   ethereum: 'ethereum.svg',
   external: 'external.svg',
   lisa: 'lisa.svg',
+  loadingDark: 'loading-dark.svg',
   loading: 'loading.svg',
   moon: 'moon.svg',
   polygon: 'polygon.svg',
@@ -44,6 +48,7 @@ export const iconNameMap = {
   wallet: 'wallet.svg',
 };
 export const addIcon = new URL('./icons/add.svg', import.meta.url).href;
+export const arrowDownIcon = new URL('./icons/arrow-down.svg', import.meta.url).href;
 export const arrowRightIcon = new URL('./icons/arrow-right.svg', import.meta.url).href;
 export const binanceIcon = new URL('./icons/binance.svg', import.meta.url).href;
 export const chevronRightIcon = new URL('./icons/chevron-right.svg', import.meta.url).href;
@@ -53,6 +58,7 @@ export const emptyIcon = new URL('./icons/empty.png', import.meta.url).href;
 export const ethereumIcon = new URL('./icons/ethereum.svg', import.meta.url).href;
 export const externalIcon = new URL('./icons/external.svg', import.meta.url).href;
 export const lisaIcon = new URL('./icons/lisa.svg', import.meta.url).href;
+export const loadingDarkIcon = new URL('./icons/loading-dark.svg', import.meta.url).href;
 export const loadingIcon = new URL('./icons/loading.svg', import.meta.url).href;
 export const moonIcon = new URL('./icons/moon.svg', import.meta.url).href;
 export const polygonIcon = new URL('./icons/polygon.svg', import.meta.url).href;
@@ -66,6 +72,7 @@ export const uploadingIcon = new URL('./icons/uploading.svg', import.meta.url).h
 export const walletIcon = new URL('./icons/wallet.svg', import.meta.url).href;
 const icons = {
   add: addIcon,
+  arrowDown: arrowDownIcon,
   arrowRight: arrowRightIcon,
   binance: binanceIcon,
   chevronRight: chevronRightIcon,
@@ -75,6 +82,7 @@ const icons = {
   ethereum: ethereumIcon,
   external: externalIcon,
   lisa: lisaIcon,
+  loadingDark: loadingDarkIcon,
   loading: loadingIcon,
   moon: moonIcon,
   polygon: polygonIcon,

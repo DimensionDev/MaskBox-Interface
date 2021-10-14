@@ -1,9 +1,9 @@
-import { FormEvent } from 'react';
+import { TokenType, ZERO_ADDRESS } from '@/lib';
+import { isValid as isValidDate } from 'date-fns';
+import { utils } from 'ethers';
 import { atom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
-import { isValid as isValidDate } from 'date-fns';
-import { contractAddresses, ZERO_ADDRESS } from '@/lib';
-import { utils } from 'ethers';
+import { FormEvent } from 'react';
 
 export interface Activity {
   title: string;
@@ -15,7 +15,9 @@ export interface FormData {
   cover: string;
   activities: Activity[];
   pricePerBox: string;
+  // TODO rename to paymentTokenAddress
   tokenAddress: string;
+  token: TokenType | null;
   limit: number | null;
   nftContractAddress: string;
   sellAll: boolean;
@@ -38,6 +40,7 @@ const initFormData: FormData = {
   activities: [newActivity(), newActivity(), newActivity()],
   pricePerBox: '',
   tokenAddress: ZERO_ADDRESS,
+  token: null,
   limit: 5,
   sellAll: true,
   nftContractAddress: '',

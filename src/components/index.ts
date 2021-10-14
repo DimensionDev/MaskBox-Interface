@@ -18,3 +18,4 @@ export * from './ThickButton';
 export * from './Toast';
 export * from './TokenList';
 export * from './UploadBox';
+export * from './TokenIcon';
