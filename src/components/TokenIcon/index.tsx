@@ -20,5 +20,5 @@ export const TokenIcon: FC<Props> = ({ token, ...rest }) => {
     }
   }, [token.logoURI]);
 
-  return <img src={logoUrl} alt={token.name} {...rest} />;
+  return <img loading="lazy" src={logoUrl} alt={token.name} {...rest} />;
 };
