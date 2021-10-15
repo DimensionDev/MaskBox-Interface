@@ -1,91 +1,39 @@
-import { ArticleSection, Collection, Empty, PickerDialog } from '@/components';
-import { useMBoxContract } from '@/contexts';
-import { BuyBox, MysteryBox, ShareBox, StatusOverlay, WipDialog } from '@/page-components';
-import { FC, memo, useEffect, useState } from 'react';
+import { ArticleSection } from '@/components';
+import { MysteryBox, ShareBox } from '@/page-components';
+import { FC, memo, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import * as data from './data';
 import styles from './index.module.less';
-
-const wip = true;
+import { useGetExtendedBoxInfo } from './useGetExtendedBoxInfo';
 
 export const Details: FC = memo(() => {
   const [shareBoxOpen, setShareBoxOpen] = useState(false);
-  const {
-    collectionInfo: info,
-    collectionPrice: price,
-    getCollectionInfo,
-    checkIsReadyToClaim,
-  } = useMBoxContract();
+  const location = useLocation();
+  const { chainId, boxId } = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    const chainId = params.get('chain');
+    const boxId = params.get('box');
+    return {
+      chainId: chainId ? parseInt(chainId, 10) : null,
+      boxId,
+    };
+  }, [location]);
 
-  console.log('info', info);
-  const startTime = info?._start_time ? info._start_time * 1000 : 0;
-  const endTime = info?._end_time ? info._end_time * 1000 : 0;
-
-  const [buyBoxOpen, setBuyBoxOpen] = useState(() => {
-    console.log('startTime', startTime, 'endTime', endTime);
-    if (!startTime || !endTime) {
-      return false;
-    }
-    const now = Date.now();
-    return now > startTime && now < endTime;
-  });
-
-  useEffect(() => {
-    getCollectionInfo();
-  }, [getCollectionInfo]);
-
-  useEffect(() => {
-    checkIsReadyToClaim();
-  }, [checkIsReadyToClaim]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setBuyBoxOpen(() => {
-        if (!startTime || !endTime) {
-          return false;
-        }
-        const now = Date.now();
-        return now > startTime && now < endTime;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [startTime, endTime]);
-
-  if (wip) {
-    return <WipDialog />;
-  }
+  const extendedBoxInfo = useGetExtendedBoxInfo(chainId, boxId);
+  const activities = extendedBoxInfo.activities ?? [];
 
   return (
     <>
       <main className={styles.main}>
         <h1 className={styles.title}>Mystery box</h1>
-        <MysteryBox className={styles.mysteryBox} />
-        <ArticleSection title="Draw Probability">
-          {info?._nft_list.length ? (
-            <Collection collection={info} />
-          ) : (
-            <Empty description="No NFTs yet" />
-          )}
-        </ArticleSection>
-        <ArticleSection title="Rule Introduction">
-          <p dangerouslySetInnerHTML={{ __html: data.introduction }}></p>
-        </ArticleSection>
-        <ArticleSection title="Product Description">
-          <p dangerouslySetInnerHTML={{ __html: data.description }}></p>
-        </ArticleSection>
-        <ArticleSection title="About Artist">
-          <p dangerouslySetInnerHTML={{ __html: data.artist }}></p>
-        </ArticleSection>
+        <MysteryBox className={styles.mysteryBox} box={extendedBoxInfo} />
+        {activities.map((activity, index) => (
+          <ArticleSection title={activity.title} key={index}>
+            {activity.body}
+          </ArticleSection>
+        ))}
       </main>
-      <BuyBox
-        open={buyBoxOpen}
-        onClose={() => setBuyBoxOpen(false)}
-        onShare={() => setShareBoxOpen(true)}
-      />
       <ShareBox open={shareBoxOpen} onClose={() => setShareBoxOpen(false)} />
-      <StatusOverlay name={info?._name ?? '-'} start={startTime} end={endTime} />
-      <PickerDialog open title="Under construction">
-        <p className={styles.wip}>This page is under construction.</p>
-      </PickerDialog>
     </>
   );
 });

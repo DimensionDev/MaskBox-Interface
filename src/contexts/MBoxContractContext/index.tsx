@@ -9,6 +9,7 @@ import {
   ZERO_ADDRESS,
   ZERO_PPRICE,
 } from '@/lib';
+import { BoxInfo } from '@/types';
 import { BigNumber, Contract, ContractInterface } from 'ethers';
 import noop from 'lodash-es/noop';
 import React, { FC, memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
@@ -28,8 +29,8 @@ interface ContextOptions {
   claim(): Promise<void>;
   setMbox: React.Dispatch<React.SetStateAction<MboxState>>;
   getCollectionInfo(): Promise<CollectionInfo | null | undefined>;
-  checkIsReadyToClaim(): Promise<void>;
   contractAddress: string;
+  getBoxInfo: (boxId: string) => Promise<BoxInfo>;
 }
 
 export const MBoxContractContext = React.createContext<ContextOptions>({
@@ -44,8 +45,8 @@ export const MBoxContractContext = React.createContext<ContextOptions>({
   nftCount: 1,
   collectionId: DEFAULT_COLLECTION_ID,
   setMbox: noop,
-  checkIsReadyToClaim: () => Promise.resolve(),
   contractAddress: '',
+  getBoxInfo: () => Promise.resolve({} as BoxInfo),
 });
 export const useMBoxContract = () => useContext(MBoxContractContext);
 
@@ -63,6 +64,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
   const contract = useRef<Contract>();
   useEffect(() => {
     if (ethersProvider && contractAddress) {
+      console.log({ ethersProvider, contractAddress });
       contract.current = new Contract(
         contractAddress,
         MysteryBoxABI as unknown as ContractInterface,
@@ -70,10 +72,6 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
       );
     }
   }, [ethersProvider, contractAddress]);
-
-  const checkIsReadyToClaim = useCallback(async () => {
-    return false;
-  }, []);
 
   const getCollectionInfo = useCallback(async () => {
     if (!contract.current) return;
@@ -170,6 +168,19 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     return result;
   }, [account, collectionId, ethersProvider]);
 
+  const getBoxInfo = useCallback(
+    async (boxId: string) => {
+      if (!ethersProvider || !providerChainId || !contractAddress) return;
+      debugger;
+      const contract = new Contract(contractAddress, MysteryBoxABI, ethersProvider);
+      const boxInfo = await contract.getBoxInfo(boxId);
+      debugger;
+      console.log({ getBoxInfo: boxInfo });
+      return boxInfo;
+    },
+    [contractAddress, providerChainId, ethersProvider],
+  );
+
   const contextValue = {
     myAllowance: allowance,
     myBalance: balance,
@@ -182,9 +193,9 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     setMbox,
     approve,
     buy,
-    checkIsReadyToClaim,
     getCollectionInfo,
     contractAddress,
+    getBoxInfo,
   };
 
   return (

@@ -14,7 +14,9 @@ export function useTokenList() {
     const listUrl = getTokenListUrl(providerChainId);
     fetch(listUrl).then(async (response) => {
       const data: TokenListConfig = await response.json();
-      const storedTokens = getStorage('tokens') ?? [];
+      const storedTokens = (getStorage<TokenType[]>('tokens') ?? []).filter(
+        (tk) => tk.chainId === providerChainId,
+      );
       setTokens([nativeToken, ...storedTokens, ...data.tokens]);
     });
   }, [providerChainId]);

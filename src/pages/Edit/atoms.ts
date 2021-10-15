@@ -1,14 +1,10 @@
 import { TokenType, ZERO_ADDRESS } from '@/lib';
+import { Activity } from '@/types';
 import { isValid as isValidDate } from 'date-fns';
 import { utils } from 'ethers';
 import { atom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
 import { FormEvent } from 'react';
-
-export interface Activity {
-  title: string;
-  body: string;
-}
 
 export interface FormData {
   name: string;

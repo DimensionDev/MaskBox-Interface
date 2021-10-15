@@ -15,13 +15,13 @@ interface BoxRSS3Node {
 interface IRSS3Context {
   createRSS3: () => Promise<RSS3 | null>;
   saveBox: <T extends { id: string }>(box: T) => Promise<void>;
-  getBox: (addr: string) => Promise<BoxRSS3Node | undefined>;
+  getBoxMetas: (addr: string, boxId: string) => Promise<BoxRSS3Node | undefined>;
 }
 
 const RSS3Context = createContext<IRSS3Context>({
   createRSS3: () => Promise.resolve(null),
   saveBox: () => Promise.resolve(),
-  getBox: () => {
+  getBoxMetas: () => {
     return Promise.resolve({ id: '', name: '', cover: '', activities: [] });
   },
 });
@@ -29,6 +29,8 @@ const RSS3Context = createContext<IRSS3Context>({
 export function useRSS3(): IRSS3Context {
   return useContext(RSS3Context);
 }
+
+const endpoint = 'https://hub.pass3.me';
 
 export const RSS3Provider: FC = ({ children }) => {
   const { account, ethersProvider } = useWeb3Context();
@@ -39,15 +41,22 @@ export const RSS3Provider: FC = ({ children }) => {
     signerRef.current = ethersProvider.getSigner();
   }, [ethersProvider]);
 
-  const createRSS3 = useCallback(async () => {
-    return new RSS3({
-      endpoint: 'https://hub.pass3.me',
-      address: account,
-      sign: async (message: string) => {
-        return signerRef.current?.signMessage(message) ?? '';
-      },
-    });
-  }, [account]);
+  const createRSS3 = useCallback(
+    async (address?: string) => {
+      return address
+        ? new RSS3({
+            endpoint,
+          })
+        : new RSS3({
+            endpoint,
+            address,
+            sign: async (message: string) => {
+              return signerRef.current?.signMessage(message) ?? '';
+            },
+          });
+    },
+    [account],
+  );
 
   const saveBox = useCallback(
     async <T extends { id: string }>(box: T) => {
@@ -69,20 +78,23 @@ export const RSS3Provider: FC = ({ children }) => {
     [createRSS3, ethersProvider],
   );
 
-  const getBox = useCallback(async () => {
-    const rss3 = await createRSS3();
-    const file = await rss3.files.get(rss3.account.address);
-    const nft = Object.getOwnPropertyDescriptor(file, '_box');
-    if (!nft?.value) return;
-    const data = nft.value as BoxRSS3Node;
+  const getBoxMetas = useCallback(
+    async (owner: string, boxId: string) => {
+      const rss3 = await createRSS3(owner);
+      const file = await rss3.files.get(owner);
+      const nft = Object.getOwnPropertyDescriptor(file, '_box');
+      if (!nft?.value) return;
+      const data = nft.value[boxId] as BoxRSS3Node;
 
-    return data;
-  }, [createRSS3]);
+      return data;
+    },
+    [createRSS3],
+  );
 
   const contextValue = {
     createRSS3,
     saveBox,
-    getBox,
+    getBoxMetas,
   };
 
   return <RSS3Context.Provider value={contextValue}>{children}</RSS3Context.Provider>;

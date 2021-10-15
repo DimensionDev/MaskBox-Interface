@@ -7,24 +7,18 @@ import {
   Token,
   TokenList,
 } from '@/components';
-import { useWeb3Context } from '@/contexts';
 import { useTokenList } from '@/hooks';
+import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType } from '@/lib';
 import { getStorage, isSameAddress, setStorage } from '@/utils';
 import classnames from 'classnames';
-import { Contract, utils } from 'ethers';
+import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.less';
 
 interface Props extends PickerDialogProps {
   onPick?: (token: TokenType) => void;
 }
-
-const abi = [
-  'function name() view returns (string)',
-  'function symbol() view returns (string)',
-  'function decimals() view returns (uint8)',
-];
 
 function storeNewTokens(newToken: TokenType) {
   const tokens = getStorage<TokenType[]>('tokens');
@@ -34,6 +28,7 @@ function storeNewTokens(newToken: TokenType) {
 export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
   const { tokens, updateTokens } = useTokenList();
   const [keyword, setKeyword] = useState('');
+  const getERC20Token = useGetERC20TokenInfo();
   const [newToken, setNewToken] = useState<TokenType | null>(null);
 
   const filteredTokens = useMemo(() => {
@@ -55,23 +50,11 @@ export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
     );
   }, [keyword, tokens]);
 
-  const { ethersProvider, providerChainId } = useWeb3Context();
   useEffect(() => {
-    if (!ethersProvider || !providerChainId || !isNewAddress) return;
-    const contract = new Contract(keyword, abi, ethersProvider);
-    Promise.all([contract.name(), contract.symbol(), contract.decimals()]).then(
-      ([name, symbol, decimals]) => {
-        setNewToken({
-          address: keyword,
-          chainId: providerChainId as number,
-          name: `${name as string} • Added by user`,
-          symbol: symbol as string,
-          decimals: decimals as number,
-          logoURI: '',
-        });
-      },
-    );
-  }, [isNewAddress, keyword, ethersProvider, providerChainId]);
+    if (isNewAddress) {
+      getERC20Token(keyword).then((token) => token && setNewToken(token));
+    }
+  }, [isNewAddress, keyword]);
 
   return (
     <PickerDialog className={styles.dialog} title="Seletct a Token" {...rest}>
