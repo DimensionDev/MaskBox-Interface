@@ -1,4 +1,4 @@
-import { BaseButton as Button } from '@/components';
+import { Button } from '@/components';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
 import styles from './index.module.less';

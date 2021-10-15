@@ -27,7 +27,7 @@ const schemeMap: Record<ColorScheme, string> = {
   danger: styles.schemeDanger,
 };
 
-export const BaseButton: FC<ButtonProps> = memo(
+export const Button: FC<ButtonProps> = memo(
   ({
     className,
     size,

@@ -1,4 +1,4 @@
-import { BaseButton as Button, Field, Input, Textarea, UploadBox } from '@/components';
+import { Button, Field, Input, Textarea, UploadBox } from '@/components';
 import { useUpload } from '@/contexts';
 import classnames from 'classnames';
 import { useAtom } from 'jotai';

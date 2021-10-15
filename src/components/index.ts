@@ -1,5 +1,5 @@
 export * from './ArticleSection';
-export * from './BaseButton';
+export * from './Button';
 export * from './Countdown';
 export * from './Dialog';
 export * from './Empty';

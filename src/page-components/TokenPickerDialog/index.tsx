@@ -1,5 +1,5 @@
 import {
-  BaseButton as Button,
+  Button,
   Icon,
   Input,
   PickerDialog,

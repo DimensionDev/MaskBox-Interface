@@ -1,5 +1,5 @@
 import { logoImage } from '@/assets';
-import { BaseButton as Button, Icon } from '@/components';
+import { Button, Icon } from '@/components';
 import { RouteKeys } from '@/configs';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
 import { getNetworkIcon, getNetworkName } from '@/lib';

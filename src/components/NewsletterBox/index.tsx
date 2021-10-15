@@ -1,5 +1,5 @@
 import { FC, HTMLProps } from 'react';
-import { BaseButton as Button, Icon } from '@/components';
+import { Button, Icon } from '@/components';
 import styles from './index.module.less';
 import classnames from 'classnames';
 
