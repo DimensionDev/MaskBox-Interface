@@ -8,7 +8,9 @@ const config = {
   entry: './src/main.tsx',
   target: 'web',
   output: {
+    filename: '[name]-[contenthash].js',
     publicPath: '/',
+    chunkFilename: '[name]-[id].js',
   },
   module: {
     rules: [
