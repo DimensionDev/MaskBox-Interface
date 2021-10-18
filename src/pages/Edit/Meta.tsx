@@ -75,7 +75,7 @@ export const Meta: FC = () => {
           cover: formData.cover,
           activities: formData.activities,
         });
-        setBoxUrl(`https://box.mask.io/#/details?chain=${providerChainId}&box=${args.box_id}`);
+        setBoxUrl(`${location.origin}/#/details?chain=${providerChainId}&box=${args.box_id}`);
         setUrlBoxVisible(true);
       }
     } catch (err) {
@@ -279,7 +279,9 @@ export const Meta: FC = () => {
             Copy following url, and <a href={shareLink}>share</a> on twitter
           </p>
           <div className={styles.url}>
-            <a href={shareLink}>{boxUrl}</a>
+            <a href={shareLink} target="_blank" rel="noopener noreferrer">
+              {boxUrl}
+            </a>
           </div>
         </div>
       </PickerDialog>
