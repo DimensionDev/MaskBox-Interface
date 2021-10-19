@@ -1,15 +1,17 @@
 import { BigNumber } from 'ethers';
 
+export interface BoxPayment {
+  token_addr: string;
+  price: BigNumber;
+  receivable_amount: string;
+}
+
 export interface BoxInfo {
   name: string;
   creator: string;
   nft_address: string;
-  payment: {
-    token_addr: string;
-    price: BigNumber;
-    receivable_amount: string;
-  }[];
-  personal_limit: BigNumber;
+  payment: BoxPayment[];
+  personal_limit: number;
   started: boolean;
   expired: boolean;
   remaining: BigNumber;

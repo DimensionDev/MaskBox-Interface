@@ -1,72 +1,97 @@
-import { Dialog, DialogProps, Icon, RoundButton, showToast } from '@/components';
+import { Button, LoadingIcon, PickerDialog, PickerDialogProps, TokenIcon } from '@/components';
 import { useMBoxContract, useWeb3Context } from '@/contexts';
-import { useTrackTokenPrice } from '@/hooks';
-import { getCoingeckoTokenId, getNetworkExplorer } from '@/lib';
-import { formatAddres } from '@/utils';
-import { utils } from 'ethers';
-import { FC, useCallback } from 'react';
+import { useBalance, useERC20Approve, useGetERC20Allowance, useTrackTokenPrice } from '@/hooks';
+import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
+import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
+import { BoxPayment, ExtendedBoxInfo } from '@/types';
+import { formatAddres, formatBalance } from '@/utils';
+import { BigNumber, utils } from 'ethers';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { AdjustableInput } from './AdjustableInput';
+import { useOpenBox } from './useOpenBox';
 import styles from './index.module.less';
 
-interface Props extends DialogProps {
+interface Props extends PickerDialogProps {
+  boxId: string;
+  box: Partial<ExtendedBoxInfo>;
   onShare?: () => void;
+  payment: BoxPayment;
 }
 
-export const BuyBox: FC<Props> = ({ ...rest }) => {
-  const { account, ethersProvider } = useWeb3Context();
-  const { collectionPrice: price, myAllowance, myBalance, approve, buy } = useMBoxContract();
-  const tokenPrice = useTrackTokenPrice(getCoingeckoTokenId(price.symbol));
-  const cost = utils.formatUnits(price.value, price.decimals);
-  const allowed = !price.isNative && myAllowance.gte(price.value);
-  const canBuy = (price.isNative && myBalance.gte(price.value)) || allowed;
+const paymentTokenIndex = 0;
+export const BuyBox: FC<Props> = ({ boxId, box, payment: payment, ...rest }) => {
+  const { account } = useWeb3Context();
+  const { contractAddress } = useMBoxContract();
+  const getERC20Token = useGetERC20TokenInfo();
+  const getAllowance = useGetERC20Allowance();
+  const approve = useERC20Approve();
+  const balance = useBalance(payment.token_addr);
+  const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
+  const isNative = payment.token_addr === ZERO_ADDRESS;
+  console.log({ payment, isNative });
+  const tokenPrice = useTrackTokenPrice(
+    paymentToken?.symbol ? getCoingeckoTokenId(paymentToken.symbol) : null,
+  );
+  const [allowance, setAllowance] = useState<BigNumber>(ZERO);
+  console.log({ allowance: allowance.toString() });
+  useEffect(() => {
+    getAllowance(payment.token_addr, contractAddress).then(setAllowance);
+  }, [payment.token_addr, contractAddress]);
+  const [quantity, setQuantity] = useState(1);
+  const costAmount = payment.price.mul(quantity);
+  const allowed = isNative || allowance.gte(costAmount);
+  const canBuy = isNative ? balance.gt(costAmount) : allowed;
 
-  const handleApprove = useCallback(() => {
-    approve();
-  }, [approve]);
+  useEffect(() => {
+    if (payment) {
+      getERC20Token(payment.token_addr).then((token) => {
+        if (token) {
+          setPaymentToken(token);
+        }
+      });
+    }
+  }, [payment.token_addr]);
 
-  const chainId = ethersProvider?.network?.chainId;
+  const cost = useMemo(() => {
+    return paymentToken ? utils.formatUnits(costAmount, paymentToken.decimals) : null;
+  }, [paymentToken, costAmount]);
 
-  const handleBuy = useCallback(async () => {
-    showToast({
-      title: 'Buying',
-      message: 'Sending transaction',
-    });
-    const result = await buy();
-    const exploreUrl = chainId ? getNetworkExplorer(chainId) + result?.hash : '';
-    console.log('buy result', result);
-    showToast({
-      title: 'Transaction sent',
-      message: (
-        <span>
-          Transaction Submitted{' '}
-          <a
-            href={exploreUrl}
-            target="_blank"
-            rel="noreferrer noopener"
-            aria-label="view transaction"
-          >
-            <Icon type="external" size={18} />
-          </a>
-        </span>
-      ),
-    });
-  }, [buy, chainId]);
+  const handleApprove = useCallback(async () => {
+    const tx = await approve(payment.token_addr, contractAddress, costAmount);
+    await tx.wait(1);
+    await getAllowance(payment.token_addr, contractAddress).then(setAllowance);
+  }, [approve, payment.token_addr, contractAddress, costAmount, getAllowance]);
+
+  const openBox = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
+  const limit = box.personal_limit || 1;
 
   return (
-    <Dialog {...rest} className={styles.buyBox} title="Buy">
+    <PickerDialog {...rest} className={styles.buyBox} title="Buy">
       <dl className={styles.infos}>
         <dt className={styles.cost}>
           <div className={styles.currency}>
             <strong className={styles.value}>{cost}</strong>
-            <span className={styles.unit}>{price.symbol}</span>
+            <span className={styles.unit}>{paymentToken?.symbol}</span>
           </div>
-          <div className={styles.estimate}>
-            ~$
-            {parseFloat(cost) * tokenPrice}
-          </div>
+          {isNative && cost && (
+            <div className={styles.estimate}>~${parseFloat(cost) * tokenPrice}</div>
+          )}
         </dt>
         <dd className={styles.meta}>
-          <span className={styles.metaName}>Mystery Box:</span>
-          <span className={styles.metaValue}>1</span>
+          <span className={styles.metaName}>MaskBox:</span>
+          <AdjustableInput
+            className={styles.metaValue}
+            value={quantity}
+            min={1}
+            max={limit}
+            onUpdate={setQuantity}
+          />
+        </dd>
+        <dd className={styles.meta}>
+          <span className={styles.metaName}>Quantity limit:</span>
+          <span className={styles.metaValue} title={account}>
+            {limit}
+          </span>
         </dd>
         <dd className={styles.meta}>
           <span className={styles.metaName}>Current Wallet:</span>
@@ -77,31 +102,39 @@ export const BuyBox: FC<Props> = ({ ...rest }) => {
         <dd className={styles.meta}>
           <span className={styles.metaName}>Available</span>
           <span className={styles.metaValue}>
-            {utils.formatUnits(myBalance, price.decimals)} {price.symbol}
+            {paymentToken?.decimals ? (
+              `${formatBalance(balance, paymentToken.decimals, 6)} ${paymentToken?.symbol}`
+            ) : (
+              <LoadingIcon size={24} />
+            )}
           </span>
-        </dd>
-        <dd className={styles.meta}>
-          <span className={styles.metaName}>Gas fee</span>
-          <span className={styles.metaValue}>0.001 ETH</span>
         </dd>
       </dl>
 
       <div className={styles.buttonGroup}>
         {!allowed && (
-          <RoundButton className={styles.button} fullWidth size="large" onClick={handleApprove}>
-            Allow NFTBOX to use your {price.symbol}
-          </RoundButton>
+          <Button
+            className={styles.button}
+            colorScheme="primary"
+            fullWidth
+            size="middle"
+            onClick={handleApprove}
+          >
+            <TokenIcon className={styles.tokenIcon} token={paymentToken ?? ({} as TokenType)} />
+            Allow MASKBOX to use your {paymentToken?.symbol}
+          </Button>
         )}
-        <RoundButton
+        <Button
           className={styles.button}
+          colorScheme="primary"
           fullWidth
-          size="large"
+          size="middle"
           disabled={!canBuy}
-          onClick={handleBuy}
+          onClick={openBox}
         >
-          Buy
-        </RoundButton>
+          Draw
+        </Button>
       </div>
-    </Dialog>
+    </PickerDialog>
   );
 };

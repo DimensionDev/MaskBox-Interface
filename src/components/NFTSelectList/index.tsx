@@ -32,7 +32,6 @@ export const NFTSelectList: FC<NFTSelectListProps> = ({
     }
     return tokens;
   }, [tokens, selectedTokenIds, keyword]);
-  console.log({ filteredList });
   const allIds = useMemo(() => tokens.map((token) => token.tokenId), [tokens]);
 
   const [selectedIds, setSelectedIds] = useState(selectedTokenIds);
@@ -42,7 +41,6 @@ export const NFTSelectList: FC<NFTSelectListProps> = ({
         if (id === currentId) return checked;
         return selectedIds.includes(id);
       });
-      console.log({ newIds, currentId, checked });
       setSelectedIds(newIds);
     },
     [allIds, selectedIds],

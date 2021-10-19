@@ -46,13 +46,13 @@ export const RSS3Provider: FC = ({ children }) => {
       return address
         ? new RSS3({
             endpoint,
-          })
-        : new RSS3({
-            endpoint,
             address,
             sign: async (message: string) => {
               return signerRef.current?.signMessage(message) ?? '';
             },
+          })
+        : new RSS3({
+            endpoint,
           });
     },
     [account],
@@ -61,9 +61,9 @@ export const RSS3Provider: FC = ({ children }) => {
   const saveBox = useCallback(
     async <T extends { id: string }>(box: T) => {
       if (!account) return;
-      const rss3 = await createRSS3();
+      const rss3 = await createRSS3(account);
       if (!rss3) return;
-      const file = await rss3.files.get(rss3.account.address);
+      const file = await rss3.files.get(account);
       if (!file) throw new Error('The account was not found.');
       rss3.files.set({
         ...file,
@@ -75,7 +75,7 @@ export const RSS3Provider: FC = ({ children }) => {
       });
       await rss3.files.sync();
     },
-    [createRSS3, ethersProvider],
+    [account, createRSS3, ethersProvider],
   );
 
   const getBoxMetas = useCallback(

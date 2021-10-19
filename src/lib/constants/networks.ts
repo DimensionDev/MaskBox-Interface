@@ -28,7 +28,7 @@ export const networkIcons: Record<number, string> = {
   137: polygonIcon,
 };
 
-export const networks: Network[] = ([1, 56, 137] as const).map((chainId) => {
+export const networks: Network[] = ([1, 4] as const).map((chainId) => {
   return {
     chainId,
     name: networkNames[chainId],

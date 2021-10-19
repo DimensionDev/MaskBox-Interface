@@ -5,10 +5,12 @@ export type IconType =
   | 'binance'
   | 'chevronRight'
   | 'close'
+  | 'decrease'
   | 'delete'
   | 'empty'
   | 'ethereum'
   | 'external'
+  | 'increase'
   | 'lisa'
   | 'loadingDark'
   | 'loading'
@@ -29,10 +31,12 @@ export const iconNameMap = {
   binance: 'binance.svg',
   chevronRight: 'chevron-right.svg',
   close: 'close.svg',
+  decrease: 'decrease.svg',
   delete: 'delete.svg',
   empty: 'empty.png',
   ethereum: 'ethereum.svg',
   external: 'external.svg',
+  increase: 'increase.svg',
   lisa: 'lisa.svg',
   loadingDark: 'loading-dark.svg',
   loading: 'loading.svg',
@@ -53,10 +57,12 @@ export const arrowRightIcon = new URL('./icons/arrow-right.svg', import.meta.url
 export const binanceIcon = new URL('./icons/binance.svg', import.meta.url).href;
 export const chevronRightIcon = new URL('./icons/chevron-right.svg', import.meta.url).href;
 export const closeIcon = new URL('./icons/close.svg', import.meta.url).href;
+export const decreaseIcon = new URL('./icons/decrease.svg', import.meta.url).href;
 export const deleteIcon = new URL('./icons/delete.svg', import.meta.url).href;
 export const emptyIcon = new URL('./icons/empty.png', import.meta.url).href;
 export const ethereumIcon = new URL('./icons/ethereum.svg', import.meta.url).href;
 export const externalIcon = new URL('./icons/external.svg', import.meta.url).href;
+export const increaseIcon = new URL('./icons/increase.svg', import.meta.url).href;
 export const lisaIcon = new URL('./icons/lisa.svg', import.meta.url).href;
 export const loadingDarkIcon = new URL('./icons/loading-dark.svg', import.meta.url).href;
 export const loadingIcon = new URL('./icons/loading.svg', import.meta.url).href;
@@ -77,10 +83,12 @@ const icons = {
   binance: binanceIcon,
   chevronRight: chevronRightIcon,
   close: closeIcon,
+  decrease: decreaseIcon,
   delete: deleteIcon,
   empty: emptyIcon,
   ethereum: ethereumIcon,
   external: externalIcon,
+  increase: increaseIcon,
   lisa: lisaIcon,
   loadingDark: loadingDarkIcon,
   loading: loadingIcon,

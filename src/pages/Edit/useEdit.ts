@@ -45,10 +45,7 @@ export function useEdit() {
   const { getMyTokens } = useNFTContract();
 
   useEffect(() => {
-    getMyTokens(formData.nftContractAddress).then((tokens) => {
-      console.log({ tokens });
-      setOwnedTokens(tokens);
-    });
+    getMyTokens(formData.nftContractAddress).then(setOwnedTokens);
   }, [formData.nftContractAddress, getMyTokens]);
 
   const approveAll = useCallback(async () => {

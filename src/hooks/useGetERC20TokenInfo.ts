@@ -1,14 +1,9 @@
+import { ERC20_ABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { getNativeToken, ZERO_ADDRESS } from '@/lib';
 import { isSameAddress } from '@/utils';
 import { Contract } from 'ethers';
 import { useCallback } from 'react';
-
-const ABI = [
-  'function name() view returns (string)',
-  'function symbol() view returns (string)',
-  'function decimals() view returns (uint8)',
-];
 
 export function useGetERC20TokenInfo() {
   const { ethersProvider, providerChainId } = useWeb3Context();
@@ -18,7 +13,7 @@ export function useGetERC20TokenInfo() {
       if (isSameAddress(addr, ZERO_ADDRESS)) {
         return getNativeToken(providerChainId);
       }
-      const contract = new Contract(addr, ABI, ethersProvider);
+      const contract = new Contract(addr, ERC20_ABI, ethersProvider);
       const token = Promise.all([contract.name(), contract.symbol(), contract.decimals()]).then(
         ([name, symbol, decimals]) => {
           return {

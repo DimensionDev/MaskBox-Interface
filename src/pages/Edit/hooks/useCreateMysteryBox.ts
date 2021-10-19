@@ -11,7 +11,6 @@ const abiInterface = new ethers.utils.Interface(MysteryBoxABI);
 export function useCreateMysteryBox() {
   const { ethersProvider, providerChainId } = useWeb3Context();
   const formData = useAtomValue(formDataAtom);
-  console.log({ formData });
 
   const limit = formData.limit ?? 5;
   const createBox = useCallback(async () => {
@@ -41,7 +40,6 @@ export function useCreateMysteryBox() {
     await result.wait(1);
     const logs = await ethersProvider.getLogs(contract.filters.CreationSuccess());
     const parsedLog = abiInterface.parseLog(logs[0]);
-    console.log({ result, parsedLog });
     return parsedLog;
   }, [formData, ethersProvider, providerChainId]);
   return createBox;

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const ETH_PRICE_POLLING_DELAY = 1 * 1000;
 function createTrackHook<T = number>(initialize: T, updater: (...args: any[]) => Promise<T>) {
-  return function useTrack(tokenId?: string, currency?: string) {
+  return function useTrack(tokenId: string | null, currency?: string) {
     const [value, setValue] = useState(initialize);
 
     useEffect(() => {
@@ -31,7 +31,8 @@ interface TokenRecord {
 
 export const useTrackTokenPrice = createTrackHook(
   0,
-  async (tokenId: string = 'ethereum', currency: string = 'usd') => {
+  async (tokenId: string | null, currency: string = 'usd') => {
+    if (!tokenId) return 0;
     const response = await fetch(
       `https://api.coingecko.com/api/v3/simple/price?ids=${tokenId}&vs_currencies=${currency}`,
     );

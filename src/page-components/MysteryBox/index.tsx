@@ -9,9 +9,10 @@ import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {
   box: Partial<ExtendedBoxInfo>;
+  onDraw?: () => void;
 }
 
-export const MysteryBox: FC<Props> = ({ className, box, ...rest }) => {
+export const MysteryBox: FC<Props> = ({ className, box, onDraw, ...rest }) => {
   const getERC20Token = useGetERC20TokenInfo();
   const payment = box.payment?.[0];
   const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
@@ -51,7 +52,12 @@ export const MysteryBox: FC<Props> = ({ className, box, ...rest }) => {
           </dd>
           <dd className={styles.infoRow}>limit : {box.personal_limit?.toString()}</dd>
         </dl>
-        <Button className={styles.drawButton} colorScheme="primary" disabled={!price}>
+        <Button
+          className={styles.drawButton}
+          colorScheme="primary"
+          disabled={!price}
+          onClick={onDraw}
+        >
           {price ? `Draw( ${price}/Time )` : <LoadingIcon size={24} />}
         </Button>
       </div>
