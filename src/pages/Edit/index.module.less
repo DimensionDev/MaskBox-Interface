@@ -62,24 +62,6 @@
     width: 286px;
   }
 }
-.textarea {
-  font-family: Helvetica Neue;
-  height: 200px;
-  width: 100%;
-  padding: 8px 12px;
-  background: #ffffff;
-  border: 1px solid #c1c7de;
-  box-sizing: border-box;
-  border-radius: 6px;
-  resize: vertical;
-  max-height: 60vh;
-  &:invalid {
-    border: 1px solid var(--input-invalid-border, #fb2047);
-  }
-  &:valid:not(:placeholder-shown) {
-    border: 1px solid var(--input-valid-border, #2bc128);
-  }
-}
 
 .buttonGroup {
   display: flex;
@@ -115,8 +97,12 @@
   align-items: center;
   line-height: 30px;
   flex-direction: column;
+  .url {
+    white-space: nowrap;
+  }
   a {
     margin: 0 0.5em;
+    color: #0057ff;
   }
 }
 

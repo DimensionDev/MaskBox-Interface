@@ -13,7 +13,7 @@ export const Edit: FC = () => {
         <Switch>
           <Route exact path="/edit/desc" component={Description}></Route>
           <Route path="/edit/meta" component={Meta}></Route>
-          <Redirect to={'/edit/desc'} />
+          <Redirect to="/edit/desc" />
         </Switch>
       </Provider>
     </main>
