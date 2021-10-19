@@ -1,17 +1,18 @@
 import { avatarImage } from '@/assets';
 import { ArticleSection, Collection, Empty, NeonButton } from '@/components';
 import { useNFTContract } from '@/contexts';
+import { WipDialog } from '@/page-components';
 import { BigNumber } from 'ethers';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import styles from './index.module.less';
 
 const wip = true;
 
 export const Profile: FC = () => {
   const { tokens, getMyTokens } = useNFTContract();
-  useEffect(() => {
-    getMyTokens();
-  }, [getMyTokens]);
+  // useEffect(() => {
+  //   getMyTokens();
+  // }, [getMyTokens]);
   const isEmpty = tokens.length === 0;
 
   const myNfts = useMemo(() => {
@@ -22,7 +23,6 @@ export const Profile: FC = () => {
   }, [tokens]);
 
   if (wip) {
-    // eslint-disable-next-line react/jsx-no-undef
     return <WipDialog />;
   }
   console.log('my tokens', tokens);

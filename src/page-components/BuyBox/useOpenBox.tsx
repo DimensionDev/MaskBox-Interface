@@ -6,6 +6,7 @@ import { getNetworkExplorer, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment } from '@/types';
 import { utils } from 'ethers';
 import { useCallback } from 'react';
+import styles from './index.module.less';
 
 const abiInterface = new utils.Interface(MysteryBoxABI);
 
@@ -26,37 +27,44 @@ export function useOpenBox(
       title: 'Drawing',
       message: 'Sending transaction',
     });
-    // TODO the proof parameter
-    const tx = await contract.openBox(boxId, quantity, paymentTokenIndex, proof, {
-      value: isNative ? payment.price.mul(quantity) : undefined,
-    });
-    const exploreUrl = chainId ? getNetworkExplorer(chainId) + tx?.hash : '';
-    const closeToast = showToast({
-      title: 'Transaction sent',
-      processing: true,
-      message: (
-        <span>
-          Transaction Submitted{' '}
-          <a
-            href={exploreUrl}
-            target="_blank"
-            rel="noreferrer noopener"
-            aria-label="view transaction"
-          >
-            <Icon type="external" size={18} />
-          </a>
-        </span>
-      ),
-    });
-    await tx.wait(1);
-    const openLogs = await ethersProvider.getLogs(contract.filters.OpenSuccess());
-    const parsedOpenLog = abiInterface.parseLog(openLogs[0]);
-    console.log({ parsedOpenLog });
-    closeToast();
-    showToast({
-      title: `Draw Success`,
-      variant: 'success',
-    });
+    try {
+      // TODO the proof parameter
+      const tx = await contract.openBox(boxId, quantity, paymentTokenIndex, proof, {
+        value: isNative ? payment.price.mul(quantity) : undefined,
+      });
+      const exploreUrl = chainId ? getNetworkExplorer(chainId) + tx?.hash : '';
+      const closeToast = showToast({
+        title: 'Transaction sent',
+        processing: true,
+        message: (
+          <span className={styles.drawMessage}>
+            Transaction Submitted{' '}
+            <a
+              href={exploreUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label="view transaction"
+            >
+              <Icon type="external" size={18} />
+            </a>
+          </span>
+        ),
+      });
+      await tx.wait(1);
+      const openLogs = await ethersProvider.getLogs(contract.filters.OpenSuccess());
+      const parsedOpenLog = abiInterface.parseLog(openLogs?.[0]);
+      console.log({ parsedOpenLog });
+      closeToast();
+      showToast({
+        title: `Draw Success`,
+        variant: 'success',
+      });
+    } catch (err: any) {
+      showToast({
+        title: `Fails to draw the box ${boxId}: ${err.error ? err.error.message : err.message}`,
+        variant: 'error',
+      });
+    }
   }, [chainId, contract, ethersProvider]);
 
   return openBox;

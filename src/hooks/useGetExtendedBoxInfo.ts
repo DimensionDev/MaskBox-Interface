@@ -7,7 +7,7 @@ export function useGetExtendedBoxInfo(chainId: number | null, boxId: string | nu
   const [boxInfo, setBoxInfo] = useState<BoxInfo | null>(null);
   const [boxMetas, setBoxMetas] = useState<Partial<BoxMetas>>({});
   const { providerChainId } = useWeb3Context();
-  const { getBoxMetas: getBoxMetas } = useRSS3();
+  const { getBoxMetas } = useRSS3();
   const { getBoxInfo } = useMBoxContract();
 
   useEffect(() => {

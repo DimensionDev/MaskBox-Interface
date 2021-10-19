@@ -18,3 +18,10 @@ export interface BoxInfo {
   total: BigNumber;
   qualification: string;
 }
+
+export interface CreateResult extends Pick<BoxInfo, 'name' | 'nft_address' | 'creator'> {
+  box_id: string;
+  start_time: number;
+  end_time: number;
+  sell_all: boolean;
+}

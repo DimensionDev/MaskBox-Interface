@@ -1,6 +1,7 @@
 import { Button, Icon } from '@/components';
 import classnames from 'classnames';
 import { FC } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
 
 const boxUrl = new URL('../../assets/images/box.png', import.meta.url).href;
@@ -8,6 +9,7 @@ const nftUrl = new URL('../../assets/images/nft.png', import.meta.url).href;
 const kvUrl = new URL('../../assets/images/kv.png', import.meta.url).href;
 
 export const Home: FC = () => {
+  const history = useHistory();
   return (
     <main>
       <div className={classnames(styles.frame, styles.heroFrame)}>
@@ -21,6 +23,9 @@ export const Home: FC = () => {
             colorScheme="primary"
             size="large"
             rightIcon={<Icon type="chevronRight" size={22} />}
+            onClick={() => {
+              history.push('/list');
+            }}
           >
             Explore Now
           </Button>

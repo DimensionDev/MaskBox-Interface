@@ -83,9 +83,10 @@ export const RSS3Provider: FC = ({ children }) => {
       const rss3 = await createRSS3(owner);
       const file = await rss3.files.get(owner);
       const nft = Object.getOwnPropertyDescriptor(file, '_box');
-      if (!nft?.value) return;
+      if (!nft?.value?.[boxId]) {
+        throw new Error(`Meta info for box ${boxId} was not found`);
+      }
       const data = nft.value[boxId] as BoxRSS3Node;
-
       return data;
     },
     [createRSS3],
