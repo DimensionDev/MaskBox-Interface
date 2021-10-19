@@ -1,17 +1,11 @@
 import { Button, Field, Input, Textarea, UploadBox } from '@/components';
 import { useUpload } from '@/contexts';
-import classnames from 'classnames';
+import { Activity } from '@/types';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { FC } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  Activity,
-  descriptionFullfilledAtom,
-  formDataAtom,
-  newActivity,
-  useBindFormField,
-} from './atoms';
+import { descriptionFullfilledAtom, formDataAtom, newActivity, useBindFormField } from './atoms';
 import styles from './index.module.less';
 
 const wip = true;
