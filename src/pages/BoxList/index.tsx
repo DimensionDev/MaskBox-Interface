@@ -34,12 +34,14 @@ export const BoxList: FC = () => {
     );
   }
 
-  if (!boxesData?.maskboxes || !providerChainId) return null;
+  const maskboxes = boxesData?.maskboxes;
+
+  if (!maskboxes || !providerChainId) return null;
 
   return (
     <>
       <ul className={styles.list}>
-        {boxesData.maskboxes.map((maskbox) => (
+        {maskboxes.map((maskbox) => (
           <li key={maskbox.box_id} className={styles.item}>
             <MysteryBox chainId={providerChainId} boxId={maskbox.box_id} inList />
           </li>
@@ -49,7 +51,11 @@ export const BoxList: FC = () => {
         <Button className={styles.button} disabled={page === 1} onClick={loadPrevPage}>
           Previous
         </Button>
-        <Button className={styles.button} onClick={loadNextPage}>
+        <Button
+          className={styles.button}
+          disabled={maskboxes.length < PAGE_SIZE}
+          onClick={loadNextPage}
+        >
           Next
         </Button>
       </div>
