@@ -1,0 +1,15 @@
+query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
+  maskboxes(orderBy: create_time, orderDirection: desc, first: $first, skip: $skip) {
+    box_id
+    name
+    creator
+    nft_address
+    start_time
+    end_time
+    sell_all
+    nft_contract {
+      address
+      name
+    }
+  }
+}

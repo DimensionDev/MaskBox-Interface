@@ -1,0 +1,396 @@
+directive @entity on OBJECT
+
+directive @derivedFrom(field: String) on FIELD_DEFINITION
+
+directive @subgraphId(id: String) on OBJECT
+
+scalar BigDecimal
+
+scalar BigInt
+
+input Block_height {
+  hash: Bytes
+  number: Int
+}
+
+scalar Bytes
+
+type Maskbox {
+  id: ID!
+  chain_id: Int!
+  box_id: String!
+  blockNumber: BigInt!
+  creator: Bytes!
+  nft_address: Bytes!
+  name: String!
+  create_time: Int!
+  start_time: Int!
+  end_time: Int!
+  sell_all: Boolean!
+  nft_contract: NFTContract!
+}
+
+input Maskbox_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  chain_id: Int
+  chain_id_not: Int
+  chain_id_gt: Int
+  chain_id_lt: Int
+  chain_id_gte: Int
+  chain_id_lte: Int
+  chain_id_in: [Int!]
+  chain_id_not_in: [Int!]
+  box_id: String
+  box_id_not: String
+  box_id_gt: String
+  box_id_lt: String
+  box_id_gte: String
+  box_id_lte: String
+  box_id_in: [String!]
+  box_id_not_in: [String!]
+  box_id_contains: String
+  box_id_not_contains: String
+  box_id_starts_with: String
+  box_id_not_starts_with: String
+  box_id_ends_with: String
+  box_id_not_ends_with: String
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  blockNumber_in: [BigInt!]
+  blockNumber_not_in: [BigInt!]
+  creator: Bytes
+  creator_not: Bytes
+  creator_in: [Bytes!]
+  creator_not_in: [Bytes!]
+  creator_contains: Bytes
+  creator_not_contains: Bytes
+  nft_address: Bytes
+  nft_address_not: Bytes
+  nft_address_in: [Bytes!]
+  nft_address_not_in: [Bytes!]
+  nft_address_contains: Bytes
+  nft_address_not_contains: Bytes
+  name: String
+  name_not: String
+  name_gt: String
+  name_lt: String
+  name_gte: String
+  name_lte: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  create_time: Int
+  create_time_not: Int
+  create_time_gt: Int
+  create_time_lt: Int
+  create_time_gte: Int
+  create_time_lte: Int
+  create_time_in: [Int!]
+  create_time_not_in: [Int!]
+  start_time: Int
+  start_time_not: Int
+  start_time_gt: Int
+  start_time_lt: Int
+  start_time_gte: Int
+  start_time_lte: Int
+  start_time_in: [Int!]
+  start_time_not_in: [Int!]
+  end_time: Int
+  end_time_not: Int
+  end_time_gt: Int
+  end_time_lt: Int
+  end_time_gte: Int
+  end_time_lte: Int
+  end_time_in: [Int!]
+  end_time_not_in: [Int!]
+  sell_all: Boolean
+  sell_all_not: Boolean
+  sell_all_in: [Boolean!]
+  sell_all_not_in: [Boolean!]
+  nft_contract: String
+  nft_contract_not: String
+  nft_contract_gt: String
+  nft_contract_lt: String
+  nft_contract_gte: String
+  nft_contract_lte: String
+  nft_contract_in: [String!]
+  nft_contract_not_in: [String!]
+  nft_contract_contains: String
+  nft_contract_not_contains: String
+  nft_contract_starts_with: String
+  nft_contract_not_starts_with: String
+  nft_contract_ends_with: String
+  nft_contract_not_ends_with: String
+}
+
+enum Maskbox_orderBy {
+  id
+  chain_id
+  box_id
+  blockNumber
+  creator
+  nft_address
+  name
+  create_time
+  start_time
+  end_time
+  sell_all
+  nft_contract
+}
+
+type NFTContract {
+  id: ID!
+  address: Bytes!
+  name: String!
+  chain_id: Int!
+}
+
+input NFTContract_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  address: Bytes
+  address_not: Bytes
+  address_in: [Bytes!]
+  address_not_in: [Bytes!]
+  address_contains: Bytes
+  address_not_contains: Bytes
+  name: String
+  name_not: String
+  name_gt: String
+  name_lt: String
+  name_gte: String
+  name_lte: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  chain_id: Int
+  chain_id_not: Int
+  chain_id_gt: Int
+  chain_id_lt: Int
+  chain_id_gte: Int
+  chain_id_lte: Int
+  chain_id_in: [Int!]
+  chain_id_not_in: [Int!]
+}
+
+enum NFTContract_orderBy {
+  id
+  address
+  name
+  chain_id
+}
+
+enum OrderDirection {
+  asc
+  desc
+}
+
+type Query {
+  nftcontract(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): NFTContract
+  nftcontracts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: NFTContract_orderBy
+    orderDirection: OrderDirection
+    where: NFTContract_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [NFTContract!]!
+  maskbox(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Maskbox
+  maskboxes(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Maskbox_orderBy
+    orderDirection: OrderDirection
+    where: Maskbox_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Maskbox!]!
+
+  """
+  Access to subgraph metadata
+  """
+  _meta(block: Block_height): _Meta_
+}
+
+type Subscription {
+  nftcontract(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): NFTContract
+  nftcontracts(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: NFTContract_orderBy
+    orderDirection: OrderDirection
+    where: NFTContract_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [NFTContract!]!
+  maskbox(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): Maskbox
+  maskboxes(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: Maskbox_orderBy
+    orderDirection: OrderDirection
+    where: Maskbox_filter
+
+    """
+    The block at which the query should be executed. Can either be an `{ number: Int }` containing the block number or a `{ hash: Bytes }` value containing a block hash. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [Maskbox!]!
+
+  """
+  Access to subgraph metadata
+  """
+  _meta(block: Block_height): _Meta_
+}
+
+type _Block_ {
+  """
+  The hash of the block
+  """
+  hash: Bytes
+
+  """
+  The block number
+  """
+  number: Int!
+}
+
+"""
+The type for the top-level _meta field
+"""
+type _Meta_ {
+  """
+  Information about a specific subgraph block. The hash of the block
+  will be null if the _meta field has a block constraint that asks for
+  a block number. It will be filled if the _meta field has no block constraint
+  and therefore asks for the latest  block
+  """
+  block: _Block_!
+
+  """
+  The deployment ID
+  """
+  deployment: String!
+
+  """
+  If `true`, the subgraph encountered indexing errors at some past block
+  """
+  hasIndexingErrors: Boolean!
+}
+
+enum _SubgraphErrorPolicy_ {
+  """
+  Data will be returned even if the subgraph has indexing errors
+  """
+  allow
+
+  """
+  If the subgraph has indexing errors, data will be omitted. The default.
+  """
+  deny
+}

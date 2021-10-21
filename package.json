@@ -8,7 +8,9 @@
     "prettier": "prettier \"src/**/*.{css,less,ts,tsx}\"",
     "typecheck": "tsc --noEmit",
     "gen:assets": "node ./scripts/generate-assets.js",
-    "gen:icons": "node ./scripts/generate-icons.js"
+    "gen:icons": "node ./scripts/generate-icons.js",
+    "fetch-schema": "node ./scripts/fetch-schema.js",
+    "gen:graphql": "graphql-codegen --config codegen.yml"
   },
   "homepage": "https://box.mask.io/",
   "gitHooks": {
@@ -20,6 +22,7 @@
     ]
   },
   "dependencies": {
+    "@apollo/client": "^3.4.16",
     "@gnosis.pm/safe-apps-web3modal": "^1.0.0",
     "@walletconnect/web3-provider": "^1.5.3",
     "classnames": "^2.3.1",
@@ -37,6 +40,10 @@
     "web3modal": "^1.9.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.2.1",
+    "@graphql-codegen/typescript": "^2.2.4",
+    "@graphql-codegen/typescript-operations": "^2.1.8",
+    "@graphql-codegen/typescript-react-apollo": "^3.1.6",
     "@types/lodash-es": "^4.17.4",
     "@types/prettier": "^2.3.2",
     "@types/react": "^17.0.0",
@@ -48,11 +55,13 @@
     "css-loader": "^6.2.0",
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.24.0",
+    "graphql": "^15.6.1",
     "html-webpack-plugin": "^5.3.2",
     "https-browserify": "^1.0.0",
     "less": "^4.1.1",
     "less-loader": "^10.0.1",
     "lint-staged": "^11.1.1",
+    "node-fetch": "^2.6.1",
     "os-browserify": "^0.3.0",
     "patch-package": "^6.4.7",
     "prettier": "^2.3.2",

@@ -4,6 +4,7 @@ import { Routes } from './Routes';
 import { Layout } from './Layout';
 
 import {
+  ApolloProvider,
   MBoxContractProvider,
   NFTContractProvider,
   RSS3Provider,
@@ -11,6 +12,7 @@ import {
   UploadProvider,
   Web3Provider,
 } from './contexts';
+
 import './base.less';
 import './theme.module.less';
 import styles from './app.module.less';
@@ -21,15 +23,17 @@ function App() {
       <ThemeProvider>
         <UploadProvider>
           <Web3Provider>
-            <NFTContractProvider>
-              <MBoxContractProvider>
-                <RSS3Provider>
-                  <Layout>
-                    <Routes />
-                  </Layout>
-                </RSS3Provider>
-              </MBoxContractProvider>
-            </NFTContractProvider>
+            <ApolloProvider>
+              <NFTContractProvider>
+                <MBoxContractProvider>
+                  <RSS3Provider>
+                    <Layout>
+                      <Routes />
+                    </Layout>
+                  </RSS3Provider>
+                </MBoxContractProvider>
+              </NFTContractProvider>
+            </ApolloProvider>
           </Web3Provider>
           <Toaster
             position="top-right"
