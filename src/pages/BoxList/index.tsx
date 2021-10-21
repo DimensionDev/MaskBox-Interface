@@ -7,6 +7,7 @@ import styles from './index.module.less';
 
 const PAGE_SIZE = 10;
 export const BoxList: FC = () => {
+  // TODO from route query
   const [page, setPage] = useState(1);
   const [fetchBoxes, { data: boxesData, loading }] = useMaskBoxesLazyQuery({});
   const { providerChainId } = useWeb3Context();

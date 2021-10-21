@@ -4,6 +4,7 @@
   display: flex;
   .interaction {
     margin-left: 28px;
+    overflow: hidden;
   }
 }
 .media {
@@ -16,6 +17,7 @@
   justify-content: center;
   background-color: var(--image-placeholder-bg, #f0f2f6);
   color: var(--text-secondary, #f0f2f6);
+  flex-shrink: 0;
 }
 .inList {
   .media {
@@ -29,8 +31,12 @@
   }
 }
 .infoList {
+  overflow: hidden;
   .name {
     font-size: 34px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .infoRow {
     font-size: 18px;

@@ -59,7 +59,9 @@ export const MysteryBox: FC<Props> = ({ chainId, boxId, className, onLoad, inLis
         </div>
         <div className={styles.interaction}>
           <dl className={styles.infoList}>
-            <dt className={styles.name}>{box.name ?? -''}</dt>
+            <dt className={styles.name} title={box.name}>
+              {box.name ?? -''}
+            </dt>
             <dd className={styles.infoRow}>Lucky Draw</dd>
             <dd className={styles.infoRow}>Get your unique card (NFT) by lucky draw</dd>
             <dd className={styles.infoRow}>
