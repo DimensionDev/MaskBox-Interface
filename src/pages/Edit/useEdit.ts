@@ -15,7 +15,7 @@ export function useEdit() {
   const { account, ethersProvider, providerChainId } = useWeb3Context();
   const [ownedTokens, setOwnedTokens] = useState<ERC721Token[]>([]);
   const contractAddress = useMemo(
-    () => (providerChainId ? getContractAddressConfig(providerChainId).MysteryBox : ''),
+    () => (providerChainId ? getContractAddressConfig(providerChainId)?.MysteryBox : ''),
     [providerChainId],
   );
 

@@ -24,9 +24,9 @@ export const SelectNetwork: FC<Props> = (props) => {
   };
   return (
     <Dialog
-      {...props}
       className={classnames(props.className, styles.selectNetwork)}
       title="Select a Network"
+      {...props}
     >
       <p className={styles.note}>You are currently on the {getNetworkName(providerChainId!)}</p>
       <ul className={styles.networks}>

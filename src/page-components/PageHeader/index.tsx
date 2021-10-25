@@ -2,7 +2,7 @@ import { logoImage } from '@/assets';
 import { Button, Icon } from '@/components';
 import { RouteKeys } from '@/configs';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
-import { getNetworkIcon, getNetworkName } from '@/lib';
+import { getNetworkIcon, getNetworkName, isSupportedChain } from '@/lib';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
@@ -15,6 +15,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   const { account, providerChainId, connectWeb3 } = useWeb3Context();
   const [selectNetworkVisible, setSelectNetworkVisible] = useState(false);
+  const isSupported = isSupportedChain(providerChainId ?? 0);
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === ThemeType.Dark;
   const history = useHistory();
@@ -94,7 +95,11 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           </Button>
         </div>
       </div>
-      <SelectNetwork open={selectNetworkVisible} onClose={() => setSelectNetworkVisible(false)} />
+      <SelectNetwork
+        open={selectNetworkVisible || !isSupported}
+        title={isSupported ? 'Select a Network' : 'Current is not supported'}
+        onClose={() => setSelectNetworkVisible(false)}
+      />
     </div>
   );
 };

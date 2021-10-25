@@ -58,7 +58,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
   ] = useMbox();
 
   const contractAddress = useMemo(
-    () => (providerChainId ? getContractAddressConfig(providerChainId).MysteryBox : ''),
+    () => (providerChainId ? getContractAddressConfig(providerChainId)?.MysteryBox : ''),
     [providerChainId],
   );
   const contract = useRef<Contract>();

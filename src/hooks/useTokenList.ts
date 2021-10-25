@@ -11,6 +11,7 @@ export function useTokenList() {
       return;
     }
     const nativeToken = getNativeToken(providerChainId);
+    if (!nativeToken) return;
     const listUrl = getTokenListUrl(providerChainId);
     fetch(listUrl).then(async (response) => {
       const data: TokenListConfig = await response.json();

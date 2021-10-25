@@ -1,5 +1,7 @@
 import { ethereumIcon, binanceIcon, polygonIcon } from '../../components/Icon/icon-data';
 
+export const supportedChains = [1, 4];
+
 export const networkNames: Record<number, string> = {
   1: 'ETH Mainnet',
   3: 'Ethereum Testnet Ropsten',
@@ -42,3 +44,7 @@ export const networkExplorers: Record<number, string> = {
   56: 'https://bscscan.com/tx/',
   137: 'https://polygonscan.com/tx/',
 };
+
+export function isSupportedChain(chainId: number) {
+  return supportedChains.includes(chainId);
+}
