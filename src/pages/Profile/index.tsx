@@ -1,30 +1,21 @@
 import { avatarImage } from '@/assets';
-import { ArticleSection, Collection, Empty, NeonButton } from '@/components';
-import { useNFTContract } from '@/contexts';
-import { WipDialog } from '@/page-components';
-import { BigNumber } from 'ethers';
-import { FC, useMemo } from 'react';
+import { ArticleSection, NFTItem } from '@/components';
+import { useNFTContract, useWeb3Context } from '@/contexts';
+import { getContractAddressConfig } from '@/lib';
+import { FC, useEffect, useMemo } from 'react';
 import styles from './index.module.less';
 
-const wip = true;
-
 export const Profile: FC = () => {
+  const { providerChainId } = useWeb3Context();
   const { tokens, getMyTokens } = useNFTContract();
-  // useEffect(() => {
-  //   getMyTokens();
-  // }, [getMyTokens]);
-  const isEmpty = tokens.length === 0;
+  const contractAddress = useMemo(
+    () => (providerChainId ? getContractAddressConfig(providerChainId).MysteryBoxNFT : ''),
+    [providerChainId],
+  );
+  useEffect(() => {
+    getMyTokens(contractAddress);
+  }, [getMyTokens, contractAddress]);
 
-  const myNfts = useMemo(() => {
-    return tokens.map((uri, index) => ({
-      latest_nft_id: BigNumber.from(index),
-      // imageUrl: uri,
-    }));
-  }, [tokens]);
-
-  if (wip) {
-    return <WipDialog />;
-  }
   console.log('my tokens', tokens);
   return (
     <article>
@@ -33,27 +24,14 @@ export const Profile: FC = () => {
       </header>
       <main className={styles.main}>
         <ArticleSection title="My Collectibles">
-          {isEmpty ? (
-            <div className={styles.emptyContainer}>
-              <Empty description="Opps, There’s Nothing left here" />
-            </div>
-          ) : (
-            <Collection
-              className={styles.nftList}
-              /* eslint-disable-next-line */
-              // @ts-ignore
-              collection={{
-                _name: 'Mirror Editions',
-                _nft_list: myNfts,
-              }}
-            />
-          )}
+          <ul className={styles.nftList}>
+            {tokens.map((token) => (
+              <li key={token.tokenId}>
+                <NFTItem token={token} />
+              </li>
+            ))}
+          </ul>
         </ArticleSection>
-        {!isEmpty && (
-          <div className={styles.buttonGroup}>
-            <NeonButton>Load More</NeonButton>
-          </div>
-        )}
       </main>
     </article>
   );
