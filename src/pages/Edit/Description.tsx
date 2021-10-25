@@ -136,7 +136,7 @@ export const Description: FC = () => {
           colorScheme="primary"
           size="large"
           onClick={() => {
-            history.push('/edit/meta');
+            history.replace('/edit/meta');
           }}
         >
           Next

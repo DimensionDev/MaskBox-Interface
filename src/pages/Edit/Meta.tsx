@@ -1,13 +1,4 @@
-import {
-  Button,
-  Field,
-  Icon,
-  Input,
-  NFTSelectList,
-  PickerDialog,
-  showToast,
-  TokenIcon,
-} from '@/components';
+import { Button, Field, Icon, Input, NFTSelectList, showToast, TokenIcon } from '@/components';
 import { useRSS3, useWeb3Context } from '@/contexts';
 import { useTokenList } from '@/hooks';
 import { NFTPickerDialog, TokenPickerDialog } from '@/page-components';
@@ -39,12 +30,7 @@ export const Meta: FC = () => {
   const updateField = useUpdateFormField();
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
-  const [boxUrl, setBoxUrl] = useState('');
-  const [urlBoxVisible, setUrlBoxVisible] = useState(false);
   const [tokenBoxVisible, setTokenBoxVisible] = useState(false);
-
-  const shareLink = new URL(`https://twitter.com/intent/tweet?text=${encodeURIComponent(boxUrl)}`)
-    .href;
 
   const createBox = useCreateMysteryBox();
   const { isApproveAll, approveAll, checkingApprove, ownedTokens } = useEdit();
@@ -75,8 +61,7 @@ export const Meta: FC = () => {
           cover: formData.cover,
           activities: formData.activities,
         });
-        setBoxUrl(`${location.origin}/#/details?chain=${providerChainId}&box=${args.box_id}`);
-        setUrlBoxVisible(true);
+        history.replace(`/details?chain=${providerChainId}&box=${args.box_id}&new=true`);
       }
     } catch (err) {
       showToast({
@@ -110,11 +95,7 @@ export const Meta: FC = () => {
           className={styles.backButton}
           size="large"
           onClick={() => {
-            if (history.length > 1) {
-              history.goBack();
-            } else {
-              history.push('/edit/desc');
-            }
+            history.replace('/edit/desc');
           }}
         >
           Go back
@@ -273,18 +254,6 @@ export const Meta: FC = () => {
           ))}
         </ul>
       </div>
-      <PickerDialog title="Share" open={urlBoxVisible} onClose={() => setUrlBoxVisible(false)}>
-        <div className={styles.urlBoxContent}>
-          <p>
-            Copy following url, and <a href={shareLink}>share</a> on twitter
-          </p>
-          <div className={styles.url}>
-            <a href={shareLink} target="_blank" rel="noopener noreferrer">
-              {boxUrl}
-            </a>
-          </div>
-        </div>
-      </PickerDialog>
       <TokenPickerDialog
         open={tokenBoxVisible}
         onClose={() => setTokenBoxVisible(false)}

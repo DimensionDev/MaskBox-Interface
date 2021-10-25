@@ -46,8 +46,6 @@ export function useGetExtendedBoxInfo(chainId: number | null, boxId: string | nu
     }
   }, [boxInfo?.creator, boxId]);
 
-  console.log({ boxData, resultValue: result.value });
-
   return useMemo(
     () => ({
       ...boxInfo,

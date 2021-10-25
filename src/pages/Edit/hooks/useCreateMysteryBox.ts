@@ -49,6 +49,7 @@ export function useCreateMysteryBox() {
         throw new Error('Fails to get log of CreationSuccess');
       }
     }
+    console.info('useCreateMysteryBox', { confirmation });
 
     const parsedLog = abiInterface.parseLog(log);
     return parsedLog;

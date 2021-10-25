@@ -1,23 +1,28 @@
-import { ArticleSection } from '@/components';
-import { MysteryBox, ShareBox } from '@/page-components';
+import { ArticleSection, PickerDialog } from '@/components';
+import { MysteryBox } from '@/page-components';
 import { ExtendedBoxInfo } from '@/types';
 import { FC, memo, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './index.module.less';
 
 export const Details: FC = memo(() => {
-  const [shareBoxOpen, setShareBoxOpen] = useState(false);
   const location = useLocation();
 
-  const { chainId, boxId } = useMemo(() => {
+  const { chainId, boxId, isNew } = useMemo(() => {
     const params = new URLSearchParams(location.search);
     const chainId = params.get('chain');
     const boxId = params.get('box');
     return {
       chainId: chainId ? parseInt(chainId, 10) : null,
       boxId,
+      isNew: !!params.get('new'),
     };
   }, [location.search]);
+
+  const [urlBoxVisible, setUrlBoxVisible] = useState(isNew);
+  const boxUrl = `${window.location.origin}/#/details?chain=${chainId}&box=${boxId}`;
+  const shareLink = new URL(`https://twitter.com/intent/tweet?text=${encodeURIComponent(boxUrl)}`)
+    .href;
 
   const [box, setBox] = useState<Partial<ExtendedBoxInfo>>({});
   const activities = box.activities ?? [];
@@ -41,7 +46,18 @@ export const Details: FC = memo(() => {
           </ArticleSection>
         ))}
       </main>
-      <ShareBox open={shareBoxOpen} onClose={() => setShareBoxOpen(false)} />
+      <PickerDialog title="Share" open={urlBoxVisible} onClose={() => setUrlBoxVisible(false)}>
+        <div className={styles.urlBoxContent}>
+          <p>
+            Copy following url, and <a href={shareLink}>share</a> on twitter
+          </p>
+          <div className={styles.url}>
+            <a target="_blank" rel="noopener noreferrer">
+              {boxUrl}
+            </a>
+          </div>
+        </div>
+      </PickerDialog>
     </>
   );
 });
