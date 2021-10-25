@@ -33,7 +33,7 @@ export const Meta: FC = () => {
   const [tokenBoxVisible, setTokenBoxVisible] = useState(false);
 
   const createBox = useCreateMysteryBox();
-  const { isApproveAll, approveAll, checkingApprove, ownedTokens } = useEdit();
+  const { isApproveAll, approveAll, checkingApprove, ownedTokens: ownedERC721Tokens } = useEdit();
 
   const { saveBox } = useRSS3();
   const create = useCallback(async () => {
@@ -174,7 +174,7 @@ export const Meta: FC = () => {
       >
         <div className={styles.selectedNft}>
           <NFTSelectList
-            tokens={ownedTokens}
+            tokens={ownedERC721Tokens}
             selectedTokenIds={formData.selectedNFTIds}
             onPick={() => setNftPickerVisible(true)}
           />
@@ -264,7 +264,7 @@ export const Meta: FC = () => {
         }}
       />
       <NFTPickerDialog
-        tokens={ownedTokens}
+        tokens={ownedERC721Tokens}
         selectedTokenIds={formData.selectedNFTIds}
         onClose={() => setNftPickerVisible(false)}
         onConfirm={(ids) => {

@@ -30,6 +30,7 @@ interface ContextOptions {
   getCollectionInfo(): Promise<CollectionInfo | null | undefined>;
   contractAddress: string;
   getBoxInfo: (boxId: string) => Promise<BoxInfo>;
+  getNftListForSale: (box: string, cursor?: BigNumber, amount?: BigNumber) => Promise<string[]>;
 }
 
 export const MBoxContractContext = React.createContext<ContextOptions>({
@@ -45,6 +46,7 @@ export const MBoxContractContext = React.createContext<ContextOptions>({
   setMbox: noop,
   contractAddress: '',
   getBoxInfo: () => Promise.resolve({} as BoxInfo),
+  getNftListForSale: () => Promise.resolve([]),
 });
 export const useMBoxContract = () => useContext(MBoxContractContext);
 
@@ -160,6 +162,16 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     [contractAddress, providerChainId, ethersProvider],
   );
 
+  const getNftListForSale = useCallback(
+    async (boxId: string, cursor: BigNumber = ZERO, amount: BigNumber = BigNumber.from(20)) => {
+      if (!ethersProvider || !providerChainId || !contractAddress) return [];
+      const contract = new Contract(contractAddress, MysteryBoxABI, ethersProvider);
+      const idList: BigNumber[] = await contract.getNftListForSale(boxId, cursor, amount);
+      return idList.map((id) => id.toString());
+    },
+    [contractAddress, providerChainId, ethersProvider],
+  );
+
   const contextValue = {
     myAllowance: allowance,
     myBalance: balance,
@@ -174,6 +186,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
     getCollectionInfo,
     contractAddress,
     getBoxInfo,
+    getNftListForSale,
   };
 
   return (

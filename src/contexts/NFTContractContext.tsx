@@ -10,6 +10,7 @@ interface ContextOptions {
   getMyBalance(contract: Contract): Promise<number>;
   getMyToken(contract: Contract, index: BigNumber): Promise<ERC721Token | null>;
   getMyTokens(contractAddress: string): Promise<ERC721Token[]>;
+  getByIdList(contractAddress: string, idList: string[]): Promise<ERC721Token[]>;
 }
 
 export const NFTContractContext = React.createContext<ContextOptions>({
@@ -17,6 +18,7 @@ export const NFTContractContext = React.createContext<ContextOptions>({
   tokens: [],
   getMyToken: () => Promise.resolve(null),
   getMyTokens: () => Promise.resolve([]),
+  getByIdList: () => Promise.resolve([]),
 });
 export const useNFTContract = () => useContext(NFTContractContext);
 
@@ -39,15 +41,20 @@ export const NFTContractProvider: FC = memo(({ children }) => {
     [account],
   );
 
+  const getTokenById = async (contract: Contract, tokenId: string) => {
+    const uri = await contract.tokenURI(tokenId);
+    const data = await fetchNFTTokenDetail(uri);
+    return { ...data, tokenId } as ERC721Token;
+  };
+
   const getMyToken = useCallback(
     async (contract: Contract, index: BigNumber) => {
       const tokenId = await contract
         .tokenOfOwnerByIndex(account, index)
         .catch((getMyTokenError: Error) => console.error({ getMyTokenError }));
       if (!tokenId) return null;
-      const uri = await contract.tokenURI(tokenId);
-      const data = await fetchNFTTokenDetail(uri);
-      return { ...data, tokenId } as ERC721Token;
+      const token = await getTokenById(contract, tokenId);
+      return token;
     },
     [account],
   );
@@ -68,11 +75,24 @@ export const NFTContractProvider: FC = memo(({ children }) => {
     [getMyBalance, getMyToken],
   );
 
+  const getByIdList = useCallback(
+    async (contractAddress: string, idList: string[]) => {
+      if (!ethersProvider || !utils.isAddress(contractAddress)) return [];
+      const contract = new Contract(contractAddress, MysterBoxNFTABI, ethersProvider);
+      const getTokens = idList.map((id) => getTokenById(contract, id));
+      const list = (await Promise.all(getTokens)).filter(notEmpty);
+      setTokens(list);
+      return list;
+    },
+    [ethersProvider],
+  );
+
   const contextValue = {
     tokens,
-    getMyTokens,
     getMyBalance,
     getMyToken,
+    getMyTokens,
+    getByIdList,
   };
 
   return <NFTContractContext.Provider value={contextValue}>{children}</NFTContractContext.Provider>;
