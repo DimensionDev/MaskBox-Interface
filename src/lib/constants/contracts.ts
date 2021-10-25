@@ -18,9 +18,18 @@ export const contractAddresses: Record<string, Record<string, string>> = {
   },
 };
 
+export const fromtBlocks: Record<string, number> = {
+  Mainnet: 0,
+  Rinkeby: 9369286,
+};
+
 export const drawTxParameters = {
   // 6 M Gwei
   gasLimit: 6000000,
   // `0.01 ether` is the fee users need to pay to draw an NFT
   value: ethers.utils.parseUnits('0.02', 'ether'),
+};
+
+export const getContractFromBlock = (chainId: number) => {
+  return fromtBlocks[chainId];
 };

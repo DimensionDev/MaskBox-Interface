@@ -7,6 +7,7 @@ import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
 
 const abiInterface = new ethers.utils.Interface(MysteryBoxABI);
+const MAX_CONFIRMATION = 6;
 
 export function useCreateMysteryBox() {
   const { ethersProvider, providerChainId } = useWeb3Context();
@@ -21,7 +22,7 @@ export function useCreateMysteryBox() {
       MysteryBoxABI as unknown as ContractInterface,
       ethersProvider.getSigner(),
     );
-    const result = await contract.createBox(
+    const tx = await contract.createBox(
       formData.nftContractAddress,
       formData.name,
       [
@@ -37,9 +38,19 @@ export function useCreateMysteryBox() {
       formData.selectedNFTIds,
       formData.whiteList || ZERO_ADDRESS,
     );
-    await result.wait(1);
-    const logs = await ethersProvider.getLogs(contract.filters.CreationSuccess());
-    const parsedLog = abiInterface.parseLog(logs[0]);
+    let log;
+    let confirmation = 0;
+    while (!log) {
+      await tx.wait(1);
+      confirmation += 1;
+      const logs = await ethersProvider.getLogs(contract.filters.CreationSuccess());
+      log = logs[0];
+      if (!log && confirmation >= MAX_CONFIRMATION) {
+        throw new Error('Fails to get log of CreationSuccess');
+      }
+    }
+
+    const parsedLog = abiInterface.parseLog(log);
     return parsedLog;
   }, [formData, ethersProvider, providerChainId]);
   return createBox;

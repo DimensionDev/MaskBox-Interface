@@ -344,6 +344,28 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny',
 }
 
+export type MaskBoxQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type MaskBoxQuery = {
+  __typename?: 'Query';
+  maskbox?:
+    | {
+        __typename?: 'Maskbox';
+        box_id: string;
+        name: string;
+        creator: any;
+        nft_address: any;
+        start_time: number;
+        end_time: number;
+        sell_all: boolean;
+        nft_contract: { __typename?: 'NFTContract'; address: any; name: string };
+      }
+    | null
+    | undefined;
+};
+
 export type MaskBoxesQueryVariables = Exact<{
   first?: Scalars['Int'];
   skip?: Scalars['Int'];
@@ -364,6 +386,55 @@ export type MaskBoxesQuery = {
   }>;
 };
 
+export const MaskBoxDocument = gql`
+  query MaskBox($id: ID!) {
+    maskbox(id: $id) {
+      box_id
+      name
+      creator
+      nft_address
+      start_time
+      end_time
+      sell_all
+      nft_contract {
+        address
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useMaskBoxQuery__
+ *
+ * To run a query within a React component, call `useMaskBoxQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMaskBoxQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMaskBoxQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMaskBoxQuery(
+  baseOptions: Apollo.QueryHookOptions<MaskBoxQuery, MaskBoxQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MaskBoxQuery, MaskBoxQueryVariables>(MaskBoxDocument, options);
+}
+export function useMaskBoxLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<MaskBoxQuery, MaskBoxQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MaskBoxQuery, MaskBoxQueryVariables>(MaskBoxDocument, options);
+}
+export type MaskBoxQueryHookResult = ReturnType<typeof useMaskBoxQuery>;
+export type MaskBoxLazyQueryHookResult = ReturnType<typeof useMaskBoxLazyQuery>;
+export type MaskBoxQueryResult = Apollo.QueryResult<MaskBoxQuery, MaskBoxQueryVariables>;
 export const MaskBoxesDocument = gql`
   query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
     maskboxes(orderBy: create_time, orderDirection: desc, first: $first, skip: $skip) {

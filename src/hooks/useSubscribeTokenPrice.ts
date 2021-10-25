@@ -29,15 +29,22 @@ interface TokenRecord {
   [token: string]: PriceRecord;
 }
 
+const cacheMap = new Map<string, number>();
+
 export const useTrackTokenPrice = createTrackHook(
   0,
   async (tokenId: string | null, currency: string = 'usd') => {
     if (!tokenId) return 0;
-    const response = await fetch(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${tokenId}&vs_currencies=${currency}`,
-    );
+    const url = `https://api.coingecko.com/api/v3/simple/price?ids=${tokenId}&vs_currencies=${currency}`;
+    const cached = cacheMap.get(url);
+    if (cached) {
+      return cached;
+    }
+    const response = await fetch(url);
     const data = (await response.json()) as TokenRecord | null;
-    if (!data) return 0;
-    return data[tokenId]?.[currency] ?? 0;
+    if (data?.[tokenId]?.[currency]) {
+      cacheMap.set(url, data?.[tokenId]?.[currency]);
+    }
+    return cacheMap.get(url) ?? 0;
   },
 );

@@ -3,6 +3,7 @@ export * from './useERC20Approve';
 export * from './useGdpr';
 export * from './useGetERC20Allowance';
 export * from './useGetExtendedBoxInfo';
+export * from './useMaskboxCreationEvent';
 export * from './useMysteryBoxContract';
 export * from './useOnceShowup';
 export * from './useSubscribeTokenPrice';

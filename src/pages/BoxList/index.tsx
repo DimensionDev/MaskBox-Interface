@@ -1,11 +1,12 @@
 import { Button, LoadingIcon } from '@/components';
 import { useWeb3Context } from '@/contexts';
-import { useMaskBoxesLazyQuery } from '@/graphql-hooks';
+import { MaskBoxesQuery, useMaskBoxesLazyQuery } from '@/graphql-hooks';
 import { MysteryBox } from '@/page-components';
 import { FC, useEffect, useState } from 'react';
 import styles from './index.module.less';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
+const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
   // TODO from route query
   const [page, setPage] = useState(1);
@@ -22,6 +23,7 @@ export const BoxList: FC = () => {
     fetchBoxes({
       variables: {
         skip: (page - 1) * PAGE_SIZE,
+        first: PAGE_SIZE,
       },
     });
   }, [fetchBoxes, page]);
@@ -34,9 +36,9 @@ export const BoxList: FC = () => {
     );
   }
 
-  const maskboxes = boxesData?.maskboxes;
+  const maskboxes = boxesData?.maskboxes ?? EMPTY_LIST;
 
-  if (!maskboxes || !providerChainId) return null;
+  if (!providerChainId) return null;
 
   return (
     <>
@@ -48,12 +50,12 @@ export const BoxList: FC = () => {
         ))}
       </ul>
       <div className={styles.paginaton}>
-        <Button className={styles.button} disabled={page === 1} onClick={loadPrevPage}>
+        <Button className={styles.button} disabled={page === 1 || loading} onClick={loadPrevPage}>
           Previous
         </Button>
         <Button
           className={styles.button}
-          disabled={maskboxes.length < PAGE_SIZE}
+          disabled={maskboxes.length < PAGE_SIZE || loading}
           onClick={loadNextPage}
         >
           Next

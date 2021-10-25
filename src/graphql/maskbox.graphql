@@ -1,3 +1,10 @@
+query MaskBox($id: ID!) {
+  maskbox(id: $id) {
+    start_time
+    end_time
+  }
+}
+
 query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
   maskboxes(orderBy: create_time, orderDirection: desc, first: $first, skip: $skip) {
     box_id

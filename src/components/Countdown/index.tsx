@@ -34,3 +34,5 @@ export const Countdown: FC<Props> = ({ end, className, onEnded, ...rest }) => {
     </div>
   );
 };
+
+export * from './useCountdown';
