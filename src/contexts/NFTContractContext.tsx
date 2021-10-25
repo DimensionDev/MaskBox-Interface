@@ -61,7 +61,10 @@ export const NFTContractProvider: FC = memo(({ children }) => {
 
   const getMyTokens = useCallback(
     async (contractAddress: string) => {
-      if (!ethersProvider || !utils.isAddress(contractAddress)) return [];
+      if (!ethersProvider || !utils.isAddress(contractAddress)) {
+        setTokens([]);
+        return [];
+      }
       const contract = new Contract(contractAddress, MysterBoxNFTABI, ethersProvider);
       const balance = await getMyBalance(contract);
       console.log('balance', balance);
@@ -72,7 +75,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
       setTokens(list);
       return list;
     },
-    [getMyBalance, getMyToken],
+    [ethersProvider, getMyBalance, getMyToken],
   );
 
   const getByIdList = useCallback(
@@ -81,7 +84,6 @@ export const NFTContractProvider: FC = memo(({ children }) => {
       const contract = new Contract(contractAddress, MysterBoxNFTABI, ethersProvider);
       const getTokens = idList.map((id) => getTokenById(contract, id));
       const list = (await Promise.all(getTokens)).filter(notEmpty);
-      setTokens(list);
       return list;
     },
     [ethersProvider],

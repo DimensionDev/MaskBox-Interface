@@ -34,6 +34,7 @@ export const SelectNetwork: FC<Props> = (props) => {
           return (
             <li key={network.chainId} onClick={() => switchNetwork(network.chainId)}>
               <div
+                role="button"
                 className={classnames(
                   styles.network,
                   network.chainId === providerChainId && styles.selected,
