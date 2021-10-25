@@ -19,7 +19,7 @@ export const contractAddresses: Record<string, Record<string, string>> = {
 };
 
 export const fromtBlocks: Record<string, number> = {
-  Mainnet: 0,
+  Mainnet: 13396393,
   Rinkeby: 9369286,
 };
 

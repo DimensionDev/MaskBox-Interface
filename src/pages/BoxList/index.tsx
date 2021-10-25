@@ -2,24 +2,41 @@ import { Button, LoadingIcon } from '@/components';
 import { useWeb3Context } from '@/contexts';
 import { MaskBoxesQuery, useMaskBoxesLazyQuery } from '@/graphql-hooks';
 import { MysteryBox } from '@/page-components';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
 
 const PAGE_SIZE = 5;
 const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
-  // TODO from route query
-  const [page, setPage] = useState(1);
   const [fetchBoxes, { data: boxesData, loading }] = useMaskBoxesLazyQuery({});
   const { providerChainId } = useWeb3Context();
 
-  const loadNextPage = () => {
-    setPage((p) => p + 1);
-  };
+  const history = useHistory();
+  const { location } = history;
+
+  const page = useMemo(() => {
+    const p = new URLSearchParams(location.search).get('page');
+    return p ? parseInt(p, 10) : null;
+  }, [location.search]);
+
+  useEffect(() => {
+    if (!page) {
+      history.replace('/list?page=1');
+    }
+  }, [history, page]);
+
   const loadPrevPage = () => {
-    setPage((p) => (p > 1 ? p - 1 : 1));
+    if (!page) return;
+    const p = page > 1 ? page - 1 : 1;
+    history.push(`/list?page=${p}`);
+  };
+  const loadNextPage = () => {
+    if (!page) return;
+    history.push(`/list?page=${page + 1}`);
   };
   useEffect(() => {
+    if (!page) return;
     fetchBoxes({
       variables: {
         skip: (page - 1) * PAGE_SIZE,
