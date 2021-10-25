@@ -1,4 +1,4 @@
-import { Button, ButtonProps, LoadingIcon, useCountdown } from '@/components';
+import { Button, ButtonProps, LoadingIcon } from '@/components';
 import { useGetExtendedBoxInfo } from '@/hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType } from '@/lib';
@@ -16,17 +16,6 @@ interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> {
   boxId: string;
   onLoad?: (box: Partial<ExtendedBoxInfo>) => void;
   inList?: boolean;
-}
-
-function formatCountdown(options: Record<string, number>) {
-  const paris = Object.keys(options).map((key) => {
-    const val = options[key];
-    if (val < 1) {
-      return '';
-    }
-    return `${val} ${key}${val > 1 ? 's' : ''}`;
-  });
-  return paris.filter(Boolean).join(' ');
 }
 
 export const MysteryBox: FC<Props> = ({ chainId, boxId, className, onLoad, inList, ...rest }) => {
@@ -86,48 +75,46 @@ export const MysteryBox: FC<Props> = ({ chainId, boxId, className, onLoad, inLis
   };
 
   return (
-    <>
-      <div
-        className={classnames(styles.mysteryBox, className, { [styles.inList]: inList })}
-        {...rest}
-      >
-        <div className={styles.media}>
-          {box.cover ? (
-            <img src={box.cover} width="480" height="360" alt={box.name ?? '-'} />
-          ) : (
-            <LoadingIcon size={50} />
-          )}
-        </div>
-        <div className={styles.interaction}>
-          <dl className={styles.infoList}>
-            <dt className={styles.name} title={box.name}>
-              {box.name ?? '-'}
-            </dt>
-            <dd className={styles.infoRow}>Lucky Draw</dd>
-            <dd className={styles.infoRow}>Get your unique card (NFT) by lucky draw</dd>
-            <dd className={styles.infoRow}>
-              {box.total
-                ? `${box.total.sub(box.remaining!).toString()}/${box.total.toString()}`
-                : '-/-'}
-            </dd>
-            <dd className={styles.infoRow}>limit : {box.personal_limit?.toString()}</dd>
-          </dl>
-          {notStarted ? (
-            <CountdownButton {...buttonProps} startTime={startTime!} />
-          ) : (
-            <Button {...buttonProps}>{buttonText}</Button>
-          )}
-        </div>
-        {payment && (
-          <BuyBox
-            open={buyBoxOpen}
-            onClose={() => setBuyBoxOpen(false)}
-            boxId={boxId}
-            box={box}
-            payment={payment}
-          />
+    <div
+      className={classnames(styles.mysteryBox, className, { [styles.inList]: inList })}
+      {...rest}
+    >
+      <div className={styles.media}>
+        {box.cover ? (
+          <img src={box.cover} width="480" height="360" alt={box.name ?? '-'} />
+        ) : (
+          <LoadingIcon size={50} />
         )}
       </div>
-    </>
+      <div className={styles.interaction}>
+        <dl className={styles.infoList}>
+          <dt className={styles.name} title={box.name}>
+            {box.name ?? '-'}
+          </dt>
+          <dd className={styles.infoRow}>Lucky Draw</dd>
+          <dd className={styles.infoRow}>Get your unique card (NFT) by lucky draw</dd>
+          <dd className={styles.infoRow}>
+            {box.total
+              ? `${box.total.sub(box.remaining!).toString()}/${box.total.toString()}`
+              : '-/-'}
+          </dd>
+          <dd className={styles.infoRow}>limit : {box.personal_limit?.toString()}</dd>
+        </dl>
+        {notStarted ? (
+          <CountdownButton {...buttonProps} startTime={startTime!} />
+        ) : (
+          <Button {...buttonProps}>{buttonText}</Button>
+        )}
+      </div>
+      {payment && (
+        <BuyBox
+          open={buyBoxOpen}
+          onClose={() => setBuyBoxOpen(false)}
+          boxId={boxId}
+          box={box}
+          payment={payment}
+        />
+      )}
+    </div>
   );
 };
