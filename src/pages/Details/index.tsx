@@ -5,12 +5,13 @@ import { MysteryBox } from '@/page-components';
 import { ERC721Token, ExtendedBoxInfo } from '@/types';
 import { BigNumber } from 'ethers';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
 
 const PAGE_SIZE = BigNumber.from(10);
 export const Details: FC = memo(() => {
-  const location = useLocation();
+  const history = useHistory();
+  const { location } = history;
   const { getNftListForSale } = useMBoxContract();
   const { getByIdList } = useNFTContract();
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>([]);
@@ -26,10 +27,17 @@ export const Details: FC = memo(() => {
     };
   }, [location.search]);
 
-  const [urlBoxVisible, setUrlBoxVisible] = useState(isNew);
+  const [shareBoxVisible, setShareBoxVisible] = useState(isNew);
   const boxUrl = `${window.location.origin}/#/details?chain=${chainId}&box=${boxId}`;
   const shareLink = new URL(`https://twitter.com/intent/tweet?text=${encodeURIComponent(boxUrl)}`)
     .href;
+
+  const closeShareBox = useCallback(() => {
+    setShareBoxVisible(false);
+    const params = new URLSearchParams(location.search);
+    params.delete('new');
+    history.replace(`/details?${params.toString()}`);
+  }, [history, location.search]);
 
   const [box, setBox] = useState<Partial<ExtendedBoxInfo>>({});
   const activities = box.activities ?? [];
@@ -85,7 +93,7 @@ export const Details: FC = memo(() => {
           </ArticleSection>
         ))}
       </main>
-      <PickerDialog title="Share" open={urlBoxVisible} onClose={() => setUrlBoxVisible(false)}>
+      <PickerDialog title="Share" open={shareBoxVisible} onClose={closeShareBox}>
         <div className={styles.urlBoxContent}>
           <p>
             Copy following url, and <a href={shareLink}>share</a> on twitter
