@@ -103,20 +103,14 @@ export const Web3Provider: FC = ({ children }) => {
       const gnosisSafe = await web3Modal.isSafeApp();
 
       if (!gnosisSafe) {
-        modalProvider.on('accountsChanged', (accounts: string[]) => {
-          setWeb3State((state) => ({
-            ...state,
-            account: accounts[0],
-          }));
-        });
-        modalProvider.on('chainChanged', () => {
-          setWeb3Provider(modalProvider);
-        });
+        const updateWeb3Provider = () => setWeb3Provider(modalProvider);
+        modalProvider.on('accountsChanged', updateWeb3Provider);
+        modalProvider.on('chainChanged', updateWeb3Provider);
       }
       if (modalProvider.isWalletConnect) {
         modalProvider.on('disconnect', disconnect);
       }
-    } catch (error) {
+    } catch (error: any) {
       logError({ web3ModalError: error });
     }
   }, [setWeb3Provider, disconnect]);

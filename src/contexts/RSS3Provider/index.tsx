@@ -34,28 +34,23 @@ const endpoint = 'https://hub.pass3.me';
 
 export const RSS3Provider: FC = ({ children }) => {
   const { account, ethersProvider } = useWeb3Context();
-  type JsonRpcSigner = ReturnType<NonNullable<typeof ethersProvider>['getSigner']>;
-  const signerRef = useRef<JsonRpcSigner>();
-  useEffect(() => {
-    if (!ethersProvider) return;
-    signerRef.current = ethersProvider.getSigner();
-  }, [ethersProvider]);
 
   const createRSS3 = useCallback(
     async (address?: string) => {
+      const signer = ethersProvider?.getSigner();
       return address
         ? new RSS3({
             endpoint,
             address,
             sign: async (message: string) => {
-              return signerRef.current?.signMessage(message) ?? '';
+              return signer?.signMessage(message) ?? '';
             },
           })
         : new RSS3({
             endpoint,
           });
     },
-    [account],
+    [ethersProvider],
   );
 
   const saveBox = useCallback(

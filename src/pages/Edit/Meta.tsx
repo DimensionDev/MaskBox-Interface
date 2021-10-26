@@ -166,20 +166,17 @@ export const Meta: FC = () => {
         )}
       </Field>
 
-      <Field
-        className={styles.field}
-        name="Select NFT"
-        required
-        style={{ display: formData.nftContractAddress && !formData.sellAll ? 'block' : 'none' }}
-      >
-        <div className={styles.selectedNft}>
-          <NFTSelectList
-            tokens={ownedERC721Tokens}
-            selectedTokenIds={formData.selectedNFTIds}
-            onPick={() => setNftPickerVisible(true)}
-          />
-        </div>
-      </Field>
+      {formData.nftContractAddress && !formData.sellAll && (
+        <Field className={styles.field} name="Select NFT" required>
+          <div className={styles.selectedNft}>
+            <NFTSelectList
+              tokens={ownedERC721Tokens}
+              selectedTokenIds={formData.selectedNFTIds}
+              onPick={() => setNftPickerVisible(true)}
+            />
+          </div>
+        </Field>
+      )}
 
       <div className={styles.rowFieldGroup}>
         <Field
