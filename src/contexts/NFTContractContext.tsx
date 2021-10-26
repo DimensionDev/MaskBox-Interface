@@ -1,4 +1,5 @@
 import { MysterBoxNFTABI } from '@/abi';
+import { showToast } from '@/components';
 import { ERC721Token } from '@/types';
 import { fetchNFTTokenDetail, notEmpty } from '@/utils';
 import { BigNumber, Contract, utils } from 'ethers';
@@ -49,12 +50,20 @@ export const NFTContractProvider: FC = memo(({ children }) => {
 
   const getMyToken = useCallback(
     async (contract: Contract, index: BigNumber) => {
-      const tokenId = await contract
-        .tokenOfOwnerByIndex(account, index)
-        .catch((getMyTokenError: Error) => console.error({ getMyTokenError }));
-      if (!tokenId) return null;
-      const token = await getTokenById(contract, tokenId);
-      return token;
+      try {
+        const tokenId = await contract.tokenOfOwnerByIndex(account, index);
+        if (!tokenId) return null;
+        const token = await getTokenById(contract, tokenId);
+        return token;
+      } catch (getMyTokenError: any) {
+        if (getMyTokenError.reason) {
+          showToast({
+            title: getMyTokenError.reason,
+            variant: 'error',
+          });
+        }
+        console.error({ getMyTokenError });
+      }
     },
     [account],
   );

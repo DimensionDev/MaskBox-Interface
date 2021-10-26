@@ -77,7 +77,7 @@ export const Web3Provider: FC = ({ children }) => {
             providerChainId: chainId,
           }));
         }
-      } catch (err) {
+      } catch (err: any) {
         showToast({
           variant: 'error',
           title: 'Fails to set provider',
