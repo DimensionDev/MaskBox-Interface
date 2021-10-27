@@ -17,7 +17,7 @@ export const ShareBox: FC<Props> = ({ boxId, nftAddress, nftIds, ...rest }) => {
   const [tokens, setTokens] = useState<ERC721Token[]>([]);
   const handleShare = useCallback(() => {
     const link = `${window.location.origin}.io/#/details?chain=${chainId}&box=${boxId}`;
-    const text = `I just draw an NFT on Maskbox platform, subscribe @realmaskbook for more unpates - ${link}`;
+    const text = `I just draw an NFT on Maskbox platform, subscribe @realmaskbook for more updates - ${link}`;
     const shareLink = createShareUrl(text);
     window.open(shareLink, 'noopener noreferrer');
   }, [boxId, chainId]);
