@@ -1,7 +1,7 @@
 import { ArticleSection, Button, NFTItem, PickerDialog } from '@/components';
 import { useMBoxContract, useNFTContract } from '@/contexts';
 import { createShareUrl, ZERO } from '@/lib';
-import { BuyBox, MysteryBox, ShareBox } from '@/page-components';
+import { BuyBox, BuyBoxProps, MysteryBox, ShareBox } from '@/page-components';
 import { ERC721Token, ExtendedBoxInfo } from '@/types';
 import { BigNumber } from 'ethers';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -55,6 +55,12 @@ export const Details: FC = memo(() => {
     const tokens = await getByIdList(box.nft_address, idList);
     setErc721Tokens((oldList) => [...oldList, ...tokens]);
   }, [box?.nft_address, boxId]);
+
+  const handlePurchased: BuyBoxProps['onPurchased'] = useCallback(({ nftIds }) => {
+    setBuyBoxVisible(false);
+    setShareBoxVisible(true);
+    setPurchasedNfts(nftIds);
+  }, []);
 
   useEffect(() => {
     loadNfts();
@@ -136,10 +142,7 @@ export const Details: FC = memo(() => {
           boxId={boxId}
           box={box}
           payment={payment}
-          onPurchased={({ nftIds }) => {
-            setShareBoxVisible(true);
-            setPurchasedNfts(nftIds);
-          }}
+          onPurchased={handlePurchased}
         />
       )}
     </>

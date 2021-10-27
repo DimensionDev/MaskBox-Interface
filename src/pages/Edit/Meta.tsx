@@ -33,7 +33,13 @@ export const Meta: FC = () => {
   const [tokenBoxVisible, setTokenBoxVisible] = useState(false);
 
   const createBox = useCreateMysteryBox();
-  const { isApproveAll, approveAll, checkingApprove, ownedTokens: ownedERC721Tokens } = useEdit();
+  const {
+    isApproveAll,
+    isApproving,
+    approveAll,
+    checkingApprove,
+    ownedTokens: ownedERC721Tokens,
+  } = useEdit();
 
   const { saveBox } = useRSS3();
   const create = useCallback(async () => {
@@ -227,9 +233,9 @@ export const Meta: FC = () => {
             size="large"
             colorScheme="primary"
             onClick={approveAll}
-            disabled={checkingApprove}
+            disabled={checkingApprove || isApproving}
           >
-            {checkingApprove ? 'Checking...' : 'Unlock NFT'}
+            {checkingApprove ? 'Checking...' : isApproving ? 'Unlocking' : 'Unlock NFT'}
           </Button>
         )}
         <Button

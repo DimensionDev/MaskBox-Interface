@@ -1,7 +1,7 @@
 import { Button, ButtonProps, LoadingIcon } from '@/components';
 import { useGetExtendedBoxInfo } from '@/hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
-import { TokenType } from '@/lib';
+import { TokenType, ZERO } from '@/lib';
 import { ExtendedBoxInfo } from '@/types';
 import classnames from 'classnames';
 import { utils } from 'ethers';
@@ -56,18 +56,22 @@ export const MysteryBox: FC<Props> = ({
       return `${digit} ${paymentToken.symbol}`;
     }
   }, [payment?.price, paymentToken?.decimals]);
+  const isSoldout = useMemo(
+    () => box.remaining !== undefined && box.remaining.eq(ZERO),
+    [box.remaining],
+  );
 
   const buttonText = useMemo(() => {
-    if (inList) {
-      return box.expired ? 'End' : 'View Details';
-    }
+    if (isSoldout) return 'Sold out';
+    if (inList) return box.expired ? 'End' : 'View Details';
+
     return price ? `Draw( ${price}/Time )` : <LoadingIcon size={24} />;
-  }, [inList, price]);
+  }, [inList, price, isSoldout]);
 
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: !inList && (!price || notStarted || box.expired),
+    disabled: !inList && (!price || notStarted || box.expired || isSoldout),
     onClick: () => {
       if (inList) {
         history.push(`/details?chain=${chainId}&box=${boxId}`);

@@ -11,6 +11,7 @@ import { formDataAtom } from './atoms';
 export function useEdit() {
   const formData = useAtomValue(formDataAtom);
   const [isApproveAll, setIsApproveAll] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
   const [checkingApprove, setCheckingApprove] = useState(false);
   const { account, ethersProvider, providerChainId } = useWeb3Context();
   const [ownedTokens, setOwnedTokens] = useState<ERC721Token[]>([]);
@@ -54,6 +55,7 @@ export function useEdit() {
       title: 'Unlocking',
       processing: true,
     });
+    setIsApproving(true);
     try {
       const contract = new Contract(
         formData.nftContractAddress,
@@ -63,6 +65,10 @@ export function useEdit() {
       const tx = await contract.setApprovalForAll(contractAddress, true);
       await tx.wait(1);
       checkIsApproveAll();
+      showToast({
+        title: 'Unlock success',
+        variant: 'success',
+      });
     } catch (err) {
       showToast({
         title: `Fails to unlock ${(err as Error).message}`,
@@ -70,12 +76,14 @@ export function useEdit() {
       });
     } finally {
       closeToast();
+      setIsApproving(false);
     }
   }, [ethersProvider, formData.nftContractAddress, checkIsApproveAll]);
 
   return {
     checkingApprove,
     isApproveAll,
+    isApproving,
     approveAll,
     ownedTokens,
   };
