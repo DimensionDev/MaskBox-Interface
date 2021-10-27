@@ -15,7 +15,7 @@ interface Props extends HTMLProps<HTMLDivElement> {}
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   const { account, providerChainId, connectWeb3 } = useWeb3Context();
   const [selectNetworkVisible, setSelectNetworkVisible] = useState(false);
-  const isSupported = isSupportedChain(providerChainId ?? 0);
+  const isNotSupported = providerChainId !== undefined && !isSupportedChain(providerChainId);
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === ThemeType.Dark;
   const history = useHistory();
@@ -96,8 +96,8 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         </div>
       </div>
       <SelectNetwork
-        open={selectNetworkVisible || !isSupported}
-        title={isSupported ? 'Select a Network' : 'Current is not supported'}
+        open={selectNetworkVisible || isNotSupported}
+        title={isNotSupported ? 'Not supported network' : 'Select a Network'}
         onClose={() => setSelectNetworkVisible(false)}
       />
     </div>

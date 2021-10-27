@@ -1,15 +1,11 @@
 import { MysteryBoxABI } from '@/abi';
-import { useWeb3Context } from '@/contexts';
-import { getContractAddressConfig } from '@/lib';
+import { useMaskboxAddress, useWeb3Context } from '@/contexts';
 import { Contract } from 'ethers';
 import { useMemo } from 'react';
 
 export function useMysteryBoxContract(requireSigner?: boolean) {
-  const { ethersProvider, providerChainId } = useWeb3Context();
-  const contractAddress = useMemo(
-    () => (providerChainId ? getContractAddressConfig(providerChainId).MysteryBox : ''),
-    [providerChainId],
-  );
+  const { ethersProvider } = useWeb3Context();
+  const contractAddress = useMaskboxAddress();
   const contract = useMemo(() => {
     if (!contractAddress || !ethersProvider) return null;
     return new Contract(
