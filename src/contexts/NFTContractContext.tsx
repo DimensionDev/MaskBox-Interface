@@ -9,7 +9,7 @@ import { useWeb3Context } from './Web3Context';
 interface ContextOptions {
   tokens: ERC721Token[];
   getMyBalance(contract: Contract): Promise<number>;
-  getMyToken(contract: Contract, index: BigNumber): Promise<ERC721Token | null>;
+  getMyToken(contract: Contract, index: BigNumber): Promise<ERC721Token | null | undefined>;
   getMyTokens(contractAddress: string): Promise<ERC721Token[]>;
   getByIdList(contractAddress: string, idList: string[]): Promise<ERC721Token[]>;
 }

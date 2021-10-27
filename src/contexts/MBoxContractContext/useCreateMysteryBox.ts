@@ -2,7 +2,7 @@ import { MysteryBoxABI } from '@/abi';
 import { contractAddresses } from '@/lib';
 import { Contract, ContractInterface } from 'ethers';
 import { useCallback, useEffect, useRef } from 'react';
-import { useWeb3Context } from '..';
+import { useWeb3Context } from '../Web3Context';
 
 const contractAddress = contractAddresses.Rinkeby.MysteryBox;
 const mboxContract = new Contract(contractAddress, MysteryBoxABI as unknown as ContractInterface);

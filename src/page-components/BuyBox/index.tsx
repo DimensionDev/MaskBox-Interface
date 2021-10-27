@@ -1,5 +1,12 @@
-import { Button, LoadingIcon, PickerDialog, PickerDialogProps, TokenIcon } from '@/components';
-import { useMBoxContract, useWeb3Context } from '@/contexts';
+import {
+  Button,
+  LoadingIcon,
+  PickerDialog,
+  PickerDialogProps,
+  showToast,
+  TokenIcon,
+} from '@/components';
+import { useMaskboxAddress, useWeb3Context } from '@/contexts';
 import { useBalance, useERC20Approve, useGetERC20Allowance, useTrackTokenPrice } from '@/hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
@@ -8,20 +15,20 @@ import { formatAddres, formatBalance } from '@/utils';
 import { BigNumber, utils } from 'ethers';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { AdjustableInput } from './AdjustableInput';
-import { useOpenBox } from './useOpenBox';
 import styles from './index.module.less';
+import { useOpenBox } from './useOpenBox';
 
 interface Props extends PickerDialogProps {
   boxId: string;
   box: Partial<ExtendedBoxInfo>;
-  onShare?: () => void;
   payment: BoxPayment;
+  onPurchased?: ({ boxId, nftIds }: { boxId: string; nftIds: string[] }) => void;
 }
 
 const paymentTokenIndex = 0;
-export const BuyBox: FC<Props> = ({ boxId, box, payment: payment, ...rest }) => {
+export const BuyBox: FC<Props> = ({ boxId, box, payment: payment, onPurchased, ...rest }) => {
   const { account } = useWeb3Context();
-  const { contractAddress } = useMBoxContract();
+  const contractAddress = useMaskboxAddress();
   const getERC20Token = useGetERC20TokenInfo();
   const getAllowance = useGetERC20Allowance();
   const approve = useERC20Approve();
@@ -43,13 +50,12 @@ export const BuyBox: FC<Props> = ({ boxId, box, payment: payment, ...rest }) => 
   const canBuy = isNative ? balance.gt(costAmount) : allowed;
 
   useEffect(() => {
-    if (payment) {
-      getERC20Token(payment.token_addr).then((token) => {
-        if (token) {
-          setPaymentToken(token);
-        }
-      });
-    }
+    if (!payment.token_addr) return;
+    getERC20Token(payment.token_addr).then((token) => {
+      if (token) {
+        setPaymentToken(token);
+      }
+    });
   }, [payment.token_addr]);
 
   const cost = useMemo(() => {
@@ -63,6 +69,16 @@ export const BuyBox: FC<Props> = ({ boxId, box, payment: payment, ...rest }) => 
   }, [approve, payment.token_addr, contractAddress, costAmount, getAllowance]);
 
   const openBox = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
+  const handleDraw = useCallback(async () => {
+    const result = await openBox();
+    if (!result) {
+      showToast({
+        title: 'Draw success, but fails get the result',
+      });
+      return;
+    }
+    onPurchased?.(result);
+  }, [openBox, onPurchased]);
   const limit = box.personal_limit || 1;
 
   return (
@@ -130,7 +146,7 @@ export const BuyBox: FC<Props> = ({ boxId, box, payment: payment, ...rest }) => 
           fullWidth
           size="middle"
           disabled={!canBuy}
-          onClick={openBox}
+          onClick={handleDraw}
         >
           Draw
         </Button>

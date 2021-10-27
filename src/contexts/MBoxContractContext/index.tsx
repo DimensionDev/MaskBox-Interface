@@ -1,63 +1,91 @@
-import { MysteryBoxABI } from '@/abi';
 import { ZERO } from '@/lib';
 import { BoxInfo } from '@/types';
-import { BigNumber, Contract, ContractInterface } from 'ethers';
-import React, { FC, memo, useCallback, useContext, useEffect, useRef } from 'react';
+import { BigNumber } from 'ethers';
+import React, { FC, memo, useCallback, useContext } from 'react';
+import { useMaskboxContract } from '..';
 import { useWeb3Context } from '../Web3Context';
-import { useMaskboxAddress } from './useAddress';
+
+export * from './useAddress';
+export * from './useContract';
 
 interface ContextOptions {
-  contractAddress: string;
   getBoxInfo: (boxId: string) => Promise<BoxInfo>;
   getNftListForSale: (box: string, cursor?: BigNumber, amount?: BigNumber) => Promise<string[]>;
+  openBox: (
+    boxId: string,
+    quantity: number,
+    paymentTokenIndex: number,
+    proof: string[],
+    overrides: Record<string, any>,
+  ) => Promise<any>;
+  getPurchasedNft: (boxId: string, customer: string) => Promise<string[]>;
 }
 
 export const MBoxContractContext = React.createContext<ContextOptions>({
-  contractAddress: '',
   getBoxInfo: () => Promise.resolve({} as BoxInfo),
   getNftListForSale: () => Promise.resolve([]),
+  openBox: () => Promise.resolve(null),
+  getPurchasedNft: () => Promise.resolve([]),
 });
+
 export const useMBoxContract = () => useContext(MBoxContractContext);
 
 export const MBoxContractProvider: FC = memo(({ children }) => {
-  const { ethersProvider, providerChainId } = useWeb3Context();
+  const { ethersProvider } = useWeb3Context();
 
-  const address = useMaskboxAddress();
-  const contract = useRef<Contract>();
-  useEffect(() => {
-    if (ethersProvider && address) {
-      contract.current = new Contract(
-        address,
-        MysteryBoxABI as unknown as ContractInterface,
-        ethersProvider,
-      );
-    }
-  }, [ethersProvider, address]);
+  const contract = useMaskboxContract();
 
   const getBoxInfo = useCallback(
     async (boxId: string) => {
-      if (!ethersProvider || !providerChainId || !address) return;
-      const contract = new Contract(address, MysteryBoxABI, ethersProvider);
+      if (!contract) return;
       const boxInfo = await contract.getBoxInfo(boxId);
       return boxInfo;
     },
-    [address, providerChainId, ethersProvider],
+    [contract],
   );
 
   const getNftListForSale = useCallback(
     async (boxId: string, cursor: BigNumber = ZERO, amount: BigNumber = BigNumber.from(20)) => {
-      if (!ethersProvider || !providerChainId || !address) return [];
-      const contract = new Contract(address, MysteryBoxABI, ethersProvider);
+      if (!contract) return [];
       const idList: BigNumber[] = await contract.getNftListForSale(boxId, cursor, amount);
       return idList.map((id) => id.toString());
     },
-    [address, providerChainId, ethersProvider],
+    [contract],
+  );
+
+  const openBox = useCallback(
+    async (
+      boxId: string,
+      quantity: number,
+      paymentTokenIndex: number,
+      proof: string[],
+      overrides: Record<string, any>,
+    ) => {
+      if (!contract || !ethersProvider) {
+        return null;
+      }
+      const tx = await contract
+        .connect(ethersProvider.getSigner())
+        .openBox(boxId, quantity, paymentTokenIndex, proof, overrides);
+      return tx;
+    },
+    [contract],
+  );
+
+  const getPurchasedNft = useCallback(
+    async (boxId: string, customer: string) => {
+      if (!contract) return [];
+      const idList: BigNumber[] = await contract.getPurchasedNft(boxId, customer);
+      return idList.map((bn) => bn.toString());
+    },
+    [contract],
   );
 
   const contextValue = {
-    contractAddress: address,
     getBoxInfo,
     getNftListForSale,
+    openBox,
+    getPurchasedNft,
   };
 
   return (

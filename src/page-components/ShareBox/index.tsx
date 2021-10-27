@@ -1,24 +1,52 @@
-import { Dialog, DialogProps, NFTItem, RoundButton } from '@/components';
-import { FC } from 'react';
-import { mockNfts } from '@/data';
+import { Button, NFTItem, PickerDialog, PickerDialogProps } from '@/components';
+import { useNFTContract, useWeb3Context } from '@/contexts';
+import { createShareUrl } from '@/lib';
+import { ERC721Token } from '@/types';
+import { FC, useCallback, useEffect, useState } from 'react';
 import styles from './index.module.less';
 
-interface Props extends DialogProps {
-  onShare?: () => void;
+interface Props extends PickerDialogProps {
+  boxId: string;
+  nftAddress: string;
+  nftIds: string[];
 }
 
-export const ShareBox: FC<Props> = ({ onShare, ...rest }) => {
+export const ShareBox: FC<Props> = ({ boxId, nftAddress, nftIds, ...rest }) => {
+  const { getByIdList } = useNFTContract();
+  const { providerChainId: chainId } = useWeb3Context();
+  const [tokens, setTokens] = useState<ERC721Token[]>([]);
+  const handleShare = useCallback(() => {
+    const link = `${window.location.origin}.io/#/details?chain=${chainId}&box=${boxId}`;
+    const text = `I just draw an NFT on Maskbox platform, subscribe @realmaskbook for more unpates - ${link}`;
+    const shareLink = createShareUrl(text);
+    window.open(shareLink, 'noopener noreferrer');
+  }, [boxId, chainId]);
+
+  useEffect(() => {
+    getByIdList(nftAddress, nftIds).then(setTokens);
+  }, [nftAddress, nftIds]);
+
   return (
-    <Dialog {...rest} className={styles.shareBox} title="Successful">
-      <div className={styles.nftContainer}>
-        <NFTItem {...mockNfts[0]} />
-      </div>
+    <PickerDialog {...rest} className={styles.shareBox} title="Successful">
+      <ul className={styles.nftList}>
+        {tokens.map((token) => (
+          <li key={token.tokenId}>
+            <NFTItem token={token} />
+          </li>
+        ))}
+      </ul>
 
       <div className={styles.buttonGroup}>
-        <RoundButton className={styles.button} fullWidth size="large" onClick={onShare}>
+        <Button
+          className={styles.button}
+          fullWidth
+          colorScheme="primary"
+          size="middle"
+          onClick={handleShare}
+        >
           Share
-        </RoundButton>
+        </Button>
       </div>
-    </Dialog>
+    </PickerDialog>
   );
 };

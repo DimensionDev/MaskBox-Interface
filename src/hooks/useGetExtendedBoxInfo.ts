@@ -20,7 +20,8 @@ export function useGetExtendedBoxInfo(chainId: number | null, boxId: string | nu
 
   useEffect(() => {
     if (boxId && chainId && chainId === providerChainId) {
-      getBoxInfo(boxId).then(setBoxInfo);
+      const p = getBoxInfo(boxId);
+      p.then(setBoxInfo);
     }
   }, [chainId, boxId, providerChainId]);
 

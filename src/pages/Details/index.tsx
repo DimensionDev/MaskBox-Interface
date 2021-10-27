@@ -1,7 +1,7 @@
 import { ArticleSection, Button, NFTItem, PickerDialog } from '@/components';
 import { useMBoxContract, useNFTContract } from '@/contexts';
-import { ZERO } from '@/lib';
-import { MysteryBox } from '@/page-components';
+import { createShareUrl, ZERO } from '@/lib';
+import { BuyBox, MysteryBox, ShareBox } from '@/page-components';
 import { ERC721Token, ExtendedBoxInfo } from '@/types';
 import { BigNumber } from 'ethers';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -27,13 +27,15 @@ export const Details: FC = memo(() => {
     };
   }, [location.search]);
 
-  const [shareBoxVisible, setShareBoxVisible] = useState(isNew);
+  const [shareBoxVisible, setShareBoxVisible] = useState(false);
+  const [purchasedNfts, setPurchasedNfts] = useState<string[]>([]);
+  const [shareNewBoxVisible, setShareNewBoxVisible] = useState(isNew);
+  const [buyBoxOpen, setBuyBoxVisible] = useState(false);
   const boxUrl = `${window.location.origin}/#/details?chain=${chainId}&box=${boxId}`;
-  const shareLink = new URL(`https://twitter.com/intent/tweet?text=${encodeURIComponent(boxUrl)}`)
-    .href;
+  const shareLink = createShareUrl(boxUrl);
 
-  const closeShareBox = useCallback(() => {
-    setShareBoxVisible(false);
+  const closeShareNewBox = useCallback(() => {
+    setShareNewBoxVisible(false);
     const params = new URLSearchParams(location.search);
     params.delete('new');
     history.replace(`/details?${params.toString()}`);
@@ -65,12 +67,19 @@ export const Details: FC = memo(() => {
       </main>
     );
   }
+  const payment = box.payment?.[0];
 
   return (
     <>
       <main className={styles.main}>
         <h1 className={styles.title}>Mystery box</h1>
-        <MysteryBox className={styles.mysteryBox} chainId={chainId} boxId={boxId} onLoad={setBox} />
+        <MysteryBox
+          className={styles.mysteryBox}
+          chainId={chainId}
+          boxId={boxId}
+          onLoad={setBox}
+          onPurchase={() => setBuyBoxVisible(true)}
+        />
         {erc721Tokens.length > 0 && (
           <ArticleSection title="Details">
             <div className={styles.detailsContent}>
@@ -81,7 +90,13 @@ export const Details: FC = memo(() => {
                   </li>
                 ))}
               </ul>
-              <Button className={styles.loadmore} fullWidth disabled={allLoaded} onClick={loadNfts}>
+              <Button
+                className={styles.loadmore}
+                fullWidth
+                disabled={allLoaded}
+                size="small"
+                onClick={loadNfts}
+              >
                 {allLoaded ? 'No more' : 'Load more'}
               </Button>
             </div>
@@ -93,18 +108,40 @@ export const Details: FC = memo(() => {
           </ArticleSection>
         ))}
       </main>
-      <PickerDialog title="Share" open={shareBoxVisible} onClose={closeShareBox}>
+      <PickerDialog title="Share" open={shareNewBoxVisible} onClose={closeShareNewBox}>
         <div className={styles.urlBoxContent}>
           <p>
-            Copy following url, and <a href={shareLink}>share</a> on twitter
+            Copy following url, and{' '}
+            <a href={shareLink} target="_blank" rel="noopener noreferrer">
+              share
+            </a>{' '}
+            on twitter
           </p>
           <div className={styles.url}>
-            <a target="_blank" rel="noopener noreferrer">
-              {boxUrl}
-            </a>
+            <a> {boxUrl} </a>
           </div>
         </div>
       </PickerDialog>
+      <ShareBox
+        boxId={boxId}
+        nftIds={purchasedNfts}
+        nftAddress={box.nft_address!}
+        open={shareBoxVisible}
+        onClose={() => setShareBoxVisible(false)}
+      />
+      {payment && (
+        <BuyBox
+          open={buyBoxOpen}
+          onClose={() => setBuyBoxVisible(false)}
+          boxId={boxId}
+          box={box}
+          payment={payment}
+          onPurchased={({ nftIds }) => {
+            setShareBoxVisible(true);
+            setPurchasedNfts(nftIds);
+          }}
+        />
+      )}
     </>
   );
 });

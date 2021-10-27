@@ -5,6 +5,7 @@ import { isSameAddress } from '@/utils';
 import { Contract } from 'ethers';
 import { useCallback } from 'react';
 
+// TODO refactor to `const token = useERC20Token(address)`
 export function useGetERC20TokenInfo() {
   const { ethersProvider, providerChainId } = useWeb3Context();
   const getTokenInfo = useCallback(

@@ -1,4 +1,4 @@
-import { createContext, FC, useCallback, useContext, useEffect, useRef } from 'react';
+import { createContext, FC, useCallback, useContext } from 'react';
 import RSS3 from 'rss3-next';
 import { useWeb3Context } from '../Web3Context';
 

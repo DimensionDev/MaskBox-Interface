@@ -7,26 +7,31 @@ import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { BuyBox } from '..';
 import { CountdownButton } from './CountdownButton';
 import styles from './index.module.less';
 
 interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> {
   chainId: number;
   boxId: string;
-  onLoad?: (box: Partial<ExtendedBoxInfo>) => void;
   inList?: boolean;
+  onLoad?: (box: Partial<ExtendedBoxInfo>) => void;
+  onPurchase?: () => void;
 }
 
-export const MysteryBox: FC<Props> = ({ chainId, boxId, className, onLoad, inList, ...rest }) => {
+export const MysteryBox: FC<Props> = ({
+  chainId,
+  boxId,
+  className,
+  inList,
+  onLoad,
+  onPurchase,
+  ...rest
+}) => {
   const box = useGetExtendedBoxInfo(chainId, boxId);
   const getERC20Token = useGetERC20TokenInfo();
   const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
   const payment = box.payment?.[0];
-  const [buyBoxOpen, setBuyBoxOpen] = useState(false);
   const history = useHistory();
-
-  console.log({ box });
 
   useEffect(() => {
     if (box && onLoad) onLoad(box);
@@ -66,10 +71,8 @@ export const MysteryBox: FC<Props> = ({ chainId, boxId, className, onLoad, inLis
     onClick: () => {
       if (inList) {
         history.push(`/details?chain=${chainId}&box=${boxId}`);
-      } else {
-        if (box.started && !box.expired) {
-          setBuyBoxOpen(true);
-        }
+      } else if (box.started && !box.expired && onPurchase) {
+        onPurchase();
       }
     },
   };
@@ -106,15 +109,6 @@ export const MysteryBox: FC<Props> = ({ chainId, boxId, className, onLoad, inLis
           <Button {...buttonProps}>{buttonText}</Button>
         )}
       </div>
-      {payment && (
-        <BuyBox
-          open={buyBoxOpen}
-          onClose={() => setBuyBoxOpen(false)}
-          boxId={boxId}
-          box={box}
-          payment={payment}
-        />
-      )}
     </div>
   );
 };

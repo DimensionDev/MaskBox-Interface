@@ -67,3 +67,7 @@ export const ZERO_PPRICE: Price = {
   decimals: 18,
   symbol: 'eth',
 };
+
+export const createShareUrl = (text: string) => {
+  return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+};
