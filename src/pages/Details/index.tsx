@@ -49,7 +49,6 @@ export const Details: FC = memo(() => {
   const loadNfts = useCallback(async () => {
     if (!box?.nft_address || !boxId) return;
     const idList = await getNftListForSale(boxId, cursorRef.current, PAGE_SIZE);
-    console.log({ idList });
     setAllLoaded(PAGE_SIZE.gt(idList.length));
     cursorRef.current = cursorRef.current.add(idList.length);
     const tokens = await getByIdList(box.nft_address, idList);

@@ -1,7 +1,7 @@
 import { ZERO } from '@/lib';
 import { BoxInfo } from '@/types';
 import { BigNumber } from 'ethers';
-import React, { FC, memo, useCallback, useContext } from 'react';
+import React, { FC, memo, useCallback, useContext, useEffect, useState } from 'react';
 import { useMaskboxContract } from '..';
 import { useWeb3Context } from '../Web3Context';
 
@@ -29,6 +29,17 @@ export const MBoxContractContext = React.createContext<ContextOptions>({
 });
 
 export const useMBoxContract = () => useContext(MBoxContractContext);
+
+export function usePurchasedNft(boxId?: string, customer?: string) {
+  const { getPurchasedNft } = useMBoxContract();
+  const [ids, setIds] = useState<string[]>([]);
+  useEffect(() => {
+    if (!boxId || !customer) return;
+    getPurchasedNft(boxId, customer).then(setIds);
+  }, [boxId, customer, getPurchasedNft]);
+
+  return ids;
+}
 
 export const MBoxContractProvider: FC = memo(({ children }) => {
   const { ethersProvider } = useWeb3Context();
