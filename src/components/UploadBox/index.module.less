@@ -19,7 +19,13 @@
     object-fit: cover;
   }
   &.error {
+    color: var(--text-error, #fb2047);
     border-color: var(--upload-error-border, #ff9eaf);
+  }
+  &.dragingIn {
+    border-color: var(--upload-active-border, #ff9eaf);
+    border-style: solid;
+    outline: 1px solid var(--upload-active-border, #ff9eaf);
   }
 }
 .inner {

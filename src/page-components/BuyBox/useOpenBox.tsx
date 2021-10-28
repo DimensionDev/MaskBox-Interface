@@ -5,7 +5,7 @@ import { useMysteryBoxContract } from '@/hooks/useMysteryBoxContract';
 import { getNetworkExplorer, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment } from '@/types';
 import { utils } from 'ethers';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import styles from './index.module.less';
 
 const abiInterface = new utils.Interface(MysteryBoxABI);
@@ -21,9 +21,11 @@ export function useOpenBox(
   const { openBox, getPurchasedNft } = useMBoxContract();
   const contract = useMysteryBoxContract(true);
   const isNative = payment.token_addr === ZERO_ADDRESS;
+  const [loading, setLoading] = useState(false);
 
   const open = useCallback(async () => {
     if (!contract || !ethersProvider || !account) return;
+    setLoading(true);
     showToast({
       title: 'Drawing',
       message: 'Sending transaction',
@@ -48,19 +50,17 @@ export function useOpenBox(
               rel="noreferrer noopener"
               aria-label="view transaction"
             >
-              <Icon type="external" size={18} />
+              <Icon type="external" size={18} color="#0057ff" />
             </a>
           </span>
         ),
       });
       await tx.wait(1);
-      const openLogs = await ethersProvider.getLogs(contract.filters.OpenSuccess());
-      const parsedOpenLog = openLogs?.[0] ? abiInterface.parseLog(openLogs[0]) : null;
+      await ethersProvider.getLogs(contract.filters.OpenSuccess());
       const newlyPurchasedNfts = (await getPurchasedNft(boxId, account)).filter(
         (id) => !purchasedNfts.includes(id),
       );
-      const args = parsedOpenLog?.args;
-      console.log({ parsedOpenLog, newlyPurchasedNfts });
+      console.log({ newlyPurchasedNfts });
       closeToast();
       showToast({
         title: `Draw Success`,
@@ -75,6 +75,8 @@ export function useOpenBox(
         title: `Fails to draw the box ${boxId}: ${err.error ? err.error.message : err.message}`,
         variant: 'error',
       });
+    } finally {
+      setLoading(false);
     }
   }, [
     account,
@@ -88,5 +90,5 @@ export function useOpenBox(
     ethersProvider,
   ]);
 
-  return open;
+  return { open, loading };
 }

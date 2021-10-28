@@ -1,5 +1,5 @@
 import { ArticleSection, Button, NFTItem, PickerDialog } from '@/components';
-import { useMBoxContract, useNFTContract } from '@/contexts';
+import { useMBoxContract, useNFTContract, useNFTName } from '@/contexts';
 import { createShareUrl, ZERO } from '@/lib';
 import { BuyBox, BuyBoxProps, MysteryBox, ShareBox } from '@/page-components';
 import { ERC721Token, ExtendedBoxInfo } from '@/types';
@@ -42,6 +42,7 @@ export const Details: FC = memo(() => {
   }, [history, location.search]);
 
   const [box, setBox] = useState<Partial<ExtendedBoxInfo>>({});
+  const contractName = useNFTName(box.nft_address);
   const activities = box.activities ?? [];
 
   const cursorRef = useRef<BigNumber>(ZERO);
@@ -91,19 +92,21 @@ export const Details: FC = memo(() => {
               <ul className={styles.nftList}>
                 {erc721Tokens.map((token) => (
                   <li key={token.tokenId}>
-                    <NFTItem token={token} />
+                    <NFTItem contractName={contractName} token={token} />
                   </li>
                 ))}
               </ul>
-              <Button
-                className={styles.loadmore}
-                fullWidth
-                disabled={allLoaded}
-                size="small"
-                onClick={loadNfts}
-              >
-                {allLoaded ? 'No more' : 'Load more'}
-              </Button>
+              {PAGE_SIZE.lt(erc721Tokens.length) ? (
+                <Button
+                  className={styles.loadmore}
+                  fullWidth
+                  disabled={allLoaded}
+                  size="small"
+                  onClick={loadNfts}
+                >
+                  {allLoaded ? 'No more' : 'Load more'}
+                </Button>
+              ) : null}
             </div>
           </ArticleSection>
         )}

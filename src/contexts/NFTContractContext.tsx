@@ -3,11 +3,12 @@ import { showToast } from '@/components';
 import { ERC721Token } from '@/types';
 import { fetchNFTTokenDetail, notEmpty } from '@/utils';
 import { BigNumber, Contract, utils } from 'ethers';
-import React, { FC, memo, useCallback, useContext, useState } from 'react';
+import React, { FC, memo, useCallback, useContext, useEffect, useState } from 'react';
 import { useWeb3Context } from './Web3Context';
 
 interface ContextOptions {
   tokens: ERC721Token[];
+  getName: (address?: string) => Promise<string>;
   getMyBalance(contract: Contract): Promise<number>;
   getMyToken(contract: Contract, index: BigNumber): Promise<ERC721Token | null | undefined>;
   getMyTokens(contractAddress: string): Promise<ERC721Token[]>;
@@ -15,13 +16,23 @@ interface ContextOptions {
 }
 
 export const NFTContractContext = React.createContext<ContextOptions>({
-  getMyBalance: () => Promise.resolve(0),
   tokens: [],
+  getName: () => Promise.resolve(''),
+  getMyBalance: () => Promise.resolve(0),
   getMyToken: () => Promise.resolve(null),
   getMyTokens: () => Promise.resolve([]),
   getByIdList: () => Promise.resolve([]),
 });
 export const useNFTContract = () => useContext(NFTContractContext);
+
+export function useNFTName(address?: string) {
+  const [name, setName] = useState('');
+  const { getName } = useNFTContract();
+  useEffect(() => {
+    getName(address).then(setName);
+  }, [getName, address]);
+  return name;
+}
 
 export const NFTContractProvider: FC = memo(({ children }) => {
   const { ethersProvider, account } = useWeb3Context();
@@ -68,6 +79,18 @@ export const NFTContractProvider: FC = memo(({ children }) => {
     [account],
   );
 
+  const getName = useCallback(
+    async (contractAddress?: string) => {
+      if (!ethersProvider || !contractAddress || !utils.isAddress(contractAddress)) {
+        return '';
+      }
+      const contract = new Contract(contractAddress, MysterBoxNFTABI, ethersProvider);
+      const name = await contract.name();
+      return name;
+    },
+    [ethersProvider],
+  );
+
   const getMyTokens = useCallback(
     async (contractAddress: string) => {
       if (!ethersProvider || !utils.isAddress(contractAddress)) {
@@ -100,6 +123,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
 
   const contextValue = {
     tokens,
+    getName,
     getMyBalance,
     getMyToken,
     getMyTokens,

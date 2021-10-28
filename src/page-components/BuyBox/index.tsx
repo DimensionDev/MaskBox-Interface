@@ -69,7 +69,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
     await getAllowance(payment.token_addr, contractAddress).then(setAllowance);
   }, [approve, payment.token_addr, contractAddress, costAmount, getAllowance]);
 
-  const openBox = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
+  const { open: openBox, loading } = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
   const handleDraw = useCallback(async () => {
     const result = await openBox();
     if (!result) {
@@ -149,10 +149,10 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
           colorScheme="primary"
           fullWidth
           size="middle"
-          disabled={!canBuy}
+          disabled={!canBuy || loading}
           onClick={handleDraw}
         >
-          Draw
+          {loading ? 'Drawing' : 'Draw'}
         </Button>
       </div>
     </PickerDialog>

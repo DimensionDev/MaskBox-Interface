@@ -1,21 +1,24 @@
 import { Button, Field, Input, Textarea, UploadBox } from '@/components';
-import { useUpload } from '@/contexts';
 import { Activity } from '@/types';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { descriptionFullfilledAtom, formDataAtom, newActivity, useBindFormField } from './atoms';
+import {
+  descriptionFullfilledAtom,
+  formDataAtom,
+  newActivity,
+  useBindFormField,
+  useUpdateFormField,
+} from './atoms';
 import styles from './index.module.less';
 
-const wip = true;
-
 export const Description: FC = () => {
-  const { upload, uploading } = useUpload();
   const fullfilled = useAtomValue(descriptionFullfilledAtom);
   const history = useHistory();
   const [formData, setFormData] = useAtom(formDataAtom);
   const bindField = useBindFormField();
+  const updateField = useUpdateFormField();
 
   const updateActivityAt = (index: number, updater: (activity: Activity) => Activity) => {
     setFormData((fd) => ({
@@ -41,6 +44,10 @@ export const Description: FC = () => {
     });
   };
 
+  const handleUploaded = useCallback((url) => {
+    setFormData((fd) => ({ ...fd, cover: url }));
+  }, []);
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>
@@ -57,26 +64,17 @@ export const Description: FC = () => {
         />
       </Field>
       <Field className={styles.field} name="Mystery thumbnail" required>
-        {/* TODO let uploadBox tab selectable */}
-        {wip ? (
-          <Input
-            placeholder="eg. https://mask.io/assets/images/meme-1.jpg"
-            fullWidth
-            size="large"
-            value={formData.cover}
-            onChange={bindField('cover')}
-          />
-        ) : (
-          <UploadBox
-            className={styles.uploadBox}
-            uploading={uploading}
-            previewUrl={formData.cover}
-            onClick={async () => {
-              const url = await upload();
-              setFormData((fd) => ({ ...fd, cover: url }));
-            }}
-          />
-        )}
+        <UploadBox previewUrl={formData.cover} tabIndex={0} onUploaded={handleUploaded} />
+        {formData.cover ? (
+          <Button
+            colorScheme="danger"
+            size="small"
+            className={styles.coverRestButton}
+            onClick={() => updateField('cover', '')}
+          >
+            Reset
+          </Button>
+        ) : null}
       </Field>
 
       {formData.activities.map((activity, index, list) => (
