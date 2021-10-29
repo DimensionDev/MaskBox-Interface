@@ -1,34 +1,26 @@
 import { Button, NFTItem, PickerDialog, PickerDialogProps } from '@/components';
-import { useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
-import { createShareUrl } from '@/lib';
+import { useNFTContract, useNFTName } from '@/contexts';
 import { ERC721Token } from '@/types';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './index.module.less';
 
 interface Props extends PickerDialogProps {
-  boxId: string;
   nftAddress: string;
   nftIds: string[];
+  onShare?: () => void;
 }
 
-export const ShareBox: FC<Props> = ({ boxId, nftAddress, nftIds, ...rest }) => {
+export const ShareBox: FC<Props> = ({ nftAddress, nftIds, onShare, ...rest }) => {
   const { getByIdList } = useNFTContract();
-  const { providerChainId: chainId } = useWeb3Context();
   const [tokens, setTokens] = useState<ERC721Token[]>([]);
   const nftName = useNFTName(nftAddress);
-  const handleShare = useCallback(() => {
-    const link = `${window.location.origin}.io/#/details?chain=${chainId}&box=${boxId}`;
-    const text = `I just draw an NFT on Maskbox platform, subscribe @realMaskNetwork for more updates - ${link}`;
-    const shareLink = createShareUrl(text);
-    window.open(shareLink, 'noopener noreferrer');
-  }, [boxId, chainId]);
 
   useEffect(() => {
     getByIdList(nftAddress, nftIds).then(setTokens);
   }, [nftAddress, nftIds]);
 
   return (
-    <PickerDialog {...rest} className={styles.shareBox} title="Successful">
+    <PickerDialog className={styles.shareBox} title="Successful" {...rest}>
       <ul className={styles.nftList}>
         {tokens.map((token) => (
           <li key={token.tokenId}>
@@ -43,9 +35,9 @@ export const ShareBox: FC<Props> = ({ boxId, nftAddress, nftIds, ...rest }) => {
           fullWidth
           colorScheme="primary"
           size="middle"
-          onClick={handleShare}
+          onClick={onShare}
         >
-          Share
+          Share to twitter
         </Button>
       </div>
     </PickerDialog>

@@ -1,0 +1,25 @@
+.confirmDialog {
+  width: 600px;
+}
+.meta {
+  display: flex;
+  justify-content: space-between;
+  .name {
+    font-weight: bold;
+  }
+  .value {
+    display: flex;
+    align-items: center;
+  }
+  margin-bottom: 20px;
+}
+.nftList {
+  max-height: 426px;
+  overflow: auto;
+  grid-gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  .nft {
+    width: 175px;
+  }
+}

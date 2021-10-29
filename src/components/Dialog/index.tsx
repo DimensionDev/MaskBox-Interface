@@ -3,6 +3,8 @@ import { FC, HTMLProps } from 'react';
 import { Overlay } from '../Overlay';
 import styles from './index.module.less';
 
+export * from './useDialog';
+
 export interface DialogProps extends HTMLProps<HTMLDialogElement> {
   open?: boolean;
   title?: string;

@@ -39,10 +39,10 @@ export const networks: Network[] = ([1, 4] as const).map((chainId) => {
 });
 
 export const networkExplorers: Record<number, string> = {
-  1: 'https://etherscan.io/tx/',
-  4: 'https://rinkeby.etherscan.io/tx/',
-  56: 'https://bscscan.com/tx/',
-  137: 'https://polygonscan.com/tx/',
+  1: 'https://etherscan.io',
+  4: 'https://rinkeby.etherscan.io',
+  56: 'https://bscscan.com',
+  137: 'https://polygonscan.com',
 };
 
 export function isSupportedChain(chainId: number) {

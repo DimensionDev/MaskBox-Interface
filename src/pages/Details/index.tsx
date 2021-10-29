@@ -131,20 +131,24 @@ export const Details: FC = memo(() => {
         </div>
       </PickerDialog>
       <ShareBox
-        boxId={boxId}
         nftIds={purchasedNfts}
         nftAddress={box.nft_address!}
         open={shareBoxVisible}
         onClose={() => setShareBoxVisible(false)}
+        onShare={() => {
+          const text = `I just draw an NFT on Maskbox platform, subscribe @realMaskNetwork for more updates - ${window.location.href}`;
+          const shareLink = createShareUrl(text);
+          window.open(shareLink, 'noopener noreferrer');
+        }}
       />
       {payment && (
         <BuyBox
           open={buyBoxOpen}
-          onClose={() => setBuyBoxVisible(false)}
           boxId={boxId}
           box={box}
           payment={payment}
           onPurchased={handlePurchased}
+          onClose={() => setBuyBoxVisible(false)}
         />
       )}
     </>

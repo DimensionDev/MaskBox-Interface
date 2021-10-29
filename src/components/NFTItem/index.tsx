@@ -4,7 +4,7 @@ import { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
 export interface NFTItemProps extends HTMLProps<HTMLDivElement> {
-  contractName: string;
+  contractName?: string;
   token: ERC721Token;
 }
 
@@ -25,7 +25,7 @@ export const NFTItem: FC<NFTItemProps> = ({ className, contractName, token, ...r
 };
 
 interface CollectionProps extends HTMLProps<HTMLUListElement> {
-  contractName: string;
+  contractName?: string;
   tokens: ERC721Token[];
 }
 
@@ -33,7 +33,7 @@ export const Collection: FC<CollectionProps> = ({ tokens, contractName, classNam
   return (
     <ul className={classnames(styles.nftList, className)} {...rest}>
       {tokens.map((token) => (
-        <li key={token.tokenId.toString()} className={styles.nftItem}>
+        <li key={token.tokenId} className={styles.nftItem}>
           <NFTItem contractName={contractName} token={token} />
         </li>
       ))}

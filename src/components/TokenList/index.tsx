@@ -50,7 +50,7 @@ export const Token: FC<TokenProps> = ({
     const contract = new Contract(token.address, erc20Abi, ethersProvider);
     const balanceResult: BigNumber = await contract.balanceOf(account);
     setBalance(balanceResult);
-  }, [account, token.address]);
+  }, [account, token.address, ethersProvider]);
 
   useOnceShowup(containerRef, fetchBalance);
 
@@ -76,7 +76,7 @@ export const Token: FC<TokenProps> = ({
           {loading ? (
             <LoadingIcon type="loadingDark" size={24} />
           ) : (
-            utils.formatUnits(balance, token.decimals)
+            utils.formatUnits(balance, token.decimals || 1)
           )}
         </div>
       )}

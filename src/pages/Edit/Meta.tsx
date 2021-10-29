@@ -1,7 +1,17 @@
-import { Button, Field, Icon, Input, NFTSelectList, showToast, TokenIcon } from '@/components';
+import {
+  Button,
+  Field,
+  Icon,
+  Input,
+  NFTSelectList,
+  showToast,
+  TokenIcon,
+  useDialog,
+} from '@/components';
 import { useRSS3, useWeb3Context } from '@/contexts';
 import { useTokenList } from '@/hooks';
-import { NFTPickerDialog, TokenPickerDialog } from '@/page-components';
+import { createShareUrl } from '@/lib';
+import { NFTPickerDialog, ShareBox, TokenPickerDialog } from '@/page-components';
 import { isSameAddress } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
@@ -15,6 +25,7 @@ import {
   useUpdateFormField,
   validationsAtom,
 } from './atoms';
+import { CreationConfirmDialog } from './CreationConfirmDialog';
 import { useCreateMysteryBox } from './hooks';
 import styles from './index.module.less';
 import { useEdit } from './useEdit';
@@ -31,6 +42,7 @@ export const Meta: FC = () => {
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
   const [tokenBoxVisible, setTokenBoxVisible] = useState(false);
+  const [createdBoxId, setCreatedBoxId] = useState('');
 
   const createBox = useCreateMysteryBox();
   const {
@@ -42,6 +54,9 @@ export const Meta: FC = () => {
   } = useEdit();
 
   const { saveBox } = useRSS3();
+  const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useDialog();
+  const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
+  const [creating, setCreating] = useState(false);
   const create = useCallback(async () => {
     if (!isReady || validations.length) {
       validations.forEach((validation) => {
@@ -52,6 +67,7 @@ export const Meta: FC = () => {
       });
       return;
     }
+    setCreating(true);
     const closeToast = showToast({
       title: 'Creating Mystery Box',
       processing: true,
@@ -61,13 +77,15 @@ export const Meta: FC = () => {
       const result = await createBox();
       if (result) {
         const { args } = result;
+        setCreatedBoxId(args.box_id.toString() as string);
         await saveBox({
           id: args.box_id.toString(),
           name: args.name,
           cover: formData.cover,
           activities: formData.activities,
         });
-        history.replace(`/details?chain=${providerChainId}&box=${args.box_id}&new=true`);
+        closeConfirmDialog();
+        openShareBox();
       }
     } catch (err) {
       showToast({
@@ -77,6 +95,7 @@ export const Meta: FC = () => {
       throw err;
     } finally {
       closeToast();
+      setCreating(false);
     }
   }, [createBox, isReady]);
 
@@ -245,7 +264,7 @@ export const Meta: FC = () => {
           size="large"
           colorScheme="primary"
           disabled={!isReady}
-          onClick={create}
+          onClick={openConfirmDialog}
         >
           Create Mystery box
         </Button>
@@ -257,6 +276,34 @@ export const Meta: FC = () => {
           ))}
         </ul>
       </div>
+      <CreationConfirmDialog
+        open={confirmDialogVisible}
+        onClose={closeConfirmDialog}
+        sellAll={formData.sellAll}
+        nftAddress={formData.nftContractAddress}
+        nftIdList={formData.selectedNFTIds}
+        onConfirm={create}
+        creating={creating}
+      />
+      <ShareBox
+        open={shareBoxVisible}
+        nftAddress={formData.nftContractAddress}
+        title="Successful"
+        onClose={() => {
+          closeShareBox();
+          history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
+        }}
+        nftIds={
+          formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : formData.selectedNFTIds
+        }
+        onShare={() => {
+          const link = `${window.location.origin}.io/#/details?chain=${providerChainId}&box=${createdBoxId}`;
+          const text = `I just created an NFT mystery box ${formData.name} on MaskBox platform. Try to draw and good luck!
+            ${link}`;
+          const shareLink = createShareUrl(text);
+          window.open(shareLink, 'noopener noreferrer');
+        }}
+      />
       <TokenPickerDialog
         open={tokenBoxVisible}
         onClose={() => setTokenBoxVisible(false)}

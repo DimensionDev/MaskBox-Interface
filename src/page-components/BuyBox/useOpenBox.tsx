@@ -37,7 +37,7 @@ export function useOpenBox(
       const tx = await openBox(boxId, quantity, paymentTokenIndex, proof, {
         value: isNative ? payment.price.mul(quantity) : undefined,
       });
-      const exploreUrl = chainId ? getNetworkExplorer(chainId) + tx?.hash : '';
+      const exploreUrl = chainId ? `${getNetworkExplorer(chainId)}/tx/${tx?.hash}` : '';
       const closeToast = showToast({
         title: 'Transaction sent',
         processing: true,
