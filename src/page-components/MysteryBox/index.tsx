@@ -81,7 +81,16 @@ export const MysteryBox: FC<Props> = ({
     },
   };
 
-  console.log({ boxName: box.name });
+  const total = useMemo(() => {
+    // TODO If the box is set to sell all,
+    // and the creator get a new NFT after creating the box
+    // then remaining will be greater than total.
+    // This will be fixed from the contract later
+    if (box.total && box.remaining && box.remaining.gt(box.total)) {
+      return box.remaining;
+    }
+    return box.total;
+  }, [box.total, box.remaining]);
 
   return (
     <div
@@ -103,9 +112,7 @@ export const MysteryBox: FC<Props> = ({
           <dd className={styles.infoRow}>Lucky Draw</dd>
           <dd className={styles.infoRow}>Get your unique card (NFT) by lucky draw</dd>
           <dd className={styles.infoRow}>
-            {box.total
-              ? `${box.total.sub(box.remaining!).toString()}/${box.total.toString()}`
-              : '-/-'}
+            {total ? `${total.sub(box.remaining!).toString()}/${total.toString()}` : '-/-'}
           </dd>
           <dd className={styles.infoRow}>limit : {box.personal_limit?.toString()}</dd>
         </dl>

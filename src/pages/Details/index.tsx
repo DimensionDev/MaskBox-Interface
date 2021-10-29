@@ -96,7 +96,7 @@ export const Details: FC = memo(() => {
                   </li>
                 ))}
               </ul>
-              {PAGE_SIZE.lt(erc721Tokens.length) ? (
+              {PAGE_SIZE.lte(erc721Tokens.length) ? (
                 <Button
                   className={styles.loadmore}
                   fullWidth
@@ -104,7 +104,7 @@ export const Details: FC = memo(() => {
                   size="small"
                   onClick={loadNfts}
                 >
-                  {allLoaded ? 'No more' : 'Load more'}
+                  {allLoaded ? ' All NFTs have been loaded :)' : 'Load more'}
                 </Button>
               ) : null}
             </div>
