@@ -1,3 +1,4 @@
+export * from './AccountDialog';
 export * from './BuyBox';
 export * from './MysteryBox';
 export * from './NFTPickerDialog';

@@ -1,0 +1,30 @@
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.account {
+  padding: 12px;
+  color: var(--text-primary, #1e202c);
+  font-size: 14px;
+  background-color: var(--wallet-bg, #f0f2f6);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  .icon {
+    margin-right: 5px;
+  }
+}
+.cell {
+  color: var(--text-primary, #1e202c);
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  text-decoration: none;
+  .icon {
+    margin-right: 10px;
+  }
+  &[role='button'] {
+    cursor: pointer;
+  }
+}

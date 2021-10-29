@@ -11,6 +11,7 @@ interface ContextOptions {
   account: string;
   connectWeb3: () => Promise<void>;
   disconnect: () => void;
+  isMetaMask: boolean;
 }
 
 export const Web3Context = React.createContext<Partial<ContextOptions>>({});
@@ -133,6 +134,7 @@ export const Web3Provider: FC = ({ children }) => {
       account,
       ethersProvider,
       providerChainId,
+      isMetaMask: !!ethersProvider?.provider?.isMetaMask,
     }),
     [connectWeb3, disconnect, account, ethersProvider, providerChainId],
   );
