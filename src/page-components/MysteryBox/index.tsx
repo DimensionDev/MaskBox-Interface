@@ -1,4 +1,4 @@
-import { Button, ButtonProps, LoadingIcon } from '@/components';
+import { Button, ButtonProps, LoadingIcon, SNSShare } from '@/components';
 import { useGetExtendedBoxInfo } from '@/hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType, ZERO } from '@/lib';
@@ -81,6 +81,8 @@ export const MysteryBox: FC<Props> = ({
     },
   };
 
+  console.log({ boxName: box.name });
+
   return (
     <div
       className={classnames(styles.mysteryBox, className, { [styles.inList]: inList })}
@@ -113,6 +115,7 @@ export const MysteryBox: FC<Props> = ({
           <Button {...buttonProps}>{buttonText}</Button>
         )}
       </div>
+      {inList ? null : <SNSShare boxName={box.name ?? ''} className={styles.snsShare} />}
     </div>
   );
 };

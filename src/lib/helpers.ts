@@ -71,3 +71,10 @@ export const ZERO_PPRICE: Price = {
 export const createShareUrl = (text: string) => {
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 };
+
+export const createShareUrlForFacebook = (text: string) => {
+  const url = new URL('https://www.facebook.com/sharer/sharer.php');
+  url.searchParams.set('quote', text);
+  url.searchParams.set('u', 'mask.io');
+  return url.toString();
+};

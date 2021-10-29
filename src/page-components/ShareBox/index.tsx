@@ -1,5 +1,5 @@
 import { Button, NFTItem, PickerDialog, PickerDialogProps } from '@/components';
-import { useNFTContract, useWeb3Context } from '@/contexts';
+import { useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
 import { createShareUrl } from '@/lib';
 import { ERC721Token } from '@/types';
 import { FC, useCallback, useEffect, useState } from 'react';
@@ -15,9 +15,10 @@ export const ShareBox: FC<Props> = ({ boxId, nftAddress, nftIds, ...rest }) => {
   const { getByIdList } = useNFTContract();
   const { providerChainId: chainId } = useWeb3Context();
   const [tokens, setTokens] = useState<ERC721Token[]>([]);
+  const nftName = useNFTName(nftAddress);
   const handleShare = useCallback(() => {
     const link = `${window.location.origin}.io/#/details?chain=${chainId}&box=${boxId}`;
-    const text = `I just draw an NFT on Maskbox platform, subscribe @realmaskbook for more updates - ${link}`;
+    const text = `I just draw an NFT on Maskbox platform, subscribe @realMaskNetwork for more updates - ${link}`;
     const shareLink = createShareUrl(text);
     window.open(shareLink, 'noopener noreferrer');
   }, [boxId, chainId]);
@@ -31,7 +32,7 @@ export const ShareBox: FC<Props> = ({ boxId, nftAddress, nftIds, ...rest }) => {
       <ul className={styles.nftList}>
         {tokens.map((token) => (
           <li key={token.tokenId}>
-            <NFTItem token={token} />
+            <NFTItem contractName={nftName} token={token} />
           </li>
         ))}
       </ul>
