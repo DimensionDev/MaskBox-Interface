@@ -23,9 +23,7 @@ export const UploadBox: FC<Props> = ({ className, previewUrl, onUploaded, ...res
         if (f.size > ONE_MB) {
           throw new Error('File size of cover image up to 1MB');
         } else if (!f.name.toLowerCase().match(/\.(jpe?g|png|svg|gif|bmp|webp)/)) {
-          throw new Error(
-            'You should upload an image, only jpg, png, svg, gif, bmp, webp are supposed',
-          );
+          throw new Error('You should upload an image, only accept jpg, png, svg, gif, bmp, webp');
         }
       });
       if (url && onUploaded) {

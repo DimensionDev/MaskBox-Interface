@@ -14,7 +14,7 @@ export const NFTItem: FC<NFTItemProps> = ({ className, contractName, token, ...r
   return (
     <div className={classnames(styles.nft, className)} {...rest}>
       <div className={styles.image}>
-        <img src={token.image ?? imagePlaceholder} alt={token.name} height="100%" />
+        <img loading="lazy" src={token.image ?? imagePlaceholder} alt={token.name} height="100%" />
       </div>
       <div className={styles.info}>
         {contractName && <h3 className={styles.contractName}>{contractName}</h3>}

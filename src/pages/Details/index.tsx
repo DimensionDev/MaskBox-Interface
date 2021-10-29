@@ -8,7 +8,7 @@ import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
 
-const PAGE_SIZE = BigNumber.from(10);
+const PAGE_SIZE = BigNumber.from(50);
 export const Details: FC = memo(() => {
   const history = useHistory();
   const { location } = history;

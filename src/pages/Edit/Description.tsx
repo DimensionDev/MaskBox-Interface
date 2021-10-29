@@ -54,7 +54,7 @@ export const Description: FC = () => {
         Description
         <span className={styles.step}>1/2</span>
       </h2>
-      <Field className={styles.field} name="Mystery box name" required>
+      <Field className={styles.field} name="MaskBox name" required>
         <Input
           placeholder="eg. Punk & Mask Special Edition"
           fullWidth

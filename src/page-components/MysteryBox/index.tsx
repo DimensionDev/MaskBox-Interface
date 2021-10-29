@@ -1,4 +1,4 @@
-import { Button, ButtonProps, LoadingIcon, SNSShare } from '@/components';
+import { Button, ButtonProps, Icon, LoadingIcon, SNSShare } from '@/components';
 import { useGetExtendedBoxInfo } from '@/hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType, ZERO } from '@/lib';
@@ -65,7 +65,7 @@ export const MysteryBox: FC<Props> = ({
     if (isSoldout) return 'Sold out';
     if (inList) return box.expired ? 'End' : 'View Details';
 
-    return price ? `Draw( ${price}/Time )` : <LoadingIcon size={24} />;
+    return price ? `Draw ( ${price}/Time )` : <LoadingIcon size={24} />;
   }, [inList, price, isSoldout]);
 
   const buttonProps: ButtonProps = {
@@ -99,9 +99,9 @@ export const MysteryBox: FC<Props> = ({
     >
       <div className={styles.media}>
         {box.cover ? (
-          <img src={box.cover} width="480" height="360" alt={box.name ?? '-'} />
+          <img src={box.cover} loading="lazy" width="480" height="360" alt={box.name ?? '-'} />
         ) : (
-          <LoadingIcon size={50} />
+          <Icon type="mask" size={48} />
         )}
       </div>
       <div className={styles.interaction}>

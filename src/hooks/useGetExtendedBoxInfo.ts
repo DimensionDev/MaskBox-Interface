@@ -39,10 +39,7 @@ export function useGetExtendedBoxInfo(chainId: number | null, boxId: string | nu
           }
         })
         .catch((err) => {
-          showToast({
-            title: `Fails at getting box info: ${(err as Error).message}`,
-            variant: 'error',
-          });
+          console.log('Fails at getting box info', err);
         });
     }
   }, [boxInfo?.creator, boxId]);
