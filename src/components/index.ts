@@ -7,6 +7,7 @@ export * from './Faq';
 export * from './Field';
 export * from './Icon';
 export * from './Input';
+export * from './LanguageSwitcher';
 export * from './NeonButton';
 export * from './NewsletterBox';
 export * from './NFTItem';

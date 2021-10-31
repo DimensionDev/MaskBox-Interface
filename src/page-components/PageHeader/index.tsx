@@ -1,5 +1,5 @@
 import { logoImage } from '@/assets';
-import { Button, Icon, useDialog } from '@/components';
+import { Button, Icon, LanguageSwitcher, useDialog } from '@/components';
 import { RouteKeys } from '@/configs';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
 import { getNetworkIcon, getNetworkName, isSupportedChain } from '@/lib';
@@ -97,6 +97,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           </Button>
         </div>
       </div>
+      <LanguageSwitcher className={styles.langSwitch} />
       <SelectNetwork
         open={selectNetworkVisible || isNotSupported}
         title={isNotSupported ? 'Not supported network' : 'Select a Network'}

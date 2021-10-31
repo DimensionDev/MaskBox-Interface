@@ -5,6 +5,7 @@ import { Layout } from './Layout';
 
 import {
   ApolloProvider,
+  I18nProvider,
   MBoxContractProvider,
   NFTContractProvider,
   RSS3Provider,
@@ -21,28 +22,30 @@ function App() {
   return (
     <Router>
       <ThemeProvider>
-        <UploadProvider>
-          <Web3Provider>
-            <ApolloProvider>
-              <NFTContractProvider>
-                <MBoxContractProvider>
-                  <RSS3Provider>
-                    <Layout>
-                      <Routes />
-                    </Layout>
-                  </RSS3Provider>
-                </MBoxContractProvider>
-              </NFTContractProvider>
-            </ApolloProvider>
-          </Web3Provider>
-          <Toaster
-            position="top-right"
-            containerClassName={styles.toastContainer}
-            toastOptions={{
-              className: styles.toast,
-            }}
-          />
-        </UploadProvider>
+        <I18nProvider>
+          <UploadProvider>
+            <Web3Provider>
+              <ApolloProvider>
+                <NFTContractProvider>
+                  <MBoxContractProvider>
+                    <RSS3Provider>
+                      <Layout>
+                        <Routes />
+                      </Layout>
+                    </RSS3Provider>
+                  </MBoxContractProvider>
+                </NFTContractProvider>
+              </ApolloProvider>
+            </Web3Provider>
+            <Toaster
+              position="top-right"
+              containerClassName={styles.toastContainer}
+              toastOptions={{
+                className: styles.toast,
+              }}
+            />
+          </UploadProvider>
+        </I18nProvider>
       </ThemeProvider>
     </Router>
   );

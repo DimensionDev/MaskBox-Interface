@@ -8,7 +8,7 @@ const Link: FC<LinkProps> = ({ href, children }) => {
     </a>
   );
 };
-export const faqs = [
+export const faqsInEn = [
   {
     title: 'How to login to MASKBOX?',
     answer: 'Use MetaMask wallet or a wallet that supports WalletConnect to login.',
@@ -82,6 +82,80 @@ export const faqs = [
   {
     title: 'What is our test network?',
     answer:
-      'Our current test network is Ropsten. Please switch the wallet to Ropsten network for testing.',
+      'Our current test network is Rinkeby. Please switch the wallet to Rinkeby network for testing.',
+  },
+];
+
+export const faqsInZh = [
+  {
+    title: 'How to login to MASKBOX?',
+    answer: 'Use MetaMask wallet or a wallet that supports WalletConnect to login.',
+  },
+  {
+    title: '如何安装 MetaMask?',
+    answer: (
+      <p>
+        请登录 <Link href="https://metamask.io" /> 下载适合您设备的 MateMask.
+      </p>
+    ),
+  },
+  {
+    title: '什么是 NFT (非同质化代币)?',
+    answer:
+      'NFT 英文名称为 Non-Fungible Token,翻译为中文就是:非同质化代币,具有不可分割、不可替代、独一无二的特点.  简单来理解,使得它可以锚定现实社会的游戏道具、数字艺术品、门票等.让现实社会中的产品具有更高的展示和交易属性.',
+  },
+  {
+    title: '如何购买 NFT(非同质化代币)?',
+    answer: '连接数字钱包后.可以使用活动限定的数字货币.进行购买.',
+  },
+  {
+    title: 'Mystery 购买机制?',
+    answer:
+      'Mystery 采取使用 chiailink 随机数作为随机抽奖来源.使每个用户能够公平进行购买.购买成功后会成功发送 NFT 至购买用户的付款钱包.',
+  },
+  {
+    title: '购买为什么需要消耗 ETH?',
+    answer: '在不同网络购买中会消耗主网代币,购买成功或者失败都会产生 gas 费用的消耗.',
+  },
+  {
+    title: '如何查看已购买的 NFT?',
+    answer: '可以点击头部菜单中的 My item,就可以查看您在 MASKBOX 中购买的 NFT.',
+  },
+  {
+    title: '如何转售已购买的 NFT?',
+    answer: (
+      <p>
+        目前 MASKBOX 尚未提供 NFT出售功能,您可以跳转至 <Link href="https://opensea.io" /> 出售您的
+        NFT.
+      </p>
+    ),
+  },
+  {
+    title: '什么是 MASKBOX 平台?',
+    answer:
+      'MASKBOX 是进行专业发行 NFT 的机构,由行业知名团队创建.和多家数字艺术出版商有较强的商业合作关系.为其提供数字艺术品 NFT 化提供技术和初始发行工作.',
+  },
+  {
+    title: '如何联系我们发行 NFT?',
+    answer: (
+      <p>
+        目前仅适用于合作方进行发行.如有业务意向请填写<Link href="#">合作表单</Link>.
+        我们会及时和您取得联系.
+      </p>
+    ),
+  },
+  {
+    title: '我们的合约是否安全?',
+    answer: (
+      <p>
+        我们的合约是经过多年资深工程师.有行业一流的 Gas
+        费用优化方案.也有一流的合约安全的工程师进行多轮的合约检查.合约源码请查看我们{' '}
+        <Link href="https://github.com">Github</Link>.
+      </p>
+    ),
+  },
+  {
+    title: '我们的测试网络?',
+    answer: '我们目前测试网络是 Rinkeby ,请钱包切换至 Rinkeby 网络上.进行测试.',
   },
 ];

@@ -1,0 +1,36 @@
+.langSwitch {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  .icon {
+    margin: 0 6px;
+  }
+  .langs {
+    position: absolute;
+    right: 0;
+    top: 53px;
+  }
+}
+.labels {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.langs {
+  background-color: var(--background, #fff);
+  width: 100%;
+  border: 1px solid var(--border, #d9ddea);
+  border-radius: 4px;
+  overflow: hidden;
+  .lang {
+    cursor: pointer;
+    line-height: 35px;
+    height: 35px;
+    padding: 0 10px;
+    font-size: 14px;
+    &:hover {
+      background-color: var(--button-primary-bg, #0057ff);
+      color: var(--button-primary-color, #fff);
+    }
+  }
+}
