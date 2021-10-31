@@ -11,7 +11,12 @@ import {
 import { useRSS3, useWeb3Context } from '@/contexts';
 import { useTokenList } from '@/hooks';
 import { createShareUrl } from '@/lib';
-import { NFTPickerDialog, ShareBox, TokenPickerDialog } from '@/page-components';
+import {
+  ERC721TokenPickerDialog,
+  NFTPickerDialog,
+  ShareBox,
+  TokenPickerDialog,
+} from '@/page-components';
 import { isSameAddress } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
@@ -41,11 +46,13 @@ export const Meta: FC = () => {
   const updateField = useUpdateFormField();
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
-  const [tokenBoxVisible, setTokenBoxVisible] = useState(false);
+  const [tokenBoxVisible, openTokenBox, closeTokenBox] = useDialog();
+  const [erc721DialogVisible, openERC721PickerDialog, closeERC721PickerDialog] = useDialog();
   const [createdBoxId, setCreatedBoxId] = useState('');
 
   const createBox = useCreateMysteryBox();
   const {
+    isEnumable,
     isApproveAll,
     isApproving,
     approveAll,
@@ -136,7 +143,7 @@ export const Meta: FC = () => {
           value={formData.pricePerBox}
           onChange={bindField('pricePerBox')}
           rightAddon={
-            <span className={styles.pickButton} onClick={() => setTokenBoxVisible(true)}>
+            <span className={styles.pickButton} onClick={openTokenBox}>
               {selectedPaymentToken ? (
                 <TokenIcon className={styles.tokenIcon} token={selectedPaymentToken} />
               ) : null}
@@ -161,11 +168,19 @@ export const Meta: FC = () => {
 
       <Field className={styles.field} name="NFT Contract" required>
         <Input
+          className={styles.clickableInput}
           placeholder="Enter the contract address"
           fullWidth
           size="large"
-          value={formData.nftContractAddress}
+          readOnly
+          value={formData.erc721Token?.name ?? formData.nftContractAddress}
           onChange={bindField('nftContractAddress')}
+          onClick={openERC721PickerDialog}
+          rightAddon={
+            <span className={styles.pickButton} onClick={openERC721PickerDialog}>
+              <Icon size={24} type="arrowDown" />
+            </span>
+          }
         />
         {utils.isAddress(formData.nftContractAddress) && (
           <div className={styles.selectGroup}>
@@ -215,6 +230,7 @@ export const Meta: FC = () => {
             size="large"
             type="datetime-local"
             value={formData.startAt}
+            max={formData.endAt}
             onChange={bindField('startAt')}
           />
         </Field>
@@ -229,6 +245,7 @@ export const Meta: FC = () => {
             size="large"
             type="datetime-local"
             value={formData.endAt}
+            min={formData.startAt}
             onChange={bindField('endAt')}
           />
         </Field>
@@ -245,7 +262,12 @@ export const Meta: FC = () => {
       </Field>
 
       <div className={classnames(styles.field, styles.buttonList)}>
-        {!isApproveAll && utils.isAddress(formData.nftContractAddress) && (
+        {!isEnumable && (
+          <Button className={styles.button} fullWidth size="large" colorScheme="primary" disabled>
+            Provided contract is not a enumable NFT contract
+          </Button>
+        )}
+        {!isApproveAll && utils.isAddress(formData.nftContractAddress) && isEnumable && (
           <Button
             className={styles.button}
             fullWidth
@@ -306,11 +328,20 @@ export const Meta: FC = () => {
       />
       <TokenPickerDialog
         open={tokenBoxVisible}
-        onClose={() => setTokenBoxVisible(false)}
+        onClose={closeTokenBox}
         onPick={(token) => {
           updateField('tokenAddress', token.address);
           updateField('token', token);
-          setTokenBoxVisible(false);
+          closeTokenBox();
+        }}
+      />
+      <ERC721TokenPickerDialog
+        open={erc721DialogVisible}
+        onClose={closeERC721PickerDialog}
+        onPick={(token) => {
+          updateField('nftContractAddress', token.address);
+          updateField('erc721Token', token);
+          closeERC721PickerDialog();
         }}
       />
       <NFTPickerDialog

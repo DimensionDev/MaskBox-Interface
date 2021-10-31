@@ -1,4 +1,4 @@
-import { TokenType, ZERO_ADDRESS } from '@/lib';
+import { ERC721Token, TokenType, ZERO_ADDRESS } from '@/lib';
 import { Activity } from '@/types';
 import { isValid as isValidDate } from 'date-fns';
 import { utils } from 'ethers';
@@ -14,6 +14,7 @@ export interface FormData {
   // TODO rename to paymentTokenAddress
   tokenAddress: string;
   token: TokenType | null;
+  erc721Token: ERC721Token | null;
   limit: number | null;
   nftContractAddress: string;
   sellAll: boolean;
@@ -32,11 +33,12 @@ const endAt = date.toJSON().split('.')[0];
 
 const initFormData: FormData = {
   name: '',
-  cover: '',
+  cover: 'https://ipfs.infura.io/ipfs/Qmerb9QvH5KV2JHw7vwDB3CVwDEA5gncwhPvvbA1epLxTJ',
   activities: [newActivity(), newActivity(), newActivity()],
   pricePerBox: '',
   tokenAddress: ZERO_ADDRESS,
   token: null,
+  erc721Token: null,
   limit: 5,
   sellAll: true,
   nftContractAddress: '',
@@ -85,6 +87,7 @@ export const validationsAtom = atom<string[]>((get) => {
   }
   if (!formData.limit || formData.limit < 1)
     validations.push('Limit of purchase per wallet is at least 1');
+
   if (!formData.nftContractAddress) {
     validations.push('Please select a contract, fill in the contract address.');
   } else if (!utils.isAddress(formData.nftContractAddress)) {

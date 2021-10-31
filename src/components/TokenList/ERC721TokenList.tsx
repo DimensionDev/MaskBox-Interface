@@ -1,44 +1,40 @@
+import { MysterBoxNFTABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { useOnceShowup } from '@/hooks';
-import { TokenType, ZERO } from '@/lib';
+import { ERC721Token as ERC721TokenType, ZERO } from '@/lib';
 import { getStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
-import { BigNumber, Contract, utils } from 'ethers';
+import { BigNumber, Contract } from 'ethers';
 import { FC, HTMLProps, useRef, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 import { LoadingIcon } from '../Icon';
-import { TokenIcon } from '../TokenIcon';
 import styles from './index.module.less';
 
-export * from './ERC721TokenList';
-
 interface TokenListProps extends HTMLProps<HTMLUListElement> {
-  tokens: TokenType[];
-  onPick?: (token: TokenType) => void;
+  tokens: ERC721TokenType[];
+  onPick?: (token: ERC721TokenType) => void;
 }
 
-// TODO refactor with vitual list
-export const TokenList: FC<TokenListProps> = ({ tokens, className, onPick, ...rest }) => {
-  const storedERC721Tokens = getStorage<TokenType[]>(StorageKeys.ERC20Tokens) ?? [];
-  const addresses = storedERC721Tokens.map((t) => t.address);
+export const ERC721TokenList: FC<TokenListProps> = ({ tokens, className, onPick, ...rest }) => {
+  const storedTokens = getStorage<ERC721TokenType[]>(StorageKeys.ERC721Tokens) ?? [];
+  const addresses = storedTokens.map((t) => t.address);
   return (
     <ul className={classnames(styles.list, className)} {...rest}>
       {tokens.map((token) => (
         <li className={styles.item} key={token.address} onClick={() => onPick?.(token)}>
-          <Token isCustomized={addresses.includes(token.address)} token={token} />
+          <ERC721Token isCustomized={addresses.includes(token.address)} token={token} />
         </li>
       ))}
     </ul>
   );
 };
 
-interface TokenProps extends HTMLProps<HTMLDivElement> {
-  token: TokenType;
+interface ERC721TokenProps extends HTMLProps<HTMLDivElement> {
+  token: ERC721TokenType;
   isCustomized?: boolean;
   hideBalance?: boolean;
 }
-const erc20Abi = ['function balanceOf(address) view returns (uint256)'];
-export const Token: FC<TokenProps> = ({
+export const ERC721Token: FC<ERC721TokenProps> = ({
   token,
   isCustomized,
   onClick,
@@ -52,7 +48,7 @@ export const Token: FC<TokenProps> = ({
 
   const [{ loading }, fetchBalance] = useAsyncFn(async () => {
     if (!ethersProvider || !account) return;
-    const contract = new Contract(token.address, erc20Abi, ethersProvider);
+    const contract = new Contract(token.address, MysterBoxNFTABI, ethersProvider);
     const balanceResult: BigNumber = await contract.balanceOf(account);
     setBalance(balanceResult);
   }, [account, token.address, ethersProvider]);
@@ -66,9 +62,6 @@ export const Token: FC<TokenProps> = ({
       ref={containerRef}
       {...rest}
     >
-      <div className={styles.icon}>
-        <TokenIcon height="24" width="24" token={token} />
-      </div>
       <div className={styles.info}>
         <div className={styles.symbol}>{token.symbol}</div>
         <div className={styles.name}>
@@ -78,7 +71,7 @@ export const Token: FC<TokenProps> = ({
       </div>
       {!hideBalance && (
         <div className={styles.balance}>
-          {loading ? <LoadingIcon size={24} /> : utils.formatUnits(balance, token.decimals || 1)}
+          {loading ? <LoadingIcon size={24} /> : balance.toString()}
         </div>
       )}
     </div>

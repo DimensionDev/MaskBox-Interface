@@ -2,6 +2,8 @@ export * from './useBalance';
 export * from './useERC20Approve';
 export * from './useGdpr';
 export * from './useGetERC20Allowance';
+export * from './useGetERC20TokenInfo';
+export * from './useGetERC721Token';
 export * from './useGetExtendedBoxInfo';
 export * from './useMaskboxCreationEvent';
 export * from './useMysteryBoxContract';

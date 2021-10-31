@@ -1,6 +1,6 @@
 import { useWeb3Context } from '@/contexts';
 import { getNativeToken, getTokenListUrl, TokenListConfig, TokenType } from '@/lib';
-import { getStorage } from '@/utils';
+import { getStorage, StorageKeys } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
 
 export function useTokenList() {
@@ -15,7 +15,7 @@ export function useTokenList() {
     const listUrl = getTokenListUrl(providerChainId);
     fetch(listUrl).then(async (response) => {
       const data: TokenListConfig = await response.json();
-      const storedTokens = (getStorage<TokenType[]>('tokens') ?? []).filter(
+      const storedTokens = (getStorage<TokenType[]>(StorageKeys.ERC20Tokens) ?? []).filter(
         (tk) => tk.chainId === providerChainId,
       );
       setTokens([nativeToken, ...storedTokens, ...data.tokens]);

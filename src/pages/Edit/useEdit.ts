@@ -13,15 +13,15 @@ export function useEdit() {
   const [isApproveAll, setIsApproveAll] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [checkingApprove, setCheckingApprove] = useState(false);
-  const { account, ethersProvider, providerChainId } = useWeb3Context();
+  const { account, ethersProvider, providerChainId: chainId } = useWeb3Context();
   const [ownedTokens, setOwnedTokens] = useState<ERC721Token[]>([]);
   const contractAddress = useMemo(
-    () => (providerChainId ? getContractAddressConfig(providerChainId)?.MysteryBox : ''),
-    [providerChainId],
+    () => (chainId ? getContractAddressConfig(chainId)?.MysteryBox : ''),
+    [chainId],
   );
 
   const checkIsApproveAll = useCallback(async () => {
-    if (!ethersProvider || !account || !providerChainId) return;
+    if (!ethersProvider || !account) return;
     setIsApproveAll(false);
     if (!utils.isAddress(formData.nftContractAddress)) return;
 
@@ -32,12 +32,29 @@ export function useEdit() {
       setIsApproveAll(result as boolean);
     } catch (err) {
       showToast({
-        title: `Fails to check approving: ${(err as Error).message}`,
+        title: `Fails to check approving, are you sure the contract address is correct?`,
         variant: 'error',
       });
+      console.log('Fails to check approving', err);
     }
     setCheckingApprove(false);
   }, [account, formData.nftContractAddress]);
+
+  const [isEnumable, setIsEnumable] = useState(true);
+  useEffect(() => {
+    if (!ethersProvider || !utils.isAddress(formData.nftContractAddress)) return;
+    (async () => {
+      try {
+        const contract = new Contract(formData.nftContractAddress, MysterBoxNFTABI, ethersProvider);
+        await contract.tokenByIndex(0);
+      } catch (err: any) {
+        if (err.code === 'CALL_EXCEPTION') {
+          setIsEnumable(false);
+        }
+        console.log('Checking if is enumable', err);
+      }
+    })();
+  }, [ethersProvider, formData.nftContractAddress]);
 
   useEffect(() => {
     checkIsApproveAll();
@@ -71,7 +88,7 @@ export function useEdit() {
       });
     } catch (err) {
       showToast({
-        title: `Fails to unlock ${(err as Error).message}`,
+        title: `Fails to unlock, are you sure the contract address is correct?`,
         variant: 'error',
       });
     } finally {
@@ -82,9 +99,10 @@ export function useEdit() {
 
   return {
     checkingApprove,
-    isApproveAll,
-    isApproving,
     approveAll,
     ownedTokens,
+    isApproveAll,
+    isApproving,
+    isEnumable,
   };
 }

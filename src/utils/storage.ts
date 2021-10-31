@@ -3,6 +3,11 @@ const getKey = (key: string) => `${STORE_PREFIX}/${key}`;
 
 const cacheMap = new Map();
 
+export enum StorageKeys {
+  ERC20Tokens = 'erc20-tokens',
+  ERC721Tokens = 'erc721-tokens',
+}
+
 export const setStorage = (key: string, value: any) => {
   cacheMap.set(key, value);
   return localStorage.setItem(getKey(key), JSON.stringify(value));

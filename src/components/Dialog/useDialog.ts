@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 
-export function useDialog() {
+export function useDialog(): [open: boolean, openDialog: () => void, closeDialog: () => void] {
   const [open, setOpen] = useState(false);
   const openDialog = useCallback(() => {
     setOpen(true);
@@ -9,5 +9,5 @@ export function useDialog() {
     setOpen(false);
   }, []);
 
-  return [open, openDialog, closeDialog] as const;
+  return [open, openDialog, closeDialog];
 }

@@ -1,5 +1,6 @@
 export * from './AccountDialog';
 export * from './BuyBox';
+export * from './ERC721TokenPickerDialog';
 export * from './MysteryBox';
 export * from './NFTPickerDialog';
 export * from './PageFooter';

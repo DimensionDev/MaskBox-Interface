@@ -18,7 +18,34 @@ export const contractAddresses: Record<string, Record<string, string>> = {
   },
 };
 
-export const fromtBlocks: Record<string, number> = {
+// TODO deduplicate with src/types/ERC721#ERC721Token
+export interface ERC721Token {
+  name: string;
+  chainId: number;
+  address: string;
+  symbol: string;
+}
+
+export const NFTContracts: Record<number, ERC721Token[]> = {
+  1: [
+    {
+      chainId: 1,
+      name: 'Mask Test NFT',
+      address: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
+      symbol: 'MaskTestNFT',
+    },
+  ],
+  4: [
+    // {
+    //   chainId: 4,
+    //   name: 'Mask Test NFT',
+    //   address: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
+    //   symbol: 'MaskTestNFT',
+    // },
+  ],
+};
+
+export const fromBlocks: Record<string, number> = {
   Mainnet: 13396393,
   Rinkeby: 9369286,
 };
@@ -31,5 +58,9 @@ export const drawTxParameters = {
 };
 
 export const getContractFromBlock = (chainId: number) => {
-  return fromtBlocks[chainId];
+  return fromBlocks[chainId];
+};
+
+export const getNFTContracts = (chainId: number) => {
+  return NFTContracts[chainId];
 };
