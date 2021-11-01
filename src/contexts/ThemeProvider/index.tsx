@@ -47,11 +47,13 @@ export const ThemeProvider: FC = ({ children }) => {
     if (storedTheme) {
       setTheme(storedTheme);
     } else {
-      mediaQuery.addEventListener('change', (evt) => {
+      const handler = (evt: MediaQueryListEvent) => {
         if (!getStorage(THEME_STORAGE_KEY)) {
           setTheme(evt.matches ? ThemeType.Dark : ThemeType.Light);
         }
-      });
+      };
+      mediaQuery.addEventListener('change', handler);
+      mediaQuery.removeEventListener('change', handler);
     }
   }, []);
 

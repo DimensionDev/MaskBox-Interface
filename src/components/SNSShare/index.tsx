@@ -9,7 +9,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 }
 
 export const SNSShare: FC<Props> = ({ className, boxName, ...rest }) => {
-  const text = `Check out NFT mystery box ${boxName}on Maskbox platform, let’s try it and good luck! Subscribe @realMaskNetwork for more updates.
+  const text = `Check out NFT mystery box ${boxName} on Maskbox platform, let’s try it and good luck! Subscribe @realMaskNetwork for more updates.
 ${location.href}`;
   const handleShareToTwitter = useCallback(() => {
     const shareLink = createShareUrl(text);
