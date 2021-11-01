@@ -33,7 +33,7 @@ const endAt = date.toJSON().split('.')[0];
 
 const initFormData: FormData = {
   name: '',
-  cover: 'https://ipfs.infura.io/ipfs/Qmerb9QvH5KV2JHw7vwDB3CVwDEA5gncwhPvvbA1epLxTJ',
+  cover: '',
   activities: [newActivity(), newActivity(), newActivity()],
   pricePerBox: '',
   tokenAddress: ZERO_ADDRESS,

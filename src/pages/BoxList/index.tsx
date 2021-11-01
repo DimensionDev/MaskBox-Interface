@@ -17,7 +17,7 @@ export const BoxList: FC = () => {
 
   const page = useMemo(() => {
     const p = new URLSearchParams(location.search).get('page');
-    return p ? parseInt(p, 10) : null;
+    return p ? parseInt(p, 10) : 1;
   }, [location.search]);
 
   useEffect(() => {
@@ -66,18 +66,20 @@ export const BoxList: FC = () => {
           </li>
         ))}
       </ul>
-      <div className={styles.paginaton}>
-        <Button className={styles.button} disabled={page === 1 || loading} onClick={loadPrevPage}>
-          Previous
-        </Button>
-        <Button
-          className={styles.button}
-          disabled={maskboxes.length < PAGE_SIZE || loading}
-          onClick={loadNextPage}
-        >
-          Next
-        </Button>
-      </div>
+      {page === 1 && maskboxes.length < PAGE_SIZE ? null : (
+        <div className={styles.paginaton}>
+          <Button className={styles.button} disabled={page === 1 || loading} onClick={loadPrevPage}>
+            Previous
+          </Button>
+          <Button
+            className={styles.button}
+            disabled={maskboxes.length < PAGE_SIZE || loading}
+            onClick={loadNextPage}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </>
   );
 };

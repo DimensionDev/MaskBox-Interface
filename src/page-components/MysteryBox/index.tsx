@@ -6,7 +6,7 @@ import { ExtendedBoxInfo } from '@/types';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { CountdownButton } from './CountdownButton';
 import styles from './index.module.less';
 
@@ -63,7 +63,11 @@ export const MysteryBox: FC<Props> = ({
 
   const buttonText = useMemo(() => {
     if (isSoldout) return 'Sold out';
-    if (inList) return box.expired ? 'End' : 'View Details';
+    if (box.expired) {
+      return 'Ended';
+    } else if (inList) {
+      return 'View Details';
+    }
 
     return price ? `Draw ( ${price}/Time )` : <LoadingIcon size={24} />;
   }, [inList, price, isSoldout]);
@@ -92,18 +96,22 @@ export const MysteryBox: FC<Props> = ({
     return box.total;
   }, [box.total, box.remaining]);
 
+  const BoxCover = (
+    <div className={styles.media}>
+      {box.cover ? (
+        <img src={box.cover} loading="lazy" width="480" height="360" alt={box.name ?? '-'} />
+      ) : (
+        <Icon type="mask" size={48} />
+      )}
+    </div>
+  );
+
   return (
     <div
       className={classnames(styles.mysteryBox, className, { [styles.inList]: inList })}
       {...rest}
     >
-      <div className={styles.media}>
-        {box.cover ? (
-          <img src={box.cover} loading="lazy" width="480" height="360" alt={box.name ?? '-'} />
-        ) : (
-          <Icon type="mask" size={48} />
-        )}
-      </div>
+      {inList ? <Link to={`/details?chain=${chainId}&box=${boxId}`}>{BoxCover}</Link> : BoxCover}
       <div className={styles.interaction}>
         <dl className={styles.infoList}>
           <dt className={styles.name} title={box.name}>

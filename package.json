@@ -2,7 +2,7 @@
   "name": "react-ts-plus",
   "version": "0.0.0",
   "scripts": {
-    "dev": "webpack serve --mode=development",
+    "dev": "webpack serve --mode=development --port 5000",
     "build": "webpack --mode=production",
     "eslint": "eslint \"src/**/*.{ts,tsx}\"",
     "prettier": "prettier \"src/**/*.{css,less,ts,tsx}\"",

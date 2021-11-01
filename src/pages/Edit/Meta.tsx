@@ -285,7 +285,7 @@ export const Meta: FC = () => {
           fullWidth
           size="large"
           colorScheme="primary"
-          disabled={!isReady}
+          disabled={!isReady || !isApproveAll}
           onClick={openConfirmDialog}
         >
           Create Mystery box
@@ -320,8 +320,7 @@ export const Meta: FC = () => {
         }
         onShare={() => {
           const link = `${window.location.origin}.io/#/details?chain=${providerChainId}&box=${createdBoxId}`;
-          const text = `I just created an NFT mystery box ${formData.name} on MaskBox platform. Try to draw and good luck!
-            ${link}`;
+          const text = `I just created an NFT mystery box ${formData.name} on MaskBox platform. Try to draw and good luck! ${link}`;
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
         }}

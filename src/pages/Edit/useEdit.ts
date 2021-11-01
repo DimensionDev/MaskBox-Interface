@@ -54,7 +54,7 @@ export function useEdit() {
         console.log('Checking if is enumable', err);
       }
     })();
-  }, [ethersProvider, formData.nftContractAddress]);
+  }, [ethersProvider, formData.nftContractAddress, chainId]);
 
   useEffect(() => {
     checkIsApproveAll();
@@ -86,9 +86,12 @@ export function useEdit() {
         title: 'Unlock success',
         variant: 'success',
       });
-    } catch (err) {
+    } catch (err: any) {
       showToast({
-        title: `Fails to unlock, are you sure the contract address is correct?`,
+        title:
+          err.code === 4001
+            ? 'Your wallet canceled the transaction'
+            : `Fails to unlock, ${err.message}`,
         variant: 'error',
       });
     } finally {
