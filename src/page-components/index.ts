@@ -5,6 +5,7 @@ export * from './MysteryBox';
 export * from './NFTPickerDialog';
 export * from './PageFooter';
 export * from './PageHeader';
+export * from './RequestConnection';
 export * from './SelectNetwork';
 export * from './ShareBox';
 export * from './StatusOverlay';

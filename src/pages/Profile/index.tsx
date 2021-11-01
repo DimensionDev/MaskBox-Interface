@@ -2,6 +2,7 @@ import { avatarImage } from '@/assets';
 import { ArticleSection, NFTItem } from '@/components';
 import { useNFTContract, useWeb3Context } from '@/contexts';
 import { getContractAddressConfig } from '@/lib';
+import { RequestConnection } from '@/page-components';
 import { FC, useEffect, useMemo } from 'react';
 import styles from './index.module.less';
 
@@ -16,7 +17,6 @@ export const Profile: FC = () => {
     getMyTokens(contractAddress);
   }, [getMyTokens, contractAddress]);
 
-  console.log('my tokens', tokens);
   return (
     <article>
       <header className={styles.header}>
@@ -24,13 +24,17 @@ export const Profile: FC = () => {
       </header>
       <main className={styles.main}>
         <ArticleSection title="My Collectibles">
-          <ul className={styles.nftList}>
-            {tokens.map((token) => (
-              <li key={token.tokenId}>
-                <NFTItem token={token} />
-              </li>
-            ))}
-          </ul>
+          {providerChainId ? (
+            <ul className={styles.nftList}>
+              {tokens.map((token) => (
+                <li key={token.tokenId}>
+                  <NFTItem token={token} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <RequestConnection />
+          )}
         </ArticleSection>
       </main>
     </article>

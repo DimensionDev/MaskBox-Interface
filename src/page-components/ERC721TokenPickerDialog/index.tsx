@@ -57,7 +57,7 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
   }, [isNewAddress, keyword]);
 
   return (
-    <PickerDialog className={styles.dialog} title="Seletct a Token" {...rest}>
+    <PickerDialog className={styles.dialog} title="Seletct an NFT" {...rest}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth

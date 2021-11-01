@@ -40,7 +40,9 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
             Home
           </NavLink>
           <NavLink
-            className={styles.navItem}
+            className={classnames(styles.navItem, {
+              [styles.activeNav]: history.location.pathname === RouteKeys.Details,
+            })}
             activeClassName={styles.activeNav}
             to={RouteKeys.BoxList}
           >
