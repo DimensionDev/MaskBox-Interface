@@ -6,6 +6,8 @@ const cacheMap = new Map();
 export enum StorageKeys {
   ERC20Tokens = 'erc20-tokens',
   ERC721Tokens = 'erc721-tokens',
+  Language = 'language',
+  Theme = 'theme',
 }
 
 export const setStorage = (key: string, value: any) => {

@@ -1,4 +1,4 @@
-import { getStorage, setStorage } from '@/utils';
+import { getStorage, setStorage, StorageKeys } from '@/utils';
 import { noop } from 'lodash-es';
 import {
   createContext,
@@ -17,7 +17,7 @@ export enum ThemeType {
   Dark = 'dark',
 }
 
-const THEME_STORAGE_KEY = 'theme';
+const THEME_STORAGE_KEY = StorageKeys.Theme;
 
 interface ThemeContextOptions {
   theme: ThemeType;

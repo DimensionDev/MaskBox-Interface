@@ -19,7 +19,7 @@ const langList = Object.keys(Language)
 export const LanguageSwitcher: FC<Props> = ({ className, ...rest }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { language, setLanguage } = useI18n();
-  const [menuVisible, setMenuVisible] = useState(!false);
+  const [menuVisible, setMenuVisible] = useState(false);
   useClickAway(ref, () => {
     setMenuVisible(false);
   });
