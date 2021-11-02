@@ -21,12 +21,13 @@ import { isSameAddress } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   formDataAtom,
   readyToCreateAtom,
   useBindFormField,
+  useSetAllDirty,
   useUpdateFormField,
   validationsAtom,
 } from './atoms';
@@ -44,6 +45,7 @@ export const Meta: FC = () => {
   const validations = useAtomValue(validationsAtom);
   const bindField = useBindFormField();
   const updateField = useUpdateFormField();
+  const setAllDirty = useSetAllDirty();
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
   const [tokenBoxVisible, openTokenBox, closeTokenBox] = useDialog();
@@ -65,6 +67,7 @@ export const Meta: FC = () => {
   const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
   const [creating, setCreating] = useState(false);
   const create = useCallback(async () => {
+    setAllDirty();
     if (!isReady || validations.length) {
       validations.forEach((validation) => {
         showToast({
@@ -104,7 +107,7 @@ export const Meta: FC = () => {
       closeToast();
       setCreating(false);
     }
-  }, [createBox, isReady]);
+  }, [createBox, isReady, setAllDirty]);
 
   useEffect(() => {
     if (formData.pricePerBox.startsWith('-')) {
@@ -279,17 +282,19 @@ export const Meta: FC = () => {
             {checkingApprove ? 'Checking...' : isApproving ? 'Unlocking' : 'Unlock NFT'}
           </Button>
         )}
-        <Button
-          title={validations.join('\n')}
-          className={styles.button}
-          fullWidth
-          size="large"
-          colorScheme="primary"
-          disabled={!isReady || !isApproveAll}
-          onClick={openConfirmDialog}
-        >
-          Create Mystery box
-        </Button>
+        <div onMouseEnter={setAllDirty}>
+          <Button
+            title={validations.join('\n')}
+            className={styles.button}
+            fullWidth
+            size="large"
+            colorScheme="primary"
+            disabled={!isReady || !isApproveAll}
+            onClick={openConfirmDialog}
+          >
+            Create Mystery box
+          </Button>
+        </div>
       </div>
       <div className={styles.field}>
         <ul className={styles.validations}>

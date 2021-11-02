@@ -4,7 +4,7 @@ import { isValid as isValidDate } from 'date-fns';
 import { utils } from 'ethers';
 import { atom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
-import { FormEvent } from 'react';
+import { FormEvent, useCallback } from 'react';
 
 export interface FormData {
   name: string;
@@ -47,6 +47,7 @@ const initFormData: FormData = {
   whiteList: '',
   selectedNFTIds: [],
 };
+const fieldKeys = Object.keys(initFormData) as Array<keyof FormData>;
 
 export const formDataAtom = atom<FormData>(initFormData);
 
@@ -54,6 +55,8 @@ export const descriptionFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);
   return !!formData.name && formData.cover;
 });
+
+export const fieldDirtyAtom = atom<Partial<Record<keyof FormData, boolean>>>({});
 
 export const metaFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);
@@ -75,23 +78,35 @@ export const readyToCreateAtom = atom((get) => {
   return descriptionFullfilled && metaFullfilled;
 });
 
+export function useSetAllDirty() {
+  const setDirty = useUpdateAtom(fieldDirtyAtom);
+  return useCallback(() => {
+    const dirtyMap: Partial<Record<keyof FormData, boolean>> = {};
+    fieldKeys.forEach((key) => {
+      dirtyMap[key] = true;
+    });
+    setDirty(dirtyMap);
+  }, []);
+}
+
 export const validationsAtom = atom<string[]>((get) => {
   const formData = get(formDataAtom);
+  const dirtyFileds = get(fieldDirtyAtom);
   const validations: string[] = [];
-  if (!formData.name) validations.push('Please input mystery box name');
-  if (!formData.cover) validations.push('Please provide Mystery thumbnail');
-  if (!formData.pricePerBox) {
+  if (!formData.name && dirtyFileds.name) validations.push('Please input mystery box name');
+  if (!formData.cover && dirtyFileds.cover) validations.push('Please provide Mystery thumbnail');
+  if (!formData.pricePerBox && dirtyFileds.pricePerBox) {
     validations.push('Please provide price for a box');
-  } else if (parseFloat(formData.pricePerBox) < 0) {
+  }
+  if (formData.pricePerBox && parseFloat(formData.pricePerBox) < 0) {
     validations.push('Price box must be positive');
   }
-  if (!formData.limit || formData.limit < 1)
+  if ((!formData.limit || formData.limit < 1) && dirtyFileds.limit) {
     validations.push('Limit of purchase per wallet is at least 1');
+  }
 
-  if (!formData.nftContractAddress) {
-    validations.push('Please select a contract, fill in the contract address.');
-  } else if (!utils.isAddress(formData.nftContractAddress)) {
-    validations.push('NFT contract address is not valid');
+  if (!formData.nftContractAddress && dirtyFileds.nftContractAddress) {
+    validations.push('Please select a contract');
   }
 
   if (!formData.sellAll && formData.selectedNFTIds.length < 1) {
@@ -119,8 +134,13 @@ export const validationsAtom = atom<string[]>((get) => {
 
 export function useUpdateFormField() {
   const setFormData = useUpdateAtom(formDataAtom);
+  const setDirty = useUpdateAtom(fieldDirtyAtom);
 
   return <T extends keyof FormData>(fieldName: T, newValue: FormData[T]) => {
+    setDirty((fd) => ({
+      ...fd,
+      [fieldName]: true,
+    }));
     setFormData((fd) => ({
       ...fd,
       [fieldName]: newValue,
