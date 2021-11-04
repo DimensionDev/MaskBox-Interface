@@ -323,6 +323,7 @@ export const Meta: FC = () => {
           const text = `I just created an NFT mystery box ${formData.name} on MaskBox platform. Try to draw and good luck! ${link}`;
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
+          history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
         }}
       />
       <TokenPickerDialog

@@ -15,6 +15,7 @@ export * from './NFTSelectList';
 export * from './Overlay';
 export * from './PickerDialog';
 export * from './RoundButton';
+export * from './SelectedBadge';
 export * from './SNSShare';
 export * from './Textarea';
 export * from './ThickButton';

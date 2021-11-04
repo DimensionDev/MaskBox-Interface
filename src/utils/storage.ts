@@ -1,3 +1,5 @@
+import { useCallback, useState } from 'react';
+
 const STORE_PREFIX = 'mbox';
 const getKey = (key: string) => `${STORE_PREFIX}/${key}`;
 
@@ -8,6 +10,9 @@ export enum StorageKeys {
   ERC721Tokens = 'erc721-tokens',
   Language = 'language',
   Theme = 'theme',
+  WalletId = 'wallet-id',
+  ChainId = 'chain-id',
+  WalletType = 'wallet-type',
 }
 
 export const setStorage = (key: string, value: any) => {
@@ -36,3 +41,21 @@ export const getStorage = <T extends any = any>(key: string): T | null => {
 export const removeStorage = (key: string) => {
   localStorage.removeItem(getKey(key));
 };
+
+export function useStorage<T extends any = any>(
+  key: StorageKeys,
+): [value: T | null, updateStorage: (val: T) => void, remove: () => void] {
+  const [value, setValue] = useState<T | null>(getStorage<T>(key));
+
+  const update = useCallback(
+    (val: T) => {
+      setValue(val);
+      setStorage(key, val);
+    },
+    [key],
+  );
+
+  const remove = useCallback(() => removeStorage(key), [key]);
+
+  return [value, update, remove];
+}

@@ -14,7 +14,7 @@ import styles from './index.module.less';
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
-  const { account, providerChainId, connectWeb3, isMetaMask } = useWeb3Context();
+  const { account, providerChainId, openConnectionDialog, isMetaMask } = useWeb3Context();
   const [selectNetworkVisible, openSelectNetwork, closeSelectNetwork] = useDialog();
   const [accountDialogVisible, openAccountDialog, closeAccountDialog] = useDialog();
   const isNotSupported = providerChainId !== undefined && !isSupportedChain(providerChainId);
@@ -66,7 +66,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         <div className={styles.operations}>
           {account ? (
             <>
-              <Button className={styles.button} onClick={openSelectNetwork}>
+              <Button className={styles.button} onClick={openConnectionDialog}>
                 <Icon
                   className={styles.icon}
                   iconUrl={getNetworkIcon(providerChainId!)}
@@ -90,7 +90,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
               </Button>
             </>
           ) : (
-            <Button className={styles.button} onClick={connectWeb3}>
+            <Button className={styles.button} onClick={openConnectionDialog}>
               Connect Wallet
             </Button>
           )}
@@ -100,11 +100,11 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         </div>
       </div>
       <LanguageSwitcher className={styles.langSwitch} />
-      <SelectNetwork
-        open={selectNetworkVisible || isNotSupported}
-        title={isNotSupported ? 'Not supported network' : 'Select a Network'}
-        onClose={closeSelectNetwork}
-      />
+      {/* <SelectNetwork */}
+      {/*   open={selectNetworkVisible || isNotSupported} */}
+      {/*   title={isNotSupported ? 'Not supported network' : 'Select a Network'} */}
+      {/*   onClose={closeSelectNetwork} */}
+      {/* /> */}
       <AccountDialog open={accountDialogVisible} onClose={closeAccountDialog} />
     </div>
   );

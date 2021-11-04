@@ -1,4 +1,5 @@
 export * from './chainUrls';
+export * from './chainId';
 export * from './collections';
 export * from './common';
 export * from './contracts';
