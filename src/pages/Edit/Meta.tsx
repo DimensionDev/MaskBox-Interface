@@ -179,6 +179,11 @@ export const Meta: FC = () => {
           value={formData.erc721Token?.name ?? formData.nftContractAddress}
           onChange={bindField('nftContractAddress')}
           onClick={openERC721PickerDialog}
+          leftAddon={
+            formData.erc721Token ? (
+              <TokenIcon className={styles.tokenIcon} token={formData.erc721Token} />
+            ) : null
+          }
           rightAddon={
             <span className={styles.pickButton} onClick={openERC721PickerDialog}>
               <Icon size={24} type="arrowDown" />

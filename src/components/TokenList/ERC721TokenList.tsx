@@ -8,6 +8,7 @@ import { BigNumber, Contract } from 'ethers';
 import { FC, HTMLProps, useRef, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 import { LoadingIcon } from '../Icon';
+import { TokenIcon } from '../TokenIcon';
 import styles from './index.module.less';
 
 interface TokenListProps extends HTMLProps<HTMLUListElement> {
@@ -62,6 +63,9 @@ export const ERC721Token: FC<ERC721TokenProps> = ({
       ref={containerRef}
       {...rest}
     >
+      <div className={styles.icon}>
+        <TokenIcon height="24" width="24" token={token} />
+      </div>
       <div className={styles.info}>
         <div className={styles.symbol}>{token.symbol}</div>
         <div className={styles.name}>
