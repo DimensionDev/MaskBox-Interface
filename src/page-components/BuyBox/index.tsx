@@ -82,7 +82,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   }, [openBox, onPurchased]);
 
   return (
-    <PickerDialog {...rest} className={styles.buyBox} title="Buy">
+    <PickerDialog {...rest} className={styles.buyBox} title="Draw">
       <dl className={styles.infos}>
         <dt className={styles.cost}>
           <div className={styles.currency}>
@@ -90,7 +90,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             <span className={styles.unit}>{paymentToken?.symbol}</span>
           </div>
           {isNative && cost && (
-            <div className={styles.estimate}>~${parseFloat(cost) * tokenPrice}</div>
+            <div className={styles.estimate}>≈${parseFloat(cost) * tokenPrice}</div>
           )}
         </dt>
         <dd className={styles.meta}>
