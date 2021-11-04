@@ -1,7 +1,14 @@
 import { createContext, FC, useContext, useMemo, useState } from 'react';
 import { create } from 'ipfs-http-client';
 
-type UploadResult = string;
+export enum MediaType {
+  Audio = 'audio',
+  Image = 'image',
+  Video = 'video',
+  Unknown = 'unknown',
+}
+
+export type UploadResult = { url: string; mediaType: MediaType };
 
 interface IUploadContext {
   upload: (file?: File, validator?: (file: File) => void) => Promise<UploadResult | undefined>;
@@ -9,13 +16,25 @@ interface IUploadContext {
 }
 
 const UploadContext = createContext<IUploadContext>({
-  upload: () => Promise.resolve(''),
+  upload: () => Promise.resolve({ url: '', mediaType: MediaType.Unknown }),
   uploading: false,
 });
 
 export function useUpload(): IUploadContext {
   return useContext(UploadContext);
 }
+export const getMediaType = (fileName: string) => {
+  const ext = fileName.toLowerCase().split('.').pop();
+  if (!ext) return MediaType.Unknown;
+  if (['jpg', 'jpge', 'svg', 'gif', 'bmp', 'webp'].includes(ext)) {
+    return MediaType.Image;
+  } else if (['mp4'].includes(ext)) {
+    return MediaType.Video;
+  } else if (['mp3'].includes(ext)) {
+    return MediaType.Audio;
+  }
+  return MediaType.Unknown;
+};
 
 const createInput = () => {
   const inputEl = document.createElement('input');
@@ -51,13 +70,14 @@ export const UploadProvider: FC = ({ children }) => {
 
   const upload = useMemo(() => {
     const uploadFile = async (file: File): Promise<UploadResult | undefined> => {
+      const mediaType = getMediaType(file.name);
       const added = await ipfsClient.add(file);
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
-      return url;
+      return { url, mediaType };
     };
 
     const fn: IUploadContext['upload'] = async (file, validator) => {
-      let url: string | undefined;
+      let result: UploadResult | undefined;
       if (!file) {
         const pickedFile = await pickFile();
         if (pickedFile) file = pickedFile;
@@ -66,13 +86,15 @@ export const UploadProvider: FC = ({ children }) => {
       if (file) {
         try {
           validator?.(file);
-          url = await uploadFile(file);
+          result = await uploadFile(file);
+        } catch (err) {
+          console.log('Upload error', err);
         } finally {
           setUploading(false);
         }
       }
       setUploading(false);
-      return url;
+      return result;
     };
     return fn;
   }, []);

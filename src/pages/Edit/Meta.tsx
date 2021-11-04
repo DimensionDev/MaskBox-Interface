@@ -91,7 +91,8 @@ export const Meta: FC = () => {
         await saveBox({
           id: args.box_id.toString(),
           name: args.name,
-          cover: formData.cover,
+          mediaType: formData.mediaType,
+          mediaUrl: formData.mediaUrl,
           activities: formData.activities,
         });
         closeConfirmDialog();

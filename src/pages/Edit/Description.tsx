@@ -1,4 +1,5 @@
 import { Button, Field, Input, Textarea, UploadBox } from '@/components';
+import { MediaType, UploadResult } from '@/contexts';
 import { Activity } from '@/types';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
@@ -43,9 +44,8 @@ export const Description: FC = () => {
       };
     });
   };
-
-  const handleUploaded = useCallback((url) => {
-    setFormData((fd) => ({ ...fd, cover: url }));
+  const handleUploaded = useCallback(({ url: mediaUrl, mediaType }: UploadResult) => {
+    setFormData((fd) => ({ ...fd, mediaUrl, mediaType }));
   }, []);
 
   return (
@@ -64,13 +64,21 @@ export const Description: FC = () => {
         />
       </Field>
       <Field className={styles.field} name="Mystery thumbnail" required>
-        <UploadBox previewUrl={formData.cover} tabIndex={0} onUploaded={handleUploaded} />
-        {formData.cover ? (
+        <UploadBox
+          mediaUrl={formData.mediaUrl}
+          mediaType={formData.mediaType}
+          tabIndex={0}
+          onUploaded={handleUploaded}
+        />
+        {formData.mediaUrl ? (
           <Button
             colorScheme="danger"
             size="small"
-            className={styles.coverRestButton}
-            onClick={() => updateField('cover', '')}
+            className={styles.mediaRestButton}
+            onClick={() => {
+              updateField('mediaUrl', '');
+              updateField('mediaType', MediaType.Unknown);
+            }}
           >
             Reset
           </Button>

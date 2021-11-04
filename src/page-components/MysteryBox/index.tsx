@@ -1,4 +1,5 @@
 import { Button, ButtonProps, Icon, LoadingIcon, SNSShare } from '@/components';
+import { MediaType } from '@/contexts';
 import { useGetExtendedBoxInfo } from '@/hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType, ZERO } from '@/lib';
@@ -98,8 +99,25 @@ export const MysteryBox: FC<Props> = ({
 
   const BoxCover = (
     <div className={styles.media}>
-      {box.cover ? (
-        <img src={box.cover} loading="lazy" width="480" height="360" alt={box.name ?? '-'} />
+      {box.mediaUrl ? (
+        (() => {
+          switch (box.mediaType as MediaType) {
+            case MediaType.Video:
+              return <video src={box.mediaUrl} width="480" height="360" controls={!inList} />;
+            case MediaType.Audio:
+              return <audio src={box.mediaUrl} controls />;
+            default:
+              return (
+                <img
+                  src={box.mediaUrl}
+                  loading="lazy"
+                  width="480"
+                  height="360"
+                  alt={box.name ?? '-'}
+                />
+              );
+          }
+        })()
       ) : (
         <Icon type="mask" size={48} />
       )}

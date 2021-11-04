@@ -1,11 +1,13 @@
 import { createContext, FC, useCallback, useContext } from 'react';
 import RSS3 from 'rss3-next';
+import { MediaType } from '../UploadProvider';
 import { useWeb3Context } from '../Web3Context';
 
 interface BoxRSS3Node {
   id: string;
   name: string;
-  cover: string;
+  mediaUrl: string;
+  mediaType: MediaType;
   activities: {
     title: string;
     body: string;
@@ -22,7 +24,13 @@ const RSS3Context = createContext<IRSS3Context>({
   createRSS3: () => Promise.resolve(null),
   saveBox: () => Promise.resolve(),
   getBoxMetas: () => {
-    return Promise.resolve({ id: '', name: '', cover: '', activities: [] });
+    return Promise.resolve({
+      id: '',
+      name: '',
+      mediaUrl: '',
+      mediaType: MediaType.Unknown,
+      activities: [],
+    });
   },
 });
 

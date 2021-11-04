@@ -1,3 +1,4 @@
+import { MediaType } from '@/contexts';
 import { ERC721Token, TokenType, ZERO_ADDRESS } from '@/lib';
 import { Activity } from '@/types';
 import { isValid as isValidDate } from 'date-fns';
@@ -8,7 +9,8 @@ import { FormEvent, useCallback } from 'react';
 
 export interface FormData {
   name: string;
-  cover: string;
+  mediaUrl: string;
+  mediaType: MediaType;
   activities: Activity[];
   pricePerBox: string;
   // TODO rename to paymentTokenAddress
@@ -33,7 +35,8 @@ const endAt = date.toJSON().split('.')[0];
 
 const initFormData: FormData = {
   name: '',
-  cover: '',
+  mediaUrl: '',
+  mediaType: MediaType.Unknown,
   activities: [newActivity(), newActivity(), newActivity()],
   pricePerBox: '',
   tokenAddress: ZERO_ADDRESS,
@@ -53,7 +56,7 @@ export const formDataAtom = atom<FormData>(initFormData);
 
 export const descriptionFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);
-  return !!formData.name && formData.cover;
+  return !!formData.name && formData.mediaUrl;
 });
 
 export const fieldDirtyAtom = atom<Partial<Record<keyof FormData, boolean>>>({});
@@ -94,7 +97,8 @@ export const validationsAtom = atom<string[]>((get) => {
   const dirtyFileds = get(fieldDirtyAtom);
   const validations: string[] = [];
   if (!formData.name && dirtyFileds.name) validations.push('Please input mystery box name');
-  if (!formData.cover && dirtyFileds.cover) validations.push('Please provide Mystery thumbnail');
+  if (!formData.mediaUrl && dirtyFileds.mediaUrl)
+    validations.push('Please provide Mystery thumbnail');
   if (!formData.pricePerBox && dirtyFileds.pricePerBox) {
     validations.push('Please provide price for a box');
   }

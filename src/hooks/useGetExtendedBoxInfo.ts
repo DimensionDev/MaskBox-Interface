@@ -1,4 +1,3 @@
-import { showToast } from '@/components';
 import { useMBoxContract, useRSS3, useWeb3Context } from '@/contexts';
 import { useMaskBoxQuery } from '@/graphql-hooks';
 import { BoxInfo, BoxMetas } from '@/types';
@@ -31,7 +30,8 @@ export function useGetExtendedBoxInfo(chainId: number | null, boxId: string | nu
         .then((data) => {
           if (data) {
             setBoxMetas({
-              cover: data.cover,
+              mediaType: data.mediaType,
+              mediaUrl: data.mediaUrl,
               activities: data.activities,
             });
           } else {

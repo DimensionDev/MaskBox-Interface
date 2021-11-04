@@ -1,4 +1,4 @@
-import { BoxInfo } from '.';
+import { BoxInfo } from './maskbox';
 
 export interface Activity {
   title: string;
@@ -6,7 +6,8 @@ export interface Activity {
 }
 
 export interface BoxMetas {
-  cover: string;
+  mediaType: string;
+  mediaUrl: string;
   activities: Activity[];
 }
 
