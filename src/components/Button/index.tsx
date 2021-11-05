@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import React, { ButtonHTMLAttributes, FC, memo } from 'react';
+import { LoadingIcon } from '../Icon';
 import styles from './index.module.less';
 
 type VariantType = 'default';
@@ -60,7 +61,7 @@ export const Button: FC<ButtonProps> = memo(
         {...rest}
       >
         {leftIcon && (
-          <span className={classnames(styles.iconHolder, styles.rightIcon)}>{leftIcon}</span>
+          <span className={classnames(styles.iconHolder, styles.leftIcon)}>{leftIcon}</span>
         )}
         {children}
         {rightIcon && (
@@ -70,3 +71,17 @@ export const Button: FC<ButtonProps> = memo(
     );
   },
 );
+
+interface Props extends ButtonProps {
+  loading?: boolean;
+}
+
+export const LoadingButton: FC<Props> = ({ loading, ...props }) => {
+  return (
+    <Button
+      leftIcon={loading ? <LoadingIcon size={18} /> : undefined}
+      disabled={loading}
+      {...props}
+    />
+  );
+};

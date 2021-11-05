@@ -1,5 +1,5 @@
 import { ZERO } from '@/lib';
-import { BoxInfo } from '@/types';
+import { BoxOnChain } from '@/types';
 import { BigNumber } from 'ethers';
 import React, { FC, memo, useCallback, useContext, useEffect, useState } from 'react';
 import { useMaskboxContract } from '..';
@@ -9,7 +9,7 @@ export * from './useAddress';
 export * from './useContract';
 
 interface ContextOptions {
-  getBoxInfo: (boxId: string) => Promise<BoxInfo>;
+  getBoxInfo: (boxId: string) => Promise<BoxOnChain>;
   getNftListForSale: (box: string, cursor?: BigNumber, amount?: BigNumber) => Promise<string[]>;
   openBox: (
     boxId: string,
@@ -22,7 +22,7 @@ interface ContextOptions {
 }
 
 export const MBoxContractContext = React.createContext<ContextOptions>({
-  getBoxInfo: () => Promise.resolve({} as BoxInfo),
+  getBoxInfo: () => Promise.resolve({} as BoxOnChain),
   getNftListForSale: () => Promise.resolve([]),
   openBox: () => Promise.resolve(null),
   getPurchasedNft: () => Promise.resolve([]),

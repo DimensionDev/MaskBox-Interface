@@ -1,4 +1,4 @@
-import { ArticleSection, Button, NFTItem } from '@/components';
+import { ArticleSection, Button, NFTItem, useDialog } from '@/components';
 import { useMBoxContract, useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
 import { ChainId, createShareUrl, ZERO } from '@/lib';
 import {
@@ -11,15 +11,16 @@ import {
 } from '@/page-components';
 import { ERC721Token, ExtendedBoxInfo } from '@/types';
 import { BigNumber } from 'ethers';
+import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styles from './index.module.less';
+import { useBox } from './useBox';
 
 const PAGE_SIZE = BigNumber.from(50);
 export const Details: FC = memo(() => {
   const { ethersProvider, isNotSupportedChain } = useWeb3Context();
-  const history = useHistory();
-  const { location } = history;
+  const location = useLocation();
   const { getNftListForSale } = useMBoxContract();
   const { getByIdList } = useNFTContract();
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>([]);
@@ -34,9 +35,11 @@ export const Details: FC = memo(() => {
     };
   }, [location.search]);
 
-  const [shareBoxVisible, setShareBoxVisible] = useState(false);
+  const { boxOnSubgraph, boxOnRSS3, boxOnChain, refetch } = useBox(boxId ?? '');
+
+  const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
   const [purchasedNfts, setPurchasedNfts] = useState<string[]>([]);
-  const [buyBoxOpen, setBuyBoxVisible] = useState(false);
+  const [buyBoxVisible, openBuyBox, closeBuyBox] = useDialog();
 
   const [box, setBox] = useState<Partial<ExtendedBoxInfo>>({});
   const contractName = useNFTName(box.nft_address);
@@ -50,14 +53,21 @@ export const Details: FC = memo(() => {
     setAllLoaded(PAGE_SIZE.gt(idList.length));
     cursorRef.current = cursorRef.current.add(idList.length);
     const tokens = await getByIdList(box.nft_address, idList);
-    setErc721Tokens((oldList) => [...oldList, ...tokens]);
+    setErc721Tokens((oldList) => uniqBy<ERC721Token>([...oldList, ...tokens], 'tokenId'));
   }, [box?.nft_address, boxId]);
 
-  const handlePurchased: BuyBoxProps['onPurchased'] = useCallback(({ nftIds }) => {
-    setBuyBoxVisible(false);
-    setShareBoxVisible(true);
-    setPurchasedNfts(nftIds);
-  }, []);
+  const handlePurchased: BuyBoxProps['onPurchased'] = useCallback(
+    ({ nftIds }) => {
+      closeBuyBox();
+      openShareBox();
+      setPurchasedNfts(nftIds);
+      refetch();
+      setErc721Tokens([]);
+      cursorRef.current = ZERO;
+      loadNfts();
+    },
+    [refetch, loadNfts],
+  );
 
   useEffect(() => {
     loadNfts();
@@ -93,10 +103,11 @@ export const Details: FC = memo(() => {
         <h1 className={styles.title}>Mystery box</h1>
         <MysteryBox
           className={styles.mysteryBox}
-          chainId={chainId}
-          boxId={boxId}
+          boxOnSubgraph={boxOnSubgraph}
+          boxOnChain={boxOnChain}
+          boxOnRSS3={boxOnRSS3}
           onLoad={setBox}
-          onPurchase={() => setBuyBoxVisible(true)}
+          onPurchase={openBuyBox}
         />
         {erc721Tokens.length > 0 && (
           <ArticleSection title="Details">
@@ -132,7 +143,7 @@ export const Details: FC = memo(() => {
         nftIds={purchasedNfts}
         nftAddress={box.nft_address!}
         open={shareBoxVisible}
-        onClose={() => setShareBoxVisible(false)}
+        onClose={closeShareBox}
         onShare={() => {
           const text = `I just draw an NFT on Maskbox platform, subscribe @realMaskNetwork for more updates - ${window.location.href}`;
           const shareLink = createShareUrl(text);
@@ -141,12 +152,12 @@ export const Details: FC = memo(() => {
       />
       {payment && (
         <BuyBox
-          open={buyBoxOpen}
+          open={buyBoxVisible}
           boxId={boxId}
           box={box}
           payment={payment}
           onPurchased={handlePurchased}
-          onClose={() => setBuyBoxVisible(false)}
+          onClose={closeBuyBox}
         />
       )}
     </>

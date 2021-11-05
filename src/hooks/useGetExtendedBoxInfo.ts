@@ -1,11 +1,11 @@
 import { useMBoxContract, useRSS3, useWeb3Context } from '@/contexts';
 import { useMaskBoxQuery } from '@/graphql-hooks';
-import { BoxInfo, BoxMetas } from '@/types';
+import { BoxOnChain, BoxMetas } from '@/types';
 import { useEffect, useMemo, useState } from 'react';
 import { useMaskBoxCreationSuccessEvent } from './useMaskboxCreationEvent';
 
 export function useGetExtendedBoxInfo(chainId: number | null, boxId: string | null) {
-  const [boxInfo, setBoxInfo] = useState<BoxInfo | null>(null);
+  const [boxInfo, setBoxInfo] = useState<BoxOnChain | null>(null);
   const [boxMetas, setBoxMetas] = useState<Partial<BoxMetas>>({});
   const { providerChainId } = useWeb3Context();
   const { getBoxMetas } = useRSS3();
@@ -44,7 +44,7 @@ export function useGetExtendedBoxInfo(chainId: number | null, boxId: string | nu
     }
   }, [boxInfo?.creator, boxId]);
 
-  return useMemo(
+  const box = useMemo(
     () => ({
       ...boxInfo,
       ...boxMetas,
@@ -53,4 +53,6 @@ export function useGetExtendedBoxInfo(chainId: number | null, boxId: string | nu
     }),
     [boxInfo, boxMetas, result.value, boxData?.maskbox],
   );
+
+  return box;
 }

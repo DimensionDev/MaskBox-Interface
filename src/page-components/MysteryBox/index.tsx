@@ -1,9 +1,10 @@
 import { Button, ButtonProps, Icon, LoadingIcon, SNSShare } from '@/components';
 import { MediaType } from '@/contexts';
-import { useGetExtendedBoxInfo } from '@/hooks';
+import { BoxRSS3Node } from '@/contexts/RSS3Provider';
+import { MaskBoxQuery } from '@/graphql-hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType, ZERO } from '@/lib';
-import { ExtendedBoxInfo } from '@/types';
+import { BoxOnChain, ExtendedBoxInfo } from '@/types';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
@@ -11,24 +12,35 @@ import { Link, useHistory } from 'react-router-dom';
 import { CountdownButton } from './CountdownButton';
 import styles from './index.module.less';
 
-interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> {
-  chainId: number;
-  boxId: string;
+export interface MaskboxProps extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> {
+  boxOnSubgraph: MaskBoxQuery['maskbox'];
+  boxOnChain: BoxOnChain | null;
+  boxOnRSS3: Partial<Pick<BoxRSS3Node, 'mediaType' | 'mediaUrl' | 'activities'>> | null;
   inList?: boolean;
   onLoad?: (box: Partial<ExtendedBoxInfo>) => void;
   onPurchase?: () => void;
 }
 
-export const MysteryBox: FC<Props> = ({
-  chainId,
-  boxId,
+export const MysteryBox: FC<MaskboxProps> = ({
+  boxOnSubgraph,
+  boxOnRSS3,
+  boxOnChain,
   className,
   inList,
   onLoad,
   onPurchase,
   ...rest
 }) => {
-  const box = useGetExtendedBoxInfo(chainId, boxId);
+  const box = useMemo(
+    () => ({
+      ...boxOnChain,
+      ...boxOnRSS3,
+      ...boxOnSubgraph,
+    }),
+    [boxOnChain, boxOnRSS3, boxOnSubgraph],
+  );
+  const chainId = box.chain_id;
+  const boxId = box.box_id;
   const getERC20Token = useGetERC20TokenInfo();
   const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
   const payment = box.payment?.[0];
@@ -48,7 +60,7 @@ export const MysteryBox: FC<Props> = ({
     }
   }, [payment]);
 
-  const startTime = box.start_time ? box.start_time * 1000 : undefined;
+  const startTime = box?.start_time ? box.start_time * 1000 : undefined;
   const notStarted = box.started === false || (startTime && startTime > Date.now());
 
   const price = useMemo(() => {
@@ -79,7 +91,7 @@ export const MysteryBox: FC<Props> = ({
     disabled: !inList && (!price || notStarted || box.expired || isSoldout),
     onClick: () => {
       if (inList) {
-        history.push(`/details?chain=${chainId}&box=${boxId}`);
+        history.push(`/details?chain=${box.chain_id}&box=${box.box_id}`);
       } else if (box.started && !box.expired && onPurchase) {
         onPurchase();
       }
@@ -99,28 +111,26 @@ export const MysteryBox: FC<Props> = ({
 
   const BoxCover = (
     <div className={styles.media}>
-      {box.mediaUrl ? (
-        (() => {
-          switch (box.mediaType as MediaType) {
-            case MediaType.Video:
-              return <video src={box.mediaUrl} width="480" height="360" controls={!inList} />;
-            case MediaType.Audio:
-              return <audio src={box.mediaUrl} controls />;
-            default:
-              return (
-                <img
-                  src={box.mediaUrl}
-                  loading="lazy"
-                  width="480"
-                  height="360"
-                  alt={box.name ?? '-'}
-                />
-              );
-          }
-        })()
-      ) : (
-        <Icon type="mask" size={48} />
-      )}
+      {(() => {
+        if (!box?.mediaUrl) return <Icon type="mask" size={48} />;
+
+        switch (box.mediaType as MediaType) {
+          case MediaType.Video:
+            return <video src={box.mediaUrl} width="480" height="360" controls={!inList} />;
+          case MediaType.Audio:
+            return <audio src={box.mediaUrl} controls />;
+          default:
+            return (
+              <img
+                src={box.mediaUrl}
+                loading="lazy"
+                width="480"
+                height="360"
+                alt={box.name ?? '-'}
+              />
+            );
+        }
+      })()}
     </div>
   );
 

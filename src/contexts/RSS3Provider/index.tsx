@@ -3,7 +3,7 @@ import RSS3 from 'rss3-next';
 import { MediaType } from '../UploadProvider';
 import { useWeb3Context } from '../Web3Context';
 
-interface BoxRSS3Node {
+export interface BoxRSS3Node {
   id: string;
   name: string;
   mediaUrl: string;

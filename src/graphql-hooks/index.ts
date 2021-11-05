@@ -14,7 +14,7 @@ export type Scalars = {
   Float: number;
   BigDecimal: any;
   BigInt: any;
-  Bytes: any;
+  Bytes: string;
 };
 
 export type Block_Height = {
@@ -354,13 +354,14 @@ export type MaskBoxQuery = {
     | {
         __typename?: 'Maskbox';
         box_id: string;
+        chain_id: number;
         name: string;
-        creator: any;
-        nft_address: any;
+        creator: string;
+        nft_address: string;
         start_time: number;
         end_time: number;
         sell_all: boolean;
-        nft_contract: { __typename?: 'NFTContract'; address: any; name: string };
+        nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
       }
     | null
     | undefined;
@@ -376,13 +377,14 @@ export type MaskBoxesQuery = {
   maskboxes: Array<{
     __typename?: 'Maskbox';
     box_id: string;
+    chain_id: number;
     name: string;
-    creator: any;
-    nft_address: any;
+    creator: string;
+    nft_address: string;
     start_time: number;
     end_time: number;
     sell_all: boolean;
-    nft_contract: { __typename?: 'NFTContract'; address: any; name: string };
+    nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
   }>;
 };
 
@@ -390,6 +392,7 @@ export const MaskBoxDocument = gql`
   query MaskBox($id: ID!) {
     maskbox(id: $id) {
       box_id
+      chain_id
       name
       creator
       nft_address
@@ -439,6 +442,7 @@ export const MaskBoxesDocument = gql`
   query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
     maskboxes(orderBy: create_time, orderDirection: desc, first: $first, skip: $skip) {
       box_id
+      chain_id
       name
       creator
       nft_address

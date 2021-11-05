@@ -6,10 +6,10 @@ export interface BoxPayment {
   receivable_amount: string;
 }
 
-export interface BoxInfo {
-  name: string;
+export interface BoxOnChain {
   creator: string;
   nft_address: string;
+  name: string;
   payment: BoxPayment[];
   personal_limit: number;
   started: boolean;
@@ -19,7 +19,7 @@ export interface BoxInfo {
   qualification: string;
 }
 
-export interface CreateResult extends Pick<BoxInfo, 'name' | 'nft_address' | 'creator'> {
+export interface CreateResult extends Pick<BoxOnChain, 'name' | 'nft_address' | 'creator'> {
   box_id: string;
   start_time: number;
   end_time: number;

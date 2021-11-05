@@ -2,6 +2,7 @@ export * from './AccountDialog';
 export * from './BuyBox';
 export * from './ERC721TokenPickerDialog';
 export * from './MysteryBox';
+export * from './MysteryBox/WrapMaskbox';
 export * from './NFTPickerDialog';
 export * from './PageFooter';
 export * from './PageHeader';

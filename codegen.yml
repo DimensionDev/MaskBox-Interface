@@ -11,6 +11,7 @@ generates:
     config:
       scalars:
         DateTime: string
+        Bytes: string
 
 hooks:
   afterOneFileWrite:

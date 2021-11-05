@@ -1,9 +1,9 @@
 import { Button, LoadingIcon } from '@/components';
 import { useWeb3Context } from '@/contexts';
 import { MaskBoxesQuery, useMaskBoxesLazyQuery } from '@/graphql-hooks';
-import { MysteryBox, RequestConnection, RequestSwitchChain } from '@/page-components';
+import { RequestConnection, RequestSwitchChain, WrapMaskbox } from '@/page-components';
 import { FC, useEffect, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.module.less';
 
 const PAGE_SIZE = 5;
@@ -13,7 +13,7 @@ export const BoxList: FC = () => {
   const { providerChainId, isNotSupportedChain } = useWeb3Context();
 
   const history = useHistory();
-  const { location } = history;
+  const location = useLocation();
 
   const page = useMemo(() => {
     const p = new URLSearchParams(location.search).get('page');
@@ -63,7 +63,7 @@ export const BoxList: FC = () => {
       <ul className={styles.list}>
         {maskboxes.map((maskbox) => (
           <li key={maskbox.box_id} className={styles.item}>
-            <MysteryBox chainId={providerChainId} boxId={maskbox.box_id} inList />
+            <WrapMaskbox boxOnSubgraph={maskbox} inList />
           </li>
         ))}
       </ul>

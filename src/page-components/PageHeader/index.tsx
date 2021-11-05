@@ -1,23 +1,25 @@
 import { logoImage } from '@/assets';
-import { Button, Icon, LanguageSwitcher, useDialog } from '@/components';
+import { Button, Icon, LanguageSwitcher, LoadingButton, useDialog } from '@/components';
 import { RouteKeys } from '@/configs';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
 import { getNetworkIcon, getNetworkName } from '@/lib';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
-import { Link, NavLink, useHistory } from 'react-router-dom';
+import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { AccountDialog } from '../AccountDialog';
 import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
-  const { account, providerChainId, openConnectionDialog, isMetaMask } = useWeb3Context();
+  const { account, providerChainId, openConnectionDialog, isMetaMask, isConnecting } =
+    useWeb3Context();
   const [accountDialogVisible, openAccountDialog, closeAccountDialog] = useDialog();
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === ThemeType.Dark;
   const history = useHistory();
+  const location = useLocation();
 
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
@@ -38,7 +40,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           </NavLink>
           <NavLink
             className={classnames(styles.navItem, {
-              [styles.activeNav]: history.location.pathname === RouteKeys.Details,
+              [styles.activeNav]: location.pathname === RouteKeys.Details,
             })}
             activeClassName={styles.activeNav}
             to={RouteKeys.BoxList}
@@ -87,9 +89,14 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
               </Button>
             </>
           ) : (
-            <Button className={styles.button} onClick={openConnectionDialog}>
+            <LoadingButton
+              className={styles.button}
+              onClick={openConnectionDialog}
+              disabled={isConnecting}
+              loading={isConnecting}
+            >
               Connect Wallet
-            </Button>
+            </LoadingButton>
           )}
           <Button className={styles.button} circle colorScheme="light" onClick={toggleTheme}>
             <Icon type={isDark ? 'sun' : 'moon'} size={20} />
