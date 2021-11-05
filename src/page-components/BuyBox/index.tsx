@@ -49,6 +49,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   const allowed = isNative || allowance.gte(costAmount);
   const canBuy =
     (isNative ? balance.gt(costAmount) : allowed) && purchasedNft.length + quantity <= limit;
+  const balaneEnough = isNative ? balance.gt(costAmount) : allowance.gt(costAmount);
 
   useEffect(() => {
     if (!payment.token_addr) return;
@@ -152,7 +153,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
           disabled={!canBuy || loading}
           onClick={handleDraw}
         >
-          {loading ? 'Drawing' : 'Draw'}
+          {loading ? 'Drawing' : balaneEnough ? 'Draw' : 'Insufficient balance'}
         </Button>
       </div>
     </PickerDialog>
