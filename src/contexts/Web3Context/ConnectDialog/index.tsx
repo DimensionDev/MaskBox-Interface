@@ -30,7 +30,16 @@ export const ConnectDialog: FC<Props> = ({
   ...rest
 }) => {
   const [currChainId, setCurrChainId] = useState<ChainId | undefined>(chainId);
-  const [currWalletId, setCurrWallet] = useState<string | undefined>(walletId);
+  const [currWalletId, setCurrWalletId] = useState<string | undefined>(walletId);
+
+  useEffect(() => {
+    setCurrChainId(chainId);
+  }, [chainId]);
+
+  useEffect(() => {
+    setCurrWalletId(walletId);
+  }, [walletId]);
+
   const handleConnect = useCallback(({ chainId, walletId, walletType }) => {
     if (chainId && walletId && onSelect) {
       onSelect({
@@ -77,7 +86,7 @@ export const ConnectDialog: FC<Props> = ({
                   key={w.id}
                   selected={w.id === currWalletId}
                   onClick={() => {
-                    setCurrWallet(w.id);
+                    setCurrWalletId(w.id);
                     if (currChainId) {
                       handleConnect({
                         chainId: currChainId,
