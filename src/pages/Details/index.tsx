@@ -1,4 +1,4 @@
-import { ArticleSection, Button, NFTItem, PickerDialog } from '@/components';
+import { ArticleSection, Button, NFTItem } from '@/components';
 import { useMBoxContract, useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
 import { createShareUrl, ZERO } from '@/lib';
 import { BuyBox, BuyBoxProps, MysteryBox, RequestConnection, ShareBox } from '@/page-components';
@@ -17,30 +17,19 @@ export const Details: FC = memo(() => {
   const { getByIdList } = useNFTContract();
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>([]);
 
-  const { chainId, boxId, isNew } = useMemo(() => {
+  const { chainId, boxId } = useMemo(() => {
     const params = new URLSearchParams(location.search);
     const chainId = params.get('chain');
     const boxId = params.get('box');
     return {
       chainId: chainId ? parseInt(chainId, 10) : null,
       boxId,
-      isNew: !!params.get('new'),
     };
   }, [location.search]);
 
   const [shareBoxVisible, setShareBoxVisible] = useState(false);
   const [purchasedNfts, setPurchasedNfts] = useState<string[]>([]);
-  const [shareNewBoxVisible, setShareNewBoxVisible] = useState(isNew);
   const [buyBoxOpen, setBuyBoxVisible] = useState(false);
-  const boxUrl = `${window.location.origin}/#/details?chain=${chainId}&box=${boxId}`;
-  const shareLink = createShareUrl(boxUrl);
-
-  const closeShareNewBox = useCallback(() => {
-    setShareNewBoxVisible(false);
-    const params = new URLSearchParams(location.search);
-    params.delete('new');
-    history.replace(`/details?${params.toString()}`);
-  }, [history, location.search]);
 
   const [box, setBox] = useState<Partial<ExtendedBoxInfo>>({});
   const contractName = useNFTName(box.nft_address);
@@ -125,20 +114,6 @@ export const Details: FC = memo(() => {
           </ArticleSection>
         ))}
       </main>
-      <PickerDialog title="Share" open={shareNewBoxVisible} onClose={closeShareNewBox}>
-        <div className={styles.urlBoxContent}>
-          <p>
-            Copy following url, and{' '}
-            <a href={shareLink} target="_blank" rel="noopener noreferrer">
-              share
-            </a>{' '}
-            on twitter
-          </p>
-          <div className={styles.url}>
-            <a> {boxUrl} </a>
-          </div>
-        </div>
-      </PickerDialog>
       <ShareBox
         nftIds={purchasedNfts}
         nftAddress={box.nft_address!}

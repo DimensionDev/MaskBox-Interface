@@ -1,5 +1,5 @@
 import { showToast, useDialog } from '@/components';
-import { ChainId, logError } from '@/lib';
+import { ChainId, isSupportedChain, logError } from '@/lib';
 import { getStorage, StorageKeys, useStorage } from '@/utils';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ethers } from 'ethers';
@@ -15,6 +15,7 @@ interface ContextOptions {
   disconnect: () => void;
   isMetaMask: boolean;
   isConnecting: boolean;
+  isNotSupportedChain: boolean;
 }
 
 export const Web3Context = React.createContext<Partial<ContextOptions>>({});
@@ -29,6 +30,7 @@ type Provider =
   | {
       chainId: string;
       isMetaMask?: boolean;
+      selectedAddress: null | string;
       send: (
         payload: Record<string, unknown>,
         callback: (err: Error | null, response: Record<string, unknown>) => void,
@@ -57,6 +59,7 @@ export const Web3Provider: FC = ({ children }) => {
   const setWeb3Provider = useCallback(
     async (prov: Provider) => {
       try {
+        if (!prov.selectedAddress) return;
         const provider = new ethers.providers.Web3Provider(prov);
         const chainId = Number(prov.chainId as string);
         if (!account) {
@@ -89,7 +92,7 @@ export const Web3Provider: FC = ({ children }) => {
     setWeb3State({});
     removeStoredChainId();
     removeStoredWalletId();
-  }, [setWeb3State]);
+  }, []);
 
   const connectWeb3 = useCallback(
     async (chainId: ChainId, walletType: string) => {
@@ -111,10 +114,7 @@ export const Web3Provider: FC = ({ children }) => {
         const updateWeb3Provider = () => setWeb3Provider(provider);
         provider.on('accountsChanged', updateWeb3Provider);
         provider.on('chainChanged', updateWeb3Provider);
-
-        if (provider.isWalletConnect) {
-          provider.on('disconnect', disconnect);
-        }
+        provider.on('disconnect', disconnect);
       } catch (error: any) {
         logError({ web3ModalError: error });
       } finally {
@@ -137,8 +137,9 @@ export const Web3Provider: FC = ({ children }) => {
     })();
   }, [connectWeb3]);
 
-  const value = useMemo(
-    () => ({
+  const value = useMemo(() => {
+    const isNotSupportedChain = providerChainId !== undefined && !isSupportedChain(providerChainId);
+    return {
       openConnectionDialog,
       disconnect,
       account,
@@ -146,9 +147,9 @@ export const Web3Provider: FC = ({ children }) => {
       providerChainId,
       isMetaMask: !!ethersProvider?.provider?.isMetaMask,
       isConnecting,
-    }),
-    [disconnect, account, ethersProvider, providerChainId, isConnecting],
-  );
+      isNotSupportedChain,
+    };
+  }, [disconnect, account, ethersProvider, providerChainId, isConnecting]);
 
   return (
     <Web3Context.Provider value={value}>

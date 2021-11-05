@@ -21,11 +21,12 @@ export const setStorage = (key: string, value: any) => {
 };
 
 export const getStorage = <T extends any = any>(key: string): T | null => {
+  const storeKey = getKey(key);
   let result;
-  if (cacheMap.has(key)) {
-    return cacheMap.get(key);
+  if (cacheMap.has(storeKey)) {
+    return cacheMap.get(storeKey);
   }
-  const raw = localStorage.getItem(getKey(key));
+  const raw = localStorage.getItem(storeKey);
   try {
     result = JSON.parse(raw ?? '');
   } catch {
@@ -33,13 +34,15 @@ export const getStorage = <T extends any = any>(key: string): T | null => {
   }
 
   if (result !== null) {
-    cacheMap.set(key, result);
+    cacheMap.set(storeKey, result);
   }
   return result;
 };
 
 export const removeStorage = (key: string) => {
-  localStorage.removeItem(getKey(key));
+  const storeKey = getKey(key);
+  localStorage.removeItem(storeKey);
+  cacheMap.delete(storeKey);
 };
 
 export function useStorage<T extends any = any>(
@@ -55,7 +58,10 @@ export function useStorage<T extends any = any>(
     [key],
   );
 
-  const remove = useCallback(() => removeStorage(key), [key]);
+  const remove = useCallback(() => {
+    removeStorage(key);
+    setValue(null);
+  }, [key]);
 
   return [value, update, remove];
 }

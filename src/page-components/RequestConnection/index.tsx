@@ -7,11 +7,11 @@ import styles from './index.module.less';
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const RequestConnection: FC<Props> = ({ className, ...rest }) => {
-  const { connectWeb3 } = useWeb3Context();
+  const { openConnectionDialog } = useWeb3Context();
   return (
     <div className={classnames(className, styles.container)} {...rest}>
       <p className={styles.text}>Please connect your wallet.</p>
-      <Button className={styles.button} onClick={connectWeb3}>
+      <Button className={styles.button} onClick={openConnectionDialog}>
         Connect Wallet
       </Button>
     </div>
