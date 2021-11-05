@@ -116,7 +116,7 @@ export const MysteryBox: FC<MaskboxProps> = ({
 
         switch (box.mediaType as MediaType) {
           case MediaType.Video:
-            return <video src={box.mediaUrl} width="480" height="360" controls={!inList} />;
+            return <video src={box.mediaUrl} width="480" height="320" controls={!inList} />;
           case MediaType.Audio:
             return <audio src={box.mediaUrl} controls />;
           default:
@@ -125,7 +125,7 @@ export const MysteryBox: FC<MaskboxProps> = ({
                 src={box.mediaUrl}
                 loading="lazy"
                 width="480"
-                height="360"
+                height="320"
                 alt={box.name ?? '-'}
               />
             );
@@ -135,10 +135,7 @@ export const MysteryBox: FC<MaskboxProps> = ({
   );
 
   return (
-    <div
-      className={classnames(styles.mysteryBox, className, { [styles.inList]: inList })}
-      {...rest}
-    >
+    <div className={classnames(styles.mysteryBox, className)} {...rest}>
       {inList ? <Link to={`/details?chain=${chainId}&box=${boxId}`}>{BoxCover}</Link> : BoxCover}
       <div className={styles.interaction}>
         <dl className={styles.infoList}>
