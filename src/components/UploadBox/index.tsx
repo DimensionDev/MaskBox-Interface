@@ -110,7 +110,9 @@ export const UploadBox: FC<Props> = ({ className, mediaUrl, mediaType, onUploade
               invalidMessage
             ) : (
               <div className={styles.texts}>
-                <p>JPG, PNG, SVG,GIF, BMP, WEBP, Max 2mb, MP4 or Mp3, Max 30mb.</p>
+                <p className={styles.filetypes}>
+                  JPG, PNG, SVG,GIF, BMP, WEBP, Max 2mb, MP4 or Mp3, Max 30mb.
+                </p>
                 <p>
                   Drag-and-drap file, or <span className={styles.highlight}>Browse computer</span>
                 </p>

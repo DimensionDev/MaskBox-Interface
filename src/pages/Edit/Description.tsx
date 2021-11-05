@@ -1,6 +1,7 @@
 import { Button, Field, Input, Textarea, UploadBox } from '@/components';
 import { MediaType, UploadResult } from '@/contexts';
 import { Activity } from '@/types';
+import classnames from 'classnames';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
 import { FC, useCallback } from 'react';
@@ -63,7 +64,12 @@ export const Description: FC = () => {
           onChange={bindField('name')}
         />
       </Field>
-      <Field className={styles.field} name="Mystery thumbnail" required>
+      <Field
+        className={classnames(styles.field, styles.mediaField)}
+        name="Mystery thumbnail"
+        tip="Recommendation: 480*320/960*640"
+        required
+      >
         <UploadBox
           mediaUrl={formData.mediaUrl}
           mediaType={formData.mediaType}

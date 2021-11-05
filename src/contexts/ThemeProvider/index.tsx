@@ -10,12 +10,14 @@ import {
   useEffect,
   useMemo,
 } from 'react';
-import styles from '../../theme.module.less';
+import '../../theme.module.less';
 
 export enum ThemeType {
   Light = 'light',
   Dark = 'dark',
 }
+
+const darkModeClass = 'darkMode';
 
 const THEME_STORAGE_KEY = StorageKeys.Theme;
 
@@ -36,7 +38,7 @@ export const ThemeContext = createContext<ThemeContextOptions>({
   toggleTheme: noop,
 });
 if (initialDark) {
-  document.body.classList.toggle(styles.darkMode, initialDark);
+  document.body.classList.toggle(darkModeClass, initialDark);
 }
 
 export const ThemeProvider: FC = ({ children }) => {
@@ -58,7 +60,7 @@ export const ThemeProvider: FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    document.body.classList.toggle(styles.darkMode, theme === ThemeType.Dark);
+    document.body.classList.toggle(darkModeClass, theme === ThemeType.Dark);
   }, [theme]);
 
   const toggleTheme = () => {
