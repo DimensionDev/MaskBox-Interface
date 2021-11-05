@@ -1,7 +1,14 @@
 import { ArticleSection, Button, NFTItem } from '@/components';
 import { useMBoxContract, useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
-import { createShareUrl, ZERO } from '@/lib';
-import { BuyBox, BuyBoxProps, MysteryBox, RequestConnection, ShareBox } from '@/page-components';
+import { ChainId, createShareUrl, ZERO } from '@/lib';
+import {
+  BuyBox,
+  BuyBoxProps,
+  MysteryBox,
+  RequestConnection,
+  RequestSwitchChain,
+  ShareBox,
+} from '@/page-components';
 import { ERC721Token, ExtendedBoxInfo } from '@/types';
 import { BigNumber } from 'ethers';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -10,7 +17,7 @@ import styles from './index.module.less';
 
 const PAGE_SIZE = BigNumber.from(50);
 export const Details: FC = memo(() => {
-  const { ethersProvider } = useWeb3Context();
+  const { ethersProvider, isNotSupportedChain } = useWeb3Context();
   const history = useHistory();
   const { location } = history;
   const { getNftListForSale } = useMBoxContract();
@@ -60,6 +67,13 @@ export const Details: FC = memo(() => {
     return (
       <main className={styles.main}>
         <RequestConnection />
+      </main>
+    );
+  }
+  if (isNotSupportedChain) {
+    return (
+      <main className={styles.main}>
+        <RequestSwitchChain chainId={chainId as ChainId} />
       </main>
     );
   }

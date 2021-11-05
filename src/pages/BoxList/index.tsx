@@ -1,7 +1,7 @@
 import { Button, LoadingIcon } from '@/components';
 import { useWeb3Context } from '@/contexts';
 import { MaskBoxesQuery, useMaskBoxesLazyQuery } from '@/graphql-hooks';
-import { MysteryBox, RequestConnection } from '@/page-components';
+import { MysteryBox, RequestConnection, RequestSwitchChain } from '@/page-components';
 import { FC, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
@@ -10,7 +10,7 @@ const PAGE_SIZE = 5;
 const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
   const [fetchBoxes, { data: boxesData, loading }] = useMaskBoxesLazyQuery({});
-  const { providerChainId } = useWeb3Context();
+  const { providerChainId, isNotSupportedChain } = useWeb3Context();
 
   const history = useHistory();
   const { location } = history;
@@ -56,6 +56,7 @@ export const BoxList: FC = () => {
   const maskboxes = boxesData?.maskboxes ?? EMPTY_LIST;
 
   if (!providerChainId) return <RequestConnection />;
+  if (isNotSupportedChain) return <RequestSwitchChain />;
 
   return (
     <>
