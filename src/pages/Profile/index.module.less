@@ -1,3 +1,4 @@
+@import '../../variables.less';
 .header {
   background-image: url(../../assets/images/profile-bg.jpg);
   background-size: cover;
@@ -32,7 +33,31 @@
   align-items: center;
 }
 .nftList {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+@media (max-width: @mid-screen) {
+  .main {
+    .nftList {
+      gap: 15px;
+    }
+  }
+  .header {
+    display: none;
+  }
+}
+@media (max-width: @sm-screen) {
+  .main {
+    width: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
+@media (min-width: @sm-screen) and (max-width: @mid-screen) {
+  .main {
+    width: auto;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
 }

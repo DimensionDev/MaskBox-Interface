@@ -1,3 +1,4 @@
+@import '../../variables.less';
 .pageHeader {
   height: 74px;
   box-sizing: border-box;
@@ -21,6 +22,23 @@
     margin-top: 20px;
     margin-bottom: 20px;
     color: var(--text-primary, #1e202c);
+  }
+}
+@media (max-width: @sm-screen) {
+  .pageHeader {
+    border-bottom: none;
+    height: 48px;
+    .inner {
+      padding: 0 20px;
+    }
+  }
+}
+@media (min-width: @sm-screen) and (max-width: @mid-screen) {
+  .pageHeader {
+    height: 56px;
+    .inner {
+      padding: 0 20px;
+    }
   }
 }
 .nav {
@@ -49,6 +67,12 @@
 .brand {
   display: flex;
   align-items: center;
+  width: 171px;
+  height: 51px;
+  @media (max-width: @sm-screen) {
+    width: 109px;
+    height: 32px;
+  }
   select {
     height: 20px;
     width: 100px;
@@ -67,5 +91,25 @@
     .icon {
       margin-right: 10px;
     }
+  }
+}
+@media (max-width: @mid-screen) {
+  .pageHeader {
+    .inner {
+      width: auto;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .nav {
+    display: none;
+  }
+  .operations {
+    .button:not(.themeToggleButton) {
+      display: none;
+    }
+  }
+  .langSwitch {
+    display: none;
   }
 }

@@ -1,3 +1,4 @@
+@import '../../variables.less';
 .list {
   width: 1120px;
   margin-left: auto;
@@ -28,4 +29,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+@media (max-width: @mid-screen) {
+  .loadingBox {
+    width: 100%;
+  }
+}
+@media (max-width: @sm-screen) {
+  .list {
+    width: auto;
+    margin-bottom: 40px;
+    .item {
+      margin: 40px 20px 24px;
+    }
+  }
+  .paginaton {
+    margin-bottom: 40px;
+  }
+}
+@media (min-width: @sm-screen) and (max-width: @mid-screen) {
+  .list {
+    width: auto;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
 }

@@ -1,3 +1,4 @@
+@import '../../variables.less';
 .article {
   width: 1120px;
   margin: 120px auto;
@@ -11,4 +12,39 @@
 .faqList {
   margin-left: 110px;
   width: 954px;
+}
+@media (max-width: @mid-screen) {
+  .article {
+    width: auto;
+    margin-top: 40px;
+    .title {
+      margin-bottom: 60px;
+    }
+  }
+  .faqList {
+    width: auto;
+  }
+}
+@media (max-width: @sm-screen) {
+  .article {
+    width: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+    .title {
+      font-size: 22px;
+    }
+  }
+  .faqList {
+    margin-left: 64px;
+  }
+}
+@media (min-width: @sm-screen) and (max-width: @mid-screen) {
+  .article {
+    width: auto;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+  .faqList {
+    margin-left: 90px;
+  }
 }

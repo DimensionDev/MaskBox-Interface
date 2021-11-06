@@ -1,3 +1,4 @@
+@import '../../variables.less';
 .section {
   margin-top: 40px;
   margin-bottom: 40px;
@@ -30,5 +31,24 @@
     position: absolute;
     left: -40px;
     top: 17px;
+  }
+}
+@media (max-width: @mid-screen) {
+  .section {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    .content {
+      font-size: 16px;
+    }
+  }
+}
+@media (max-width: @sm-screen) {
+  .section {
+    .title {
+      font-size: 18px;
+    }
+    .content {
+      font-size: 16px;
+    }
   }
 }

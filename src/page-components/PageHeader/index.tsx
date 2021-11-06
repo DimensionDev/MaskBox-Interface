@@ -26,7 +26,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
       <div className={styles.inner}>
         <div className={styles.brand}>
           <Link to="/" className={styles.logo} title="NFTBOX">
-            <img src={logoImage} width="171" height="51" alt="NFTBOX" />
+            <img src={logoImage} width="100%" height="100%" alt="MASKBOX" />
           </Link>
         </div>
         <nav className={styles.nav}>
@@ -98,7 +98,12 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
               Connect Wallet
             </LoadingButton>
           )}
-          <Button className={styles.button} circle colorScheme="light" onClick={toggleTheme}>
+          <Button
+            className={classnames(styles.button, styles.themeToggleButton)}
+            circle
+            colorScheme="light"
+            onClick={toggleTheme}
+          >
             <Icon type={isDark ? 'sun' : 'moon'} size={20} />
           </Button>
         </div>

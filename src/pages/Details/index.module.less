@@ -1,3 +1,4 @@
+@import '../../variables.less';
 .main {
   font-family: Helvetica Neue;
   width: 1120px;
@@ -42,5 +43,25 @@
     display: block;
     width: 300px;
     margin: 16px auto;
+  }
+}
+
+@media (max-width: @sm-screen) {
+  .main {
+    width: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .detailsContent {
+    .nftList {
+      gap: 15px;
+    }
+  }
+}
+@media (min-width: @sm-screen) and (max-width: @mid-screen) {
+  .main {
+    width: auto;
+    margin-left: 40px;
+    margin-right: 40px;
   }
 }
