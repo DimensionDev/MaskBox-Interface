@@ -44,8 +44,24 @@
     width: 200px;
   }
 }
-@media (max-width: @sm-screen) {
+@media (max-width: @mid-screen) {
   .nft {
     width: 160px;
+  }
+}
+@media (max-width: @sm-screen) {
+  .info {
+    font-size: 12px;
+    .meta {
+      font-size: 10px;
+    }
+  }
+}
+@media (min-width: @sm-screen) and (max-width: @mid-screen) {
+  .info {
+    font-size: 13px;
+    .meta {
+      font-size: 11px;
+    }
   }
 }
