@@ -15,6 +15,7 @@ import {
 } from './contexts';
 
 import './base.less';
+import './variables.less';
 import './theme.module.less';
 import styles from './app.module.less';
 

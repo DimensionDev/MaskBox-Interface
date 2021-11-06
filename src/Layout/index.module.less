@@ -1,3 +1,4 @@
+@import '../variables.less';
 :global {
   html,
   body,
@@ -25,8 +26,25 @@
   .body {
     flex-grow: 1;
     margin-top: 74px;
+    @media (max-width: @sm-screen) {
+      margin-top: 48px;
+    }
   }
   .footer {
     border-top: solid 1px var(--bottom-border);
+  }
+}
+@media (max-width: @sm-screen) {
+  .container {
+    .body {
+      margin-top: 48px;
+    }
+  }
+}
+@media (min-width: @sm-screen) and (max-width: @mid-screen) {
+  .container {
+    .body {
+      margin-top: 56px;
+    }
   }
 }

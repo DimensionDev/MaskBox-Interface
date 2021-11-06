@@ -1,3 +1,4 @@
+@import '../../variables.less';
 .button {
   cursor: pointer;
   position: relative;
@@ -66,6 +67,52 @@
   }
   &.large {
     width: 48px;
+  }
+}
+@media (max-width: @mid-screen) {
+  .button {
+    height: 32px;
+    padding: 8px 16px;
+    &.small {
+      height: 32px;
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+    &.middle {
+      height: 32px;
+      padding: 10px 18px;
+      font-size: 14px;
+    }
+    &.large {
+      height: 40px;
+      padding: 12px 22px;
+      font-size: 16px;
+    }
+  }
+  .round {
+    border-radius: 32px;
+    &.small {
+      border-radius: 24px;
+    }
+    &.middle {
+      border-radius: 32px;
+    }
+    &.large {
+      border-radius: 40px;
+    }
+  }
+  .circle {
+    border-radius: 32px;
+    width: 32px;
+    &.small {
+      width: 24px;
+    }
+    &.middle {
+      width: 32px;
+    }
+    &.large {
+      width: 40px;
+    }
   }
 }
 .iconHolder {
