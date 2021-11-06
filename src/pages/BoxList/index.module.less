@@ -30,6 +30,11 @@
   align-items: center;
   justify-content: center;
 }
+@media (max-width: @mid-screen) {
+  .loadingBox {
+    width: 100%;
+  }
+}
 @media (max-width: @sm-screen) {
   .list {
     width: auto;
@@ -40,5 +45,12 @@
   }
   .paginaton {
     margin-bottom: 40px;
+  }
+}
+@media (min-width: @sm-screen) and (max-width: @mid-screen) {
+  .list {
+    width: auto;
+    margin-left: 40px;
+    margin-right: 40px;
   }
 }
