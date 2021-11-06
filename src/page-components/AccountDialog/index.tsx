@@ -25,6 +25,7 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
           Connected with {isMetaMask ? 'MetaMask' : 'Unknown'}
           <Button
             size="small"
+            className={styles.disconnectButton}
             onClick={() => {
               disconnect?.();
               onClose?.();
@@ -40,13 +41,24 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
         </div>
         {account ? (
           <div className={styles.row}>
-            <a href={explorerUrl} className={styles.cell} target="_blank" rel="noopener noreferrer">
-              <Icon className={styles.icon} type="link" size={18} />
-              View in your browser
-            </a>
-            <div role="button" className={styles.cell} onClick={() => copyToClipboard(account)}>
-              <Icon className={styles.icon} type="copy" size={18} />
-              Copy Address
+            <div className={styles.cell}>
+              <a
+                href={explorerUrl}
+                className={styles.cell}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon className={styles.icon} type="link" size={18} />
+                View in your browser
+              </a>
+              <div
+                role="button"
+                className={styles.copyButton}
+                onClick={() => copyToClipboard(account)}
+              >
+                <Icon className={styles.icon} type="copy" size={18} />
+                Copy Address
+              </div>
             </div>
           </div>
         ) : null}

@@ -23,7 +23,7 @@ const getMaxSize = (mediaType: MediaType) => {
   }
 };
 
-const FILE_EXT_RE = /\.(jpe?g|png|svg|gif|bmp|webp|mp3|mp4)/;
+const FILE_EXT_RE = /\.(jpe?g|png|svg|gif|bmp|webp|mp4)/;
 export const UploadBox: FC<Props> = ({ className, mediaUrl, mediaType, onUploaded, ...rest }) => {
   const { upload, uploading } = useUpload();
   const [invalidMessage, setInvalidMessage] = useState('');
@@ -38,7 +38,7 @@ export const UploadBox: FC<Props> = ({ className, mediaUrl, mediaType, onUploade
           throw new Error(`File size up to ${maxSize / (1024 * 1024)}MB`);
         } else if (!f.name.toLowerCase().match(FILE_EXT_RE)) {
           throw new Error(
-            'You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp3, mp4',
+            'You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4',
           );
         }
       });
@@ -77,7 +77,7 @@ export const UploadBox: FC<Props> = ({ className, mediaUrl, mediaType, onUploade
           handleUpload(firstFile);
         } else {
           setInvalidMessage(
-            'You should upload an image, only jpg, png, svg, gif, bmp, webp, mp3, mp4 are supposed',
+            'You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed',
           );
         }
       }}
@@ -111,7 +111,7 @@ export const UploadBox: FC<Props> = ({ className, mediaUrl, mediaType, onUploade
             ) : (
               <div className={styles.texts}>
                 <p className={styles.filetypes}>
-                  JPG, PNG, SVG,GIF, BMP, WEBP, Max 2mb, MP4 or Mp3, Max 30mb.
+                  JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.
                 </p>
                 <p>
                   Drag-and-drap file, or <span className={styles.highlight}>Browse computer</span>

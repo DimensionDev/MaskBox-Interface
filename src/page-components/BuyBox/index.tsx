@@ -91,7 +91,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             <span className={styles.unit}>{paymentToken?.symbol}</span>
           </div>
           {isNative && cost && (
-            <div className={styles.estimate}>≈${parseFloat(cost) * tokenPrice}</div>
+            <div className={styles.estimate}>≈ $ {parseFloat(cost) * tokenPrice}</div>
           )}
         </dt>
         <dd className={styles.meta}>
