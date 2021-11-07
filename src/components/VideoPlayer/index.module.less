@@ -1,0 +1,22 @@
+.player {
+  position: relative;
+  .playPause {
+    height: 32px;
+    width: 32px;
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    background: rgba(30, 32, 44, 0.7);
+    border-radius: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    will-change: opacity;
+    transition: 0.3s opacity ease-in-out;
+  }
+  &:hover .playPause {
+    opacity: 1;
+  }
+}

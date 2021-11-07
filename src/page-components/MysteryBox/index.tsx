@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Icon, LoadingIcon, SNSShare } from '@/components';
+import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
 import { MediaType } from '@/contexts';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
@@ -116,7 +116,7 @@ export const MysteryBox: FC<MaskboxProps> = ({
 
         switch (box.mediaType as MediaType) {
           case MediaType.Video:
-            return <video src={box.mediaUrl} width="480" height="320" controls={!inList} />;
+            return <VideoPlayer src={box.mediaUrl} width="480" height="320" controls={!inList} />;
           case MediaType.Audio:
             return <audio src={box.mediaUrl} controls />;
           default:

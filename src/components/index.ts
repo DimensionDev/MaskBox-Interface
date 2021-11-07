@@ -1,4 +1,5 @@
 export * from './ArticleSection';
+export * from './VideoPlayer';
 export * from './Button';
 export * from './Countdown';
 export * from './Dialog';

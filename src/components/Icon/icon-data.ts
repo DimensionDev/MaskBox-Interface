@@ -27,6 +27,8 @@ export type IconType =
   | 'metamaskWallet'
   | 'metamask'
   | 'moon'
+  | 'pause'
+  | 'play'
   | 'polygonChain'
   | 'polygon'
   | 'riskRed'
@@ -68,6 +70,8 @@ export const iconNameMap = {
   metamaskWallet: 'metamask-wallet.svg',
   metamask: 'metamask.svg',
   moon: 'moon.svg',
+  pause: 'pause.svg',
+  play: 'play.svg',
   polygonChain: 'polygon-chain.svg',
   polygon: 'polygon.svg',
   riskRed: 'risk-red.svg',
@@ -125,6 +129,8 @@ export const metamaskWalletIcon = new URL('./icons/metamask-wallet.svg', import.
 export const metamaskIcon = new URL('./icons/metamask.svg', import.meta.url).href;
 export const moonIcon =
   '<svg width="100%" height="100%" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M17.5 10.0029C17.0348 10.2355 16.4926 10.4489 15.9069 10.6096C14.132 11.0967 11.9572 11.1002 10.3125 9.69043C8.61663 8.23682 8.79895 6.03194 9.40338 4.09503C9.57861 3.53353 9.7893 2.99456 10 2.50293C9.39005 2.50293 8.7971 2.57574 8.22938 2.71315C4.94175 3.50886 2.5 6.47074 2.5 10.0029C2.5 14.1451 5.85786 17.5029 10 17.5029C13.5221 17.5029 16.4771 15.0751 17.2829 11.8017C17.4248 11.2255 17.5 10.623 17.5 10.0029ZM15.4722 12.311C14.5715 14.4437 12.4606 15.9404 10 15.9404C6.72081 15.9404 4.0625 13.2821 4.0625 10.0029C4.0625 7.55381 5.54534 5.45102 7.66219 4.54338C7.54329 5.05515 7.45711 5.58519 7.42474 6.11934C7.32703 7.73156 7.72053 9.52667 9.29564 10.8768C10.7577 12.13 12.5003 12.5107 14.0708 12.4632C14.5486 12.4487 15.0185 12.3948 15.4722 12.311Z" fill="currentColor"/>\n</svg>';
+export const pauseIcon = new URL('./icons/pause.svg', import.meta.url).href;
+export const playIcon = new URL('./icons/play.svg', import.meta.url).href;
 export const polygonChainIcon = new URL('./icons/polygon-chain.svg', import.meta.url).href;
 export const polygonIcon =
   '<svg width="100%" height="100%" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path d="M24.1309 14.0968C23.6866 13.8422 23.109 13.8422 22.6203 14.0968L19.1548 16.0484L16.8 17.3212L13.3344 19.2728C12.8901 19.5274 12.3125 19.5274 11.8238 19.2728L9.0691 17.7454C8.6248 17.4909 8.31378 17.0242 8.31378 16.5151V13.5028C8.31378 12.9937 8.58037 12.527 9.0691 12.2725L11.7793 10.7875C12.2236 10.533 12.8012 10.533 13.29 10.7875L16.0002 12.2725C16.4445 12.527 16.7555 12.9937 16.7555 13.5028V15.4544L19.1103 14.1392V12.1876C19.1103 11.6785 18.8437 11.2118 18.355 10.9572L13.3344 8.1571C12.8901 7.90255 12.3125 7.90255 11.8238 8.1571L6.7143 10.9572C6.22557 11.2118 5.95898 11.6785 5.95898 12.1876V17.8303C5.95898 18.3394 6.22557 18.8061 6.7143 19.0607L11.8238 21.8608C12.2681 22.1154 12.8457 22.1154 13.3344 21.8608L16.8 19.9516L19.1548 18.6364L22.6203 16.7272C23.0646 16.4727 23.6422 16.4727 24.1309 16.7272L26.8412 18.2121C27.2855 18.4667 27.5965 18.9334 27.5965 19.4425V22.4548C27.5965 22.9639 27.3299 23.4306 26.8412 23.6851L24.1309 25.2125C23.6866 25.467 23.109 25.467 22.6203 25.2125L19.9101 23.7276C19.4658 23.473 19.1548 23.0063 19.1548 22.4972V20.5456L16.8 21.8608V23.8124C16.8 24.3215 17.0665 24.7882 17.5553 25.0428L22.6647 27.8429C23.109 28.0975 23.6866 28.0975 24.1754 27.8429L29.2848 25.0428C29.7291 24.7882 30.0401 24.3215 30.0401 23.8124V18.1697C30.0401 17.6606 29.7736 17.1939 29.2848 16.9393L24.1309 14.0968Z" fill="currentColor"/>\n</svg>';
@@ -206,6 +212,8 @@ const icons = {
   metamaskWallet: metamaskWalletIcon,
   metamask: metamaskIcon,
   moon: moonIcon,
+  pause: pauseIcon,
+  play: playIcon,
   polygonChain: polygonChainIcon,
   polygon: polygonIcon,
   riskRed: riskRedIcon,
