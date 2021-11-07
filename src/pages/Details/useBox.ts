@@ -7,13 +7,13 @@ import { useCallback, useEffect, useState } from 'react';
 
 export function useBox(boxId: string) {
   const { getBoxInfo } = useMBoxContract();
-  const [boxInfo, setBoxInfo] = useState<BoxOnChain | null>(null);
-  const [boxMetas, setBoxMetas] = useState<Partial<BoxMetas>>({});
+  const [boxOnChain, setBoxOnChain] = useState<BoxOnChain | null>(null);
+  const [boxOnRSS3, setBoxOnRSS3] = useState<Partial<BoxMetas>>({});
   const { getBoxMetas } = useRSS3();
 
   const fetchBoxInfo = useCallback(() => {
     if (boxId) {
-      getBoxInfo(boxId).then(setBoxInfo);
+      getBoxInfo(boxId).then(setBoxOnChain);
     }
   }, [getBoxInfo, boxId]);
 
@@ -31,7 +31,7 @@ export function useBox(boxId: string) {
       getBoxMetas(getAddress(box.creator), box?.box_id ?? '')
         .then((data) => {
           if (data) {
-            setBoxMetas({
+            setBoxOnRSS3({
               mediaType: data.mediaType as MediaType,
               mediaUrl: data.mediaUrl,
               activities: data.activities,
@@ -48,8 +48,8 @@ export function useBox(boxId: string) {
 
   return {
     boxOnSubgraph: boxData?.maskbox,
-    boxOnRSS3: boxMetas,
-    boxOnChain: boxInfo,
+    boxOnRSS3,
+    boxOnChain,
     refetch: fetchBoxInfo,
   };
 }

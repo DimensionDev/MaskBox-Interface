@@ -64,14 +64,17 @@ export const ConnectDialog: FC<Props> = ({
           <p className={styles.stepTitle}>1.Choose Network</p>
           <div className={classnames(styles.stepContent, styles.list)}>
             {connectableChains.map((c) => (
-              <SelectableIcon
+              <div
                 className={styles.option}
                 key={c.name}
-                selected={c.chainId === currChainId}
+                role="button"
                 onClick={() => setCurrChainId(c.chainId)}
               >
-                <Icon type={c.iconType} size={48} />
-              </SelectableIcon>
+                <SelectableIcon key={c.name} selected={c.chainId === currChainId}>
+                  <Icon type={c.iconType} size={48} />
+                </SelectableIcon>
+                <p className={styles.name}>{c.name}</p>
+              </div>
             ))}
           </div>
         </div>
@@ -81,10 +84,10 @@ export const ConnectDialog: FC<Props> = ({
           <div className={classnames(styles.stepContent, styles.list)}>
             <div className={classnames(styles.stepContent, styles.list)}>
               {connectableWallets.map((w) => (
-                <SelectableIcon
+                <div
                   className={styles.option}
+                  role="button"
                   key={w.id}
-                  selected={w.id === currWalletId}
                   onClick={() => {
                     setCurrWalletId(w.id);
                     if (currChainId) {
@@ -96,8 +99,10 @@ export const ConnectDialog: FC<Props> = ({
                     }
                   }}
                 >
-                  <Icon type={w.iconType} size={48} />
-                </SelectableIcon>
+                  <SelectableIcon selected={w.id === currWalletId}>
+                    <Icon type={w.iconType} size={48} />
+                  </SelectableIcon>
+                </div>
               ))}
             </div>
           </div>

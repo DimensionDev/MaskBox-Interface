@@ -6,7 +6,7 @@ export const connectableChains = [
     iconType: 'ethereumChain',
   },
   {
-    name: 'ethereum-rinkeby',
+    name: 'rinkeby',
     chainId: ChainId.Rinkeby,
     iconType: 'ethereumChain',
   },
