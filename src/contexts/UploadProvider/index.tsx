@@ -89,6 +89,7 @@ export const UploadProvider: FC = ({ children }) => {
           result = await uploadFile(file);
         } catch (err) {
           console.log('Upload error', err);
+          throw err;
         } finally {
           setUploading(false);
         }

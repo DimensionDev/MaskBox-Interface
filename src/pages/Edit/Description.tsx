@@ -4,7 +4,7 @@ import { Activity } from '@/types';
 import classnames from 'classnames';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   descriptionFullfilledAtom,
@@ -49,6 +49,8 @@ export const Description: FC = () => {
     setFormData((fd) => ({ ...fd, mediaUrl, mediaType }));
   }, []);
 
+  const [uploadError, setUploadError] = useState<Error | null>(null);
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>
@@ -75,7 +77,9 @@ export const Description: FC = () => {
           mediaType={formData.mediaType}
           tabIndex={0}
           onUploaded={handleUploaded}
+          onError={setUploadError}
         />
+        {uploadError ? <div className={styles.error}>{uploadError.message}</div> : null}
         {formData.mediaUrl ? (
           <Button
             colorScheme="danger"

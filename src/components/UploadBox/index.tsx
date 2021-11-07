@@ -1,15 +1,15 @@
-import { useUpload, MediaType, getMediaType } from '@/contexts';
+import { getMediaType, MediaType, useUpload } from '@/contexts';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
 import { Icon, LoadingIcon } from '../Icon';
-import { showToast } from '../Toast';
 import styles from './index.module.less';
 
-interface Props extends HTMLProps<HTMLDivElement> {
+interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onError'> {
   mediaUrl?: string;
   mediaType?: MediaType;
   onDragUpload?: (file: File) => void;
   onUploaded?: (opts: { url: string; mediaType: MediaType }) => void;
+  onError?: (err: Error) => void;
 }
 
 const getMaxSize = (mediaType: MediaType) => {
@@ -24,7 +24,14 @@ const getMaxSize = (mediaType: MediaType) => {
 };
 
 const FILE_EXT_RE = /\.(jpe?g|png|svg|gif|bmp|webp|mp4)/;
-export const UploadBox: FC<Props> = ({ className, mediaUrl, mediaType, onUploaded, ...rest }) => {
+export const UploadBox: FC<Props> = ({
+  className,
+  mediaUrl,
+  mediaType,
+  onUploaded,
+  onError,
+  ...rest
+}) => {
   const { upload, uploading } = useUpload();
   const [invalidMessage, setInvalidMessage] = useState('');
   const [dragingIn, setDragingIn] = useState(false);
@@ -48,10 +55,7 @@ export const UploadBox: FC<Props> = ({ className, mediaUrl, mediaType, onUploade
     } catch (err: any) {
       const message = err.message as string;
       setInvalidMessage(message);
-      showToast({
-        variant: 'error',
-        title: message,
-      });
+      onError?.(err as Error);
     }
   };
   return (
@@ -106,18 +110,14 @@ export const UploadBox: FC<Props> = ({ className, mediaUrl, mediaType, onUploade
         <div className={styles.inner}>
           {uploading ? <LoadingIcon size={24} /> : <Icon size={24} type="upload" />}
           <div className={styles.description}>
-            {invalidMessage ? (
-              invalidMessage
-            ) : (
-              <div className={styles.texts}>
-                <p className={styles.filetypes}>
-                  JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.
-                </p>
-                <p>
-                  Drag-and-drap file, or <span className={styles.highlight}>Browse computer</span>
-                </p>
-              </div>
-            )}
+            <div className={styles.texts}>
+              <p className={styles.filetypes}>
+                JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.
+              </p>
+              <p>
+                Drag-and-drap file, or <span className={styles.highlight}>Browse computer</span>
+              </p>
+            </div>
           </div>
         </div>
       )}
