@@ -55,7 +55,9 @@ export const ThemeProvider: FC = ({ children }) => {
         }
       };
       mediaQuery.addEventListener('change', handler);
-      mediaQuery.removeEventListener('change', handler);
+      return () => {
+        mediaQuery.removeEventListener('change', handler);
+      };
     }
   }, []);
 
