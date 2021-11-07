@@ -1,6 +1,6 @@
 import { Icon, showToast } from '@/components';
 import { useMBoxContract, useWeb3Context } from '@/contexts';
-import { useMysteryBoxContract } from '@/hooks/useMysteryBoxContract';
+import { useMaskboxContract } from '@/hooks/useMaskboxContract';
 import { getNetworkExplorer, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment } from '@/types';
 import { useCallback, useState } from 'react';
@@ -15,7 +15,7 @@ export function useOpenBox(
 ) {
   const { ethersProvider, providerChainId: chainId, account } = useWeb3Context();
   const { openBox, getPurchasedNft } = useMBoxContract();
-  const contract = useMysteryBoxContract(true);
+  const contract = useMaskboxContract(true);
   const isNative = payment.token_addr === ZERO_ADDRESS;
   const [loading, setLoading] = useState(false);
 

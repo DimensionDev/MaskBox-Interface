@@ -10,7 +10,7 @@ export const Profile: FC = () => {
   const { providerChainId } = useWeb3Context();
   const { tokens, getMyTokens } = useNFTContract();
   const contractAddress = useMemo(
-    () => (providerChainId ? getContractAddressConfig(providerChainId)?.MysteryBoxNFT : ''),
+    () => (providerChainId ? getContractAddressConfig(providerChainId)?.MaskboxNFT : ''),
     [providerChainId],
   );
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { MaskboxABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
-import { useMysteryBoxContract } from '@/hooks';
+import { useMaskboxContract } from '@/hooks';
 import { CreateResult } from '@/types';
 import { utils } from 'ethers';
 import { uniqBy } from 'lodash-es';
@@ -10,7 +10,7 @@ const abiInterface = new utils.Interface(MaskboxABI);
 
 export function useGetBoxes() {
   const { ethersProvider } = useWeb3Context();
-  const contract = useMysteryBoxContract();
+  const contract = useMaskboxContract();
   const [boxes, setBoxes] = useState<CreateResult[]>([]);
   const offsetRef = useRef(0);
   const getBoxes = useCallback(async () => {

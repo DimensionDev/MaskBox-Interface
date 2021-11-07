@@ -1,1 +1,1 @@
-export * from './useCreateMysteryBox';
+export * from './useCreateMaskbox';

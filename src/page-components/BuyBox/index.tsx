@@ -7,8 +7,13 @@ import {
   TokenIcon,
 } from '@/components';
 import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
-import { useBalance, useERC20Approve, useGetERC20Allowance, useTrackTokenPrice } from '@/hooks';
-import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
+import {
+  useBalance,
+  useERC20Approve,
+  useGetERC20Allowance,
+  useGetERC20TokenInfo,
+  useTrackTokenPrice,
+} from '@/hooks';
 import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, ExtendedBoxInfo } from '@/types';
 import { formatAddres, formatBalance } from '@/utils';

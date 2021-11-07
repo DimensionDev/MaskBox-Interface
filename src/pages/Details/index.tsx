@@ -102,7 +102,7 @@ export const Details: FC = memo(() => {
       <main className={styles.main}>
         <h1 className={styles.title}>Mystery box</h1>
         <Maskbox
-          className={styles.mysteryBox}
+          className={styles.maskbox}
           boxOnSubgraph={boxOnSubgraph}
           boxOnChain={boxOnChain}
           boxOnRSS3={boxOnRSS3}

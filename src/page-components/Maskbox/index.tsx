@@ -135,7 +135,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   );
 
   return (
-    <div className={classnames(styles.mysteryBox, className)} {...rest}>
+    <div className={classnames(styles.maskbox, className)} {...rest}>
       {inList ? <Link to={`/details?chain=${chainId}&box=${boxId}`}>{BoxCover}</Link> : BoxCover}
       <div className={styles.interaction}>
         <dl className={styles.infoList}>

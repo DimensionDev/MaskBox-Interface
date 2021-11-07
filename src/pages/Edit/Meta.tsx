@@ -32,7 +32,7 @@ import {
   validationsAtom,
 } from './atoms';
 import { CreationConfirmDialog } from './CreationConfirmDialog';
-import { useCreateMysteryBox } from './hooks';
+import { useCreateMaskbox } from './hooks';
 import styles from './index.module.less';
 import { useEdit } from './useEdit';
 
@@ -52,7 +52,7 @@ export const Meta: FC = () => {
   const [erc721DialogVisible, openERC721PickerDialog, closeERC721PickerDialog] = useDialog();
   const [createdBoxId, setCreatedBoxId] = useState('');
 
-  const createBox = useCreateMysteryBox();
+  const createBox = useCreateMaskbox();
   const {
     isEnumable,
     isApproveAll,

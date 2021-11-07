@@ -6,7 +6,7 @@ export * from './useGetERC20TokenInfo';
 export * from './useGetERC721Token';
 export * from './useGetExtendedBoxInfo';
 export * from './useMaskboxCreationEvent';
-export * from './useMysteryBoxContract';
+export * from './useMaskboxContract';
 export * from './useOnceShowup';
 export * from './useSubscribeTokenPrice';
 export * from './useTokenList';

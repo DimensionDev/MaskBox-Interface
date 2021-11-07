@@ -9,14 +9,14 @@ import { formDataAtom } from '../atoms';
 const abiInterface = new ethers.utils.Interface(MaskboxABI);
 const MAX_CONFIRMATION = 6;
 
-export function useCreateMysteryBox() {
+export function useCreateMaskbox() {
   const { ethersProvider, providerChainId } = useWeb3Context();
   const formData = useAtomValue(formDataAtom);
 
   const limit = formData.limit ?? 5;
   const createBox = useCallback(async () => {
     if (!ethersProvider || !providerChainId) return;
-    const contractAddress = getContractAddressConfig(providerChainId).MysteryBox;
+    const contractAddress = getContractAddressConfig(providerChainId).Maskbox;
     const contract = new Contract(
       contractAddress,
       MaskboxABI as unknown as ContractInterface,
@@ -49,7 +49,7 @@ export function useCreateMysteryBox() {
         throw new Error('Fails to get log of CreationSuccess');
       }
     }
-    console.info('useCreateMysteryBox', { confirmation });
+    console.info('useCreateMaskbox', { confirmation });
 
     const parsedLog = abiInterface.parseLog(log);
     return parsedLog;

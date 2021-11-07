@@ -4,7 +4,7 @@ import { getContractFromBlock } from '@/lib';
 import { utils } from 'ethers';
 import { first } from 'lodash-es';
 import { useAsyncRetry } from 'react-use';
-import { useMysteryBoxContract } from './useMysteryBoxContract';
+import { useMaskboxContract } from './useMaskboxContract';
 
 const abiInterface = new utils.Interface(MaskboxABI);
 export function useMaskBoxCreationSuccessEvent(
@@ -12,7 +12,7 @@ export function useMaskBoxCreationSuccessEvent(
   tokenAddress?: string,
   boxId?: string | null,
 ) {
-  const contract = useMysteryBoxContract();
+  const contract = useMaskboxContract();
   const { providerChainId, ethersProvider } = useWeb3Context();
 
   return useAsyncRetry(async () => {

@@ -3,7 +3,7 @@ import { useMaskboxAddress, useWeb3Context } from '@/contexts';
 import { Contract } from 'ethers';
 import { useMemo } from 'react';
 
-export function useMysteryBoxContract(requireSigner?: boolean) {
+export function useMaskboxContract(requireSigner?: boolean) {
   const { ethersProvider } = useWeb3Context();
   const contractAddress = useMaskboxAddress();
   const contract = useMemo(() => {
