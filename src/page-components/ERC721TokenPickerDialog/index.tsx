@@ -88,6 +88,10 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
             </div>
           </div>
         )
+      ) : keyword && filteredContracts.length === 0 ? (
+        <div className={styles.noResult}>
+          No results for <strong className={styles.keyword}>{keyword}</strong>
+        </div>
       ) : (
         <ERC721TokenList className={styles.tokenList} tokens={filteredContracts} onPick={onPick} />
       )}
