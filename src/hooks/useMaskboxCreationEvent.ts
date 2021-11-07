@@ -1,4 +1,4 @@
-import { MysteryBoxABI } from '@/abi';
+import { MaskboxABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { getContractFromBlock } from '@/lib';
 import { utils } from 'ethers';
@@ -6,7 +6,7 @@ import { first } from 'lodash-es';
 import { useAsyncRetry } from 'react-use';
 import { useMysteryBoxContract } from './useMysteryBoxContract';
 
-const abiInterface = new utils.Interface(MysteryBoxABI);
+const abiInterface = new utils.Interface(MaskboxABI);
 export function useMaskBoxCreationSuccessEvent(
   creatorAddress?: string,
   tokenAddress?: string,

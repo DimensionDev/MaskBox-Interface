@@ -1,4 +1,4 @@
-import { MysteryBoxABI } from '@/abi';
+import { MaskboxABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { Contract } from 'ethers';
 import { useMemo } from 'react';
@@ -9,7 +9,7 @@ export function useMaskboxContract() {
   const contractAddress = useMaskboxAddress();
   const contract = useMemo(() => {
     if (!contractAddress || !ethersProvider) return null;
-    return new Contract(contractAddress, MysteryBoxABI, ethersProvider);
+    return new Contract(contractAddress, MaskboxABI, ethersProvider);
   }, [contractAddress, ethersProvider]);
 
   return contract;

@@ -1,14 +1,10 @@
-import { MysteryBoxABI } from '@/abi';
 import { Icon, showToast } from '@/components';
 import { useMBoxContract, useWeb3Context } from '@/contexts';
 import { useMysteryBoxContract } from '@/hooks/useMysteryBoxContract';
 import { getNetworkExplorer, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment } from '@/types';
-import { utils } from 'ethers';
 import { useCallback, useState } from 'react';
 import styles from './index.module.less';
-
-const abiInterface = new utils.Interface(MysteryBoxABI);
 
 export function useOpenBox(
   boxId: string,

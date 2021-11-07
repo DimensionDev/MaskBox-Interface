@@ -1,5 +1,5 @@
-import MysteryBoxABI from './MysteryBox.json';
-import MysterBoxNFTABI from './MysterBoxNFT.json';
+import MaskboxABI from './Maskbox.json';
+import MaskboxNFTABI from './MaskboxNFT.json';
 
-export { MysteryBoxABI, MysterBoxNFTABI };
+export { MaskboxABI, MaskboxNFTABI };
 export * from './ERC20';

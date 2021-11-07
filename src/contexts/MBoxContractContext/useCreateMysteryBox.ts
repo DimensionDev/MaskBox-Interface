@@ -1,11 +1,11 @@
-import { MysteryBoxABI } from '@/abi';
+import { MaskboxABI } from '@/abi';
 import { contractAddresses } from '@/lib';
 import { Contract, ContractInterface } from 'ethers';
 import { useCallback, useEffect, useRef } from 'react';
 import { useWeb3Context } from '../Web3Context';
 
 const contractAddress = contractAddresses.Rinkeby.MysteryBox;
-const mboxContract = new Contract(contractAddress, MysteryBoxABI as unknown as ContractInterface);
+const mboxContract = new Contract(contractAddress, MaskboxABI as unknown as ContractInterface);
 
 interface PaymentOption {
   token_addr: string;

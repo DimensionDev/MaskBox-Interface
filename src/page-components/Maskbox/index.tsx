@@ -21,7 +21,7 @@ export interface MaskboxProps extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> 
   onPurchase?: () => void;
 }
 
-export const MysteryBox: FC<MaskboxProps> = ({
+export const Maskbox: FC<MaskboxProps> = ({
   boxOnSubgraph,
   boxOnRSS3,
   boxOnChain,

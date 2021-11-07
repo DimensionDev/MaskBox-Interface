@@ -1,4 +1,4 @@
-import { MysteryBoxABI } from '@/abi';
+import { MaskboxABI } from '@/abi';
 import { useMaskboxAddress, useWeb3Context } from '@/contexts';
 import { Contract } from 'ethers';
 import { useMemo } from 'react';
@@ -10,7 +10,7 @@ export function useMysteryBoxContract(requireSigner?: boolean) {
     if (!contractAddress || !ethersProvider) return null;
     return new Contract(
       contractAddress,
-      MysteryBoxABI,
+      MaskboxABI,
       requireSigner ? ethersProvider.getSigner() : ethersProvider,
     );
   }, [contractAddress, ethersProvider, requireSigner]);

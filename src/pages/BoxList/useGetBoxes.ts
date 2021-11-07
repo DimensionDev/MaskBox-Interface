@@ -1,4 +1,4 @@
-import { MysteryBoxABI } from '@/abi';
+import { MaskboxABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { useMysteryBoxContract } from '@/hooks';
 import { CreateResult } from '@/types';
@@ -6,7 +6,7 @@ import { utils } from 'ethers';
 import { uniqBy } from 'lodash-es';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const abiInterface = new utils.Interface(MysteryBoxABI);
+const abiInterface = new utils.Interface(MaskboxABI);
 
 export function useGetBoxes() {
   const { ethersProvider } = useWeb3Context();

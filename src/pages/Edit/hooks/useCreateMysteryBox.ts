@@ -1,4 +1,4 @@
-import { MysteryBoxABI } from '@/abi';
+import { MaskboxABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { getContractAddressConfig, ZERO_ADDRESS } from '@/lib';
 import { Contract, ContractInterface, ethers } from 'ethers';
@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
 
-const abiInterface = new ethers.utils.Interface(MysteryBoxABI);
+const abiInterface = new ethers.utils.Interface(MaskboxABI);
 const MAX_CONFIRMATION = 6;
 
 export function useCreateMysteryBox() {
@@ -19,7 +19,7 @@ export function useCreateMysteryBox() {
     const contractAddress = getContractAddressConfig(providerChainId).MysteryBox;
     const contract = new Contract(
       contractAddress,
-      MysteryBoxABI as unknown as ContractInterface,
+      MaskboxABI as unknown as ContractInterface,
       ethersProvider.getSigner(),
     );
     const tx = await contract.createBox(

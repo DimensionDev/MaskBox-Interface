@@ -1,4 +1,4 @@
-import { MysterBoxNFTABI } from '@/abi';
+import { MaskboxNFTABI } from '@/abi';
 import { showToast } from '@/components';
 import { ERC721Token } from '@/types';
 import { fetchNFTTokenDetail, notEmpty } from '@/utils';
@@ -84,7 +84,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
       if (!ethersProvider || !contractAddress || !utils.isAddress(contractAddress)) {
         return '';
       }
-      const contract = new Contract(contractAddress, MysterBoxNFTABI, ethersProvider);
+      const contract = new Contract(contractAddress, MaskboxNFTABI, ethersProvider);
       const name = await contract.name();
       return name;
     },
@@ -97,7 +97,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
         setTokens([]);
         return [];
       }
-      const contract = new Contract(contractAddress, MysterBoxNFTABI, ethersProvider);
+      const contract = new Contract(contractAddress, MaskboxNFTABI, ethersProvider);
       const balance = await getMyBalance(contract);
       console.log('balance', balance);
       const getTokens = new Array(balance)
@@ -113,7 +113,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
   const getByIdList = useCallback(
     async (contractAddress: string, idList: string[]) => {
       if (!ethersProvider || !utils.isAddress(contractAddress)) return [];
-      const contract = new Contract(contractAddress, MysterBoxNFTABI, ethersProvider);
+      const contract = new Contract(contractAddress, MaskboxNFTABI, ethersProvider);
       const getTokens = idList.map((id) => getTokenById(contract, id));
       const list = (await Promise.all(getTokens)).filter(notEmpty);
       return list;

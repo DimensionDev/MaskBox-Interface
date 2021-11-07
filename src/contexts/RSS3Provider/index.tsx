@@ -1,4 +1,6 @@
-import { createContext, FC, useCallback, useContext } from 'react';
+import { BoxMetas } from '@/types';
+import { utils } from 'ethers';
+import { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
 import RSS3 from 'rss3-next';
 import { MediaType } from '../UploadProvider';
 import { useWeb3Context } from '../Web3Context';
@@ -36,6 +38,32 @@ const RSS3Context = createContext<IRSS3Context>({
 
 export function useRSS3(): IRSS3Context {
   return useContext(RSS3Context);
+}
+
+export function useBoxOnRSS3(creator: string | undefined, boxId: string | undefined) {
+  const [boxOnRSS3, setBoxOnRSS3] = useState<Partial<BoxMetas>>({});
+  const { getBoxMetas } = useRSS3();
+  useEffect(() => {
+    if (creator && boxId) {
+      getBoxMetas(utils.getAddress(creator), boxId)
+        .then((data) => {
+          if (data) {
+            setBoxOnRSS3({
+              mediaType: data.mediaType as MediaType,
+              mediaUrl: data.mediaUrl,
+              activities: data.activities,
+            });
+          } else {
+            throw new Error(`Meta info was not found`);
+          }
+        })
+        .catch((err) => {
+          console.log('Fails at getting box info', err);
+        });
+    }
+  }, [creator, boxId]);
+
+  return boxOnRSS3;
 }
 
 const endpoint = 'https://hub.pass3.me';

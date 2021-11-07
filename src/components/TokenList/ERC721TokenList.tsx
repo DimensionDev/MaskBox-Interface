@@ -1,4 +1,4 @@
-import { MysterBoxNFTABI } from '@/abi';
+import { MaskboxNFTABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { useOnceShowup } from '@/hooks';
 import { ERC721Token as ERC721TokenType, ZERO } from '@/lib';
@@ -49,7 +49,7 @@ export const ERC721Token: FC<ERC721TokenProps> = ({
 
   const [{ loading }, fetchBalance] = useAsyncFn(async () => {
     if (!ethersProvider || !account) return;
-    const contract = new Contract(token.address, MysterBoxNFTABI, ethersProvider);
+    const contract = new Contract(token.address, MaskboxNFTABI, ethersProvider);
     const balanceResult: BigNumber = await contract.balanceOf(account);
     setBalance(balanceResult);
   }, [account, token.address, ethersProvider]);

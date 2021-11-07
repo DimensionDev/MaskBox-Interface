@@ -1,4 +1,4 @@
-import { MysterBoxNFTABI } from '@/abi';
+import { MaskboxNFTABI } from '@/abi';
 import { showToast } from '@/components';
 import { useNFTContract, useWeb3Context } from '@/contexts';
 import { getContractAddressConfig } from '@/lib';
@@ -27,7 +27,7 @@ export function useEdit() {
 
     setCheckingApprove(true);
     try {
-      const contract = new Contract(formData.nftContractAddress, MysterBoxNFTABI, ethersProvider);
+      const contract = new Contract(formData.nftContractAddress, MaskboxNFTABI, ethersProvider);
       const result = await contract.isApprovedForAll(account, contractAddress);
       setIsApproveAll(result as boolean);
     } catch (err) {
@@ -45,7 +45,7 @@ export function useEdit() {
     if (!ethersProvider || !utils.isAddress(formData.nftContractAddress)) return;
     (async () => {
       try {
-        const contract = new Contract(formData.nftContractAddress, MysterBoxNFTABI, ethersProvider);
+        const contract = new Contract(formData.nftContractAddress, MaskboxNFTABI, ethersProvider);
         await contract.tokenByIndex(0);
       } catch (err: any) {
         if (err.code === 'CALL_EXCEPTION') {
@@ -76,7 +76,7 @@ export function useEdit() {
     try {
       const contract = new Contract(
         formData.nftContractAddress,
-        MysterBoxNFTABI,
+        MaskboxNFTABI,
         ethersProvider.getSigner(),
       );
       const tx = await contract.setApprovalForAll(contractAddress, true);

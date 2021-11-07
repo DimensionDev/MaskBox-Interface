@@ -4,7 +4,7 @@ import { ChainId, createShareUrl, ZERO } from '@/lib';
 import {
   BuyBox,
   BuyBoxProps,
-  MysteryBox,
+  Maskbox,
   RequestConnection,
   RequestSwitchChain,
   ShareBox,
@@ -101,7 +101,7 @@ export const Details: FC = memo(() => {
     <>
       <main className={styles.main}>
         <h1 className={styles.title}>Mystery box</h1>
-        <MysteryBox
+        <Maskbox
           className={styles.mysteryBox}
           boxOnSubgraph={boxOnSubgraph}
           boxOnChain={boxOnChain}

@@ -1,4 +1,4 @@
-import { MysterBoxNFTABI } from '@/abi';
+import { MaskboxNFTABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { ERC721Token } from '@/lib';
 import { Contract } from 'ethers';
@@ -10,7 +10,7 @@ export function useGetERC721Token() {
   const getToken = useCallback(
     async (addr: string) => {
       if (!ethersProvider || !chainId) return;
-      const contract = new Contract(addr, MysterBoxNFTABI, ethersProvider);
+      const contract = new Contract(addr, MaskboxNFTABI, ethersProvider);
       const token = Promise.all([contract.name(), contract.symbol()]).then(([name, symbol]) => {
         return {
           name: name as string,
