@@ -1,20 +1,22 @@
 import { avatarImage } from '@/assets';
-import { ArticleSection, NFTItem } from '@/components';
+import { ArticleSection, Icon, LoadingIcon, NFTItem } from '@/components';
 import { useNFTContract, useWeb3Context } from '@/contexts';
 import { getContractAddressConfig } from '@/lib';
 import { RequestConnection } from '@/page-components';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.less';
 
 export const Profile: FC = () => {
   const { providerChainId } = useWeb3Context();
+  const [loading, setLoading] = useState(false);
   const { tokens, getMyTokens } = useNFTContract();
   const contractAddress = useMemo(
     () => (providerChainId ? getContractAddressConfig(providerChainId)?.MaskboxNFT : ''),
     [providerChainId],
   );
   useEffect(() => {
-    getMyTokens(contractAddress);
+    setLoading(true);
+    getMyTokens(contractAddress).finally(() => setLoading(false));
   }, [getMyTokens, contractAddress]);
 
   return (
@@ -24,17 +26,33 @@ export const Profile: FC = () => {
       </header>
       <main className={styles.main}>
         <ArticleSection title="My Collectibles">
-          {providerChainId ? (
-            <ul className={styles.nftList}>
-              {tokens.map((token) => (
-                <li key={token.tokenId}>
-                  <NFTItem token={token} />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <RequestConnection />
-          )}
+          {(() => {
+            if (!providerChainId) return <RequestConnection />;
+            if (loading)
+              return (
+                <div className={styles.status}>
+                  <LoadingIcon size={36} />
+                </div>
+              );
+
+            if (tokens.length === 0) {
+              return (
+                <div className={styles.status}>
+                  <p className={styles.text}>No items to display.</p>
+                  <Icon type="empty" size={96} />
+                </div>
+              );
+            }
+            return (
+              <ul className={styles.nftList}>
+                {tokens.map((token) => (
+                  <li key={token.tokenId}>
+                    <NFTItem token={token} />
+                  </li>
+                ))}
+              </ul>
+            );
+          })()}
         </ArticleSection>
       </main>
     </article>
