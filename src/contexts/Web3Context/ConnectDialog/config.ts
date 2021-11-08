@@ -1,12 +1,12 @@
 import { ChainId } from '@/lib';
 export const connectableChains = [
   {
-    name: 'ethereum',
+    name: 'Ethereum',
     chainId: ChainId.Mainnet,
     iconType: 'ethereumChain',
   },
   {
-    name: 'rinkeby',
+    name: 'Rinkeby',
     chainId: ChainId.Rinkeby,
     iconType: 'ethereumChain',
   },

@@ -46,6 +46,7 @@ export const Description: FC = () => {
     });
   };
   const handleUploaded = useCallback(({ url: mediaUrl, mediaType }: UploadResult) => {
+    setUploadError(null);
     setFormData((fd) => ({ ...fd, mediaUrl, mediaType }));
   }, []);
 
@@ -86,6 +87,7 @@ export const Description: FC = () => {
             size="small"
             className={styles.mediaRestButton}
             onClick={() => {
+              setUploadError(null);
               updateField('mediaUrl', '');
               updateField('mediaType', MediaType.Unknown);
             }}

@@ -14,8 +14,14 @@ import styles from './index.module.less';
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
-  const { account, providerChainId, openConnectionDialog, isMetaMask, isConnecting } =
-    useWeb3Context();
+  const {
+    account,
+    providerChainId,
+    openConnectionDialog,
+    isNotSupportedChain,
+    isMetaMask,
+    isConnecting,
+  } = useWeb3Context();
   const [accountDialogVisible, openAccountDialog, closeAccountDialog] = useDialog();
   const [popupNavVisible, openPopupNav, closePopupNav] = useDialog();
   console.log({ popupNavVisible });
@@ -77,13 +83,18 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         <div className={styles.operations}>
           {account ? (
             <>
-              <Button className={styles.button} onClick={openConnectionDialog}>
+              <Button
+                className={styles.button}
+                onClick={openConnectionDialog}
+                colorScheme={isNotSupportedChain ? 'danger' : 'default'}
+              >
                 <Icon
                   className={styles.icon}
-                  iconUrl={getNetworkIcon(providerChainId!)}
+                  iconUrl={isNotSupportedChain ? undefined : getNetworkIcon(providerChainId!)}
+                  type={isNotSupportedChain ? 'risk' : undefined}
                   size={18}
                 />
-                {getNetworkName(providerChainId!)}
+                {isNotSupportedChain ? 'Network error' : getNetworkName(providerChainId!)}
               </Button>
               <Button className={styles.button} title={account} onClick={openAccountDialog}>
                 <Icon className={styles.icon} type={isMetaMask ? 'metamask' : 'wallet'} size={16} />

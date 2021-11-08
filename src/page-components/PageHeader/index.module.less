@@ -8,7 +8,7 @@
   .inner {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    width: 1120px;
+    max-width: 1120px;
     margin-left: auto;
     margin-right: auto;
     align-items: center;
@@ -24,8 +24,18 @@
     color: var(--text-primary, #1e202c);
   }
 }
+@media (max-width: 1250px) {
+  .pageHeader {
+    display: flex;
+    .langSwitch {
+      position: relative;
+      margin-left: 10px;
+    }
+  }
+}
 @media (max-width: @sm-screen) {
   .pageHeader {
+    display: block;
     border-bottom: none;
     height: 48px;
     .inner {
@@ -35,6 +45,7 @@
 }
 @media (min-width: @sm-screen) and (max-width: @mid-screen) {
   .pageHeader {
+    display: block;
     height: 56px;
     .inner {
       padding: 0 20px;
@@ -92,6 +103,7 @@
   }
   .langSwitchItem {
     height: 30px;
+    color: var(--text-primary, #1e202c);
   }
 }
 .brand {
@@ -99,14 +111,16 @@
   align-items: center;
   width: 171px;
   height: 51px;
-  @media (max-width: @sm-screen) {
-    width: 109px;
-    height: 32px;
-  }
   select {
     height: 20px;
     width: 100px;
     margin-left: 16px;
+  }
+}
+@media (max-width: @mid-screen) {
+  .brand {
+    width: 109px;
+    height: 32px;
   }
 }
 .operations {
@@ -131,6 +145,7 @@
   .pageHeader {
     .inner {
       width: auto;
+      flex-grow: 1;
       display: flex;
       justify-content: space-between;
     }

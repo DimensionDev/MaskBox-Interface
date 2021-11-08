@@ -65,7 +65,9 @@ export const ConnectDialog: FC<Props> = ({
           <div className={classnames(styles.stepContent, styles.list)}>
             {connectableChains.map((c) => (
               <div
-                className={styles.option}
+                className={classnames(styles.option, {
+                  [styles.selected]: c.chainId === currChainId,
+                })}
                 key={c.name}
                 role="button"
                 onClick={() => setCurrChainId(c.chainId)}

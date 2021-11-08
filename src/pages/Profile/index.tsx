@@ -1,6 +1,6 @@
 import { avatarImage } from '@/assets';
 import { ArticleSection, Icon, LoadingIcon, NFTItem } from '@/components';
-import { useNFTContract, useWeb3Context } from '@/contexts';
+import { ThemeType, useNFTContract, useTheme, useWeb3Context } from '@/contexts';
 import { getContractAddressConfig } from '@/lib';
 import { RequestConnection } from '@/page-components';
 import { FC, useEffect, useMemo, useState } from 'react';
@@ -10,6 +10,7 @@ export const Profile: FC = () => {
   const { providerChainId } = useWeb3Context();
   const [loading, setLoading] = useState(false);
   const { tokens, getMyTokens } = useNFTContract();
+  const { theme } = useTheme();
   const contractAddress = useMemo(
     () => (providerChainId ? getContractAddressConfig(providerChainId)?.MaskboxNFT : ''),
     [providerChainId],
@@ -39,7 +40,7 @@ export const Profile: FC = () => {
               return (
                 <div className={styles.status}>
                   <p className={styles.text}>No items to display.</p>
-                  <Icon type="empty" size={96} />
+                  <Icon type={theme === ThemeType.Light ? 'empty' : 'emptyDark'} size={96} />
                 </div>
               );
             }

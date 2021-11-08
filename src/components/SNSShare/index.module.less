@@ -1,8 +1,17 @@
+@import '../../variables.less';
 .snsShare {
   display: flex;
   .button {
     margin-left: 10px;
     cursor: pointer;
     color: var(--text-primary, #1e202c);
+  }
+}
+@media (max-width: @mid-screen) {
+  .snsShare {
+    .button {
+      margin-left: 0;
+      margin-right: 10px;
+    }
   }
 }
