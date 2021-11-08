@@ -1,11 +1,12 @@
 import { logoImage } from '@/assets';
 import { Button, Icon, LanguageSwitcher, LoadingButton, useDialog } from '@/components';
 import { RouteKeys } from '@/configs';
+import { useClickAway } from 'react-use';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
 import { getNetworkIcon, getNetworkName } from '@/lib';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
-import { FC, HTMLProps } from 'react';
+import { FC, HTMLProps, useEffect, useRef } from 'react';
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { AccountDialog } from '../AccountDialog';
 import styles from './index.module.less';
@@ -16,10 +17,21 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   const { account, providerChainId, openConnectionDialog, isMetaMask, isConnecting } =
     useWeb3Context();
   const [accountDialogVisible, openAccountDialog, closeAccountDialog] = useDialog();
+  const [popupNavVisible, openPopupNav, closePopupNav] = useDialog();
+  console.log({ popupNavVisible });
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === ThemeType.Dark;
   const history = useHistory();
   const location = useLocation();
+
+  const popupNavRef = useRef<HTMLDivElement>(null);
+  const menuBtnRef = useRef<HTMLDivElement>(null);
+  useClickAway(popupNavRef, (event) => {
+    const target = event.target as HTMLDivElement;
+    if (target && menuBtnRef.current?.contains(target)) return;
+    closePopupNav();
+  });
+  useEffect(closePopupNav, [location.pathname]);
 
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
@@ -106,9 +118,50 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           >
             <Icon type={isDark ? 'sun' : 'moon'} size={20} />
           </Button>
+          <div
+            className={styles.menuButton}
+            role="button"
+            ref={menuBtnRef}
+            onClick={() => (popupNavVisible ? closePopupNav() : openPopupNav())}
+          >
+            <Icon type="menu" />
+          </div>
         </div>
       </div>
       <LanguageSwitcher className={styles.langSwitch} />
+      <nav
+        className={classnames(styles.popupNav, { [styles.open]: popupNavVisible })}
+        ref={popupNavRef}
+      >
+        <NavLink
+          exact
+          className={styles.navItem}
+          activeClassName={styles.activeNav}
+          to={RouteKeys.Home}
+        >
+          Home
+        </NavLink>
+        <NavLink
+          className={classnames(styles.navItem, {
+            [styles.activeNav]: location.pathname === RouteKeys.Details,
+          })}
+          activeClassName={styles.activeNav}
+          to={RouteKeys.BoxList}
+        >
+          Mystery
+        </NavLink>
+        <NavLink
+          className={styles.navItem}
+          activeClassName={styles.activeNav}
+          to={RouteKeys.Profile}
+        >
+          My Items
+        </NavLink>
+        <NavLink className={styles.navItem} activeClassName={styles.activeNav} to={RouteKeys.Faqs}>
+          FAQs
+        </NavLink>
+        <LanguageSwitcher className={styles.langSwitchItem} />
+      </nav>
       <AccountDialog open={accountDialogVisible} onClose={closeAccountDialog} />
     </div>
   );
