@@ -12,6 +12,7 @@ interface ContextOptions {
   ethersProvider: ethers.providers.Web3Provider;
   account: string;
   openConnectionDialog: () => void;
+  closeConnectionDialog: () => void;
   disconnect: () => void;
   isMetaMask: boolean;
   isConnecting: boolean;
@@ -141,6 +142,7 @@ export const Web3Provider: FC = ({ children }) => {
     const isNotSupportedChain = providerChainId !== undefined && !isSupportedChain(providerChainId);
     return {
       openConnectionDialog,
+      closeConnectionDialog,
       disconnect,
       account,
       ethersProvider,

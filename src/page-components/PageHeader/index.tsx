@@ -1,5 +1,12 @@
 import { logoImage } from '@/assets';
-import { Button, Icon, LanguageSwitcher, LoadingButton, useDialog } from '@/components';
+import {
+  Button,
+  Icon,
+  LanguageSwitcher,
+  LoadingButton,
+  LoadingIcon,
+  useDialog,
+} from '@/components';
 import { RouteKeys } from '@/configs';
 import { useClickAway } from 'react-use';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
@@ -24,7 +31,6 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   } = useWeb3Context();
   const [accountDialogVisible, openAccountDialog, closeAccountDialog] = useDialog();
   const [popupNavVisible, openPopupNav, closePopupNav] = useDialog();
-  console.log({ popupNavVisible });
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === ThemeType.Dark;
   const history = useHistory();
@@ -83,19 +89,25 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         <div className={styles.operations}>
           {account ? (
             <>
-              <Button
-                className={styles.button}
-                onClick={openConnectionDialog}
-                colorScheme={isNotSupportedChain ? 'danger' : 'default'}
-              >
-                <Icon
-                  className={styles.icon}
-                  iconUrl={isNotSupportedChain ? undefined : getNetworkIcon(providerChainId!)}
-                  type={isNotSupportedChain ? 'risk' : undefined}
-                  size={18}
-                />
-                {isNotSupportedChain ? 'Network error' : getNetworkName(providerChainId!)}
-              </Button>
+              {isConnecting ? (
+                <Button circle>
+                  <LoadingIcon size={18} />
+                </Button>
+              ) : (
+                <Button
+                  className={styles.button}
+                  onClick={openConnectionDialog}
+                  colorScheme={isNotSupportedChain ? 'danger' : 'default'}
+                >
+                  <Icon
+                    className={styles.icon}
+                    iconUrl={isNotSupportedChain ? undefined : getNetworkIcon(providerChainId!)}
+                    type={isNotSupportedChain ? 'risk' : undefined}
+                    size={18}
+                  />
+                  {isNotSupportedChain ? 'Network error' : getNetworkName(providerChainId!)}
+                </Button>
+              )}
               <Button className={styles.button} title={account} onClick={openAccountDialog}>
                 <Icon className={styles.icon} type={isMetaMask ? 'metamask' : 'wallet'} size={16} />
                 {formatAddres(account)}

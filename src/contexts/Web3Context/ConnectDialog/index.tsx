@@ -40,6 +40,13 @@ export const ConnectDialog: FC<Props> = ({
     setCurrWalletId(walletId);
   }, [walletId]);
 
+  useEffect(() => {
+    if (!open) {
+      setCurrChainId(chainId);
+      setCurrWalletId(walletId);
+    }
+  }, [chainId, walletId, open]);
+
   const handleConnect = useCallback(({ chainId, walletId, walletType }) => {
     if (chainId && walletId && onSelect) {
       onSelect({

@@ -37,7 +37,7 @@ export const VideoPlayer: FC<Props> = ({ className, src, ...rest }) => {
   }, []);
   return (
     <div className={classnames(className, styles.player)}>
-      <video src={src} height="100%" width="100%" ref={videoRef} {...rest} />
+      <video src={src} height="100%" width="100%" ref={videoRef} controls={playing} {...rest} />
       <div className={styles.playPause} role="button" onClick={togglePlayStatus}>
         <Icon type={playing ? 'pause' : 'play'} />
       </div>

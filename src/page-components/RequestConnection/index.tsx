@@ -10,7 +10,7 @@ export const RequestConnection: FC<Props> = ({ className, ...rest }) => {
   const { openConnectionDialog, isConnecting } = useWeb3Context();
   return (
     <div className={classnames(className, styles.container)} {...rest}>
-      <p className={styles.text}>Please connect your wallet.</p>
+      <p className={styles.text}>{isConnecting ? 'Connecting' : 'Please connect your wallet.'}</p>
       <Button
         className={styles.button}
         onClick={openConnectionDialog}

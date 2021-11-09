@@ -14,6 +14,7 @@ import { createShareUrl } from '@/lib';
 import {
   ERC721TokenPickerDialog,
   NFTPickerDialog,
+  RequestConnection,
   ShareBox,
   TokenPickerDialog,
 } from '@/page-components';
@@ -46,7 +47,7 @@ export const Meta: FC = () => {
   const bindField = useBindFormField();
   const updateField = useUpdateFormField();
   const setAllDirty = useSetAllDirty();
-  const { providerChainId, isConnecting, openConnectionDialog } = useWeb3Context();
+  const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
   const [tokenBoxVisible, openTokenBox, closeTokenBox] = useDialog();
   const [erc721DialogVisible, openERC721PickerDialog, closeERC721PickerDialog] = useDialog();
@@ -66,12 +67,6 @@ export const Meta: FC = () => {
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useDialog();
   const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
   const [creating, setCreating] = useState(false);
-  useEffect(() => {
-    if (isConnecting) return;
-    if (!providerChainId && openConnectionDialog) {
-      openConnectionDialog();
-    }
-  }, [providerChainId, isConnecting, openConnectionDialog]);
   const create = useCallback(async () => {
     setAllDirty();
     if (!isReady || validations.length) {
@@ -126,6 +121,8 @@ export const Meta: FC = () => {
   const selectedPaymentToken = useMemo(() => {
     return tokens.find((token) => isSameAddress(token.address, formData.tokenAddress));
   }, [tokens, formData.tokenAddress]);
+
+  if (!providerChainId) return <RequestConnection />;
 
   return (
     <section className={styles.section}>

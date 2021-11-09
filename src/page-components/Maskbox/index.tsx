@@ -116,7 +116,7 @@ export const Maskbox: FC<MaskboxProps> = ({
 
         switch (box.mediaType as MediaType) {
           case MediaType.Video:
-            return <VideoPlayer src={box.mediaUrl} width="480" height="320" controls={!inList} />;
+            return <VideoPlayer src={box.mediaUrl} width="480" height="320" />;
           case MediaType.Audio:
             return <audio src={box.mediaUrl} controls />;
           default:
