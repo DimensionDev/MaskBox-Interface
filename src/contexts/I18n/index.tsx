@@ -54,7 +54,7 @@ export function createLocales(configs: LocaleConfig) {
     const t = useCallback(
       (key: string, data?: Record<string, string>) => {
         const config = configs[language as string];
-        let text = config?.[key] ?? configs.en?.[key] ?? key;
+        let text = config?.[key] || configs.en?.[key] || key;
         if (data) {
           text = text.replace(/{(.*?)}/g, (_, key) => data[key] ?? key);
         }
