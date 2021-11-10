@@ -2,7 +2,6 @@ import { MediaType } from '@/contexts';
 import { ERC721Token, TokenType, ZERO_ADDRESS } from '@/lib';
 import { Activity } from '@/types';
 import { isValid as isValidDate } from 'date-fns';
-import { utils } from 'ethers';
 import { atom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
 import { FormEvent, useCallback } from 'react';

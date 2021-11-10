@@ -17,6 +17,7 @@ scalar Bytes
 
 type Maskbox {
   id: ID!
+  tx_hash: Bytes!
   chain_id: Int!
   box_id: String!
   blockNumber: BigInt!
@@ -28,6 +29,7 @@ type Maskbox {
   end_time: Int!
   sell_all: Boolean!
   nft_contract: NFTContract!
+  sold_nft_list: [BigInt!]!
 }
 
 input Maskbox_filter {
@@ -39,6 +41,12 @@ input Maskbox_filter {
   id_lte: ID
   id_in: [ID!]
   id_not_in: [ID!]
+  tx_hash: Bytes
+  tx_hash_not: Bytes
+  tx_hash_in: [Bytes!]
+  tx_hash_not_in: [Bytes!]
+  tx_hash_contains: Bytes
+  tx_hash_not_contains: Bytes
   chain_id: Int
   chain_id_not: Int
   chain_id_gt: Int
@@ -137,10 +145,15 @@ input Maskbox_filter {
   nft_contract_not_starts_with: String
   nft_contract_ends_with: String
   nft_contract_not_ends_with: String
+  sold_nft_list: [BigInt!]
+  sold_nft_list_not: [BigInt!]
+  sold_nft_list_contains: [BigInt!]
+  sold_nft_list_not_contains: [BigInt!]
 }
 
 enum Maskbox_orderBy {
   id
+  tx_hash
   chain_id
   box_id
   blockNumber
@@ -152,6 +165,7 @@ enum Maskbox_orderBy {
   end_time
   sell_all
   nft_contract
+  sold_nft_list
 }
 
 type NFTContract {

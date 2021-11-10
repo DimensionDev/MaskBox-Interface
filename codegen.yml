@@ -12,6 +12,7 @@ generates:
       scalars:
         DateTime: string
         Bytes: string
+        BigInt: string
 
 hooks:
   afterOneFileWrite:

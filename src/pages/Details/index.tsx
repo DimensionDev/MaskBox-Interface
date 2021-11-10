@@ -16,6 +16,7 @@ import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import { useLocation } from 'react-router-dom';
 import styles from './index.module.less';
 import { useBox } from './useBox';
+import { useGetTokensByIds } from './useGetTokensByIds';
 
 const PAGE_SIZE = BigNumber.from(50);
 export const Details: FC = memo(() => {
@@ -55,6 +56,8 @@ export const Details: FC = memo(() => {
     const tokens = await getByIdList(box.nft_address, idList);
     setErc721Tokens((oldList) => uniqBy<ERC721Token>([...oldList, ...tokens], 'tokenId'));
   }, [box?.nft_address, boxId]);
+
+  const soldTokens = useGetTokensByIds(box?.nft_address, boxOnSubgraph?.sold_nft_list);
 
   const handlePurchased: BuyBoxProps['onPurchased'] = useCallback(
     ({ nftIds }) => {
@@ -109,13 +112,18 @@ export const Details: FC = memo(() => {
           onLoad={setBox}
           onPurchase={openBuyBox}
         />
-        {erc721Tokens.length > 0 && (
+        {erc721Tokens.length + soldTokens.length > 0 && (
           <ArticleSection title="Details">
             <div className={styles.detailsContent}>
               <ul className={styles.nftList}>
+                {soldTokens.map((token) => (
+                  <li key={token.tokenId}>
+                    <NFTItem contractName={contractName} token={token} sold />
+                  </li>
+                ))}
                 {erc721Tokens.map((token) => (
                   <li key={token.tokenId}>
-                    <NFTItem contractName={contractName} token={token} />
+                    <NFTItem contractName={contractName} token={token} sold={false} />
                   </li>
                 ))}
               </ul>

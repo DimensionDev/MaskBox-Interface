@@ -13,9 +13,24 @@
       width: 100%;
     }
   }
+  &.sold .image {
+    opacity: 0.5;
+  }
   .info {
     flex-shrink: 0;
     line-height: 20px;
+  }
+  &.sold .info div {
+    opacity: 0.5;
+  }
+  position: relative;
+  .mask {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.4);
   }
 }
 .info {

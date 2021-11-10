@@ -19,6 +19,7 @@ export const contractAddresses: Record<string, Record<string, string>> = {
 };
 
 // TODO deduplicate with src/types/ERC721#ERC721Token
+/** @deprecated */
 export interface ERC721Token {
   name: string;
   chainId: number;

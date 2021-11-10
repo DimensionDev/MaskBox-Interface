@@ -13,7 +13,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   BigDecimal: any;
-  BigInt: any;
+  BigInt: string;
   Bytes: string;
 };
 
@@ -35,7 +35,9 @@ export type Maskbox = {
   nft_address: Scalars['Bytes'];
   nft_contract: NftContract;
   sell_all: Scalars['Boolean'];
+  sold_nft_list: Array<Scalars['BigInt']>;
   start_time: Scalars['Int'];
+  tx_hash: Scalars['Bytes'];
 };
 
 export type Maskbox_Filter = {
@@ -137,6 +139,10 @@ export type Maskbox_Filter = {
   sell_all_in?: Maybe<Array<Scalars['Boolean']>>;
   sell_all_not?: Maybe<Scalars['Boolean']>;
   sell_all_not_in?: Maybe<Array<Scalars['Boolean']>>;
+  sold_nft_list?: Maybe<Array<Scalars['BigInt']>>;
+  sold_nft_list_contains?: Maybe<Array<Scalars['BigInt']>>;
+  sold_nft_list_not?: Maybe<Array<Scalars['BigInt']>>;
+  sold_nft_list_not_contains?: Maybe<Array<Scalars['BigInt']>>;
   start_time?: Maybe<Scalars['Int']>;
   start_time_gt?: Maybe<Scalars['Int']>;
   start_time_gte?: Maybe<Scalars['Int']>;
@@ -145,6 +151,12 @@ export type Maskbox_Filter = {
   start_time_lte?: Maybe<Scalars['Int']>;
   start_time_not?: Maybe<Scalars['Int']>;
   start_time_not_in?: Maybe<Array<Scalars['Int']>>;
+  tx_hash?: Maybe<Scalars['Bytes']>;
+  tx_hash_contains?: Maybe<Scalars['Bytes']>;
+  tx_hash_in?: Maybe<Array<Scalars['Bytes']>>;
+  tx_hash_not?: Maybe<Scalars['Bytes']>;
+  tx_hash_not_contains?: Maybe<Scalars['Bytes']>;
+  tx_hash_not_in?: Maybe<Array<Scalars['Bytes']>>;
 };
 
 export enum Maskbox_OrderBy {
@@ -159,7 +171,9 @@ export enum Maskbox_OrderBy {
   NftAddress = 'nft_address',
   NftContract = 'nft_contract',
   SellAll = 'sell_all',
+  SoldNftList = 'sold_nft_list',
   StartTime = 'start_time',
+  TxHash = 'tx_hash',
 }
 
 export type NftContract = {
@@ -361,6 +375,7 @@ export type MaskBoxQuery = {
         start_time: number;
         end_time: number;
         sell_all: boolean;
+        sold_nft_list: Array<string>;
         nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
       }
     | null
@@ -403,6 +418,7 @@ export const MaskBoxDocument = gql`
         address
         name
       }
+      sold_nft_list
     }
   }
 `;

@@ -12,6 +12,7 @@ query MaskBox($id: ID!) {
       address
       name
     }
+    sold_nft_list
   }
 }
 
