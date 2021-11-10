@@ -22,7 +22,7 @@ export const NFTPickerDialog: FC<Props> = ({
   const [keyword, setKeyword] = useState('');
   const [ids, setIds] = useState(selectedTokenIds);
   return (
-    <PickerDialog {...rest} title="Seletct a Token">
+    <PickerDialog {...rest} title="Select your collection">
       <div className={styles.searchGroup}>
         <Input
           fullWidth

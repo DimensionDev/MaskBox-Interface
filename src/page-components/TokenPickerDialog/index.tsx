@@ -61,13 +61,13 @@ export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
       <div className={styles.searchGroup}>
         <Input
           fullWidth
+          round
           className={styles.input}
           value={keyword}
           onChange={(evt) => setKeyword(evt.currentTarget.value)}
           placeholder="Search name or paste address"
           leftAddon={<Icon type="search" size={24} />}
         />
-        <Button round={false}>Search</Button>
       </div>
       {isNewAddress ? (
         newToken && (

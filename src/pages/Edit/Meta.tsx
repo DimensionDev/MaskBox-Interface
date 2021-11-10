@@ -176,7 +176,7 @@ export const Meta: FC = () => {
       <Field className={styles.field} name="NFT Contract" required>
         <Input
           className={styles.clickableInput}
-          placeholder="Enter the contract address"
+          placeholder="Drop down to select or enter the contract address."
           fullWidth
           size="large"
           readOnly

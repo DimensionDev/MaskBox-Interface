@@ -57,17 +57,17 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
   }, [isNewAddress, keyword]);
 
   return (
-    <PickerDialog className={styles.dialog} title="Seletct an NFT" {...rest}>
+    <PickerDialog className={styles.dialog} title="Select an NFT" {...rest}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth
+          round
           className={styles.input}
           value={keyword}
           onChange={(evt) => setKeyword(evt.currentTarget.value)}
           placeholder="Search name or paste address"
           leftAddon={<Icon type="search" size={24} />}
         />
-        <Button round={false}>Search</Button>
       </div>
       {isNewAddress ? (
         newToken && (
