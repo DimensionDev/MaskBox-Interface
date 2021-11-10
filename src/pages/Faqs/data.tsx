@@ -88,8 +88,8 @@ export const faqsInEn = [
 
 export const faqsInZh = [
   {
-    title: 'How to login to MASKBOX?',
-    answer: 'Use MetaMask wallet or a wallet that supports WalletConnect to login.',
+    title: '如何登录 Maskbox？',
+    answer: '使用 MetaMask 钱包或支持 Wallet Connect 的钱包进行登录。',
   },
   {
     title: '如何安装 MetaMask?',

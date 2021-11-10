@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 
 export function formatAddres(address: string): string {
@@ -8,4 +9,10 @@ export function formatAddres(address: string): string {
 
 export function isSameAddress(addr1: string, addr2: string): boolean {
   return addr1.toLowerCase() === addr2.toLowerCase();
+}
+
+export function addGasMargin(value: BigNumber, scale = 5000) {
+  return BigNumber.from(value)
+    .mul(10000 + scale)
+    .div(10000);
 }

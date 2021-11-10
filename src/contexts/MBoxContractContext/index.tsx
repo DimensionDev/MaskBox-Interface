@@ -1,5 +1,6 @@
 import { ZERO } from '@/lib';
 import { BoxOnChain } from '@/types';
+import { addGasMargin } from '@/utils';
 import { BigNumber } from 'ethers';
 import React, { FC, memo, useCallback, useContext, useEffect, useState } from 'react';
 import { useMaskboxContract } from '..';
@@ -75,9 +76,14 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
       if (!contract || !ethersProvider) {
         return null;
       }
-      const tx = await contract
-        .connect(ethersProvider.getSigner())
-        .openBox(boxId, quantity, paymentTokenIndex, proof, overrides);
+      const signer = ethersProvider.getSigner();
+      const estimatedGas = await contract
+        .connect(signer)
+        .estimateGas.openBox(boxId, quantity, paymentTokenIndex, proof, overrides);
+      const tx = await contract.connect(signer).openBox(boxId, quantity, paymentTokenIndex, proof, {
+        gasLimit: addGasMargin(estimatedGas),
+        ...overrides,
+      });
       return tx;
     },
     [contract],
