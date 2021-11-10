@@ -2,6 +2,7 @@ import { getMediaType, MediaType, useUpload } from '@/contexts';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
 import { Icon, LoadingIcon } from '../Icon';
+import { VideoPlayer } from '../VideoPlayer';
 import styles from './index.module.less';
 
 interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onError'> {
@@ -85,7 +86,7 @@ export const UploadBox: FC<Props> = ({
           );
         }
       }}
-      onClick={() => handleUpload()}
+      onClick={mediaUrl ? undefined : () => handleUpload()}
       onKeyDown={(evt) => {
         if (evt.code === 'Enter') {
           handleUpload();
@@ -100,7 +101,7 @@ export const UploadBox: FC<Props> = ({
             case MediaType.Unknown:
               return <img className={styles.previewImage} src={mediaUrl} />;
             case MediaType.Video:
-              return <video className={styles.previewImage} src={mediaUrl} />;
+              return <VideoPlayer className={styles.previewImage} src={mediaUrl} />;
             case MediaType.Audio:
               return <audio className={styles.previewImage} src={mediaUrl} />;
           }
