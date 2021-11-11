@@ -65,6 +65,11 @@ export const Meta: FC = () => {
     ownedTokens: ownedERC721Tokens,
   } = useEdit();
 
+  const selectedERC721Tokens = useMemo(
+    () => ownedERC721Tokens.filter((token) => formData.selectedNFTIds.includes(token.tokenId)),
+    [ownedERC721Tokens, formData.selectedNFTIds],
+  );
+
   const { saveBox } = useRSS3();
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useDialog();
   const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
@@ -224,7 +229,7 @@ export const Meta: FC = () => {
         <Field className={styles.field} name="Select NFT" required>
           <div className={styles.selectedNft}>
             <NFTSelectList
-              tokens={ownedERC721Tokens}
+              tokens={selectedERC721Tokens}
               selectedTokenIds={formData.selectedNFTIds}
               onPick={() => setNftPickerVisible(true)}
             />

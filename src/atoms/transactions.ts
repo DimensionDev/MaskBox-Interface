@@ -26,7 +26,6 @@ export const useRecentTransactions = () => {
     [transactions],
   );
 
-  console.log('transactions', { ethersProvider });
   useEffect(() => {
     if (!ethersProvider) return;
     const onBlockMined = () => {

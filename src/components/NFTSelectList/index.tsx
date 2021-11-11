@@ -8,14 +8,12 @@ export interface NFTSelectListProps extends Omit<HTMLProps<HTMLDivElement>, 'onC
   tokens: ERC721Token[];
   selectedTokenIds?: string[];
   pickable?: boolean;
-  keyword?: string;
   onPick?: () => void;
   onChange?: (ids: string[]) => void;
 }
 
 export const NFTSelectList: FC<NFTSelectListProps> = ({
   pickable,
-  keyword,
   onPick,
   tokens,
   selectedTokenIds = [],
@@ -23,50 +21,36 @@ export const NFTSelectList: FC<NFTSelectListProps> = ({
   className,
   ...rest
 }) => {
-  const filteredList = useMemo(() => {
-    if (!pickable) {
-      return tokens.filter((token) => selectedTokenIds.includes(token.tokenId));
-    }
-    if (keyword) {
-      return tokens.filter((token) => token.tokenId.toString().includes(keyword));
-    }
-    return tokens;
-  }, [tokens, selectedTokenIds, keyword]);
   const allIds = useMemo(() => tokens.map((token) => token.tokenId), [tokens]);
-
-  const [selectedIds, setSelectedIds] = useState(selectedTokenIds);
   const toggleItem = useCallback(
     (currentId: string, checked: boolean) => {
+      if (!onChange) return;
       const newIds = allIds.filter((id) => {
         if (id === currentId) return checked;
-        return selectedIds.includes(id);
+        return selectedTokenIds.includes(id);
       });
-      setSelectedIds(newIds);
+      onChange(newIds);
     },
-    [allIds, selectedIds],
+    [allIds, selectedTokenIds],
   );
-
-  useEffect(() => {
-    onChange?.(selectedIds);
-  }, [selectedIds]);
 
   return (
     <div className={className} {...rest}>
       <ul className={styles.list}>
-        {filteredList.map((token) => (
+        {tokens.map((token) => (
           <li className={styles.item} key={token.tokenId}>
             <NFTItem
               token={token}
               className={styles.nft}
               onClick={() => {
-                toggleItem(token.tokenId, !selectedIds.includes(token.tokenId));
+                toggleItem(token.tokenId, !selectedTokenIds.includes(token.tokenId));
               }}
             />
             {pickable && (
               <input
                 type="checkbox"
                 className={styles.checkbox}
-                checked={selectedIds.includes(token.tokenId)}
+                checked={selectedTokenIds.includes(token.tokenId)}
                 onChange={(evt) => toggleItem(token.tokenId, evt.currentTarget.checked)}
               />
             )}
