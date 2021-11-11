@@ -22,8 +22,12 @@ export const ERC721TokenList: FC<TokenListProps> = ({ tokens, className, onPick,
   return (
     <ul className={classnames(styles.list, className)} {...rest}>
       {tokens.map((token) => (
-        <li className={styles.item} key={token.address} onClick={() => onPick?.(token)}>
-          <ERC721Token isCustomized={addresses.includes(token.address)} token={token} />
+        <li className={styles.item} key={token.address}>
+          <ERC721Token
+            isCustomized={addresses.includes(token.address)}
+            token={token}
+            onClick={() => onPick?.(token)}
+          />
         </li>
       ))}
     </ul>
@@ -55,11 +59,13 @@ export const ERC721Token: FC<ERC721TokenProps> = ({
   }, [account, token.address, ethersProvider]);
 
   useOnceShowup(containerRef, fetchBalance);
+  const hasNoToken = balance.eq(0);
 
   return (
     <div
-      className={classnames(styles.token, className)}
-      onClick={onClick}
+      className={classnames(className, styles.token, { [styles.disabled]: hasNoToken })}
+      onClick={hasNoToken ? undefined : onClick}
+      title={hasNoToken ? 'You have no NFT of this kind for sale' : undefined}
       ref={containerRef}
       {...rest}
     >
