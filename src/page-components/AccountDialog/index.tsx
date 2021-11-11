@@ -1,4 +1,4 @@
-import { Button, Icon, Overlay, PickerDialog, PickerDialogProps } from '@/components';
+import { Button, Icon, LoadingIcon, Overlay, PickerDialog, PickerDialogProps } from '@/components';
 import { useCopyToClipboard } from 'react-use';
 import classnames from 'classnames';
 import { useWeb3Context } from '@/contexts';
@@ -6,6 +6,8 @@ import { getNetworkExplorer } from '@/lib';
 import { FC, useMemo } from 'react';
 import styles from './index.module.less';
 import { useLocales } from '../useLocales';
+import { useRecentTransactions } from '@/atoms';
+import { TransactionStatus } from '@/types';
 
 interface Props extends PickerDialogProps {}
 
@@ -17,6 +19,7 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
     return `${url}/address/${account}`;
   }, [chainId, account]);
   const [_, copyToClipboard] = useCopyToClipboard();
+  const { transactions, clearTransactions } = useRecentTransactions();
 
   if (!open) return null;
 
@@ -66,6 +69,36 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
             </div>
           </div>
         ) : null}
+        <div className={styles.recentTxes}>
+          <h3 className={styles.title}>
+            Recent Transactions
+            {transactions.length > 0 && (
+              <button className={styles.clearButton} onClick={clearTransactions}>
+                Clear All
+              </button>
+            )}
+          </h3>
+          {transactions.length > 0 ? (
+            <ul className={styles.transactions}>
+              {transactions.map((tx) => (
+                <li key={tx.txHash} className={styles.transaction}>
+                  {tx.status === TransactionStatus.Pending ? (
+                    <LoadingIcon color="#FFA800" size={16} />
+                  ) : (
+                    <Icon
+                      color={tx.status === TransactionStatus.Success ? '#2BC128' : '#FB2047'}
+                      type={tx.status === TransactionStatus.Success ? 'success' : 'warning'}
+                      size={16}
+                    />
+                  )}
+                  <span className={styles.operationName}>{tx.name}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className={styles.empty}>Your transactions will appear here...</div>
+          )}
+        </div>
       </PickerDialog>
     </Overlay>
   );

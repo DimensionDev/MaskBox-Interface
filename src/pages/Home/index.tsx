@@ -34,7 +34,7 @@ export const Home: FC = () => {
       <div className={classnames(styles.frame, styles.rightFrame)}>
         <div className={styles.content}>
           <div className={styles.image}>
-            <img src={boxUrl} alt="box" />
+            <img src={boxUrl} alt="box" loading="lazy" />
           </div>
           <div className={styles.texts}>
             <h2 className={styles.title}>{t('Mint your NFT Mystery with a suitbale gas fee')}</h2>
@@ -46,7 +46,7 @@ export const Home: FC = () => {
       <div className={classnames(styles.frame, styles.leftFrame)}>
         <div className={styles.content}>
           <div className={styles.image}>
-            <img src={nftUrl} alt="box" />
+            <img src={nftUrl} alt="box" loading="lazy" />
           </div>
           <div className={styles.texts}>
             <h2 className={styles.title}>{t('Multi-chains NFT Mystery publishing')}</h2>
@@ -58,7 +58,7 @@ export const Home: FC = () => {
       <div className={classnames(styles.frame, styles.rightFrame)}>
         <div className={styles.content}>
           <div className={styles.image}>
-            <img src={kvUrl} alt="box" />
+            <img src={kvUrl} alt="box" loading="lazy" />
           </div>
           <div className={styles.texts}>
             <h2 className={styles.title}>{t('Publish your own NFT Mystery')}</h2>

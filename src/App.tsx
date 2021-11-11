@@ -1,3 +1,4 @@
+import { Provider } from 'jotai';
 import { HashRouter as Router } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Routes } from './Routes';
@@ -23,30 +24,32 @@ function App() {
   return (
     <Router>
       <ThemeProvider>
-        <I18nProvider>
-          <UploadProvider>
-            <Web3Provider>
-              <ApolloProvider>
-                <NFTContractProvider>
-                  <MBoxContractProvider>
-                    <RSS3Provider>
-                      <Layout>
-                        <Routes />
-                      </Layout>
-                    </RSS3Provider>
-                  </MBoxContractProvider>
-                </NFTContractProvider>
-              </ApolloProvider>
-            </Web3Provider>
-            <Toaster
-              position="top-right"
-              containerClassName={styles.toastContainer}
-              toastOptions={{
-                className: styles.toast,
-              }}
-            />
-          </UploadProvider>
-        </I18nProvider>
+        <Provider>
+          <I18nProvider>
+            <UploadProvider>
+              <Web3Provider>
+                <ApolloProvider>
+                  <NFTContractProvider>
+                    <MBoxContractProvider>
+                      <RSS3Provider>
+                        <Layout>
+                          <Routes />
+                        </Layout>
+                      </RSS3Provider>
+                    </MBoxContractProvider>
+                  </NFTContractProvider>
+                </ApolloProvider>
+              </Web3Provider>
+              <Toaster
+                position="top-right"
+                containerClassName={styles.toastContainer}
+                toastOptions={{
+                  className: styles.toast,
+                }}
+              />
+            </UploadProvider>
+          </I18nProvider>
+        </Provider>
       </ThemeProvider>
     </Router>
   );

@@ -42,7 +42,8 @@ export type IconType =
   | 'upload'
   | 'uploading'
   | 'wallet'
-  | 'walletconnect';
+  | 'walletconnect'
+  | 'warning';
 export const iconNameMap = {
   add: 'add.svg',
   arrowDown: 'arrow-down.svg',
@@ -88,6 +89,7 @@ export const iconNameMap = {
   uploading: 'uploading.svg',
   wallet: 'wallet.svg',
   walletconnect: 'walletconnect.svg',
+  warning: 'warning.svg',
 };
 export const addIcon =
   '<svg width="100%" height="100%" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path d="M11.5 5.50562C11.5 4.95333 11.9477 4.50562 12.5 4.50562C13.0523 4.50562 13.5 4.95333 13.5 5.50562V11.5056H19.5C20.0523 11.5056 20.5 11.9533 20.5 12.5056C20.5 13.0579 20.0523 13.5056 19.5 13.5056H13.5V19.5056C13.5 20.0579 13.0523 20.5056 12.5 20.5056C11.9477 20.5056 11.5 20.0579 11.5 19.5056V13.5056H5.5C4.94771 13.5056 4.5 13.0579 4.5 12.5056C4.5 11.9533 4.94771 11.5056 5.5 11.5056H11.5V5.50562Z" fill="currentColor"/>\n</svg>';
@@ -160,6 +162,7 @@ export const uploadingIcon =
 export const walletIcon =
   '<svg width="100%" height="100%" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path d="M13.5 5.25H15.75C15.9489 5.25 16.1397 5.32902 16.2803 5.46967C16.421 5.61032 16.5 5.80109 16.5 6V15C16.5 15.1989 16.421 15.3897 16.2803 15.5303C16.1397 15.671 15.9489 15.75 15.75 15.75H2.25C2.05109 15.75 1.86032 15.671 1.71967 15.5303C1.57902 15.3897 1.5 15.1989 1.5 15V3C1.5 2.80109 1.57902 2.61032 1.71967 2.46967C1.86032 2.32902 2.05109 2.25 2.25 2.25H13.5V5.25ZM3 6.75V14.25H15V6.75H3ZM3 3.75V5.25H12V3.75H3ZM11.25 9.75H13.5V11.25H11.25V9.75Z" fill="currentColor"/>\n</svg>';
 export const walletconnectIcon = new URL('./icons/walletconnect.svg', import.meta.url).href;
+export const warningIcon = new URL('./icons/warning.svg', import.meta.url).href;
 
 export const iconsWithDynamicColor = [
   'add',
@@ -236,5 +239,6 @@ const icons = {
   uploading: uploadingIcon,
   wallet: walletIcon,
   walletconnect: walletconnectIcon,
+  warning: warningIcon,
 };
 export default icons;

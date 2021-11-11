@@ -13,6 +13,7 @@ export enum StorageKeys {
   WalletId = 'wallet-id',
   ChainId = 'chain-id',
   WalletType = 'wallet-type',
+  RecentTransations = 'recent-transitions',
 }
 
 export const setStorage = (key: string, value: any) => {

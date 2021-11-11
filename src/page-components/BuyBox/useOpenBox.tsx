@@ -1,8 +1,9 @@
+import { useRecentTransactions } from '@/atoms';
 import { Icon, showToast } from '@/components';
 import { useMBoxContract, useWeb3Context } from '@/contexts';
 import { useMaskboxContract } from '@/hooks/useMaskboxContract';
 import { getNetworkExplorer, ZERO_ADDRESS } from '@/lib';
-import { BoxPayment } from '@/types';
+import { BoxPayment, TransactionStatus } from '@/types';
 import { useCallback, useState } from 'react';
 import styles from './index.module.less';
 
@@ -18,6 +19,7 @@ export function useOpenBox(
   const contract = useMaskboxContract(true);
   const isNative = payment.token_addr === ZERO_ADDRESS;
   const [loading, setLoading] = useState(false);
+  const { addTransaction, updateTransactionBy } = useRecentTransactions();
 
   const open = useCallback(async () => {
     if (!contract || !ethersProvider || !account) return;
@@ -33,6 +35,14 @@ export function useOpenBox(
       const tx = await openBox(boxId, quantity, paymentTokenIndex, proof, {
         value: isNative ? payment.price.mul(quantity) : undefined,
       });
+
+      const txHash = tx.hash as string;
+      addTransaction({
+        txHash,
+        name: 'Draw MaskBox',
+        status: TransactionStatus.Pending,
+      });
+
       const exploreUrl = chainId ? `${getNetworkExplorer(chainId)}/tx/${tx?.hash}` : '';
       const closeToast = showToast({
         title: 'Transaction sent',
@@ -61,6 +71,10 @@ export function useOpenBox(
       showToast({
         title: `Draw Success`,
         variant: 'success',
+      });
+      updateTransactionBy({
+        txHash,
+        status: TransactionStatus.Success,
       });
       return {
         boxId,
