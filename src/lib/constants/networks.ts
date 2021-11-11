@@ -1,4 +1,5 @@
 import { ethereumIcon, binanceIcon, polygonIcon } from '../../components/Icon/icon-data';
+import { ChainId } from './chainId';
 
 export const supportedChains = [1, 4];
 
@@ -47,4 +48,19 @@ export const networkExplorers: Record<number, string> = {
 
 export function isSupportedChain(chainId: number) {
   return supportedChains.includes(chainId);
+}
+
+export enum GasFeeType {
+  NonEIP1559 = 1,
+  EIP1559 = 2,
+}
+
+export const gasFeeTypeMap: Record<number, GasFeeType> = {
+  [ChainId.Mainnet]: GasFeeType.EIP1559,
+  [ChainId.Rinkeby]: GasFeeType.EIP1559,
+};
+
+export function supportedEIP1559(chainId?: number) {
+  if (!chainId) return false;
+  return gasFeeTypeMap[chainId as ChainId] === GasFeeType.EIP1559;
 }
