@@ -2,11 +2,16 @@
   width: 480px;
 }
 .nftList {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
-  height: 210px;
+  height: 210 px;
   overflow: auto;
-  justify-content: space-around;
+  grid-gap: 20 px 0;
+  grid-template-columns: 1fr 1fr;
+  .item {
+    display: flex;
+    justify-content: center;
+  }
 }
 .buttonGroup {
   margin-top: 30px;

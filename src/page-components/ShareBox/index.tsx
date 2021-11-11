@@ -23,7 +23,7 @@ export const ShareBox: FC<Props> = ({ nftAddress, nftIds, onShare, ...rest }) =>
     <PickerDialog className={styles.shareBox} title="Successful" {...rest}>
       <ul className={styles.nftList}>
         {tokens.map((token) => (
-          <li key={token.tokenId}>
+          <li key={token.tokenId} className={styles.item}>
             <NFTItem contractName={nftName} token={token} />
           </li>
         ))}
