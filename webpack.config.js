@@ -2,6 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 /** import('webpack').Configuration */
 const config = {
@@ -12,6 +13,7 @@ const config = {
     publicPath: '/',
     chunkFilename: '[name]-[id].js',
   },
+  devtool: 'source-map',
   module: {
     rules: [
       {
@@ -28,9 +30,7 @@ const config = {
       {
         test: /\.less$/,
         use: [
-          {
-            loader: 'style-loader',
-          },
+          MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
@@ -54,6 +54,9 @@ const config = {
     new webpack.ProvidePlugin({
       process: 'process/browser.js',
       Buffer: ['buffer', 'Buffer'],
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name]-[hash].css',
     }),
   ],
   devServer: {
