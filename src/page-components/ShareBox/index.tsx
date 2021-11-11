@@ -2,6 +2,7 @@ import { Button, NFTItem, PickerDialog, PickerDialogProps } from '@/components';
 import { useNFTContract, useNFTName } from '@/contexts';
 import { ERC721Token } from '@/types';
 import { FC, useEffect, useState } from 'react';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 interface Props extends PickerDialogProps {
@@ -11,6 +12,7 @@ interface Props extends PickerDialogProps {
 }
 
 export const ShareBox: FC<Props> = ({ nftAddress, nftIds, onShare, ...rest }) => {
+  const t = useLocales();
   const { getByIdList } = useNFTContract();
   const [tokens, setTokens] = useState<ERC721Token[]>([]);
   const nftName = useNFTName(nftAddress);
@@ -20,7 +22,7 @@ export const ShareBox: FC<Props> = ({ nftAddress, nftIds, onShare, ...rest }) =>
   }, [nftAddress, nftIds]);
 
   return (
-    <PickerDialog className={styles.shareBox} title="Successful" {...rest}>
+    <PickerDialog className={styles.shareBox} title={t('Successful') as string} {...rest}>
       <ul className={styles.nftList}>
         {tokens.map((token) => (
           <li key={token.tokenId} className={styles.item}>
@@ -37,7 +39,7 @@ export const ShareBox: FC<Props> = ({ nftAddress, nftIds, onShare, ...rest }) =>
           size="middle"
           onClick={onShare}
         >
-          Share to twitter
+          {t('Share to twitter')}
         </Button>
       </div>
     </PickerDialog>

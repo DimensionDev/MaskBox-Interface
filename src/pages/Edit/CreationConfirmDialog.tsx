@@ -6,6 +6,7 @@ import { formatAddres } from '@/utils';
 import classnames from 'classnames';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './dialog.module.less';
+import { useLocales } from './useLocales';
 
 interface Props extends PickerDialogProps {
   sellAll?: boolean;
@@ -24,6 +25,7 @@ export const CreationConfirmDialog: FC<Props> = ({
   creating,
   ...rest
 }) => {
+  const t = useLocales();
   const { account, providerChainId: chainId } = useWeb3Context();
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>([]);
   const accountExplorerUrl = useMemo(
@@ -45,13 +47,13 @@ export const CreationConfirmDialog: FC<Props> = ({
 
   return (
     <PickerDialog
-      title="Create maskbox"
+      title={t('Create maskbox') as string}
       className={classnames(styles.confirmDialog, className)}
       {...rest}
     >
       {account ? (
         <div className={styles.meta}>
-          <div className={styles.name}>Wallet account</div>
+          <div className={styles.name}>{t('Wallet account')}</div>
           <div className={styles.value}>
             {formatAddres(account)}
             <a href={accountExplorerUrl} target="_blank" rel="noopener noreferrer">
@@ -61,7 +63,7 @@ export const CreationConfirmDialog: FC<Props> = ({
         </div>
       ) : null}
       <div className={styles.meta}>
-        <div className={styles.name}>Collections</div>
+        <div className={styles.name}>{t('Collections')}</div>
         <div className={styles.value}>{contractName}</div>
       </div>
       <ul className={classnames(styles.meta, styles.nftList)}>
@@ -72,11 +74,11 @@ export const CreationConfirmDialog: FC<Props> = ({
         ))}
       </ul>
       <div className={styles.meta}>
-        <div className={styles.name}>Total Amount</div>
+        <div className={styles.name}>{t('Total Amount')}</div>
         <div className={styles.value}>{erc721Tokens.length}</div>
       </div>
       <Button onClick={onConfirm} disabled={creating} fullWidth colorScheme="primary" size="large">
-        {creating ? 'Creating...' : 'Confirm'}
+        {creating ? t('Creating...') : t('Confirm')}
       </Button>
     </PickerDialog>
   );

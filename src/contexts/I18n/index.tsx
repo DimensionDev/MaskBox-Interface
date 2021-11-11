@@ -52,14 +52,17 @@ export function createLocales(configs: LocaleConfig) {
   return function useLocales() {
     const { language } = useI18n();
     const t = useCallback(
-      (key: string, data?: Record<string, string>) => {
+      (key: string, data?: Record<string, string | number>) => {
         const config = configs[language as string];
         let text = config?.[key] || configs.en?.[key] || key;
         if (data) {
           text = text.replace(/{(.*?)}/g, (_, key) => data[key] ?? key);
         }
+        const mightBeHtml = /(<.*?>|&\w+;)/.test(text);
 
-        return /<.*?>/.test(text) ? <span dangerouslySetInnerHTML={{ __html: text }} /> : text;
+        return mightBeHtml
+          ? ((<span dangerouslySetInnerHTML={{ __html: text }} />) as unknown as string)
+          : text;
       },
       [language],
     );

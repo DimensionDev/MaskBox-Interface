@@ -14,8 +14,10 @@ import {
   useUpdateFormField,
 } from './atoms';
 import styles from './index.module.less';
+import { useLocales } from './useLocales';
 
 export const Description: FC = () => {
+  const t = useLocales();
   const fullfilled = useAtomValue(descriptionFullfilledAtom);
   const history = useHistory();
   const [formData, setFormData] = useAtom(formDataAtom);
@@ -55,12 +57,12 @@ export const Description: FC = () => {
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>
-        Description
+        {t('Description')}
         <span className={styles.step}>1/2</span>
       </h2>
-      <Field className={styles.field} name="MaskBox name" required>
+      <Field className={styles.field} name={t('MaskBox name') as string} required>
         <Input
-          placeholder="eg. Punk & Mask Special Edition"
+          placeholder={t('eg. Punk & Mask Special Edition') as string}
           fullWidth
           size="large"
           value={formData.name}
@@ -69,8 +71,8 @@ export const Description: FC = () => {
       </Field>
       <Field
         className={classnames(styles.field, styles.mediaField)}
-        name="Mystery thumbnail"
-        tip="Recommendation: 480*320/960*640"
+        name={t('Mystery thumbnail') as string}
+        tip={t('Recommendation: 480*320/960*640') as string}
         required
       >
         <UploadBox
@@ -92,7 +94,7 @@ export const Description: FC = () => {
               updateField('mediaType', MediaType.Unknown);
             }}
           >
-            Reset
+            {t('Reset')}
           </Button>
         ) : null}
       </Field>
@@ -100,11 +102,11 @@ export const Description: FC = () => {
       {formData.activities.map((activity, index, list) => (
         <Field
           className={styles.field}
-          name={`Activity description ${list.length > 1 ? index + 1 : ''}`}
+          name={`${t('Activity description')} ${list.length > 1 ? index + 1 : ''}`}
           key={index}
         >
           <Input
-            placeholder="eg.Rule Introduction"
+            placeholder={t('eg.Rule Introduction') as string}
             fullWidth
             size="large"
             value={activity.title}
@@ -115,7 +117,7 @@ export const Description: FC = () => {
           />
           <Textarea
             className={styles.cell}
-            placeholder="Write Something.."
+            placeholder={t('Write Something..') as string}
             value={activity.body}
             onChange={(evt) => {
               const newValue = evt.currentTarget.value;
@@ -133,7 +135,7 @@ export const Description: FC = () => {
             size="large"
             onClick={appendActivity}
           >
-            Add
+            {t('Add')}
           </Button>
           {formData.activities.length > 3 && (
             <Button
@@ -142,7 +144,7 @@ export const Description: FC = () => {
               size="large"
               onClick={deleteLastActivity}
             >
-              Delete
+              {t('Delete')}
             </Button>
           )}
         </div>
@@ -157,7 +159,7 @@ export const Description: FC = () => {
             history.replace('/edit/meta');
           }}
         >
-          Next
+          {t('Next')}
         </Button>
       </div>
     </section>

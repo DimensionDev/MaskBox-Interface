@@ -14,6 +14,7 @@ import { getStorage, isSameAddress, setStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 interface Props extends PickerDialogProps {
@@ -26,6 +27,7 @@ function storeNewToken(newToken: TokenType) {
 }
 
 export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
+  const t = useLocales();
   const { tokens, updateTokens } = useTokenList();
   const [keyword, setKeyword] = useState('');
   const getERC20Token = useGetERC20TokenInfo();
@@ -57,7 +59,7 @@ export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
   }, [isNewAddress, keyword]);
 
   return (
-    <PickerDialog className={styles.dialog} title="Seletct a Token" {...rest}>
+    <PickerDialog className={styles.dialog} title={t('Seletct a Token') as string} {...rest}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth
@@ -65,7 +67,7 @@ export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
           className={styles.input}
           value={keyword}
           onChange={(evt) => setKeyword(evt.currentTarget.value)}
-          placeholder="Search name or paste address"
+          placeholder={t('Search name or paste address') as string}
           leftAddon={<Icon type="search" size={24} />}
         />
       </div>
@@ -83,7 +85,7 @@ export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
                   updateTokens();
                 }}
               >
-                Import
+                {t('Import')}
               </Button>
             </div>
           </div>

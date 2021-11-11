@@ -1,8 +1,8 @@
 import { FC, HTMLProps } from 'react';
 import styles from './index.module.less';
 
-interface Props extends HTMLProps<HTMLTableSectionElement> {
-  title: string;
+interface Props extends Omit<HTMLProps<HTMLTableSectionElement>, 'title'> {
+  title: string | JSX.Element;
 }
 export const ArticleSection: FC<Props> = ({ title, children }) => {
   return (

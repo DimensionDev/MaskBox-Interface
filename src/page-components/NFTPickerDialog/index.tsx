@@ -8,6 +8,7 @@ import {
   NFTSelectListProps,
 } from '@/components';
 import { FC, useState } from 'react';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 interface Props extends PickerDialogProps, Pick<NFTSelectListProps, 'tokens' | 'selectedTokenIds'> {
@@ -19,20 +20,21 @@ export const NFTPickerDialog: FC<Props> = ({
   onConfirm,
   ...rest
 }) => {
+  const t = useLocales();
   const [keyword, setKeyword] = useState('');
   const [ids, setIds] = useState(selectedTokenIds);
   return (
-    <PickerDialog {...rest} title="Select your collection">
+    <PickerDialog {...rest} title={t('Select your collection') as string}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth
           value={keyword}
           className={styles.input}
-          placeholder="Token ID"
+          placeholder={t('Token ID') as string}
           onChange={(evt) => setKeyword(evt.currentTarget.value)}
           leftAddon={<Icon type="search" size={24} />}
         />
-        <Button round={false}>Search</Button>
+        <Button round={false}>{t('Search')}</Button>
       </div>
       <NFTSelectList
         tokens={tokens}
@@ -44,7 +46,7 @@ export const NFTPickerDialog: FC<Props> = ({
       />
       <div className={styles.buttonGroup}>
         <Button fullWidth onClick={() => onConfirm?.(ids)}>
-          Confirm
+          {t('Confirm')}
         </Button>
       </div>
     </PickerDialog>

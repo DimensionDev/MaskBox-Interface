@@ -15,6 +15,7 @@ import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useERC721TokenList } from './useERC721TokenList';
 import styles from './index.module.less';
+import { useLocales } from '../useLocales';
 
 interface Props extends PickerDialogProps {
   onPick?: (token: ERC721TokenType) => void;
@@ -26,6 +27,7 @@ function storeNewToken(newToken: ERC721TokenType) {
 }
 
 export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
+  const t = useLocales();
   const { erc721Tokens, updateERC721Tokens } = useERC721TokenList();
   const [keyword, setKeyword] = useState('');
   const getERC721Token = useGetERC721Token();
@@ -57,7 +59,7 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
   }, [isNewAddress, keyword]);
 
   return (
-    <PickerDialog className={styles.dialog} title="Select an NFT" {...rest}>
+    <PickerDialog className={styles.dialog} title={t('Select an NFT') as string} {...rest}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth
@@ -65,7 +67,7 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
           className={styles.input}
           value={keyword}
           onChange={(evt) => setKeyword(evt.currentTarget.value)}
-          placeholder="Search name or paste address"
+          placeholder={t('Search name or paste address') as string}
           leftAddon={<Icon type="search" size={24} />}
         />
       </div>
@@ -83,14 +85,14 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
                   updateERC721Tokens();
                 }}
               >
-                Import
+                {t('Import')}
               </Button>
             </div>
           </div>
         )
       ) : keyword && filteredContracts.length === 0 ? (
         <div className={styles.noResult}>
-          No results for <strong className={styles.keyword}>{keyword}</strong>
+          {t('No results for')} <strong className={styles.keyword}>{keyword}</strong>
         </div>
       ) : (
         <ERC721TokenList className={styles.tokenList} tokens={filteredContracts} onPick={onPick} />

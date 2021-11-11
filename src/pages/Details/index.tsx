@@ -10,7 +10,7 @@ import {
   RequestSwitchChain,
   ShareBox,
 } from '@/page-components';
-import { ERC721Token, ExtendedBoxInfo } from '@/types';
+import { ERC721Token } from '@/types';
 import { BigNumber } from 'ethers';
 import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -18,9 +18,11 @@ import { useLocation } from 'react-router-dom';
 import styles from './index.module.less';
 import { useBox } from './useBox';
 import { useGetTokensByIds } from './useGetTokensByIds';
+import { useLocales } from './useLocales';
 
 const PAGE_SIZE = BigNumber.from(50);
 export const Details: FC = memo(() => {
+  const t = useLocales();
   const { ethersProvider, isNotSupportedChain } = useWeb3Context();
   const location = useLocation();
   const { getNftListForSale } = useMBoxContract();
@@ -126,7 +128,7 @@ export const Details: FC = memo(() => {
           onPurchase={openBuyBox}
         />
         {erc721Tokens.length + soldTokens.length > 0 && (
-          <ArticleSection title="Details">
+          <ArticleSection title={t('Details')}>
             <div className={styles.detailsContent}>
               <ul className={styles.nftList}>
                 {soldTokens.map((token) => (

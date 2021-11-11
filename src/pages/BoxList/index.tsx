@@ -5,10 +5,12 @@ import { RequestConnection, RequestSwitchChain, WrapMaskbox } from '@/page-compo
 import { FC, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.module.less';
+import { useLocales } from './useLocales';
 
 const PAGE_SIZE = 5;
 const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
+  const t = useLocales();
   const [fetchBoxes, { data: boxesData, loading }] = useMaskBoxesLazyQuery({});
   const { providerChainId, isNotSupportedChain } = useWeb3Context();
 
@@ -70,14 +72,14 @@ export const BoxList: FC = () => {
       {page === 1 && maskboxes.length < PAGE_SIZE ? null : (
         <div className={styles.paginaton}>
           <Button className={styles.button} disabled={page === 1 || loading} onClick={loadPrevPage}>
-            Previous
+            {t('Previous')}
           </Button>
           <Button
             className={styles.button}
             disabled={maskboxes.length < PAGE_SIZE || loading}
             onClick={loadNextPage}
           >
-            Next
+            {t('Next')}
           </Button>
         </div>
       )}

@@ -4,13 +4,14 @@ import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType, ZERO } from '@/lib';
-import { BoxOnChain, ExtendedBoxInfo } from '@/types';
+import { BoxOnChain } from '@/types';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { CountdownButton } from './CountdownButton';
 import styles from './index.module.less';
+import { useLocales } from '../useLocales';
 
 export interface MaskboxProps extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> {
   boxOnSubgraph: MaskBoxQuery['maskbox'];
@@ -29,6 +30,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   onPurchase,
   ...rest
 }) => {
+  const t = useLocales();
   const box = useMemo(
     () => ({
       ...boxOnChain,
@@ -69,15 +71,15 @@ export const Maskbox: FC<MaskboxProps> = ({
   );
 
   const buttonText = useMemo(() => {
-    if (isSoldout) return 'Sold out';
+    if (isSoldout) return t('Sold out');
     if (box.expired) {
-      return 'Ended';
+      return t('Ended');
     } else if (inList) {
-      return 'View Details';
+      return t('View Details');
     }
 
-    return price ? `Draw ( ${price}/Time )` : <LoadingIcon size={24} />;
-  }, [inList, price, isSoldout]);
+    return price ? t('Draw ( {price}/Time )', { price }) : <LoadingIcon size={24} />;
+  }, [inList, price, isSoldout, t]);
 
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
@@ -136,12 +138,14 @@ export const Maskbox: FC<MaskboxProps> = ({
           <dt className={styles.name} title={box.name}>
             {box.name ?? '-'}
           </dt>
-          <dd className={styles.infoRow}>Lucky Draw</dd>
-          <dd className={styles.infoRow}>Get your unique card (NFT) by lucky draw</dd>
+          <dd className={styles.infoRow}>{t('Lucky Draw')}</dd>
+          <dd className={styles.infoRow}>{t('Get your unique card (NFT) by lucky draw')}</dd>
           <dd className={styles.infoRow}>
             {total ? `${total.sub(box.remaining!).toString()}/${total.toString()}` : '-/-'}
           </dd>
-          <dd className={styles.infoRow}>limit : {box.personal_limit?.toString()}</dd>
+          <dd className={styles.infoRow}>
+            {t('limit')} : {box.personal_limit?.toString()}
+          </dd>
         </dl>
         {notStarted ? (
           <CountdownButton {...buttonProps} startTime={startTime!} />

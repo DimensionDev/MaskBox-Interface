@@ -5,8 +5,10 @@ import { getContractAddressConfig } from '@/lib';
 import { RequestConnection } from '@/page-components';
 import { FC, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.less';
+import { useLocales } from './useLocales';
 
 export const Profile: FC = () => {
+  const t = useLocales();
   const { providerChainId } = useWeb3Context();
   const [loading, setLoading] = useState(false);
   const { tokens, getMyTokens } = useNFTContract();
@@ -26,7 +28,7 @@ export const Profile: FC = () => {
         <img className={styles.avatar} height={96} width={96} src={avatarImage} />
       </header>
       <main className={styles.main}>
-        <ArticleSection title="My Collectibles">
+        <ArticleSection title={t('My Collectibles')}>
           {(() => {
             if (!providerChainId) return <RequestConnection />;
             if (loading)
@@ -39,7 +41,7 @@ export const Profile: FC = () => {
             if (tokens.length === 0) {
               return (
                 <div className={styles.status}>
-                  <p className={styles.text}>No items to display.</p>
+                  <p className={styles.text}>{t('No items to display.')}</p>
                   <Icon type={theme === ThemeType.Light ? 'empty' : 'emptyDark'} size={96} />
                 </div>
               );

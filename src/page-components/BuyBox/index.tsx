@@ -19,6 +19,7 @@ import { BoxPayment, ExtendedBoxInfo } from '@/types';
 import { formatAddres, formatBalance } from '@/utils';
 import { BigNumber, utils } from 'ethers';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocales } from '../useLocales';
 import { AdjustableInput } from './AdjustableInput';
 import styles from './index.module.less';
 import { useOpenBox } from './useOpenBox';
@@ -32,6 +33,7 @@ export interface BuyBoxProps extends PickerDialogProps {
 
 const paymentTokenIndex = 0;
 export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurchased, ...rest }) => {
+  const t = useLocales();
   const { account } = useWeb3Context();
   const purchasedNft = usePurchasedNft(boxId, account);
   const contractAddress = useMaskboxAddress();
@@ -88,7 +90,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   }, [openBox, onPurchased]);
 
   return (
-    <PickerDialog {...rest} className={styles.buyBox} title="Draw">
+    <PickerDialog {...rest} className={styles.buyBox} title={t('Draw') as string}>
       <dl className={styles.infos}>
         <dt className={styles.cost}>
           <div className={styles.currency}>
@@ -100,7 +102,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
           )}
         </dt>
         <dd className={styles.meta}>
-          <span className={styles.metaName}>MaskBox:</span>
+          <span className={styles.metaName}>{t('MaskBox')}:</span>
           <AdjustableInput
             className={styles.metaValue}
             value={quantity}
@@ -110,23 +112,23 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
           />
         </dd>
         <dd className={styles.meta}>
-          <span className={styles.metaName}>Quantity limit:</span>
+          <span className={styles.metaName}>{t('Quantity limit')}:</span>
           <span className={styles.metaValue}>{limit}</span>
         </dd>
         <dd className={styles.meta}>
-          <span className={styles.metaName}>Available amount:</span>
+          <span className={styles.metaName}>{t('Available amount')}:</span>
           <span className={styles.metaValue} title={account}>
             {limit - purchasedNft.length} / {limit}
           </span>
         </dd>
         <dd className={styles.meta}>
-          <span className={styles.metaName}>Current Wallet:</span>
+          <span className={styles.metaName}>{t('Current Wallet')}:</span>
           <span className={styles.metaValue} title={account}>
             {account ? formatAddres(account) : '-'}
           </span>
         </dd>
         <dd className={styles.meta}>
-          <span className={styles.metaName}>Available</span>
+          <span className={styles.metaName}>{t('Available')}</span>
           <span className={styles.metaValue}>
             {paymentToken?.decimals ? (
               `${formatBalance(balance, paymentToken.decimals, 6)} ${paymentToken?.symbol}`
@@ -147,7 +149,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             onClick={handleApprove}
           >
             <TokenIcon className={styles.tokenIcon} token={paymentToken ?? ({} as TokenType)} />
-            Allow MASKBOX to use your {paymentToken?.symbol}
+            {t('Allow MASKBOX to use your {symbol}', { symbol: paymentToken?.symbol ?? '-' })}
           </Button>
         )}
         <Button
@@ -158,7 +160,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
           disabled={!canBuy || loading}
           onClick={handleDraw}
         >
-          {loading ? 'Drawing' : balaneEnough ? 'Draw' : 'Insufficient balance'}
+          {loading ? t('Drawing') : balaneEnough ? t('Draw') : t('Insufficient balance')}
         </Button>
       </div>
     </PickerDialog>

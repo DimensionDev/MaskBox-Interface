@@ -36,10 +36,12 @@ import { CreationConfirmDialog } from './CreationConfirmDialog';
 import { useCreateMaskbox } from './hooks';
 import styles from './index.module.less';
 import { useEdit } from './useEdit';
+import { useLocales } from './useLocales';
 
 const timezoneOffset = -new Date().getTimezoneOffset() / 60;
 
 export const Meta: FC = () => {
+  const t = useLocales();
   const history = useHistory();
   const formData = useAtomValue(formDataAtom);
   const isReady = useAtomValue(readyToCreateAtom);
@@ -80,7 +82,7 @@ export const Meta: FC = () => {
     }
     setCreating(true);
     const closeToast = showToast({
-      title: 'Creating Mystery Box',
+      title: t('Creating Mystery Box'),
       processing: true,
       duration: Infinity,
     });
@@ -101,7 +103,7 @@ export const Meta: FC = () => {
       }
     } catch (err) {
       showToast({
-        title: `Fails to create: ${(err as Error).message}`,
+        title: t('Fails to create: {reason}', { reason: (err as Error).message }),
         variant: 'error',
       });
       throw err;
@@ -137,10 +139,10 @@ export const Meta: FC = () => {
             history.replace('/edit/desc');
           }}
         >
-          Go back
+          {t('Go back')}
         </Button>
       </h2>
-      <Field className={styles.field} name="Price per box" required>
+      <Field className={styles.field} name={t('Price per box')} required>
         <Input
           inputMode="decimal"
           type="number"
@@ -160,10 +162,10 @@ export const Meta: FC = () => {
           }
         />
       </Field>
-      <Field className={styles.field} name="Limit of purchase per wallet" required>
+      <Field className={styles.field} name={t('Limit of purchase per wallet')} required>
         <Input
           type="number"
-          placeholder="Limit of purchase per wallet"
+          placeholder={t('Limit of purchase per wallet')}
           fullWidth
           size="large"
           value={formData.limit ?? ''}
@@ -173,10 +175,10 @@ export const Meta: FC = () => {
         />
       </Field>
 
-      <Field className={styles.field} name="NFT Contract" required>
+      <Field className={styles.field} name={t('NFT Contract')} required>
         <Input
           className={styles.clickableInput}
-          placeholder="Drop down to select or enter the contract address."
+          placeholder={t('Drop down to select or enter the contract address.')}
           fullWidth
           size="large"
           readOnly
@@ -212,7 +214,7 @@ export const Meta: FC = () => {
                 checked={!formData.sellAll}
                 onChange={(evt) => updateField('sellAll', !evt.currentTarget.checked)}
               />
-              Selective part
+              {t('Selective part')}
             </label>
           </div>
         )}
@@ -233,11 +235,13 @@ export const Meta: FC = () => {
       <div className={styles.rowFieldGroup}>
         <Field
           className={styles.field}
-          name={`Start date (UTC${timezoneOffset > 0 ? '+' + timezoneOffset : timezoneOffset})`}
+          name={t('Start date (UTC{offset})', {
+            offset: timezoneOffset > 0 ? '+' + timezoneOffset : timezoneOffset,
+          })}
           required
         >
           <Input
-            placeholder="Date"
+            placeholder={t('Date')}
             fullWidth
             size="large"
             type="datetime-local"
@@ -248,11 +252,13 @@ export const Meta: FC = () => {
         </Field>
         <Field
           className={styles.field}
-          name={`End date (UTC${timezoneOffset > 0 ? '+' + timezoneOffset : timezoneOffset})`}
+          name={t('End date (UTC{offset})', {
+            offset: timezoneOffset > 0 ? '+' + timezoneOffset : timezoneOffset,
+          })}
           required
         >
           <Input
-            placeholder="Date"
+            placeholder={t('Date')}
             fullWidth
             size="large"
             type="datetime-local"
@@ -263,7 +269,7 @@ export const Meta: FC = () => {
         </Field>
       </div>
 
-      <Field className={styles.field} name="White list contract">
+      <Field className={styles.field} name={t('White list contract')}>
         <Input
           placeholder="eg. 0x0c8FB5C985E00fb1D232b7B9700089492Fb4B9A8"
           fullWidth
@@ -288,7 +294,7 @@ export const Meta: FC = () => {
             onClick={approveAll}
             disabled={checkingApprove || isApproving}
           >
-            {checkingApprove ? 'Checking...' : isApproving ? 'Unlocking' : 'Unlock NFT'}
+            {checkingApprove ? t('Checking...') : isApproving ? t('Unlocking') : t('Unlock NFT')}
           </Button>
         )}
         <div onMouseEnter={setAllDirty}>
@@ -301,14 +307,14 @@ export const Meta: FC = () => {
             disabled={!isReady || !isApproveAll}
             onClick={openConfirmDialog}
           >
-            Create Mystery box
+            {t('Create Mystery box')}
           </Button>
         </div>
       </div>
       <div className={styles.field}>
         <ul className={styles.validations}>
           {validations.map((validation) => (
-            <li key={validation}>{validation}</li>
+            <li key={validation}>{t(validation)}</li>
           ))}
         </ul>
       </div>
@@ -334,7 +340,7 @@ export const Meta: FC = () => {
         }
         onShare={() => {
           const link = `${window.location.origin}.io/#/details?chain=${providerChainId}&box=${createdBoxId}`;
-          const text = `I just created an NFT mystery box ${formData.name} on MaskBox platform. Try to draw and good luck! ${link}`;
+          const text = t('share-text', { name: formData.name, link: link });
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
           history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);

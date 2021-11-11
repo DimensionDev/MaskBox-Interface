@@ -17,10 +17,12 @@ import { FC, HTMLProps, useEffect, useRef } from 'react';
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { AccountDialog } from '../AccountDialog';
 import styles from './index.module.less';
+import { useLocales } from './useLocales';
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 export const PageHeader: FC<Props> = ({ className, ...rest }) => {
+  const t = useLocales();
   const {
     account,
     providerChainId,
@@ -60,7 +62,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
             activeClassName={styles.activeNav}
             to={RouteKeys.Home}
           >
-            Home
+            {t('Home')}
           </NavLink>
           <NavLink
             className={classnames(styles.navItem, {
@@ -69,21 +71,21 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
             activeClassName={styles.activeNav}
             to={RouteKeys.BoxList}
           >
-            Mystery
+            {t('Mystery')}
           </NavLink>
           <NavLink
             className={styles.navItem}
             activeClassName={styles.activeNav}
             to={RouteKeys.Profile}
           >
-            My Items
+            {t('My Items')}
           </NavLink>
           <NavLink
             className={styles.navItem}
             activeClassName={styles.activeNav}
             to={RouteKeys.Faqs}
           >
-            FAQs
+            {t('FAQs')}
           </NavLink>
         </nav>
         <div className={styles.operations}>
@@ -120,7 +122,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
                   history.push('/edit');
                 }}
               >
-                Create
+                {t('Create')}
               </Button>
             </>
           ) : (
@@ -130,7 +132,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
               disabled={isConnecting}
               loading={isConnecting}
             >
-              Connect Wallet
+              {t('Connect Wallet')}
             </LoadingButton>
           )}
           <Button
@@ -162,7 +164,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           activeClassName={styles.activeNav}
           to={RouteKeys.Home}
         >
-          Home
+          {t('Home')}
         </NavLink>
         <NavLink
           className={classnames(styles.navItem, {
@@ -171,17 +173,17 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           activeClassName={styles.activeNav}
           to={RouteKeys.BoxList}
         >
-          Mystery
+          {t('Mystery')}
         </NavLink>
         <NavLink
           className={styles.navItem}
           activeClassName={styles.activeNav}
           to={RouteKeys.Profile}
         >
-          My Items
+          {t('My Items')}
         </NavLink>
         <NavLink className={styles.navItem} activeClassName={styles.activeNav} to={RouteKeys.Faqs}>
-          FAQs
+          {t('FAQs')}
         </NavLink>
         <LanguageSwitcher className={styles.langSwitchItem} />
       </nav>

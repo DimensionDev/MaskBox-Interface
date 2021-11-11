@@ -3,22 +3,21 @@ import classnames from 'classnames';
 import { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './index.module.less';
+import { useLocales } from './useLocales';
 
 const boxUrl = new URL('../../assets/images/box.png', import.meta.url).href;
 const nftUrl = new URL('../../assets/images/nft.png', import.meta.url).href;
 const kvUrl = new URL('../../assets/images/kv.png', import.meta.url).href;
 
 export const Home: FC = () => {
+  const t = useLocales();
   const history = useHistory();
   return (
     <main>
       <div className={classnames(styles.frame, styles.heroFrame)}>
         <div className={styles.content}>
-          <h2 className={styles.title}>Time to enjoy NFT Mystery on chain !</h2>
-          <p className={styles.description}>
-            We are a team for professional NFT Mystery launching. Our team is organized by the top
-            team in Blockchain field which have amounts of digital art works publishing experiences.
-          </p>
+          <h2 className={styles.title}>{t('Time to enjoy NFT Mystery on chain !')}</h2>
+          <p className={styles.description}>{t('description1')}</p>
           <Button
             colorScheme="primary"
             size="large"
@@ -27,7 +26,7 @@ export const Home: FC = () => {
               history.push('/list');
             }}
           >
-            Explore Now
+            {t('Explore Now')}
           </Button>
         </div>
       </div>
@@ -38,11 +37,8 @@ export const Home: FC = () => {
             <img src={boxUrl} alt="box" />
           </div>
           <div className={styles.texts}>
-            <h2 className={styles.title}>Mint your NFT Mystery with a suitbale gas fee</h2>
-            <p className={styles.description}>
-              Trust us and we’ll try our best to give you the excellent solution of the high gas
-              condition. Please check our Github for the contract source code.
-            </p>
+            <h2 className={styles.title}>{t('Mint your NFT Mystery with a suitbale gas fee')}</h2>
+            <p className={styles.description}>{t('description2')}</p>
           </div>
         </div>
       </div>
@@ -53,8 +49,8 @@ export const Home: FC = () => {
             <img src={nftUrl} alt="box" />
           </div>
           <div className={styles.texts}>
-            <h2 className={styles.title}>Multi-chains NFT Mystery publishing</h2>
-            <p className={styles.description}>Multiple ways to play on Multi-chains.</p>
+            <h2 className={styles.title}>{t('Multi-chains NFT Mystery publishing')}</h2>
+            <p className={styles.description}>{t('description3')}</p>
           </div>
         </div>
       </div>
@@ -65,11 +61,8 @@ export const Home: FC = () => {
             <img src={kvUrl} alt="box" />
           </div>
           <div className={styles.texts}>
-            <h2 className={styles.title}>Publish your own NFT Mystery</h2>
-            <p className={styles.description}>
-              Now publishing your onw NFT Mystery is as easy as opening a Mystery box in reality.
-              Please contact us for your project.
-            </p>
+            <h2 className={styles.title}>{t('Publish your own NFT Mystery')}</h2>
+            <p className={styles.description}>{t('description4')}</p>
           </div>
         </div>
       </div>
