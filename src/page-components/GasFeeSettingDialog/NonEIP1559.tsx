@@ -2,6 +2,7 @@ import { FC, HTMLProps } from 'react';
 import classnames from 'classnames';
 import { Button, Input } from '@/components';
 import styles from './index.module.less';
+import { ChainId } from '@/lib';
 
 export enum GasPriceLevel {
   Rapid = 'rapid',
@@ -10,9 +11,49 @@ export enum GasPriceLevel {
   Custom = 'custom',
 }
 
+const chainIdMap: Record<number, string> = {
+  [ChainId.Mainnet]: 'eth',
+  [ChainId.BSC]: 'bsc',
+  [ChainId.xDai]: 'xdai',
+  [ChainId.Matic]: 'matic',
+  [ChainId.Arbitrum]: 'arb',
+};
+
+const getDebankChain = (chainId: number) => {
+  return chainIdMap[chainId] ?? '';
+};
+
+export interface GasPriceRecord {
+  estimated_seconds: number;
+  front_tx_count: number;
+  price: number;
+}
+
+export interface GasPriceDictResponse {
+  data: {
+    fast: GasPriceRecord;
+    normal: GasPriceRecord;
+    slow: GasPriceRecord;
+    update_at: number;
+  };
+  error_code: number;
+  _seconds: number;
+}
+
+export async function getGasPriceDict(chainId: ChainId) {
+  const chain = getDebankChain(chainId);
+  const url = `https://api.debank.com/chain/gas_price_dict_v2?chain=${chain}`;
+  const response = await fetch(url);
+  const result = await response.json();
+  if (result.error_code === 0) {
+    return result as GasPriceDictResponse;
+  }
+  return null;
+}
+
 interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
   gasPriceLevel: GasPriceLevel;
-  onChange?: ({ level, gasPrice }: { level: GasPriceLevel; gasPrice: number }) => void;
+  onChange?: (result: { level: GasPriceLevel; gasPrice: number }) => void;
 }
 
 const levels = [

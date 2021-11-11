@@ -1,4 +1,5 @@
 import { Button, Field, Input } from '@/components';
+import { ChainId } from '@/lib';
 import classnames from 'classnames';
 import { noop } from 'lodash-es';
 import { FC, HTMLProps, useCallback } from 'react';
@@ -13,6 +14,29 @@ interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
   options: EIP1559GasFeeOptions;
   onChange?: (result: EIP1559GasFeeOptions) => void;
   onConfirm?: () => void;
+}
+
+export interface EstimateSuggestOption {
+  maxWaitTimeEstimate: number;
+  minWaitTimeEstimate: number;
+  suggestedMaxFeePerGas: string;
+  suggestedMaxPriorityFeePerGas: string;
+}
+
+export interface EstimateSuggestResponse {
+  estimatedBaseFee: string;
+  low: EstimateSuggestOption;
+  medium: EstimateSuggestOption;
+  high: EstimateSuggestOption;
+}
+
+export async function getSuggestedGasFees(chainId: ChainId) {
+  if (chainId) {
+    const url = `https://gas-api.metaswap.codefi.network/network/${chainId}/suggestedGasFees`;
+    const response = await fetch(url);
+    return (await response.json()) as EstimateSuggestResponse;
+  }
+  return undefined;
 }
 
 export const EIP1559: FC<Props> = ({ className, options, onChange = noop, onConfirm, ...rest }) => {
