@@ -1,5 +1,6 @@
 import { ArticleSection, Button, NFTItem, useDialog } from '@/components';
 import { useMBoxContract, useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
+import { useSoldNftListQuery } from '@/graphql-hooks';
 import { ChainId, createShareUrl, ZERO } from '@/lib';
 import {
   BuyBox,
@@ -37,12 +38,19 @@ export const Details: FC = memo(() => {
   }, [location.search]);
 
   const { boxOnSubgraph, boxOnRSS3, boxOnChain, refetch } = useBox(boxId ?? '');
+  const box = useMemo(
+    () => ({
+      ...boxOnChain,
+      ...boxOnRSS3,
+      ...boxOnSubgraph,
+    }),
+    [boxOnChain, boxOnRSS3, boxOnSubgraph],
+  );
 
   const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
   const [purchasedNfts, setPurchasedNfts] = useState<string[]>([]);
   const [buyBoxVisible, openBuyBox, closeBuyBox] = useDialog();
 
-  const [box, setBox] = useState<Partial<ExtendedBoxInfo>>({});
   const contractName = useNFTName(box.nft_address);
   const activities = box.activities ?? [];
 
@@ -57,7 +65,13 @@ export const Details: FC = memo(() => {
     setErc721Tokens((oldList) => uniqBy<ERC721Token>([...oldList, ...tokens], 'tokenId'));
   }, [box?.nft_address, boxId]);
 
-  const soldTokens = useGetTokensByIds(box?.nft_address, boxOnSubgraph?.sold_nft_list);
+  const { data: soldNFTData } = useSoldNftListQuery({
+    variables: {
+      id: boxId ?? '',
+    },
+  });
+
+  const soldTokens = useGetTokensByIds(box?.nft_address, soldNFTData?.maskbox?.sold_nft_list);
 
   const handlePurchased: BuyBoxProps['onPurchased'] = useCallback(
     ({ nftIds }) => {
@@ -109,7 +123,6 @@ export const Details: FC = memo(() => {
           boxOnSubgraph={boxOnSubgraph}
           boxOnChain={boxOnChain}
           boxOnRSS3={boxOnRSS3}
-          onLoad={setBox}
           onPurchase={openBuyBox}
         />
         {erc721Tokens.length + soldTokens.length > 0 && (

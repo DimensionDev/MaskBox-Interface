@@ -1,5 +1,6 @@
 query MaskBox($id: ID!) {
   maskbox(id: $id) {
+    id
     box_id
     chain_id
     name
@@ -12,12 +13,12 @@ query MaskBox($id: ID!) {
       address
       name
     }
-    sold_nft_list
   }
 }
 
 query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
   maskboxes(orderBy: create_time, orderDirection: desc, first: $first, skip: $skip) {
+    id
     box_id
     chain_id
     name
@@ -30,5 +31,12 @@ query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
       address
       name
     }
+  }
+}
+
+query SoldNFTList($id: ID!) {
+  maskbox(id: $id) {
+    id
+    sold_nft_list
   }
 }

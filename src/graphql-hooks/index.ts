@@ -367,6 +367,7 @@ export type MaskBoxQuery = {
   maskbox?:
     | {
         __typename?: 'Maskbox';
+        id: string;
         box_id: string;
         chain_id: number;
         name: string;
@@ -375,7 +376,6 @@ export type MaskBoxQuery = {
         start_time: number;
         end_time: number;
         sell_all: boolean;
-        sold_nft_list: Array<string>;
         nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
       }
     | null
@@ -391,6 +391,7 @@ export type MaskBoxesQuery = {
   __typename?: 'Query';
   maskboxes: Array<{
     __typename?: 'Maskbox';
+    id: string;
     box_id: string;
     chain_id: number;
     name: string;
@@ -403,9 +404,19 @@ export type MaskBoxesQuery = {
   }>;
 };
 
+export type SoldNftListQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type SoldNftListQuery = {
+  __typename?: 'Query';
+  maskbox?: { __typename?: 'Maskbox'; id: string; sold_nft_list: Array<string> } | null | undefined;
+};
+
 export const MaskBoxDocument = gql`
   query MaskBox($id: ID!) {
     maskbox(id: $id) {
+      id
       box_id
       chain_id
       name
@@ -418,7 +429,6 @@ export const MaskBoxDocument = gql`
         address
         name
       }
-      sold_nft_list
     }
   }
 `;
@@ -457,6 +467,7 @@ export type MaskBoxQueryResult = Apollo.QueryResult<MaskBoxQuery, MaskBoxQueryVa
 export const MaskBoxesDocument = gql`
   query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
     maskboxes(orderBy: create_time, orderDirection: desc, first: $first, skip: $skip) {
+      id
       box_id
       chain_id
       name
@@ -505,3 +516,49 @@ export function useMaskBoxesLazyQuery(
 export type MaskBoxesQueryHookResult = ReturnType<typeof useMaskBoxesQuery>;
 export type MaskBoxesLazyQueryHookResult = ReturnType<typeof useMaskBoxesLazyQuery>;
 export type MaskBoxesQueryResult = Apollo.QueryResult<MaskBoxesQuery, MaskBoxesQueryVariables>;
+export const SoldNftListDocument = gql`
+  query SoldNFTList($id: ID!) {
+    maskbox(id: $id) {
+      id
+      sold_nft_list
+    }
+  }
+`;
+
+/**
+ * __useSoldNftListQuery__
+ *
+ * To run a query within a React component, call `useSoldNftListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSoldNftListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSoldNftListQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSoldNftListQuery(
+  baseOptions: Apollo.QueryHookOptions<SoldNftListQuery, SoldNftListQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SoldNftListQuery, SoldNftListQueryVariables>(SoldNftListDocument, options);
+}
+export function useSoldNftListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SoldNftListQuery, SoldNftListQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SoldNftListQuery, SoldNftListQueryVariables>(
+    SoldNftListDocument,
+    options,
+  );
+}
+export type SoldNftListQueryHookResult = ReturnType<typeof useSoldNftListQuery>;
+export type SoldNftListLazyQueryHookResult = ReturnType<typeof useSoldNftListLazyQuery>;
+export type SoldNftListQueryResult = Apollo.QueryResult<
+  SoldNftListQuery,
+  SoldNftListQueryVariables
+>;

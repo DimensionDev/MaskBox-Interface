@@ -17,7 +17,6 @@ export interface MaskboxProps extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> 
   boxOnChain: BoxOnChain | null;
   boxOnRSS3: Partial<Pick<BoxRSS3Node, 'mediaType' | 'mediaUrl' | 'activities'>> | null;
   inList?: boolean;
-  onLoad?: (box: Partial<ExtendedBoxInfo>) => void;
   onPurchase?: () => void;
 }
 
@@ -27,7 +26,6 @@ export const Maskbox: FC<MaskboxProps> = ({
   boxOnChain,
   className,
   inList,
-  onLoad,
   onPurchase,
   ...rest
 }) => {
@@ -45,10 +43,6 @@ export const Maskbox: FC<MaskboxProps> = ({
   const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
   const payment = box.payment?.[0];
   const history = useHistory();
-
-  useEffect(() => {
-    if (box && onLoad) onLoad(box);
-  }, [box, onLoad]);
 
   useEffect(() => {
     if (payment) {
