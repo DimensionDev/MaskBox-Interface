@@ -34,5 +34,14 @@
   "Unlock NFT": "NFTをアンロック",
   "Create Mystery box": "Mysteryboxを作成",
   "share-text": "NFTミステリーボックス {formData.name} を MaskBox プラットフォーム上に作成しました。頑張って絵を描いてください！ {link}",
-  "Please input mystery box name": "ミステリーボックスの名前を入力してください"
+  "Please input mystery box name": "ミステリーボックスの名前を入力してください",
+  "Please provide Mystery thumbnail": "ミステリーのサムネイルを記入してください",
+  "Please provide price for a box": "ボックスの価格を入力してください",
+  "Price box must be positive": "ボックスのプライスは正の値でなければなりません。",
+  "Limit of purchase per wallet is at least 1": "ウォレットごとの購入制限は少なくとも1です",
+  "Please select a contract": "コースを選択してください",
+  "Please select some NFTs": "NFTを選択してください",
+  "Please set a valid start date": "開始日時を正しく入力してください。",
+  "Please set a valid end date": "終了日時を正しく入力してください。",
+  "End date should be later than start date": "開始日は終了日より前の日を指定してください。"
 }
