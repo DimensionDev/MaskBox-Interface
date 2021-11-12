@@ -5,7 +5,6 @@ import { ChainId, createShareUrl, ZERO } from '@/lib';
 import {
   BuyBox,
   BuyBoxProps,
-  GasFeeSettingDialog,
   Maskbox,
   RequestConnection,
   RequestSwitchChain,
@@ -174,7 +173,6 @@ export const Details: FC = memo(() => {
           window.open(shareLink, 'noopener noreferrer');
         }}
       />
-      <GasFeeSettingDialog open />
       {payment && (
         <BuyBox
           open={buyBoxVisible}

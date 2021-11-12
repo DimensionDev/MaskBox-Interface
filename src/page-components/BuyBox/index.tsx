@@ -1,12 +1,13 @@
 import {
   Button,
+  Icon,
   LoadingIcon,
   PickerDialog,
   PickerDialogProps,
   showToast,
   TokenIcon,
 } from '@/components';
-import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
+import { useGasFeeSetting, useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
 import {
   useBalance,
   useERC20Approve,
@@ -17,6 +18,7 @@ import {
 import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, ExtendedBoxInfo } from '@/types';
 import { formatAddres, formatBalance } from '@/utils';
+import classnames from 'classnames';
 import { BigNumber, utils } from 'ethers';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
@@ -77,6 +79,13 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
     await getAllowance(payment.token_addr, contractAddress).then(setAllowance);
   }, [approve, payment.token_addr, contractAddress, costAmount, getAllowance]);
 
+  const { requestGasFee } = useGasFeeSetting();
+
+  const updateGasFee = useCallback(async () => {
+    const result = await requestGasFee();
+    console.log('gasFee result', result);
+  }, [requestGasFee]);
+
   const { open: openBox, loading } = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
   const handleDraw = useCallback(async () => {
     const result = await openBox();
@@ -135,6 +144,17 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             ) : (
               <LoadingIcon size={24} />
             )}
+          </span>
+        </dd>
+        <dd className={styles.meta}>
+          <span className={styles.metaName}>{t('Gas fee')}</span>
+          <span
+            className={classnames(styles.metaValue, styles.gasFeeButton)}
+            role="button"
+            onClick={updateGasFee}
+          >
+            0.001 ETH
+            <Icon className={styles.icon} type="setting" size={18} />
           </span>
         </dd>
       </dl>

@@ -6,6 +6,7 @@ import { Layout } from './Layout';
 
 import {
   ApolloProvider,
+  GasSettingProvider,
   I18nProvider,
   MBoxContractProvider,
   NFTContractProvider,
@@ -32,9 +33,11 @@ function App() {
                   <NFTContractProvider>
                     <MBoxContractProvider>
                       <RSS3Provider>
-                        <Layout>
-                          <Routes />
-                        </Layout>
+                        <GasSettingProvider>
+                          <Layout>
+                            <Routes />
+                          </Layout>
+                        </GasSettingProvider>
                       </RSS3Provider>
                     </MBoxContractProvider>
                   </NFTContractProvider>

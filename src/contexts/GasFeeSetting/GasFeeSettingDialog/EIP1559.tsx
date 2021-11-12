@@ -13,7 +13,6 @@ export interface EIP1559GasFeeOptions {
 interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
   options: EIP1559GasFeeOptions;
   onChange?: (result: EIP1559GasFeeOptions) => void;
-  onConfirm?: () => void;
 }
 
 export interface EstimateSuggestOption {
@@ -39,7 +38,7 @@ export async function getSuggestedGasFees(chainId: ChainId) {
   return undefined;
 }
 
-export const EIP1559: FC<Props> = ({ className, options, onChange = noop, onConfirm, ...rest }) => {
+export const EIP1559: FC<Props> = ({ className, options, onChange = noop, ...rest }) => {
   const updateField = useCallback(
     (key: keyof EIP1559GasFeeOptions, value: number) => {
       onChange({
@@ -74,16 +73,6 @@ export const EIP1559: FC<Props> = ({ className, options, onChange = noop, onConf
           onChange={(evt) => updateField('maxFee', parseFloat(evt.currentTarget.value))}
         />
       </Field>
-
-      <Button
-        className={styles.confirmButton}
-        round={false}
-        fullWidth
-        size="large"
-        onClick={onConfirm}
-      >
-        Save
-      </Button>
     </div>
   );
 };

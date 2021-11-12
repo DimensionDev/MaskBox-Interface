@@ -1,24 +1,28 @@
-import { PickerDialog, PickerDialogProps } from '@/components';
+import { Button, PickerDialog, PickerDialogProps } from '@/components';
 import { useWeb3Context } from '@/contexts';
 import { supportedEIP1559 } from '@/lib';
 import classnames from 'classnames';
 import { FC, useState } from 'react';
-import { useLocales } from '../useLocales';
+import { useLocales } from '../../useLocales';
 import { EIP1559, EIP1559GasFeeOptions } from './EIP1559';
 import { NonEIP1559, GasPriceLevel } from './NonEIP1559';
 import styles from './index.module.less';
 
-type GasFeeResult =
+export type GasFeeResult =
   | {
       gasPrice: number;
     }
   | EIP1559GasFeeOptions;
 
-interface Props extends PickerDialogProps {
+export interface GasFeeSettingDialogProps extends PickerDialogProps {
   onConfirm: (result: GasFeeResult) => void;
 }
 
-export const GasFeeSettingDialog: FC<Props> = ({ className, ...rest }) => {
+export const GasFeeSettingDialog: FC<GasFeeSettingDialogProps> = ({
+  className,
+  onConfirm,
+  ...rest
+}) => {
   const t = useLocales();
 
   const [gasPrice, setGasPrice] = useState<number>(0);
@@ -45,14 +49,8 @@ export const GasFeeSettingDialog: FC<Props> = ({ className, ...rest }) => {
         <p className={styles.inusd}>≈ $ 31.38</p>
       </div>
 
-      {!isEIP1559Supported ? (
-        <EIP1559
-          options={eip1559GasFeeOptions}
-          onChange={setEip1559GasFeeOptions}
-          onConfirm={() => {
-            console.log(eip1559GasFeeOptions);
-          }}
-        />
+      {isEIP1559Supported ? (
+        <EIP1559 options={eip1559GasFeeOptions} onChange={setEip1559GasFeeOptions} />
       ) : (
         <NonEIP1559
           gasPriceLevel={gasPriceLevel}
@@ -62,6 +60,21 @@ export const GasFeeSettingDialog: FC<Props> = ({ className, ...rest }) => {
           }}
         />
       )}
+      <Button
+        className={styles.confirmButton}
+        round={false}
+        fullWidth
+        size="large"
+        colorScheme="primary"
+        onClick={() => {
+          onConfirm({
+            ...eip1559GasFeeOptions,
+            gasPrice,
+          });
+        }}
+      >
+        Save
+      </Button>
     </PickerDialog>
   );
 };

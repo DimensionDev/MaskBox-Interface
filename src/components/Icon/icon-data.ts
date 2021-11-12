@@ -36,6 +36,7 @@ export type IconType =
   | 'riskRed'
   | 'risk'
   | 'search'
+  | 'setting'
   | 'success'
   | 'sun'
   | 'twitter'
@@ -82,6 +83,7 @@ export const iconNameMap = {
   riskRed: 'risk-red.svg',
   risk: 'risk.svg',
   search: 'search.svg',
+  setting: 'setting.svg',
   success: 'success.svg',
   sun: 'sun.svg',
   twitter: 'twitter.svg',
@@ -149,6 +151,8 @@ export const riskIcon =
   '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path opacity="0.4" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"/>\n<path d="M10.3626 17.3559L14.9955 12.723L12.5428 11.0878L13.6329 7L9 11.6329L11.4527 13.268L10.3626 17.3559Z" fill="currentColor"/>\n</svg>';
 export const searchIcon =
   '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M14.4577 15.8719C13.309 16.587 11.9527 17 10.5 17C6.35786 17 3 13.6421 3 9.5C3 5.35786 6.35786 2 10.5 2C14.6421 2 18 5.35786 18 9.5C18 11.4657 17.2438 13.2548 16.0064 14.5922L21.7071 20.2929C22.0976 20.6834 22.0976 21.3166 21.7071 21.7071C21.3166 22.0976 20.6834 22.0976 20.2929 21.7071L14.4577 15.8719ZM16 9.5C16 12.5376 13.5376 15 10.5 15C7.46243 15 5 12.5376 5 9.5C5 6.46243 7.46243 4 10.5 4C13.5376 4 16 6.46243 16 9.5Z" fill="currentColor"/>\n</svg>';
+export const settingIcon =
+  '<svg width="100%" height="100%" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M4.5 6C5.74264 6 6.75 4.99264 6.75 3.75C6.75 2.50736 5.74264 1.5 4.5 1.5C3.25736 1.5 2.25 2.50736 2.25 3.75C2.25 4.99264 3.25736 6 4.5 6ZM4.5 4.5C4.91421 4.5 5.25 4.16421 5.25 3.75C5.25 3.33579 4.91421 3 4.5 3C4.08579 3 3.75 3.33579 3.75 3.75C3.75 4.16421 4.08579 4.5 4.5 4.5Z" fill="currentColor"/>\n<path fill-rule="evenodd" clip-rule="evenodd" d="M11.378 9.75C11.6869 10.6239 12.5203 11.25 13.5 11.25C14.7426 11.25 15.75 10.2426 15.75 9C15.75 7.75736 14.7426 6.75 13.5 6.75C12.5203 6.75 11.6869 7.37611 11.378 8.25H3C2.58579 8.25 2.25 8.58579 2.25 9C2.25 9.41421 2.58579 9.75 3 9.75H11.378ZM13.5 9.75C13.9142 9.75 14.25 9.41421 14.25 9C14.25 8.58579 13.9142 8.25 13.5 8.25C13.0858 8.25 12.75 8.58579 12.75 9C12.75 9.41421 13.0858 9.75 13.5 9.75Z" fill="currentColor"/>\n<path fill-rule="evenodd" clip-rule="evenodd" d="M8.25 16.5C7.27034 16.5 6.43691 15.8739 6.12803 15H3C2.58579 15 2.25 14.6642 2.25 14.25C2.25 13.8358 2.58579 13.5 3 13.5H6.12803C6.43691 12.6261 7.27034 12 8.25 12C9.49264 12 10.5 13.0074 10.5 14.25C10.5 15.4926 9.49264 16.5 8.25 16.5ZM9 14.25C9 14.6642 8.66421 15 8.25 15C7.83579 15 7.5 14.6642 7.5 14.25C7.5 13.8358 7.83579 13.5 8.25 13.5C8.66421 13.5 9 13.8358 9 14.25Z" fill="currentColor"/>\n<path d="M8.25 3.75C8.25 3.33579 8.58579 3 9 3L15 3C15.4142 3 15.75 3.33579 15.75 3.75C15.75 4.16421 15.4142 4.5 15 4.5L9 4.5C8.58579 4.5 8.25 4.16421 8.25 3.75Z" fill="currentColor"/>\n<path d="M12.75 13.5C12.3358 13.5 12 13.8358 12 14.25C12 14.6642 12.3358 15 12.75 15H15C15.4142 15 15.75 14.6642 15.75 14.25C15.75 13.8358 15.4142 13.5 15 13.5H12.75Z" fill="currentColor"/>\n</svg>';
 export const successIcon =
   '<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path opacity="0.3" d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" fill="currentColor"/>\n<path fill-rule="evenodd" clip-rule="evenodd" d="M17.7996 8.23966C18.0814 8.5432 18.0639 9.01775 17.7603 9.2996L10.7603 15.7996C10.4647 16.0741 10.0049 16.0656 9.71967 15.7803L6.21967 12.2803C5.92678 11.9874 5.92678 11.5126 6.21967 11.2197C6.51256 10.9268 6.98744 10.9268 7.28033 11.2197L10.2693 14.2086L16.7397 8.20041C17.0432 7.91856 17.5177 7.93613 17.7996 8.23966Z" fill="currentColor"/>\n</svg>';
 export const sunIcon =
@@ -186,6 +190,7 @@ export const iconsWithDynamicColor = [
   'riskRed',
   'risk',
   'search',
+  'setting',
   'success',
   'sun',
   'twitter',
@@ -232,6 +237,7 @@ const icons = {
   riskRed: riskRedIcon,
   risk: riskIcon,
   search: searchIcon,
+  setting: settingIcon,
   success: successIcon,
   sun: sunIcon,
   twitter: twitterIcon,

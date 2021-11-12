@@ -92,9 +92,7 @@ export const NonEIP1559: FC<Props> = ({ className, gasPriceLevel, onChange, ...r
         </Button>
       ))}
 
-      <div className={styles.custom}>
-        <Input fullWidth size="large" rightAddon={<span>Gwei</span>} placeholder="Custom" />
-      </div>
+      <Input fullWidth size="large" rightAddon={<span>Gwei</span>} placeholder="Custom" />
     </div>
   );
 };
