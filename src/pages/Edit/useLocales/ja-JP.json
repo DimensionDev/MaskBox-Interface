@@ -1,1 +1,23 @@
-{}
+{
+  "Create maskbox": "MaskBoxを作成",
+  "Wallet account": "ウォレットアカウント",
+  "Collections": "コレクション",
+  "Total Amount": "合計金額",
+  "Creating...": "作成中…...",
+  "Confirm": "確認",
+  "Description": "説明",
+  "MaskBox name": "MaskBox名",
+  "eg. Punk & Mask Special Edition": "例:Punk＆Mask特別版",
+  "Mystery thumbnail": "ミステリーサムネイル",
+  "Recommendation: 480*320/960*640": "推奨：480*320/960*640",
+  "Activity description": "アクティビティの詳細",
+  "eg.Rule Introduction": "例.ルールの紹介",
+  "Write Something..": "何か書いてみましょう！",
+  "Reset": "リセット",
+  "Add": "追加",
+  "Delete": "削除",
+  "Next": "Next",
+  "Creating Mystery Box": "MysteryBoxを作成",
+  "Fails to create: {reason}": "作成に失敗: {reason}",
+  "Go back": "戻る"
+}
