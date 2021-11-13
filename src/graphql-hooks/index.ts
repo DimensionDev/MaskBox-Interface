@@ -423,6 +423,7 @@ export type MaskBoxesOfQuery = {
     start_time: number;
     end_time: number;
     sell_all: boolean;
+    sold_nft_list: Array<string>;
     nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
   }>;
 };
@@ -561,6 +562,7 @@ export const MaskBoxesOfDocument = gql`
         address
         name
       }
+      sold_nft_list
     }
   }
 `;

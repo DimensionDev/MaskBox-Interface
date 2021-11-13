@@ -14,6 +14,7 @@ export interface BoxOnChain {
   personal_limit: number;
   started: boolean;
   expired: boolean;
+  canceled: boolean;
   remaining: BigNumber;
   total: BigNumber;
   qualification: string;

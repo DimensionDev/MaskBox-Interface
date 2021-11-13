@@ -1,15 +1,23 @@
-import { Badge, Button, Icon, VideoPlayer } from '@/components';
+import { Badge, Button, Icon, SNSShare, VideoPlayer } from '@/components';
+import { RouteKeys } from '@/configs';
 import { useBoxOnRSS3, useMBoxContract } from '@/contexts';
 import { MaskBoxesOfQuery } from '@/graphql-hooks';
+import { useGetERC20TokenInfo } from '@/hooks';
+import { TokenType } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
 import classnames from 'classnames';
+import { format } from 'date-fns';
+import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxesOfQuery['maskboxes'][number];
 }
+
+const formatTime = (time: number) => format(new Date(time * 1000), 'yyyy.MM.dd hh:mm');
 
 export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const t = useLocales();
@@ -33,6 +41,30 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
     }),
     [boxOnChain, boxOnRSS3, boxOnSubgraph],
   );
+  const getERC20Token = useGetERC20TokenInfo();
+  const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
+  const payment = box.payment?.[0];
+  useEffect(() => {
+    if (payment) {
+      getERC20Token(payment.token_addr).then((token) => {
+        if (token) {
+          setPaymentToken(token);
+        }
+      });
+    }
+  }, [payment]);
+
+  const { unitPrice, totalPrice } = useMemo(() => {
+    if (payment?.price && paymentToken?.decimals) {
+      const amount = box.sold_nft_list.length;
+      const { decimals, symbol } = paymentToken;
+      return {
+        unitPrice: `${utils.formatUnits(payment.price, decimals)} ${symbol}`,
+        totalPrice: `${utils.formatUnits(payment.price.mul(amount), decimals)} ${symbol}`,
+      };
+    }
+    return {};
+  }, [payment?.price, paymentToken?.decimals, box.sold_nft_list.length]);
 
   const total = useMemo(() => {
     // TODO If the box is set to sell all,
@@ -69,40 +101,57 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
       })()}
     </div>
   );
+
+  const badgeLabel = useMemo(() => {
+    if (box.expired) return 'Ended';
+    if (box.canceled) return 'Canceled';
+    if (box.start_time * 1000 < Date.now()) return 'Opened';
+    if (box.start_time > Date.now()) return 'Coming soon';
+  }, [box.started, box.expired]);
+
   return (
     <div className={classnames(className, styles.maskbox)} {...rest}>
-      {BoxCover}
+      <Link to={`${RouteKeys.Details}?chain=${box.chain_id}&box=${box.box_id}`}>{BoxCover}</Link>
       <div className={styles.interaction}>
         <dl className={styles.infoList}>
           <dt className={styles.name} title={box.name}>
             {box.name ?? '-'}
           </dt>
           <dd className={styles.infoRow}>
-            <span className={styles.rowName}>Price:</span>
-            <span className={styles.rowValue}>200 USDT</span>
+            <span className={styles.rowName}>{t('Price')}:</span>
+            <span className={styles.rowValue}>{unitPrice}</span>
           </dd>
           <dd className={styles.infoRow}>
-            <span className={styles.rowName}>Sold:</span>
-            <span className={styles.rowValue}>0/50</span>
+            <span className={styles.rowName}>{t('Sold')}:</span>
+            <span className={styles.rowValue}>
+              {total ? `${total.sub(box.remaining!).toString()}/${total.toString()}` : '-/-'}
+            </span>
           </dd>
           <dd className={styles.infoRow}>
-            <span className={styles.rowName}>Sold Total:</span>
-            <span className={styles.rowValue}>4600 USDT</span>
+            <span className={styles.rowName}>{t('Sold Total')}:</span>
+            <span className={styles.rowValue}>{totalPrice}</span>
           </dd>
           <dd className={styles.infoRow}>
             <span className={styles.rowName}>Limit:</span>
-            <span className={styles.rowValue}>5</span>
+            <span className={styles.rowValue}>{box.personal_limit}</span>
           </dd>
           <dd className={styles.infoRow}>
-            <span className={styles.rowName}>Date:</span>
-            <span className={styles.rowValue}>2012.11.23 23:20 ~ 2012.11.25 23:20</span>
-            <Badge className={styles.statusBadge}>Coming soon</Badge>
+            <span className={styles.rowName}>{t('Date')}:</span>
+            <span className={styles.rowValue}>
+              {`${formatTime(box.start_time)} ~ ${formatTime(box.end_time)}`}
+            </span>
+            <Badge
+              className={styles.statusBadge}
+              colorScheme={badgeLabel === 'Opened' ? 'success' : undefined}
+            >
+              {badgeLabel}
+            </Badge>
           </dd>
         </dl>
         <div className={styles.operations}>
-          <Button colorScheme="primary">Edit Details</Button>
-          <Button colorScheme="danger">Cancel</Button>
-          <Button>Share to Twitter</Button>
+          <Button colorScheme="primary">{t('Edit Details')}</Button>
+          <Button colorScheme="danger">{t('Cancel')}</Button>
+          <SNSShare boxName={box.name} />
         </div>
       </div>
     </div>

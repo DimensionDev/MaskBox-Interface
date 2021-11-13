@@ -1,7 +1,7 @@
 import { Button, LoadingIcon } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useWeb3Context } from '@/contexts';
-import { MaskBoxesQuery, useMaskBoxesOfLazyQuery } from '@/graphql-hooks';
+import { MaskBoxesOfQuery, useMaskBoxesOfLazyQuery } from '@/graphql-hooks';
 import { MyMaskbox, RequestConnection, RequestSwitchChain } from '@/page-components';
 import { FC, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -9,7 +9,7 @@ import styles from './index.module.less';
 import { useLocales } from './useLocales';
 
 const PAGE_SIZE = 5;
-const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
+const EMPTY_LIST: MaskBoxesOfQuery['maskboxes'] = [];
 export const MyBoxes: FC = () => {
   const t = useLocales();
   const [fetchBoxesOf, { data: boxesData, loading }] = useMaskBoxesOfLazyQuery({});
@@ -62,27 +62,35 @@ export const MyBoxes: FC = () => {
   if (!providerChainId) return <RequestConnection />;
   if (isNotSupportedChain) return <RequestSwitchChain />;
 
+  const isEmpty = maskboxes.length === 0 && page === 1;
+
   return (
     <main className={styles.main}>
       <header className={styles.header}>
-        <h1>My Mystery box</h1>
+        <h1>{t('My Maskboxes')}</h1>
         <Button
           colorScheme="primary"
           onClick={() => {
             history.push(RouteKeys.Edit);
           }}
         >
-          Create Mystery box
+          {t('Create Maskbox')}
         </Button>
       </header>
-      <ul className={styles.list}>
-        {maskboxes.map((maskbox) => (
-          <li key={maskbox.box_id} className={styles.item}>
-            <MyMaskbox boxOnSubgraph={maskbox} />
-          </li>
-        ))}
-      </ul>
-      {page === 1 && maskboxes.length < PAGE_SIZE ? null : (
+      {isEmpty ? (
+        <div className={styles.empty}>
+          <p className={styles.text}>{t('You haven’t created any mystery box yet.')}</p>
+        </div>
+      ) : (
+        <ul className={styles.list}>
+          {maskboxes.map((maskbox) => (
+            <li key={maskbox.box_id} className={styles.item}>
+              <MyMaskbox boxOnSubgraph={maskbox} />
+            </li>
+          ))}
+        </ul>
+      )}
+      {(page === 1 && maskboxes.length < PAGE_SIZE) || isEmpty ? null : (
         <div className={styles.paginaton}>
           <Button className={styles.button} disabled={page === 1 || loading} onClick={loadPrevPage}>
             {t('Previous')}

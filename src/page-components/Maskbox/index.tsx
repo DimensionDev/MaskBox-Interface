@@ -1,16 +1,16 @@
 import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
-import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
+import { useGetERC20TokenInfo } from '@/hooks';
 import { TokenType, ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useLocales } from '../useLocales';
 import { CountdownButton } from './CountdownButton';
 import styles from './index.module.less';
-import { useLocales } from '../useLocales';
 
 export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxQuery['maskbox'];
@@ -143,7 +143,7 @@ export const Maskbox: FC<MaskboxProps> = ({
             {total ? `${total.sub(box.remaining!).toString()}/${total.toString()}` : '-/-'}
           </dd>
           <dd className={styles.infoRow}>
-            {t('limit')} : {box.personal_limit?.toString()}
+            {t('Limit')} : {box.personal_limit?.toString()}
           </dd>
         </dl>
         {notStarted ? (

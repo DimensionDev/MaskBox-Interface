@@ -55,6 +55,7 @@ query MaskBoxesOf($first: Int! = 10, $skip: Int! = 0, $account: Bytes!) {
       address
       name
     }
+    sold_nft_list
   }
 }
 

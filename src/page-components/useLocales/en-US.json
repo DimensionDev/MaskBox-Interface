@@ -21,7 +21,7 @@
   "Draw ( {price}/Time )": "Draw ( {price}/Time )",
   "Lucky Draw": "Lucky Draw",
   "Get your unique card (NFT) by lucky draw": "Get your unique card (NFT) by lucky draw",
-  "limit": "limit",
+  "Limit": "Limit",
   "Select your collection": "Select your collection",
   "Token ID": "Token ID",
   "Search": "Search",
@@ -32,5 +32,11 @@
   "{network} is not supported yet": "{network} is not supported yet",
   "Successful": "Successful",
   "Share to twitter": "Share to twitter",
-  "Seletct a Token": "Seletct a Token"
+  "Seletct a Token": "Seletct a Token",
+  "Price": "Price",
+  "Sold": "Sold",
+  "Date": "Date",
+  "My Maskboxes": "My Maskboxes",
+  "Create Maskbox": "Create Maskbox",
+  "You haven’t created any mystery box yet.": "You haven’t created any mystery box yet."
 }

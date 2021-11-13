@@ -8,9 +8,8 @@ interface Props extends HTMLProps<HTMLSpanElement> {
 
 type ColorScheme = 'default' | 'success';
 
-const schemeMap: Record<ColorScheme, string> = {
-  default: styles.schemeDefault,
-  success: styles.schemeSuccess,
+const schemeMap: Partial<Record<ColorScheme, string>> = {
+  success: styles.success,
 };
 
 export const Badge: FC<Props> = ({ className, children, colorScheme = 'default', ...rest }) => {
