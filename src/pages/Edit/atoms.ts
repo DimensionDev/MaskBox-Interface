@@ -1,6 +1,5 @@
-import { MediaType } from '@/contexts';
 import { ERC721Token, TokenType, ZERO_ADDRESS } from '@/lib';
-import { Activity } from '@/types';
+import { Activity, MediaType } from '@/types';
 import { isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';

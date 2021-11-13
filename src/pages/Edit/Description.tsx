@@ -1,6 +1,6 @@
 import { Button, Field, Input, Textarea, UploadBox } from '@/components';
-import { MediaType, UploadResult } from '@/contexts';
-import { Activity } from '@/types';
+import { UploadResult } from '@/contexts';
+import { Activity, MediaType } from '@/types';
 import classnames from 'classnames';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';

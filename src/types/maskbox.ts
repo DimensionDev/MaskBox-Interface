@@ -25,3 +25,26 @@ export interface CreateResult extends Pick<BoxOnChain, 'name' | 'nft_address' | 
   end_time: number;
   sell_all: boolean;
 }
+
+export enum MediaType {
+  Audio = 'audio',
+  Image = 'image',
+  Video = 'video',
+  Unknown = 'unknown',
+}
+
+export interface Activity {
+  title: string;
+  body: string;
+}
+
+// TODO inherits from BoxRSS3Node
+export interface BoxMetas {
+  id: string;
+  name: string;
+  mediaType: MediaType;
+  mediaUrl: string;
+  activities: Activity[];
+}
+
+export interface ExtendedBoxInfo extends BoxOnChain, BoxMetas {}

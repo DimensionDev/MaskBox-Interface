@@ -19,7 +19,7 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
     return `${url}/address/${account}`;
   }, [chainId, account]);
   const [_, copyToClipboard] = useCopyToClipboard();
-  const { transactions, clearTransactions } = useRecentTransactions();
+  const { recentTransactions, clearTransactions } = useRecentTransactions();
 
   if (!open) return null;
 
@@ -72,15 +72,15 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
         <div className={styles.recentTxes}>
           <h3 className={styles.title}>
             Recent Transactions
-            {transactions.length > 0 && (
+            {recentTransactions.length > 0 && (
               <button className={styles.clearButton} onClick={clearTransactions}>
                 Clear All
               </button>
             )}
           </h3>
-          {transactions.length > 0 ? (
+          {recentTransactions.length > 0 ? (
             <ul className={styles.transactions}>
-              {transactions.map((tx) => (
+              {recentTransactions.map((tx) => (
                 <li key={tx.txHash} className={styles.transaction}>
                   {tx.status === TransactionStatus.Pending ? (
                     <LoadingIcon color="#FFA800" size={16} />

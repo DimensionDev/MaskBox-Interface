@@ -1,5 +1,5 @@
 export * from './ArticleSection';
-export * from './VideoPlayer';
+export * from './Badge';
 export * from './Button';
 export * from './Countdown';
 export * from './Dialog';
@@ -24,3 +24,4 @@ export * from './Toast';
 export * from './TokenIcon';
 export * from './TokenList';
 export * from './UploadBox';
+export * from './VideoPlayer';

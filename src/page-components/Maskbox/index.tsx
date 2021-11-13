@@ -1,10 +1,9 @@
 import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
-import { MediaType } from '@/contexts';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType, ZERO } from '@/lib';
-import { BoxOnChain } from '@/types';
+import { BoxOnChain, MediaType } from '@/types';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
@@ -13,7 +12,7 @@ import { CountdownButton } from './CountdownButton';
 import styles from './index.module.less';
 import { useLocales } from '../useLocales';
 
-export interface MaskboxProps extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> {
+export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxQuery['maskbox'];
   boxOnChain: BoxOnChain | null;
   boxOnRSS3: Partial<Pick<BoxRSS3Node, 'mediaType' | 'mediaUrl' | 'activities'>> | null;

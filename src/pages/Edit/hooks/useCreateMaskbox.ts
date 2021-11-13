@@ -12,14 +12,14 @@ const abiInterface = new ethers.utils.Interface(MaskboxABI);
 const MAX_CONFIRMATION = 6;
 
 export function useCreateMaskbox() {
-  const { ethersProvider, providerChainId } = useWeb3Context();
+  const { ethersProvider, providerChainId: chainId } = useWeb3Context();
   const formData = useAtomValue(formDataAtom);
   const { addTransaction, updateTransactionBy } = useRecentTransactions();
 
   const limit = formData.limit ?? 5;
   const createBox = useCallback(async () => {
-    if (!ethersProvider || !providerChainId) return;
-    const contractAddress = getContractAddressConfig(providerChainId).Maskbox;
+    if (!ethersProvider || !chainId) return;
+    const contractAddress = getContractAddressConfig(chainId).Maskbox;
     const contract = new Contract(
       contractAddress,
       MaskboxABI as unknown as ContractInterface,
@@ -41,10 +41,10 @@ export function useCreateMaskbox() {
       formData.selectedNFTIds,
       formData.whiteList || ZERO_ADDRESS,
     );
-    debugger;
     const txHash = tx.hash as string;
     addTransaction({
-      txHash: txHash,
+      chainId,
+      txHash,
       name: 'Create MaskBox',
       status: TransactionStatus.Pending,
     });
@@ -71,6 +71,6 @@ export function useCreateMaskbox() {
 
     const parsedLog = abiInterface.parseLog(log);
     return parsedLog;
-  }, [formData, ethersProvider, providerChainId]);
+  }, [formData, ethersProvider, chainId]);
   return createBox;
 }

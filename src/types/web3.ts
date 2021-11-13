@@ -4,6 +4,7 @@ export enum TransactionStatus {
   Pending = -1,
 }
 export interface Transaction {
+  chainId: number;
   name: string;
   status: TransactionStatus;
   txHash: string;

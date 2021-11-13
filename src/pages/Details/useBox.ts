@@ -1,7 +1,7 @@
-import { MediaType, useMBoxContract } from '@/contexts';
+import { useMBoxContract } from '@/contexts';
 import { useRSS3 } from '@/contexts/RSS3Provider';
 import { useMaskBoxQuery } from '@/graphql-hooks';
-import { BoxMetas, BoxOnChain } from '@/types';
+import { BoxMetas, BoxOnChain, MediaType } from '@/types';
 import { getAddress } from 'ethers/lib/utils';
 import { useCallback, useEffect, useState } from 'react';
 

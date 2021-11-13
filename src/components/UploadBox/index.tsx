@@ -1,4 +1,5 @@
-import { getMediaType, MediaType, useUpload } from '@/contexts';
+import { getMediaType, useUpload } from '@/contexts';
+import { MediaType } from '@/types';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
 import { Icon, LoadingIcon } from '../Icon';

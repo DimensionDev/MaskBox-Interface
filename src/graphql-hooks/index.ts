@@ -404,6 +404,29 @@ export type MaskBoxesQuery = {
   }>;
 };
 
+export type MaskBoxesOfQueryVariables = Exact<{
+  first?: Scalars['Int'];
+  skip?: Scalars['Int'];
+  account: Scalars['Bytes'];
+}>;
+
+export type MaskBoxesOfQuery = {
+  __typename?: 'Query';
+  maskboxes: Array<{
+    __typename?: 'Maskbox';
+    id: string;
+    box_id: string;
+    chain_id: number;
+    name: string;
+    creator: string;
+    nft_address: string;
+    start_time: number;
+    end_time: number;
+    sell_all: boolean;
+    nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
+  }>;
+};
+
 export type SoldNftListQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -516,6 +539,71 @@ export function useMaskBoxesLazyQuery(
 export type MaskBoxesQueryHookResult = ReturnType<typeof useMaskBoxesQuery>;
 export type MaskBoxesLazyQueryHookResult = ReturnType<typeof useMaskBoxesLazyQuery>;
 export type MaskBoxesQueryResult = Apollo.QueryResult<MaskBoxesQuery, MaskBoxesQueryVariables>;
+export const MaskBoxesOfDocument = gql`
+  query MaskBoxesOf($first: Int! = 10, $skip: Int! = 0, $account: Bytes!) {
+    maskboxes(
+      orderBy: create_time
+      orderDirection: desc
+      first: $first
+      skip: $skip
+      where: { creator: $account }
+    ) {
+      id
+      box_id
+      chain_id
+      name
+      creator
+      nft_address
+      start_time
+      end_time
+      sell_all
+      nft_contract {
+        address
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useMaskBoxesOfQuery__
+ *
+ * To run a query within a React component, call `useMaskBoxesOfQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMaskBoxesOfQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMaskBoxesOfQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *      skip: // value for 'skip'
+ *      account: // value for 'account'
+ *   },
+ * });
+ */
+export function useMaskBoxesOfQuery(
+  baseOptions: Apollo.QueryHookOptions<MaskBoxesOfQuery, MaskBoxesOfQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MaskBoxesOfQuery, MaskBoxesOfQueryVariables>(MaskBoxesOfDocument, options);
+}
+export function useMaskBoxesOfLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<MaskBoxesOfQuery, MaskBoxesOfQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MaskBoxesOfQuery, MaskBoxesOfQueryVariables>(
+    MaskBoxesOfDocument,
+    options,
+  );
+}
+export type MaskBoxesOfQueryHookResult = ReturnType<typeof useMaskBoxesOfQuery>;
+export type MaskBoxesOfLazyQueryHookResult = ReturnType<typeof useMaskBoxesOfLazyQuery>;
+export type MaskBoxesOfQueryResult = Apollo.QueryResult<
+  MaskBoxesOfQuery,
+  MaskBoxesOfQueryVariables
+>;
 export const SoldNftListDocument = gql`
   query SoldNFTList($id: ID!) {
     maskbox(id: $id) {

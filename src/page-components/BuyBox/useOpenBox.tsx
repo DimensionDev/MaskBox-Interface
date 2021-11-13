@@ -22,7 +22,7 @@ export function useOpenBox(
   const { addTransaction, updateTransactionBy } = useRecentTransactions();
 
   const open = useCallback(async () => {
-    if (!contract || !ethersProvider || !account) return;
+    if (!contract || !ethersProvider || !account || !chainId) return;
     setLoading(true);
     showToast({
       title: 'Drawing',
@@ -38,6 +38,7 @@ export function useOpenBox(
 
       const txHash = tx.hash as string;
       addTransaction({
+        chainId,
         txHash,
         name: 'Draw MaskBox',
         status: TransactionStatus.Pending,

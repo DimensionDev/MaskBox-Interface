@@ -119,10 +119,10 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
                 colorScheme="primary"
                 title={account}
                 onClick={() => {
-                  history.push('/edit');
+                  history.push(RouteKeys.MyMaskboxes);
                 }}
               >
-                {t('Create')}
+                {t('My Maskboxes')}
               </Button>
             </>
           ) : (

@@ -5,4 +5,5 @@ export enum RouteKeys {
   Edit = '/edit',
   Faqs = '/faqs',
   Profile = '/profile',
+  MyMaskboxes = '/my-maskboxes',
 }

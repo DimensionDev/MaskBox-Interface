@@ -34,6 +34,30 @@ query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
   }
 }
 
+query MaskBoxesOf($first: Int! = 10, $skip: Int! = 0, $account: Bytes!) {
+  maskboxes(
+    orderBy: create_time
+    orderDirection: desc
+    first: $first
+    skip: $skip
+    where: { creator: $account }
+  ) {
+    id
+    box_id
+    chain_id
+    name
+    creator
+    nft_address
+    start_time
+    end_time
+    sell_all
+    nft_contract {
+      address
+      name
+    }
+  }
+}
+
 query SoldNFTList($id: ID!) {
   maskbox(id: $id) {
     id
