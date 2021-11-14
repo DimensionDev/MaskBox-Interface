@@ -85,11 +85,9 @@ export const Edit: FC = () => {
   }, [isEditting, erc721Token]);
 
   const sellingNFTIds = useNFTIdsOfBox(boxId, boxOnSubgraph?.sell_all);
-  console.log({ boxId, sell_all: boxOnSubgraph?.sell_all, sellingNFTIds });
 
   useEffect(() => {
     if (isEditting && sellingNFTIds) {
-      console.log({ sellingNFTIds });
       updateFormData((fd) => ({
         ...fd,
         selectedNFTIds: sellingNFTIds,

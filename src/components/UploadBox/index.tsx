@@ -60,7 +60,6 @@ export const UploadBox: FC<Props> = ({
       onError?.(err as Error);
     }
   };
-  console.log({ mediaUrl });
   return (
     <div
       className={classnames(className, styles.uploadBox, {

@@ -23,12 +23,6 @@ export const MyBoxes: FC = () => {
     return p ? parseInt(p, 10) : 1;
   }, [location.search]);
 
-  useEffect(() => {
-    if (!page) {
-      history.replace(`${RouteKeys.MyMaskboxes}?page=1`);
-    }
-  }, [history, page]);
-
   const loadPrevPage = () => {
     if (!page) return;
     const p = page > 1 ? page - 1 : 1;

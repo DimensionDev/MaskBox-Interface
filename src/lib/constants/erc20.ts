@@ -15,11 +15,11 @@ export const tokenListUrls: Record<number, string> = {
 };
 
 export interface TokenType {
-  chainId: number;
   address: string;
+  chainId: number;
+  name: string;
   symbol: string;
   decimals: number;
-  name: string;
   logoURI: string;
 }
 

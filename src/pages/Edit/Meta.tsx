@@ -260,7 +260,7 @@ export const Meta: FC = () => {
             <NFTSelectList
               tokens={selectedERC721Tokens}
               selectedTokenIds={formData.selectedNFTIds}
-              onPick={() => setNftPickerVisible(true)}
+              onPick={() => (isEditting ? undefined : setNftPickerVisible(true))}
             />
           </div>
         </Field>
