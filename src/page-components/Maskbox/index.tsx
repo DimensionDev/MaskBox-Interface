@@ -15,7 +15,7 @@ import styles from './index.module.less';
 export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxQuery['maskbox'];
   boxOnChain: BoxOnChain | null;
-  boxOnRSS3: Partial<Pick<BoxRSS3Node, 'mediaType' | 'mediaUrl' | 'activities'>> | null;
+  boxOnRSS3: Partial<Pick<BoxRSS3Node, 'name' | 'mediaType' | 'mediaUrl' | 'activities'>> | null;
   inList?: boolean;
   onPurchase?: () => void;
 }
@@ -35,6 +35,7 @@ export const Maskbox: FC<MaskboxProps> = ({
       ...boxOnChain,
       ...boxOnRSS3,
       ...boxOnSubgraph,
+      name: boxOnRSS3?.name ?? boxOnSubgraph?.name ?? boxOnChain?.name,
     }),
     [boxOnChain, boxOnRSS3, boxOnSubgraph],
   );

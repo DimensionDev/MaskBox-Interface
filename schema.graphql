@@ -30,6 +30,7 @@ type Maskbox {
   sell_all: Boolean!
   nft_contract: NFTContract!
   sold_nft_list: [BigInt!]!
+  canceled: Boolean!
 }
 
 input Maskbox_filter {
@@ -149,6 +150,10 @@ input Maskbox_filter {
   sold_nft_list_not: [BigInt!]
   sold_nft_list_contains: [BigInt!]
   sold_nft_list_not_contains: [BigInt!]
+  canceled: Boolean
+  canceled_not: Boolean
+  canceled_in: [Boolean!]
+  canceled_not_in: [Boolean!]
 }
 
 enum Maskbox_orderBy {
@@ -166,6 +171,7 @@ enum Maskbox_orderBy {
   sell_all
   nft_contract
   sold_nft_list
+  canceled
 }
 
 type NFTContract {

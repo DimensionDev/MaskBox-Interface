@@ -1,8 +1,8 @@
 import { MaskboxNFTABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
-import { ERC721Token } from '@/lib';
+import { ERC721Token, TokenType } from '@/lib';
 import { Contract } from 'ethers';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // TODO refactor to `const token = useERC20Token(address)`
 export function useGetERC721Token() {
@@ -24,4 +24,19 @@ export function useGetERC721Token() {
     [ethersProvider, chainId],
   );
   return getToken;
+}
+
+export function useERC721Token(address: string | undefined) {
+  const [token, setToken] = useState<ERC721Token | undefined>();
+
+  const getTokenInfo = useGetERC721Token();
+  useEffect(() => {
+    if (!address) {
+      setToken(undefined);
+      return;
+    }
+    getTokenInfo(address).then(setToken);
+  }, [address]);
+
+  return token;
 }

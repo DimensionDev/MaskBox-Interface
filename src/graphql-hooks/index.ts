@@ -26,6 +26,7 @@ export type Maskbox = {
   __typename?: 'Maskbox';
   blockNumber: Scalars['BigInt'];
   box_id: Scalars['String'];
+  canceled: Scalars['Boolean'];
   chain_id: Scalars['Int'];
   create_time: Scalars['Int'];
   creator: Scalars['Bytes'];
@@ -63,6 +64,10 @@ export type Maskbox_Filter = {
   box_id_not_in?: Maybe<Array<Scalars['String']>>;
   box_id_not_starts_with?: Maybe<Scalars['String']>;
   box_id_starts_with?: Maybe<Scalars['String']>;
+  canceled?: Maybe<Scalars['Boolean']>;
+  canceled_in?: Maybe<Array<Scalars['Boolean']>>;
+  canceled_not?: Maybe<Scalars['Boolean']>;
+  canceled_not_in?: Maybe<Array<Scalars['Boolean']>>;
   chain_id?: Maybe<Scalars['Int']>;
   chain_id_gt?: Maybe<Scalars['Int']>;
   chain_id_gte?: Maybe<Scalars['Int']>;
@@ -162,6 +167,7 @@ export type Maskbox_Filter = {
 export enum Maskbox_OrderBy {
   BlockNumber = 'blockNumber',
   BoxId = 'box_id',
+  Canceled = 'canceled',
   ChainId = 'chain_id',
   CreateTime = 'create_time',
   Creator = 'creator',
@@ -423,6 +429,7 @@ export type MaskBoxesOfQuery = {
     start_time: number;
     end_time: number;
     sell_all: boolean;
+    canceled: boolean;
     sold_nft_list: Array<string>;
     nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
   }>;
@@ -490,7 +497,13 @@ export type MaskBoxLazyQueryHookResult = ReturnType<typeof useMaskBoxLazyQuery>;
 export type MaskBoxQueryResult = Apollo.QueryResult<MaskBoxQuery, MaskBoxQueryVariables>;
 export const MaskBoxesDocument = gql`
   query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
-    maskboxes(orderBy: create_time, orderDirection: desc, first: $first, skip: $skip) {
+    maskboxes(
+      orderBy: create_time
+      orderDirection: desc
+      first: $first
+      skip: $skip
+      where: { canceled: false }
+    ) {
       id
       box_id
       chain_id
@@ -558,6 +571,7 @@ export const MaskBoxesOfDocument = gql`
       start_time
       end_time
       sell_all
+      canceled
       nft_contract {
         address
         name

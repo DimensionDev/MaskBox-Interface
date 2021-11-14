@@ -17,7 +17,13 @@ query MaskBox($id: ID!) {
 }
 
 query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
-  maskboxes(orderBy: create_time, orderDirection: desc, first: $first, skip: $skip) {
+  maskboxes(
+    orderBy: create_time
+    orderDirection: desc
+    first: $first
+    skip: $skip
+    where: { canceled: false }
+  ) {
     id
     box_id
     chain_id
@@ -51,6 +57,7 @@ query MaskBoxesOf($first: Int! = 10, $skip: Int! = 0, $account: Bytes!) {
     start_time
     end_time
     sell_all
+    canceled
     nft_contract {
       address
       name

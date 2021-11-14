@@ -1,4 +1,5 @@
 import { Button, Field, Input, Textarea, UploadBox } from '@/components';
+import { RouteKeys } from '@/configs';
 import { UploadResult } from '@/contexts';
 import { Activity, MediaType } from '@/types';
 import classnames from 'classnames';
@@ -7,8 +8,11 @@ import { useAtomValue } from 'jotai/utils';
 import { FC, useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
+  boxIdAtom,
+  chainAtom,
   descriptionFullfilledAtom,
   formDataAtom,
+  isEdittingAtom,
   newActivity,
   useBindFormField,
   useUpdateFormField,
@@ -18,6 +22,9 @@ import { useLocales } from './useLocales';
 
 export const Description: FC = () => {
   const t = useLocales();
+  const isEditting = useAtomValue(isEdittingAtom);
+  const chain = useAtomValue(chainAtom);
+  const boxId = useAtomValue(boxIdAtom);
   const fullfilled = useAtomValue(descriptionFullfilledAtom);
   const history = useHistory();
   const [formData, setFormData] = useAtom(formDataAtom);
@@ -156,7 +163,8 @@ export const Description: FC = () => {
           colorScheme="primary"
           size="large"
           onClick={() => {
-            history.replace('/edit/meta');
+            const search = isEditting ? `?chain=${chain}&box=${boxId}` : '';
+            history.replace(`${RouteKeys.EditMeta}${search}`);
           }}
         >
           {t('Next')}

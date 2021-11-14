@@ -1,31 +1,26 @@
 import { MaskboxABI } from '@/abi';
 import { useRecentTransactions } from '@/atoms';
-import { useWeb3Context } from '@/contexts';
-import { getContractAddressConfig, ZERO_ADDRESS } from '@/lib';
+import { useMaskboxContract, useWeb3Context } from '@/contexts';
+import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
-import { Contract, ContractInterface, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
 
 const abiInterface = new ethers.utils.Interface(MaskboxABI);
-const MAX_CONFIRMATION = 6;
+const MAX_CONFIRMATION = 12;
 
 export function useCreateMaskbox() {
   const { ethersProvider, providerChainId: chainId } = useWeb3Context();
   const formData = useAtomValue(formDataAtom);
   const { addTransaction, updateTransactionBy } = useRecentTransactions();
+  const contract = useMaskboxContract();
 
   const limit = formData.limit ?? 5;
   const createBox = useCallback(async () => {
-    if (!ethersProvider || !chainId) return;
-    const contractAddress = getContractAddressConfig(chainId).Maskbox;
-    const contract = new Contract(
-      contractAddress,
-      MaskboxABI as unknown as ContractInterface,
-      ethersProvider.getSigner(),
-    );
-    const tx = await contract.createBox(
+    if (!ethersProvider || !chainId || !contract) return;
+    const tx = await contract.connect(ethersProvider.getSigner()).createBox(
       formData.nftContractAddress,
       formData.name,
       [

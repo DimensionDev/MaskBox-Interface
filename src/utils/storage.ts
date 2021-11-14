@@ -15,7 +15,6 @@ export enum StorageKeys {
 }
 
 export const setStorage = <T extends any>(key: string, value: T) => {
-  console.log('setStorage', key, JSON.stringify(value));
   return localStorage.setItem(getKey(key), JSON.stringify(value));
 };
 

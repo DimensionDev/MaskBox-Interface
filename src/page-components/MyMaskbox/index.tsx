@@ -1,15 +1,15 @@
-import { Badge, Button, Icon, SNSShare, VideoPlayer } from '@/components';
+import { Badge, Button, Icon, showToast, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useBoxOnRSS3, useMBoxContract } from '@/contexts';
+import { useBoxOnRSS3 } from '@/contexts';
 import { MaskBoxesOfQuery } from '@/graphql-hooks';
-import { useGetERC20TokenInfo } from '@/hooks';
+import { useBoxInfo, useCancelBox, useGetERC20TokenInfo } from '@/hooks';
 import { TokenType } from '@/lib';
-import { BoxOnChain, MediaType } from '@/types';
+import { MediaType } from '@/types';
 import classnames from 'classnames';
 import { format } from 'date-fns';
 import { utils } from 'ethers';
-import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, HTMLProps, useCallback, useEffect, useMemo, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
@@ -22,14 +22,8 @@ const formatTime = (time: number) => format(new Date(time * 1000), 'yyyy.MM.dd h
 export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const t = useLocales();
 
-  const { getBoxInfo } = useMBoxContract();
-  const [boxOnChain, setBoxOnChain] = useState<BoxOnChain | null>(null);
-  useEffect(() => {
-    if (!boxOnSubgraph) return;
-    if (boxOnSubgraph.box_id) {
-      getBoxInfo(boxOnSubgraph.box_id).then(setBoxOnChain);
-    }
-  }, []);
+  const { box: boxOnChain } = useBoxInfo(boxOnSubgraph?.box_id);
+  const cancelBox = useCancelBox();
 
   const boxOnRSS3 = useBoxOnRSS3(boxOnSubgraph?.creator, boxOnSubgraph?.box_id);
 
@@ -38,6 +32,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
       ...boxOnChain,
       ...boxOnRSS3,
       ...boxOnSubgraph,
+      name: boxOnRSS3.name ?? boxOnSubgraph.name ?? boxOnChain?.name,
     }),
     [boxOnChain, boxOnRSS3, boxOnSubgraph],
   );
@@ -77,6 +72,20 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
     return box.total;
   }, [box.total, box.remaining]);
 
+  const history = useHistory();
+
+  const cancel = useCallback(async () => {
+    try {
+      await cancelBox(box.box_id);
+    } catch (err: any) {
+      showToast({
+        title: 'Cancel Maskbox',
+        message: `Failed to cancel this Maskbox ${err.message}`,
+        variant: 'error',
+      });
+    }
+  }, [cancelBox, box.box_id]);
+
   const BoxCover = (
     <div className={styles.media}>
       {(() => {
@@ -105,8 +114,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const badgeLabel = useMemo(() => {
     if (box.expired) return 'Ended';
     if (box.canceled) return 'Canceled';
-    if (box.start_time * 1000 < Date.now()) return 'Opened';
-    if (box.start_time > Date.now()) return 'Coming soon';
+    return box.start_time * 1000 < Date.now() ? 'Opened' : 'Coming soon';
   }, [box.started, box.expired]);
 
   return (
@@ -149,8 +157,19 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
           </dd>
         </dl>
         <div className={styles.operations}>
-          <Button colorScheme="primary">{t('Edit Details')}</Button>
-          <Button colorScheme="danger">{t('Cancel')}</Button>
+          <Button
+            colorScheme="primary"
+            onClick={() => {
+              history.push(`${RouteKeys.Edit}/desc?chain=${box.chain_id}&box=${box.box_id}`);
+            }}
+          >
+            {t('Edit Details')}
+          </Button>
+          {box.started === false ? (
+            <Button colorScheme="danger" onClick={cancel}>
+              {t('Cancel')}
+            </Button>
+          ) : null}
           <SNSShare boxName={box.name} />
         </div>
       </div>

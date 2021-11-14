@@ -52,6 +52,10 @@ const fieldKeys = Object.keys(initFormData) as Array<keyof FormData>;
 
 export const formDataAtom = atom<FormData>(initFormData);
 
+export const isEdittingAtom = atom<boolean>(false);
+export const chainAtom = atom<string | null>(null);
+export const boxIdAtom = atom<string | null>(null);
+
 export const descriptionFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);
   return !!formData.name && formData.mediaUrl;

@@ -1,8 +1,7 @@
-import { BoxMetas } from '@/types';
+import { BoxMetas, MediaType } from '@/types';
 import { utils } from 'ethers';
 import { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
 import RSS3 from 'rss3-next';
-import { MediaType } from '../UploadProvider';
 import { useWeb3Context } from '../Web3Context';
 
 export interface BoxRSS3Node {
@@ -49,6 +48,7 @@ export function useBoxOnRSS3(creator: string | undefined, boxId: string | undefi
         .then((data) => {
           if (data) {
             setBoxOnRSS3({
+              name: data.name,
               mediaType: data.mediaType as MediaType,
               mediaUrl: data.mediaUrl,
               activities: data.activities,

@@ -1,6 +1,7 @@
 import { ArticleSection, Button, NFTItem, useDialog } from '@/components';
 import { useMBoxContract, useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
+import { useBox } from '@/hooks';
 import { ChainId, createShareUrl, ZERO } from '@/lib';
 import {
   BuyBox,
@@ -16,7 +17,6 @@ import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './index.module.less';
-import { useBox } from './useBox';
 import { useGetTokensByIds } from './useGetTokensByIds';
 import { useLocales } from './useLocales';
 

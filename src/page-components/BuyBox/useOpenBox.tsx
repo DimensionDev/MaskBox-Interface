@@ -1,7 +1,7 @@
 import { useRecentTransactions } from '@/atoms';
 import { Icon, showToast } from '@/components';
 import { useMBoxContract, useWeb3Context } from '@/contexts';
-import { useMaskboxContract } from '@/hooks/useMaskboxContract';
+import { useMaskboxContract } from '@/hooks';
 import { getNetworkExplorer, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, TransactionStatus } from '@/types';
 import { useCallback, useState } from 'react';
