@@ -21,7 +21,7 @@
   "Draw ( {price}/Time )": "crwdns9591:0{price}crwdne9591:0",
   "Lucky Draw": "crwdns9593:0crwdne9593:0",
   "Get your unique card (NFT) by lucky draw": "crwdns9595:0crwdne9595:0",
-  "limit": "crwdns9597:0crwdne9597:0",
+  "Limit": "crwdns9767:0crwdne9767:0",
   "Select your collection": "crwdns9599:0crwdne9599:0",
   "Token ID": "crwdns9601:0crwdne9601:0",
   "Search": "crwdns9603:0crwdne9603:0",
@@ -32,5 +32,11 @@
   "{network} is not supported yet": "crwdns9613:0{network}crwdne9613:0",
   "Successful": "crwdns9615:0crwdne9615:0",
   "Share to twitter": "crwdns9617:0crwdne9617:0",
-  "Seletct a Token": "crwdns9619:0crwdne9619:0"
+  "Seletct a Token": "crwdns9619:0crwdne9619:0",
+  "Price": "crwdns9769:0crwdne9769:0",
+  "Sold": "crwdns9771:0crwdne9771:0",
+  "Date": "crwdns9773:0crwdne9773:0",
+  "My Maskboxes": "crwdns9775:0crwdne9775:0",
+  "Create Maskbox": "crwdns9777:0crwdne9777:0",
+  "You haven’t created any mystery box yet.": "crwdns9779:0crwdne9779:0"
 }
