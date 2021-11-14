@@ -1,6 +1,5 @@
-import { MediaType } from '@/contexts';
 import { ERC721Token, TokenType, ZERO_ADDRESS } from '@/lib';
-import { Activity } from '@/types';
+import { Activity, MediaType } from '@/types';
 import { isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
@@ -32,7 +31,7 @@ const startAt = date.toJSON().split('.')[0];
 date.setDate(date.getDate() + 30);
 const endAt = date.toJSON().split('.')[0];
 
-const initFormData: FormData = {
+export const initFormData: FormData = {
   name: '',
   mediaUrl: '',
   mediaType: MediaType.Unknown,
@@ -52,6 +51,10 @@ const initFormData: FormData = {
 const fieldKeys = Object.keys(initFormData) as Array<keyof FormData>;
 
 export const formDataAtom = atom<FormData>(initFormData);
+
+export const isEdittingAtom = atom<boolean>(false);
+export const chainAtom = atom<string | null>(null);
+export const boxIdAtom = atom<string | null>(null);
 
 export const descriptionFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);

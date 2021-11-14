@@ -1,4 +1,5 @@
 import { Button, Icon } from '@/components';
+import { RouteKeys } from '@/configs';
 import classnames from 'classnames';
 import { FC } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -23,7 +24,7 @@ export const Home: FC = () => {
             size="large"
             rightIcon={<Icon type="chevronRight" size={22} />}
             onClick={() => {
-              history.push('/list');
+              history.push(RouteKeys.BoxList);
             }}
           >
             {t('Explore Now')}

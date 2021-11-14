@@ -4,3 +4,4 @@ export * from './Edit';
 export * from './Faqs';
 export * from './Home';
 export * from './Profile';
+export * from './MyBoxes';

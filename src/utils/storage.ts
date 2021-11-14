@@ -3,8 +3,6 @@ import { useCallback, useState } from 'react';
 const STORE_PREFIX = 'mbox';
 const getKey = (key: string) => `${STORE_PREFIX}/${key}`;
 
-const cacheMap = new Map();
-
 export enum StorageKeys {
   ERC20Tokens = 'erc20-tokens',
   ERC721Tokens = 'erc721-tokens',
@@ -16,17 +14,13 @@ export enum StorageKeys {
   RecentTransations = 'recent-transitions',
 }
 
-export const setStorage = (key: string, value: any) => {
-  cacheMap.set(key, value);
+export const setStorage = <T extends any>(key: string, value: T) => {
   return localStorage.setItem(getKey(key), JSON.stringify(value));
 };
 
 export const getStorage = <T extends any = any>(key: string): T | null => {
   const storeKey = getKey(key);
   let result;
-  if (cacheMap.has(storeKey)) {
-    return cacheMap.get(storeKey);
-  }
   const raw = localStorage.getItem(storeKey);
   try {
     result = JSON.parse(raw ?? '');
@@ -34,16 +28,12 @@ export const getStorage = <T extends any = any>(key: string): T | null => {
     result = null;
   }
 
-  if (result !== null) {
-    cacheMap.set(storeKey, result);
-  }
   return result;
 };
 
 export const removeStorage = (key: string) => {
   const storeKey = getKey(key);
   localStorage.removeItem(storeKey);
-  cacheMap.delete(storeKey);
 };
 
 export function useStorage<T extends any = any>(

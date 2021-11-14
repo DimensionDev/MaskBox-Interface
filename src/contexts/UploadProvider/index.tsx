@@ -1,12 +1,6 @@
 import { createContext, FC, useContext, useMemo, useState } from 'react';
 import { create } from 'ipfs-http-client';
-
-export enum MediaType {
-  Audio = 'audio',
-  Image = 'image',
-  Video = 'video',
-  Unknown = 'unknown',
-}
+import { MediaType } from '@/types';
 
 export type UploadResult = { url: string; mediaType: MediaType };
 

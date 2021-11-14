@@ -8,6 +8,7 @@ import {
   TokenIcon,
   useDialog,
 } from '@/components';
+import { RouteKeys } from '@/configs';
 import { useRSS3, useWeb3Context } from '@/contexts';
 import { useTokenList } from '@/hooks';
 import { createShareUrl } from '@/lib';
@@ -25,7 +26,10 @@ import { useAtomValue } from 'jotai/utils';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
+  boxIdAtom,
+  chainAtom,
   formDataAtom,
+  isEdittingAtom,
   readyToCreateAtom,
   useBindFormField,
   useSetAllDirty,
@@ -45,6 +49,9 @@ export const Meta: FC = () => {
   const history = useHistory();
   const formData = useAtomValue(formDataAtom);
   const isReady = useAtomValue(readyToCreateAtom);
+  const chain = useAtomValue(chainAtom);
+  const isEditting = useAtomValue(isEdittingAtom);
+  const editingBoxId = useAtomValue(boxIdAtom);
   const validations = useAtomValue(validationsAtom);
   const bindField = useBindFormField();
   const updateField = useUpdateFormField();
@@ -65,9 +72,10 @@ export const Meta: FC = () => {
     ownedTokens: ownedERC721Tokens,
   } = useEdit();
 
+  const { selectedNFTIds } = formData;
   const selectedERC721Tokens = useMemo(
-    () => ownedERC721Tokens.filter((token) => formData.selectedNFTIds.includes(token.tokenId)),
-    [ownedERC721Tokens, formData.selectedNFTIds],
+    () => ownedERC721Tokens.filter((token) => selectedNFTIds.includes(token.tokenId.toString())),
+    [ownedERC721Tokens, selectedNFTIds],
   );
 
   const { saveBox } = useRSS3();
@@ -116,7 +124,19 @@ export const Meta: FC = () => {
       closeToast();
       setCreating(false);
     }
-  }, [createBox, isReady, setAllDirty]);
+  }, [createBox, isReady, setAllDirty, formData]);
+
+  const update = useCallback(async () => {
+    if (!editingBoxId) return;
+    await saveBox({
+      id: editingBoxId,
+      name: formData.name,
+      mediaType: formData.mediaType,
+      mediaUrl: formData.mediaUrl,
+      activities: formData.activities,
+    });
+    history.replace(`/details?chain=${providerChainId}&box=${editingBoxId}`);
+  }, [history, editingBoxId, formData]);
 
   useEffect(() => {
     if (formData.pricePerBox.startsWith('-')) {
@@ -141,7 +161,8 @@ export const Meta: FC = () => {
           className={styles.backButton}
           size="large"
           onClick={() => {
-            history.replace('/edit/desc');
+            const search = isEditting ? `?chain=${chain}&box=${editingBoxId}` : '';
+            history.replace(`${RouteKeys.EditDescription}${search}`);
           }}
         >
           {t('Go back')}
@@ -154,10 +175,11 @@ export const Meta: FC = () => {
           placeholder="0"
           fullWidth
           size="large"
+          disabled={isEditting}
           value={formData.pricePerBox}
           onChange={bindField('pricePerBox')}
           rightAddon={
-            <span className={styles.pickButton} onClick={openTokenBox}>
+            <span className={styles.pickButton} onClick={isEditting ? undefined : openTokenBox}>
               {selectedPaymentToken ? (
                 <TokenIcon className={styles.tokenIcon} token={selectedPaymentToken} />
               ) : null}
@@ -173,6 +195,7 @@ export const Meta: FC = () => {
           placeholder={t('Limit of purchase per wallet')}
           fullWidth
           size="large"
+          disabled={isEditting}
           value={formData.limit ?? ''}
           onChange={(evt) =>
             updateField('limit', evt.currentTarget.value ? parseInt(evt.currentTarget.value) : null)
@@ -187,16 +210,20 @@ export const Meta: FC = () => {
           fullWidth
           size="large"
           readOnly
+          disabled={isEditting}
           value={formData.erc721Token?.name ?? formData.nftContractAddress}
           onChange={bindField('nftContractAddress')}
-          onClick={openERC721PickerDialog}
+          onClick={isEditting ? undefined : openERC721PickerDialog}
           leftAddon={
             formData.erc721Token ? (
               <TokenIcon className={styles.tokenIcon} token={formData.erc721Token} />
             ) : null
           }
           rightAddon={
-            <span className={styles.pickButton} onClick={openERC721PickerDialog}>
+            <span
+              className={styles.pickButton}
+              onClick={isEditting ? undefined : openERC721PickerDialog}
+            >
               <Icon size={24} type="arrowDown" />
             </span>
           }
@@ -205,6 +232,7 @@ export const Meta: FC = () => {
           <div className={styles.selectGroup}>
             <label className={styles.selectType}>
               <input
+                disabled={isEditting}
                 type="radio"
                 value="all"
                 checked={formData.sellAll}
@@ -214,6 +242,7 @@ export const Meta: FC = () => {
             </label>
             <label className={styles.selectType}>
               <input
+                disabled={isEditting}
                 type="radio"
                 value="part"
                 checked={!formData.sellAll}
@@ -248,6 +277,7 @@ export const Meta: FC = () => {
           <Input
             placeholder={t('Date')}
             fullWidth
+            disabled={isEditting}
             size="large"
             type="datetime-local"
             value={formData.startAt}
@@ -265,6 +295,7 @@ export const Meta: FC = () => {
           <Input
             placeholder={t('Date')}
             fullWidth
+            disabled={isEditting}
             size="large"
             type="datetime-local"
             value={formData.endAt}
@@ -277,6 +308,7 @@ export const Meta: FC = () => {
       <Field className={styles.field} name={t('White list contract')}>
         <Input
           placeholder="eg. 0x0c8FB5C985E00fb1D232b7B9700089492Fb4B9A8"
+          disabled={isEditting}
           fullWidth
           size="large"
           value={formData.whiteList}
@@ -310,9 +342,9 @@ export const Meta: FC = () => {
             size="large"
             colorScheme="primary"
             disabled={!isReady || !isApproveAll}
-            onClick={openConfirmDialog}
+            onClick={isEditting ? update : openConfirmDialog}
           >
-            {t('Create Mystery box')}
+            {isEditting ? t('Update') : t('Create Mystery box')}
           </Button>
         </div>
       </div>

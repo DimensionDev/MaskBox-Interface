@@ -1,9 +1,11 @@
+import { useWatchChain } from '@/atoms/chain';
+import { PageFooter, PageHeader } from '@/page-components';
 import { FC, memo } from 'react';
-import { PageHeader, PageFooter } from '@/page-components';
 
 import styles from './index.module.less';
 
 export const Layout: FC = memo(({ children }) => {
+  useWatchChain();
   return (
     <div className={styles.container}>
       <PageHeader className={styles.header} />

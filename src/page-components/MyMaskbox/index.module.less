@@ -1,0 +1,53 @@
+.maskbox {
+  background-color: var(--footer-background, #f0f2f6);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  .interaction {
+    margin-left: 32px;
+  }
+}
+.media {
+  width: 312px;
+  height: 188px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--image-placeholder-bg, #e4e8f1);
+  color: var(--text-secondary, #f0f2f6);
+  flex-shrink: 0;
+  img {
+    object-fit: cover;
+  }
+}
+
+.infoList {
+  font-size: 16px;
+  line-height: 20px;
+  .name {
+    color: var(--text-primary, #1e202c);
+  }
+  .infoRow {
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    .rowName {
+      color: var(--text-secondary, #f0f2f6);
+    }
+    .rowValue {
+      color: var(--text-primary, #1e202c);
+      margin-left: 12px;
+    }
+  }
+  .statusBadge {
+    margin-left: 12px;
+  }
+}
+.operations {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}

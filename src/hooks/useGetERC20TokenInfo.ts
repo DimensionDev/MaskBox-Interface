@@ -1,15 +1,14 @@
 import { ERC20_ABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
-import { getNativeToken, ZERO_ADDRESS } from '@/lib';
+import { getNativeToken, TokenType, ZERO_ADDRESS } from '@/lib';
 import { isSameAddress } from '@/utils';
 import { Contract } from 'ethers';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-// TODO refactor to `const token = useERC20Token(address)`
 export function useGetERC20TokenInfo() {
   const { ethersProvider, providerChainId } = useWeb3Context();
   const getTokenInfo = useCallback(
-    async (addr: string) => {
+    async (addr: string): Promise<TokenType | undefined> => {
       if (!ethersProvider || !providerChainId) return;
       if (isSameAddress(addr, ZERO_ADDRESS)) {
         return getNativeToken(providerChainId);
@@ -24,7 +23,7 @@ export function useGetERC20TokenInfo() {
             symbol: symbol as string,
             decimals: decimals as number,
             logoURI: '',
-          };
+          } as TokenType;
         },
       );
       return token;
@@ -32,4 +31,19 @@ export function useGetERC20TokenInfo() {
     [ethersProvider, providerChainId],
   );
   return getTokenInfo;
+}
+
+export function useERC20Token(address: string | undefined) {
+  const [token, setToken] = useState<TokenType | undefined>();
+
+  const getTokenInfo = useGetERC20TokenInfo();
+  useEffect(() => {
+    if (!address) {
+      setToken(undefined);
+      return;
+    }
+    getTokenInfo(address).then(setToken);
+  }, [address]);
+
+  return token;
 }

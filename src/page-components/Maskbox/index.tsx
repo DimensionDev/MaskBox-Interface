@@ -1,22 +1,21 @@
 import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
-import { MediaType } from '@/contexts';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
-import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
+import { useGetERC20TokenInfo } from '@/hooks';
 import { TokenType, ZERO } from '@/lib';
-import { BoxOnChain } from '@/types';
+import { BoxOnChain, MediaType } from '@/types';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import { useLocales } from '../useLocales';
 import { CountdownButton } from './CountdownButton';
 import styles from './index.module.less';
-import { useLocales } from '../useLocales';
 
-export interface MaskboxProps extends Omit<HTMLProps<HTMLDivElement>, 'onLoad'> {
+export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxQuery['maskbox'];
   boxOnChain: BoxOnChain | null;
-  boxOnRSS3: Partial<Pick<BoxRSS3Node, 'mediaType' | 'mediaUrl' | 'activities'>> | null;
+  boxOnRSS3: Partial<Pick<BoxRSS3Node, 'name' | 'mediaType' | 'mediaUrl' | 'activities'>> | null;
   inList?: boolean;
   onPurchase?: () => void;
 }
@@ -36,6 +35,7 @@ export const Maskbox: FC<MaskboxProps> = ({
       ...boxOnChain,
       ...boxOnRSS3,
       ...boxOnSubgraph,
+      name: boxOnRSS3?.name ?? boxOnSubgraph?.name ?? boxOnChain?.name,
     }),
     [boxOnChain, boxOnRSS3, boxOnSubgraph],
   );
@@ -144,7 +144,7 @@ export const Maskbox: FC<MaskboxProps> = ({
             {total ? `${total.sub(box.remaining!).toString()}/${total.toString()}` : '-/-'}
           </dd>
           <dd className={styles.infoRow}>
-            {t('limit')} : {box.personal_limit?.toString()}
+            {t('Limit')} : {box.personal_limit?.toString()}
           </dd>
         </dl>
         {notStarted ? (

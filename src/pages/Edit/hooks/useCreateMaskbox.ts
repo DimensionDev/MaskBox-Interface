@@ -1,31 +1,26 @@
 import { MaskboxABI } from '@/abi';
 import { useRecentTransactions } from '@/atoms';
-import { useWeb3Context } from '@/contexts';
-import { getContractAddressConfig, ZERO_ADDRESS } from '@/lib';
+import { useMaskboxContract, useWeb3Context } from '@/contexts';
+import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
-import { Contract, ContractInterface, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
 
 const abiInterface = new ethers.utils.Interface(MaskboxABI);
-const MAX_CONFIRMATION = 6;
+const MAX_CONFIRMATION = 12;
 
 export function useCreateMaskbox() {
-  const { ethersProvider, providerChainId } = useWeb3Context();
+  const { ethersProvider, providerChainId: chainId } = useWeb3Context();
   const formData = useAtomValue(formDataAtom);
   const { addTransaction, updateTransactionBy } = useRecentTransactions();
+  const contract = useMaskboxContract();
 
   const limit = formData.limit ?? 5;
   const createBox = useCallback(async () => {
-    if (!ethersProvider || !providerChainId) return;
-    const contractAddress = getContractAddressConfig(providerChainId).Maskbox;
-    const contract = new Contract(
-      contractAddress,
-      MaskboxABI as unknown as ContractInterface,
-      ethersProvider.getSigner(),
-    );
-    const tx = await contract.createBox(
+    if (!ethersProvider || !chainId || !contract) return;
+    const tx = await contract.connect(ethersProvider.getSigner()).createBox(
       formData.nftContractAddress,
       formData.name,
       [
@@ -41,10 +36,10 @@ export function useCreateMaskbox() {
       formData.selectedNFTIds,
       formData.whiteList || ZERO_ADDRESS,
     );
-    debugger;
     const txHash = tx.hash as string;
     addTransaction({
-      txHash: txHash,
+      chainId,
+      txHash,
       name: 'Create MaskBox',
       status: TransactionStatus.Pending,
     });
@@ -71,6 +66,6 @@ export function useCreateMaskbox() {
 
     const parsedLog = abiInterface.parseLog(log);
     return parsedLog;
-  }, [formData, ethersProvider, providerChainId]);
+  }, [formData, ethersProvider, chainId]);
   return createBox;
 }

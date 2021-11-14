@@ -47,7 +47,6 @@ export const NFTContractProvider: FC = memo(({ children }) => {
         .catch((getMyBalanceError: Error) => console.error({ getMyBalanceError }));
       if (!balance) return 0;
 
-      console.log('balance', balance);
       return (balance as BigNumber).toNumber();
     },
     [account],
@@ -99,7 +98,6 @@ export const NFTContractProvider: FC = memo(({ children }) => {
       }
       const contract = new Contract(contractAddress, MaskboxNFTABI, ethersProvider);
       const balance = await getMyBalance(contract);
-      console.log('balance', balance);
       const getTokens = new Array(balance)
         .fill(0)
         .map((_, index) => getMyToken(contract, BigNumber.from(index)));

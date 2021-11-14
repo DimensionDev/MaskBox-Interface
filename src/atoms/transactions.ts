@@ -5,10 +5,38 @@ import { atom, useAtom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
 import { uniqBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo } from 'react';
+import { chainAtom } from './chain';
 
 const STORAGE_KEY = StorageKeys.RecentTransations;
-const initialStoredTxes = getStorage<Transaction[]>(STORAGE_KEY) ?? [];
-export const recentTransactionsAtom = atom<Transaction[]>(initialStoredTxes);
+
+type StoredTransactionMap = Record<number, Transaction[]>;
+
+const initialStoredTxesMap = getStorage<Transaction[]>(STORAGE_KEY) ?? {};
+
+export const transactionsMapAtom = atom<StoredTransactionMap>(initialStoredTxesMap);
+
+type Update = Transaction[] | ((txes: Transaction[]) => Transaction[]);
+
+export const recentTransactionsAtom = atom<Transaction[], Update>(
+  (get) => {
+    const chainId = get(chainAtom);
+    if (!chainId) return [];
+    const txesMap = get(transactionsMapAtom);
+    return txesMap[chainId] ?? [];
+  },
+  (get, set, update) => {
+    const chainId = get(chainAtom);
+    if (!chainId) return;
+    const txesMap = get(transactionsMapAtom);
+    const updatedTxes = typeof update === 'function' ? update(txesMap[chainId] ?? []) : update;
+    const updatedMap = {
+      ...txesMap,
+      [chainId]: updatedTxes,
+    };
+    set(transactionsMapAtom, updatedMap);
+    setStorage<StoredTransactionMap>(STORAGE_KEY, updatedMap);
+  },
+);
 
 export const useRecentTransactions = () => {
   const [transactions, setTxes] = useAtom(recentTransactionsAtom);
@@ -21,6 +49,7 @@ export const useRecentTransactions = () => {
   );
   const { ethersProvider } = useWeb3Context();
 
+  const recentTransactions = useMemo(() => transactions.slice(0, 5), [transactions]);
   const pendingTransactions = useMemo(
     () => transactions.filter((tx) => tx.status === TransactionStatus.Pending),
     [transactions],
@@ -31,7 +60,7 @@ export const useRecentTransactions = () => {
     const onBlockMined = () => {
       pendingTransactions.map(async (tx) => {
         const transaction = await ethersProvider.getTransactionReceipt(tx.txHash);
-        if (transaction.status !== undefined) {
+        if (transaction && transaction.status !== undefined) {
           updateTransactionBy({
             txHash: tx.txHash,
             status: transaction.status,
@@ -47,12 +76,7 @@ export const useRecentTransactions = () => {
 
   const addTransaction = useCallback(
     (tx: Transaction) => {
-      setTxes((txes) => {
-        const newTxes = uniqBy([tx, ...txes.slice(0, 4)], 'txHash');
-        console.log({ newTxes });
-        setStorage(STORAGE_KEY, newTxes);
-        return newTxes;
-      });
+      setTxes((txes) => uniqBy([tx, ...txes], 'txHash'));
     },
     [setTxes],
   );
@@ -60,14 +84,7 @@ export const useRecentTransactions = () => {
   const updateTransactionBy = useCallback(
     (newTx: Partial<Transaction> & Pick<Transaction, 'txHash'>) => {
       setTxes((txes) => {
-        return txes.map((t) => {
-          return t.txHash === newTx.txHash
-            ? {
-                ...t,
-                ...newTx,
-              }
-            : t;
-        });
+        return txes.map((tx) => (tx.txHash === newTx.txHash ? { ...tx, ...newTx } : tx));
       });
     },
     [setTxes],
@@ -79,6 +96,7 @@ export const useRecentTransactions = () => {
 
   return {
     transactions,
+    recentTransactions,
     updateTransactions,
     addTransaction,
     updateTransactionBy,

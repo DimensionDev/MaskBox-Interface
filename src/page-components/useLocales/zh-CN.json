@@ -31,5 +31,12 @@
   "Switch to {network}": "切换至 {network}",
   "{network} is not supported yet": "暂不支持 {network}",
   "Successful": "成功",
-  "Share to twitter": "分享到 twitter"
+  "Share to twitter": "分享到 twitter",
+  "Seletct a Token": "",
+  "Price": "单价",
+  "Sold": "销售量",
+  "Date": "日期",
+  "My Maskboxes": "My Maskboxes",
+  "Create Maskbox": "Create Maskbox",
+  "You haven’t created any mystery box yet.": "You haven’t created any mystery box yet."
 }
