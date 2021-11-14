@@ -31,7 +31,7 @@ const startAt = date.toJSON().split('.')[0];
 date.setDate(date.getDate() + 30);
 const endAt = date.toJSON().split('.')[0];
 
-const initFormData: FormData = {
+export const initFormData: FormData = {
   name: '',
   mediaUrl: '',
   mediaType: MediaType.Unknown,

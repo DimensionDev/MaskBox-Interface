@@ -1,4 +1,6 @@
 export * from './useBalance';
+export * from './useBox';
+export * from './useBoxInfo';
 export * from './useCancelBox';
 export * from './useERC20Approve';
 export * from './useGdpr';
@@ -8,8 +10,7 @@ export * from './useGetERC721Token';
 export * from './useGetExtendedBoxInfo';
 export * from './useMaskboxContract';
 export * from './useMaskboxCreationEvent';
+export * from './useNFTIdsOfBox';
 export * from './useOnceShowup';
 export * from './useSubscribeTokenPrice';
 export * from './useTokenList';
-export * from './useBoxInfo';
-export * from './useBox';

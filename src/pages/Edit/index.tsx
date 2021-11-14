@@ -1,11 +1,11 @@
 import { RouteKeys } from '@/configs';
-import { useBox, useERC20Token, useERC721Token } from '@/hooks';
+import { useBox, useERC20Token, useERC721Token, useNFTIdsOfBox } from '@/hooks';
 import { formatUnits } from 'ethers/lib/utils';
 import { useAtom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
 import { FC, useEffect } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import { boxIdAtom, chainAtom, formDataAtom, isEdittingAtom } from './atoms';
+import { boxIdAtom, chainAtom, formDataAtom, initFormData, isEdittingAtom } from './atoms';
 import { Description } from './Description';
 import styles from './index.module.less';
 import { Meta } from './Meta';
@@ -29,6 +29,12 @@ export const Edit: FC = () => {
     const editting = !!_chain && !!_boxId;
     updateIsEditting(editting);
   }, [location.search]);
+
+  useEffect(() => {
+    if (!isEditting) {
+      updateFormData(initFormData);
+    }
+  }, [isEditting]);
 
   useEffect(() => {
     if (isEditting && boxOnRSS3) {
@@ -77,6 +83,19 @@ export const Edit: FC = () => {
       }));
     }
   }, [isEditting, erc721Token]);
+
+  const sellingNFTIds = useNFTIdsOfBox(boxId, boxOnSubgraph?.sell_all);
+  console.log({ boxId, sell_all: boxOnSubgraph?.sell_all, sellingNFTIds });
+
+  useEffect(() => {
+    if (isEditting && sellingNFTIds) {
+      console.log({ sellingNFTIds });
+      updateFormData((fd) => ({
+        ...fd,
+        selectedNFTIds: sellingNFTIds,
+      }));
+    }
+  }, [isEditting, sellingNFTIds]);
 
   return (
     <main className={styles.editPage}>

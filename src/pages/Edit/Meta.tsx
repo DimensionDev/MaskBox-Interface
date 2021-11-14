@@ -8,6 +8,7 @@ import {
   TokenIcon,
   useDialog,
 } from '@/components';
+import { RouteKeys } from '@/configs';
 import { useRSS3, useWeb3Context } from '@/contexts';
 import { useTokenList } from '@/hooks';
 import { createShareUrl } from '@/lib';
@@ -26,6 +27,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   boxIdAtom,
+  chainAtom,
   formDataAtom,
   isEdittingAtom,
   readyToCreateAtom,
@@ -47,6 +49,7 @@ export const Meta: FC = () => {
   const history = useHistory();
   const formData = useAtomValue(formDataAtom);
   const isReady = useAtomValue(readyToCreateAtom);
+  const chain = useAtomValue(chainAtom);
   const isEditting = useAtomValue(isEdittingAtom);
   const editingBoxId = useAtomValue(boxIdAtom);
   const validations = useAtomValue(validationsAtom);
@@ -69,9 +72,10 @@ export const Meta: FC = () => {
     ownedTokens: ownedERC721Tokens,
   } = useEdit();
 
+  const { selectedNFTIds } = formData;
   const selectedERC721Tokens = useMemo(
-    () => ownedERC721Tokens.filter((token) => formData.selectedNFTIds.includes(token.tokenId)),
-    [ownedERC721Tokens, formData.selectedNFTIds],
+    () => ownedERC721Tokens.filter((token) => selectedNFTIds.includes(token.tokenId.toString())),
+    [ownedERC721Tokens, selectedNFTIds],
   );
 
   const { saveBox } = useRSS3();
@@ -120,7 +124,7 @@ export const Meta: FC = () => {
       closeToast();
       setCreating(false);
     }
-  }, [createBox, isReady, setAllDirty]);
+  }, [createBox, isReady, setAllDirty, formData]);
 
   const update = useCallback(async () => {
     if (!editingBoxId) return;
@@ -132,7 +136,7 @@ export const Meta: FC = () => {
       activities: formData.activities,
     });
     history.replace(`/details?chain=${providerChainId}&box=${editingBoxId}`);
-  }, [history, editingBoxId]);
+  }, [history, editingBoxId, formData]);
 
   useEffect(() => {
     if (formData.pricePerBox.startsWith('-')) {
@@ -157,7 +161,8 @@ export const Meta: FC = () => {
           className={styles.backButton}
           size="large"
           onClick={() => {
-            history.replace('/edit/desc');
+            const search = isEditting ? `?chain=${chain}&box=${editingBoxId}` : '';
+            history.replace(`${RouteKeys.EditDescription}${search}`);
           }}
         >
           {t('Go back')}
