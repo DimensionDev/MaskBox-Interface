@@ -19,7 +19,7 @@ import {
   ShareBox,
   TokenPickerDialog,
 } from '@/page-components';
-import { isSameAddress } from '@/utils';
+import { isSameAddress, TZOffsetLabel } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
@@ -41,8 +41,6 @@ import { useCreateMaskbox } from './hooks';
 import styles from './index.module.less';
 import { useEdit } from './useEdit';
 import { useLocales } from './useLocales';
-
-const timezoneOffset = -new Date().getTimezoneOffset() / 60;
 
 export const Meta: FC = () => {
   const t = useLocales();
@@ -270,7 +268,7 @@ export const Meta: FC = () => {
         <Field
           className={styles.field}
           name={t('Start date (UTC{offset})', {
-            offset: timezoneOffset > 0 ? '+' + timezoneOffset : timezoneOffset,
+            offset: TZOffsetLabel,
           })}
           required
         >
@@ -288,7 +286,7 @@ export const Meta: FC = () => {
         <Field
           className={styles.field}
           name={t('End date (UTC{offset})', {
-            offset: timezoneOffset > 0 ? '+' + timezoneOffset : timezoneOffset,
+            offset: TZOffsetLabel,
           })}
           required
         >

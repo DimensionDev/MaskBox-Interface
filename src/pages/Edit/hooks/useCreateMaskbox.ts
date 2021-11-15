@@ -3,6 +3,7 @@ import { useRecentTransactions } from '@/atoms';
 import { useMaskboxContract, useWeb3Context } from '@/contexts';
 import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
+import { toUTCZero } from '@/utils';
 import { ethers } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
@@ -30,8 +31,8 @@ export function useCreateMaskbox() {
         },
       ],
       limit,
-      Math.floor(new Date(formData.startAt).getTime() / 1000),
-      Math.floor(new Date(formData.endAt).getTime() / 1000),
+      Math.floor(toUTCZero(formData.startAt).getTime() / 1000),
+      Math.floor(toUTCZero(formData.endAt).getTime() / 1000),
       formData.sellAll,
       formData.selectedNFTIds,
       formData.whiteList || ZERO_ADDRESS,

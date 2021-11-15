@@ -13,8 +13,6 @@ export function formatBalance(bn: BigNumber, decimals: number, significant = dec
   const value = parseFloat(utils.formatUnits(bn, decimals));
   if (bn.eq(ZERO)) return '0';
   const ONE = BigNumber.from(10).pow(decimals);
-  if (bn.mod(ONE).eq(ZERO)) {
-    return value;
-  }
+  if (bn.mod(ONE).eq(ZERO)) return value;
   return value.toFixed(significant);
 }

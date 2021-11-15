@@ -12,13 +12,13 @@ export function formatToLocale(dt: number | Date | undefined, pattern: string) {
   return format(date, pattern);
 }
 
-export function toLocalUTC(dt: number | Date) {
+export function toLocalUTC(dt: number | string | Date) {
   const date = new Date(dt);
   date.setHours(date.getHours() + timezoneOffset);
   return date;
 }
 
-export function toUTCZero(dt: number | Date) {
+export function toUTCZero(dt: number | string | Date) {
   const date = new Date(dt);
   date.setHours(date.getHours() - timezoneOffset);
   return date;

@@ -4,6 +4,7 @@ import { MaskBoxQuery } from '@/graphql-hooks';
 import { useGetERC20TokenInfo } from '@/hooks';
 import { TokenType, ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
+import { toLocalUTC } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
@@ -56,7 +57,7 @@ export const Maskbox: FC<MaskboxProps> = ({
     }
   }, [payment]);
 
-  const startTime = box?.start_time ? box.start_time * 1000 : undefined;
+  const startTime = box?.start_time ? toLocalUTC(box.start_time * 1000).getTime() : undefined;
   const notStarted = box.started === false || (startTime && startTime > Date.now());
 
   const price = useMemo(() => {
