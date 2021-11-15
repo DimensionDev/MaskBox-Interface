@@ -24,7 +24,12 @@ export const TokenList: FC<TokenListProps> = ({ tokens, className, onPick, ...re
   return (
     <ul className={classnames(styles.list, className)} {...rest}>
       {tokens.map((token) => (
-        <li className={styles.item} key={token.address} onClick={() => onPick?.(token)}>
+        <li
+          className={styles.item}
+          key={token.address}
+          role="button"
+          onClick={() => onPick?.(token)}
+        >
           <Token isCustomized={addresses.includes(token.address)} token={token} />
         </li>
       ))}

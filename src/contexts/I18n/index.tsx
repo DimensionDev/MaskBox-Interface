@@ -56,7 +56,7 @@ export function createLocales(configs: LocaleConfig) {
         const config = configs[language as string];
         let text = config?.[key] || configs.en?.[key] || key;
         if (data) {
-          text = text.replace(/{(.*?)}/g, (_, key) => data[key] ?? key);
+          text = text.replace(/{(.*?)}/g, (_, key) => (data[key] as string) ?? key);
         }
         const mightBeHtml = /(<.*?>|&\w+;)/.test(text);
 

@@ -3,6 +3,7 @@ import { Activity, MediaType } from '@/types';
 import { isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
+import { eq } from 'lodash-es';
 import { FormEvent, useCallback } from 'react';
 
 export interface FormData {
@@ -86,11 +87,13 @@ export const readyToCreateAtom = atom((get) => {
 export function useSetAllDirty() {
   const setDirty = useUpdateAtom(fieldDirtyAtom);
   return useCallback(() => {
-    const dirtyMap: Partial<Record<keyof FormData, boolean>> = {};
-    fieldKeys.forEach((key) => {
-      dirtyMap[key] = true;
+    setDirty((oldMap) => {
+      const dirtyMap: Partial<Record<keyof FormData, boolean>> = {};
+      fieldKeys.forEach((key) => {
+        dirtyMap[key] = true;
+      });
+      return eq(oldMap, dirtyMap) ? oldMap : dirtyMap;
     });
-    setDirty(dirtyMap);
   }, []);
 }
 
