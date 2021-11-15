@@ -1,7 +1,7 @@
 import { useWeb3Context } from '@/contexts';
 import { useOnceShowup } from '@/hooks';
-import { TokenType, ZERO } from '@/lib';
-import { getStorage, StorageKeys } from '@/utils';
+import { TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
+import { formatBalance, getStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
 import { BigNumber, Contract, utils } from 'ethers';
 import { FC, HTMLProps, useRef, useState } from 'react';
@@ -52,9 +52,15 @@ export const Token: FC<TokenProps> = ({
 
   const [{ loading }, fetchBalance] = useAsyncFn(async () => {
     if (!ethersProvider || !account) return;
-    const contract = new Contract(token.address, erc20Abi, ethersProvider);
-    const balanceResult: BigNumber = await contract.balanceOf(account);
-    setBalance(balanceResult);
+    if (token.address === ZERO_ADDRESS) {
+      const balanceResult = await ethersProvider.getBalance(account);
+      setBalance(balanceResult);
+      return;
+    } else {
+      const contract = new Contract(token.address, erc20Abi, ethersProvider);
+      const balanceResult: BigNumber = await contract.balanceOf(account);
+      setBalance(balanceResult);
+    }
   }, [account, token.address, ethersProvider]);
 
   useOnceShowup(containerRef, fetchBalance);
@@ -78,7 +84,7 @@ export const Token: FC<TokenProps> = ({
       </div>
       {!hideBalance && (
         <div className={styles.balance}>
-          {loading ? <LoadingIcon size={24} /> : utils.formatUnits(balance, token.decimals || 1)}
+          {loading ? <LoadingIcon size={24} /> : formatBalance(balance, token.decimals || 1, 4)}
         </div>
       )}
     </div>
