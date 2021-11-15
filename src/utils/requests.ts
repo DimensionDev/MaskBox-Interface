@@ -1,7 +1,7 @@
 import { ERC721Token } from '@/types';
 
 const nftCache = new Map();
-export async function fetchNFTTokenDetail(uri: string) {
+export async function fetchNFTTokenDetail(uri: string): Promise<Omit<ERC721Token, 'tokenId'>> {
   if (nftCache.get(uri)) {
     return nftCache.get(uri);
   }

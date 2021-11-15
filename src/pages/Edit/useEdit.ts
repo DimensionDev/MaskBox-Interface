@@ -63,9 +63,6 @@ export function useEdit() {
   const { getMyTokens } = useNFTContract();
 
   useEffect(() => {
-    if (formData.nftContractAddress) {
-      debugger;
-    }
     getMyTokens(formData.nftContractAddress).then(setOwnedTokens);
   }, [formData.nftContractAddress, getMyTokens]);
 

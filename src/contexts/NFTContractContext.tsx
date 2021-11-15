@@ -52,18 +52,18 @@ export const NFTContractProvider: FC = memo(({ children }) => {
     [account],
   );
 
-  const getTokenById = async (contract: Contract, tokenId: string) => {
+  const getTokenById = async (contract: Contract, tokenId: string): Promise<ERC721Token> => {
     const uri = await contract.tokenURI(tokenId);
     const data = await fetchNFTTokenDetail(uri);
-    return { ...data, tokenId } as ERC721Token;
+    return { ...data, tokenId };
   };
 
   const getMyToken = useCallback(
     async (contract: Contract, index: BigNumber) => {
       try {
-        const tokenId = await contract.tokenOfOwnerByIndex(account, index);
+        const tokenId: BigNumber = await contract.tokenOfOwnerByIndex(account, index);
         if (!tokenId) return null;
-        const token = await getTokenById(contract, tokenId);
+        const token = await getTokenById(contract, tokenId.toString());
         return token;
       } catch (getMyTokenError: any) {
         if (getMyTokenError.reason) {
