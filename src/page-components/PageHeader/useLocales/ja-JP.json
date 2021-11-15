@@ -1,8 +1,9 @@
 {
-  "Home": "Home",
-  "Mystery": "ミステリー",
+  "Home": "ホーム",
+  "Mystery": "ミステリー\n",
   "My Items": "アイテム",
   "FAQs": "FAQ",
   "Create": "作成",
-  "Connect Wallet": "ウォレットを接続"
+  "Connect Wallet": "ウォレットを接続",
+  "My Maskboxes": "私のMaskBox"
 }
