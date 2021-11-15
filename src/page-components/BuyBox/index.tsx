@@ -80,13 +80,9 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   const { open: openBox, loading } = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
   const handleDraw = useCallback(async () => {
     const result = await openBox();
-    if (!result) {
-      showToast({
-        title: 'Draw success, but fails get the result',
-      });
-      return;
+    if (result && onPurchased) {
+      onPurchased(result);
     }
-    onPurchased?.(result);
   }, [openBox, onPurchased]);
 
   return (

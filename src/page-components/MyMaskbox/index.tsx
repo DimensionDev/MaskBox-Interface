@@ -156,22 +156,24 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             </Badge>
           </dd>
         </dl>
-        <div className={styles.operations}>
-          <Button
-            colorScheme="primary"
-            onClick={() => {
-              history.push(`${RouteKeys.Edit}/desc?chain=${box.chain_id}&box=${box.box_id}`);
-            }}
-          >
-            {t('Edit Details')}
-          </Button>
-          {box.started === false ? (
-            <Button colorScheme="danger" onClick={cancel}>
-              {t('Cancel')}
+        {!box.canceled && (
+          <div className={styles.operations}>
+            <Button
+              colorScheme="primary"
+              onClick={() => {
+                history.push(`${RouteKeys.Edit}/desc?chain=${box.chain_id}&box=${box.box_id}`);
+              }}
+            >
+              {t('Edit Details')}
             </Button>
-          ) : null}
-          <SNSShare boxName={box.name} />
-        </div>
+            {box.started === false ? (
+              <Button colorScheme="danger" onClick={cancel}>
+                {t('Cancel')}
+              </Button>
+            ) : null}
+            <SNSShare boxName={box.name} />
+          </div>
+        )}
       </div>
     </div>
   );
