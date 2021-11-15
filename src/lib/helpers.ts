@@ -20,7 +20,7 @@ export const logError = (error: { [key: string]: Error }) => {
 };
 
 export const getNetworkName = (chainId: number) => {
-  return networkNames[chainId] || 'Unknown Network';
+  return networkNames[chainId] || 'Unknown';
 };
 
 export const getContractAddressConfig = (chainId: number) => {

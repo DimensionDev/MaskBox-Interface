@@ -10,7 +10,7 @@ import {
 import { RouteKeys } from '@/configs';
 import { useClickAway } from 'react-use';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
-import { getNetworkIcon, getNetworkName } from '@/lib';
+import { getNetworkColor, getNetworkIcon, getNetworkName } from '@/lib';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useEffect, useRef } from 'react';
@@ -103,9 +103,9 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
                 >
                   <Icon
                     className={styles.icon}
-                    iconUrl={isNotSupportedChain ? undefined : getNetworkIcon(providerChainId!)}
-                    type={isNotSupportedChain ? 'risk' : undefined}
-                    size={18}
+                    type="dot"
+                    color={getNetworkColor(providerChainId!)}
+                    size={20}
                   />
                   {isNotSupportedChain ? 'Network error' : getNetworkName(providerChainId!)}
                 </Button>

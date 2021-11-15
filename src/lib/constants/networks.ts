@@ -1,22 +1,23 @@
 import { ethereumIcon, binanceIcon, polygonIcon } from '../../components/Icon/icon-data';
+import { ChainId as ChainIdEnum } from './chainId';
 
 export const supportedChains = [1, 4];
 
 export const networkNames: Record<number, string> = {
-  1: 'ETH Mainnet',
-  3: 'Ethereum Testnet Ropsten',
-  4: 'Ethereum Testnet Rinkeby',
-  5: 'Ethereum Testnet Kovan',
+  1: 'ETH',
+  3: 'Ropsten',
+  4: 'Rinkeby',
+  5: 'Kovan',
   42: 'Kovan Testnet',
-  56: 'Binance Smart Chain',
+  56: 'BSC',
   77: 'Sokol Testnet',
-  97: 'Binance Smart Chain Testnet',
+  97: 'BSC Testnet',
   100: 'xDai Chain',
   137: 'Matic Mainnet',
   80001: 'Matic Testnet Mumbai',
 };
 
-export type ChainId = keyof typeof networkNames;
+type ChainId = keyof typeof networkNames;
 type Network = {
   chainId: ChainId;
   name: string;
@@ -47,4 +48,19 @@ export const networkExplorers: Record<number, string> = {
 
 export function isSupportedChain(chainId: number) {
   return supportedChains.includes(chainId);
+}
+
+export const networkColors: Partial<Record<ChainIdEnum, string>> = {
+  [ChainIdEnum.Mainnet]: '#1C68F3',
+  [ChainIdEnum.Matic]: '#773EE1',
+  [ChainIdEnum.Ropsten]: '#FF4182',
+  [ChainIdEnum.Rinkeby]: '#F5BB3B',
+  [ChainIdEnum.Arbitrum]: '#2496EE',
+  [ChainIdEnum.BSC]: '#FBDA3C',
+  [ChainIdEnum.Kovan]: '#8559FF',
+  [ChainIdEnum.xDai]: '#48A9A6',
+};
+
+export function getNetworkColor(chainId: ChainIdEnum) {
+  return networkColors[chainId] ?? networkColors[ChainIdEnum.Mainnet];
 }
