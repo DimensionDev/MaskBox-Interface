@@ -30,7 +30,6 @@ export function useOpenBox(
     });
     try {
       const purchasedNfts = await getPurchasedNft(boxId, account);
-      console.log('purchasedNfts', { purchasedNfts });
       // TODO the proof parameter
       const tx = await openBox(boxId, quantity, paymentTokenIndex, proof, {
         value: isNative ? payment.price.mul(quantity) : undefined,

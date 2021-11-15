@@ -7,7 +7,7 @@ export function useCancelBox() {
   const canceleBox = useCallback(
     async (boxId: string) => {
       if (!contract || !ethersProvider) return;
-      await contract.connect(ethersProvider.getSigner()).canceleBox(boxId);
+      await contract.connect(ethersProvider.getSigner()).cancelBox(boxId);
     },
     [contract, ethersProvider],
   );
