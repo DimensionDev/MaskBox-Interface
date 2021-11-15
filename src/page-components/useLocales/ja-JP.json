@@ -21,6 +21,7 @@
   "Draw ( {price}/Time )": "ペイント（ {price}/時間）",
   "Lucky Draw": "幸運ガチャ",
   "Get your unique card (NFT) by lucky draw": "幸運ガチャでユニークなカード（NFT）を手に入れよう",
+  "Limit": "制限",
   "Select your collection": "コレクションを選択",
   "Token ID": "トークンID",
   "Search": "検索",
@@ -31,5 +32,14 @@
   "{network} is not supported yet": "{network} はまだサポートされていません",
   "Successful": "成功",
   "Share to twitter": "Twitterで共有",
-  "Seletct a Token": "トークンを選択"
+  "Seletct a Token": "トークンを選択",
+  "Price": "価格",
+  "Sold": "完売",
+  "Date": "日付",
+  "My Maskboxes": "私のMaskBox",
+  "Create Maskbox": "MaskBoxを作成",
+  "You haven’t created any mystery box yet.": "ミステリーボックスを作成していません",
+  "Cancel issue": "発売中止",
+  "Mystery box name": "ミステリーボックスの名前",
+  "Saint Seiya": "聖闘士星矢"
 }
