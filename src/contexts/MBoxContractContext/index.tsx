@@ -2,7 +2,7 @@ import { ZERO } from '@/lib';
 import { BoxOnChain } from '@/types';
 import { addGasMargin } from '@/utils';
 import { BigNumber } from 'ethers';
-import React, { FC, memo, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, FC, memo, useCallback, useContext, useEffect, useState } from 'react';
 import { useMaskboxContract } from '..';
 import { useWeb3Context } from '../Web3Context';
 
@@ -22,7 +22,7 @@ interface ContextOptions {
   getPurchasedNft: (boxId: string, customer: string) => Promise<string[]>;
 }
 
-export const MBoxContractContext = React.createContext<ContextOptions>({
+export const MBoxContractContext = createContext<ContextOptions>({
   getBoxInfo: () => Promise.resolve({} as BoxOnChain),
   getNftListForSale: () => Promise.resolve([]),
   openBox: () => Promise.resolve(null),

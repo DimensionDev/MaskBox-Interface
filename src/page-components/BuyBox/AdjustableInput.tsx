@@ -10,14 +10,22 @@ interface Props {
   min?: number;
   className?: string;
   onUpdate?: (val: number) => void;
+  disabled?: boolean;
 }
 
-export const AdjustableInput: FC<Props> = ({ value, min, max, className, onUpdate = noop }) => {
+export const AdjustableInput: FC<Props> = ({
+  className,
+  value,
+  min,
+  max,
+  disabled,
+  onUpdate = noop,
+}) => {
   return (
     <span className={classnames(styles.container, className)}>
       <Icon
         className={classnames(styles.button, styles.decrease, {
-          [styles.disabled]: min && value <= min,
+          [styles.disabled]: (min && value <= min) || disabled,
         })}
         type="decrease"
         role="button"
@@ -36,7 +44,7 @@ export const AdjustableInput: FC<Props> = ({ value, min, max, className, onUpdat
       />
       <Icon
         className={classnames(styles.button, styles.increase, {
-          [styles.disabled]: max && value >= max,
+          [styles.disabled]: (max && value >= max) || disabled,
         })}
         type="increase"
         role="button"

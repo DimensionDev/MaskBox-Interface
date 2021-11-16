@@ -1,11 +1,4 @@
-import {
-  Button,
-  LoadingIcon,
-  PickerDialog,
-  PickerDialogProps,
-  showToast,
-  TokenIcon,
-} from '@/components';
+import { Button, LoadingIcon, PickerDialog, PickerDialogProps, TokenIcon } from '@/components';
 import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
 import {
   useBalance,
@@ -104,6 +97,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             value={quantity}
             min={1}
             max={limit}
+            disabled={loading}
             onUpdate={setQuantity}
           />
         </dd>

@@ -28,6 +28,7 @@ export type Maskbox = {
   box_id: Scalars['String'];
   canceled: Scalars['Boolean'];
   chain_id: Scalars['Int'];
+  claimed: Scalars['Boolean'];
   create_time: Scalars['Int'];
   creator: Scalars['Bytes'];
   end_time: Scalars['Int'];
@@ -76,6 +77,10 @@ export type Maskbox_Filter = {
   chain_id_lte?: Maybe<Scalars['Int']>;
   chain_id_not?: Maybe<Scalars['Int']>;
   chain_id_not_in?: Maybe<Array<Scalars['Int']>>;
+  claimed?: Maybe<Scalars['Boolean']>;
+  claimed_in?: Maybe<Array<Scalars['Boolean']>>;
+  claimed_not?: Maybe<Scalars['Boolean']>;
+  claimed_not_in?: Maybe<Array<Scalars['Boolean']>>;
   create_time?: Maybe<Scalars['Int']>;
   create_time_gt?: Maybe<Scalars['Int']>;
   create_time_gte?: Maybe<Scalars['Int']>;
@@ -169,6 +174,7 @@ export enum Maskbox_OrderBy {
   BoxId = 'box_id',
   Canceled = 'canceled',
   ChainId = 'chain_id',
+  Claimed = 'claimed',
   CreateTime = 'create_time',
   Creator = 'creator',
   EndTime = 'end_time',
@@ -430,6 +436,7 @@ export type MaskBoxesOfQuery = {
     end_time: number;
     sell_all: boolean;
     canceled: boolean;
+    claimed: boolean;
     sold_nft_list: Array<string>;
     nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
   }>;
@@ -572,6 +579,7 @@ export const MaskBoxesOfDocument = gql`
       end_time
       sell_all
       canceled
+      claimed
       nft_contract {
         address
         name

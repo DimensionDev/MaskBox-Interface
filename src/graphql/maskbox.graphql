@@ -58,6 +58,7 @@ query MaskBoxesOf($first: Int! = 10, $skip: Int! = 0, $account: Bytes!) {
     end_time
     sell_all
     canceled
+    claimed
     nft_contract {
       address
       name

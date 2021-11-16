@@ -1,5 +1,6 @@
 import { MaskboxABI } from '@/abi';
 import { useRecentTransactions } from '@/atoms';
+import { MAX_CONFIRMATION } from '@/configs';
 import { useMaskboxContract, useWeb3Context } from '@/contexts';
 import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
@@ -10,7 +11,6 @@ import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
 
 const abiInterface = new ethers.utils.Interface(MaskboxABI);
-const MAX_CONFIRMATION = 12;
 
 export function useCreateMaskbox() {
   const { ethersProvider, providerChainId: chainId } = useWeb3Context();
@@ -19,6 +19,8 @@ export function useCreateMaskbox() {
   const contract = useMaskboxContract();
 
   const limit = formData.limit ?? 5;
+  const startTime = Math.floor(toUTCZero(formData.startAt).getTime() / 1000);
+  const endTime = Math.floor(toUTCZero(formData.endAt).getTime() / 1000);
   const createBox = useCallback(async () => {
     if (!ethersProvider || !chainId || !contract) return;
     const tx = await contract.connect(ethersProvider.getSigner()).createBox(
@@ -31,8 +33,8 @@ export function useCreateMaskbox() {
         },
       ],
       limit,
-      Math.floor(toUTCZero(formData.startAt).getTime() / 1000),
-      Math.floor(toUTCZero(formData.endAt).getTime() / 1000),
+      startTime,
+      endTime,
       formData.sellAll,
       formData.selectedNFTIds,
       formData.whiteList || ZERO_ADDRESS,

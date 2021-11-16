@@ -1,4 +1,5 @@
-import { BigNumber } from 'ethers';
+import { ZERO } from '@/lib';
+import { BigNumber, utils } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 
 export function formatAddres(address: string): string {
@@ -15,4 +16,12 @@ export function addGasMargin(value: BigNumber, scale = 5000) {
   return BigNumber.from(value)
     .mul(10000 + scale)
     .div(10000);
+}
+
+export function formatBalance(bn: BigNumber, decimals: number, significant = decimals) {
+  const value = parseFloat(utils.formatUnits(bn, decimals));
+  if (bn.eq(ZERO)) return '0';
+  const ONE = BigNumber.from(10).pow(decimals);
+  if (bn.mod(ONE).eq(ZERO)) return value;
+  return value.toFixed(significant);
 }

@@ -1,6 +1,6 @@
 import { ERC721Token, TokenType, ZERO_ADDRESS } from '@/lib';
 import { Activity, MediaType } from '@/types';
-import { isValid as isValidDate } from 'date-fns';
+import { format, isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
 import { eq } from 'lodash-es';
@@ -28,9 +28,9 @@ export interface FormData {
 export const newActivity = () => ({ title: '', body: '' });
 
 const date = new Date();
-const startAt = date.toJSON().split('.')[0];
+const startAt = format(date, "yyyy-MM-dd'T'HH:mm");
 date.setDate(date.getDate() + 30);
-const endAt = date.toJSON().split('.')[0];
+const endAt = format(date, "yyyy-MM-dd'T'HH:mm");
 
 export const initFormData: FormData = {
   name: '',

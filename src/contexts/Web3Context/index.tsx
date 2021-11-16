@@ -8,7 +8,9 @@ import { connectableWallets, ConnectDialog } from './ConnectDialog';
 import getProvider from './providers';
 
 interface ContextOptions {
+  /** TODO rename to chainId */
   providerChainId: number;
+  /** TODO rename to provider */
   ethersProvider: ethers.providers.Web3Provider;
   account: string;
   openConnectionDialog: () => void;

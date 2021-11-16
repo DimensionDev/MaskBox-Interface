@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 export function getTimezoneOffset() {
   return;
 }
-export const timezoneOffset = -new Date().getTimezoneOffset() / 60;
+export const timezoneOffset = 0; //-new Date().getTimezoneOffset() / 60;
 export const TZOffsetLabel = timezoneOffset > 0 ? `UTC+${timezoneOffset}` : `UTC${timezoneOffset}`;
 export function formatToLocale(dt: number | Date | undefined, pattern: string) {
   if (!dt) return '';

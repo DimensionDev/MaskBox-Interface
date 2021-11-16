@@ -31,6 +31,7 @@ type Maskbox {
   nft_contract: NFTContract!
   sold_nft_list: [BigInt!]!
   canceled: Boolean!
+  claimed: Boolean!
 }
 
 input Maskbox_filter {
@@ -154,6 +155,10 @@ input Maskbox_filter {
   canceled_not: Boolean
   canceled_in: [Boolean!]
   canceled_not_in: [Boolean!]
+  claimed: Boolean
+  claimed_not: Boolean
+  claimed_in: [Boolean!]
+  claimed_not_in: [Boolean!]
 }
 
 enum Maskbox_orderBy {
@@ -172,6 +177,7 @@ enum Maskbox_orderBy {
   nft_contract
   sold_nft_list
   canceled
+  claimed
 }
 
 type NFTContract {

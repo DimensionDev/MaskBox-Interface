@@ -267,9 +267,7 @@ export const Meta: FC = () => {
       <div className={styles.rowFieldGroup}>
         <Field
           className={styles.field}
-          name={t('Start date (UTC{offset})', {
-            offset: TZOffsetLabel,
-          })}
+          name={t('Start date ({offset})', { offset: TZOffsetLabel })}
           required
         >
           <Input
@@ -285,9 +283,7 @@ export const Meta: FC = () => {
         </Field>
         <Field
           className={styles.field}
-          name={t('End date (UTC{offset})', {
-            offset: TZOffsetLabel,
-          })}
+          name={t('End date ({offset})', { offset: TZOffsetLabel })}
           required
         >
           <Input

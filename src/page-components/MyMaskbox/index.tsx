@@ -11,7 +11,7 @@ import {
 import { RouteKeys } from '@/configs';
 import { useBoxOnRSS3 } from '@/contexts';
 import { MaskBoxesOfQuery } from '@/graphql-hooks';
-import { useBoxInfo, useCancelBox, useERC20Token, useERC721Token } from '@/hooks';
+import { useBoxInfo, useCancelBox, useClaimPayment, useERC20Token, useERC721Token } from '@/hooks';
 import { MediaType } from '@/types';
 import { formatToLocale, toLocalUTC, TZOffsetLabel } from '@/utils';
 import classnames from 'classnames';
@@ -50,17 +50,22 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const paymentToken = useERC20Token(payment?.token_addr);
   const erc721Token = useERC721Token(box.nft_address);
 
-  const { unitPrice, totalPrice } = useMemo(() => {
-    if (payment?.price && paymentToken?.decimals) {
+  const {
+    unitPrice,
+    totalPrice,
+    symbol: paymentSymbol,
+  } = useMemo(() => {
+    if (payment?.price && paymentToken) {
       const amount = box.sold_nft_list.length;
       const { decimals, symbol } = paymentToken;
       return {
         unitPrice: `${utils.formatUnits(payment.price, decimals)} ${symbol}`,
         totalPrice: `${utils.formatUnits(payment.price.mul(amount), decimals)} ${symbol}`,
+        symbol,
       };
     }
     return {};
-  }, [payment?.price, paymentToken?.decimals, box.sold_nft_list.length]);
+  }, [payment?.price, paymentToken, box.sold_nft_list.length]);
 
   const total = useMemo(() => {
     // TODO If the box is set to sell all,
@@ -88,6 +93,20 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
       closeCancelDialog();
     }
   }, [cancelBox, box.box_id]);
+
+  const claimPayment = useClaimPayment();
+  const withdraw = useCallback(async () => {
+    const result = await claimPayment(box.box_id);
+    console.log({ result });
+    const { decimals, symbol } = paymentToken ?? { decimals: 1, symbol: '' };
+    if (result) {
+      showToast({
+        title: 'Withdraw success',
+        message: `You got ${utils.formatUnits(result?.amount, decimals)}${symbol}`,
+        variant: 'success',
+      });
+    }
+  }, [claimPayment, box.box_id, paymentToken]);
 
   const BoxCover = (
     <div className={styles.media}>
@@ -161,14 +180,23 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
         </dl>
         {!box.canceled && (
           <div className={styles.operations}>
-            <Button colorScheme="primary" onClick={openEditDialog}>
-              {t('Edit Details')}
-            </Button>
-            {box.started === false ? (
+            {box.expired || box.remaining?.eq(0) ? (
+              <Button colorScheme="primary" disabled={box.claimed} onClick={withdraw}>
+                {box.claimed ? t('Withdrawn') : t('Withdraw {symbol}', { symbol: paymentSymbol! })}
+              </Button>
+            ) : (
+              <Button colorScheme="primary" onClick={openEditDialog}>
+                {t('Edit Details')}
+              </Button>
+            )}
+            {box.started === false && (
               <Button colorScheme="danger" onClick={openCancelDialog}>
                 {t('Cancel')}
               </Button>
-            ) : null}
+            )}
+            <Button colorScheme="primary" onClick={openEditDialog}>
+              {t('Edit Details')}
+            </Button>
             <SNSShare boxName={box.name} />
           </div>
         )}

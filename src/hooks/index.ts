@@ -2,6 +2,7 @@ export * from './useBalance';
 export * from './useBox';
 export * from './useBoxInfo';
 export * from './useCancelBox';
+export * from './useClaimPayment';
 export * from './useERC20Approve';
 export * from './useGdpr';
 export * from './useGetERC20Allowance';
