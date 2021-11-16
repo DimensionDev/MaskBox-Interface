@@ -133,11 +133,16 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
     </div>
   );
 
+  const isEnded = useMemo(() => {
+    return (
+      box.expired || toLocalUTC(box.end_time * 1000).getTime() <= Date.now() || box.remaining?.eq(0)
+    );
+  }, [box.expired, box.end_time, box.remaining]);
   const badgeLabel = useMemo(() => {
-    if (box.expired) return 'Ended';
+    if (isEnded) return 'Ended';
     if (box.canceled) return 'Canceled';
     return toLocalUTC(box.start_time * 1000).getTime() < Date.now() ? 'Opened' : 'Coming soon';
-  }, [box.started, box.expired]);
+  }, [box.started, box.expired, isEnded]);
 
   return (
     <div className={classnames(className, styles.maskbox)} {...rest}>
@@ -180,7 +185,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
         </dl>
         {!box.canceled && (
           <div className={styles.operations}>
-            {box.expired || box.remaining?.eq(0) ? (
+            {isEnded ? (
               <Button colorScheme="primary" disabled={box.claimed} onClick={withdraw}>
                 {box.claimed ? t('Withdrawn') : t('Withdraw {symbol}', { symbol: paymentSymbol! })}
               </Button>
@@ -197,10 +202,10 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             <Button colorScheme="primary" onClick={openEditDialog}>
               {t('Edit Details')}
             </Button>
-            <SNSShare boxName={box.name} />
           </div>
         )}
       </div>
+      {!isEnded && !box.canceled && <SNSShare className={styles.snsShare} boxName={box.name} />}
       {!box.canceled && box.started === false ? (
         <PickerDialog
           className={styles.cancelDialog}
