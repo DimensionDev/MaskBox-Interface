@@ -1,4 +1,5 @@
 import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
+import { RouteKeys } from '@/configs';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useGetERC20TokenInfo } from '@/hooks';
@@ -45,7 +46,6 @@ export const Maskbox: FC<MaskboxProps> = ({
   const getERC20Token = useGetERC20TokenInfo();
   const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
   const payment = box.payment?.[0];
-  const history = useHistory();
 
   useEffect(() => {
     if (payment) {
@@ -71,6 +71,7 @@ export const Maskbox: FC<MaskboxProps> = ({
     [box.remaining],
   );
 
+  const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}`;
   const buttonText = useMemo(() => {
     if (isSoldout) return t('Sold out');
     if (box.expired) {
@@ -85,11 +86,9 @@ export const Maskbox: FC<MaskboxProps> = ({
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: !inList && (!price || notStarted || box.expired || isSoldout),
+    disabled: !price || notStarted || box.expired || isSoldout,
     onClick: () => {
-      if (inList) {
-        history.push(`/details?chain=${box.chain_id}&box=${box.box_id}`);
-      } else if (box.started && !box.expired && onPurchase) {
+      if (box.started && !box.expired && onPurchase) {
         onPurchase();
       }
     },
@@ -133,11 +132,11 @@ export const Maskbox: FC<MaskboxProps> = ({
 
   return (
     <div className={classnames(styles.maskbox, className)} {...rest}>
-      {inList ? <Link to={`/details?chain=${chainId}&box=${boxId}`}>{BoxCover}</Link> : BoxCover}
+      {inList ? <Link to={boxLink}>{BoxCover}</Link> : BoxCover}
       <div className={styles.interaction}>
         <dl className={styles.infoList}>
           <dt className={styles.name} title={box.name}>
-            {box.name ?? '-'}
+            <Link to={boxLink}>{box.name ?? '-'}</Link>
           </dt>
           <dd className={styles.infoRow}>{t('Lucky Draw')}</dd>
           <dd className={styles.infoRow}>{t('Get your unique card (NFT) by lucky draw')}</dd>
