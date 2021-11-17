@@ -3,6 +3,7 @@ import { MediaType } from '@/types';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
 import { Icon, LoadingIcon } from '../Icon';
+import { useLocales } from '../useLocales';
 import { VideoPlayer } from '../VideoPlayer';
 import styles from './index.module.less';
 
@@ -34,6 +35,7 @@ export const UploadBox: FC<Props> = ({
   onError,
   ...rest
 }) => {
+  const t = useLocales();
   const { upload, uploading } = useUpload();
   const [invalidMessage, setInvalidMessage] = useState('');
   const [dragingIn, setDragingIn] = useState(false);
@@ -44,10 +46,10 @@ export const UploadBox: FC<Props> = ({
         const mediaType = getMediaType(f.name);
         const maxSize = getMaxSize(mediaType);
         if (f.size > maxSize) {
-          throw new Error(`File size up to ${maxSize / (1024 * 1024)}MB`);
+          throw new Error(t('File size up to {size}MB', { size: maxSize / (1024 * 1024) }));
         } else if (!f.name.toLowerCase().match(FILE_EXT_RE)) {
           throw new Error(
-            'You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4',
+            t('You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4'),
           );
         }
       });
@@ -83,7 +85,7 @@ export const UploadBox: FC<Props> = ({
           handleUpload(firstFile);
         } else {
           setInvalidMessage(
-            'You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed',
+            t('You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed'),
           );
         }
       }}

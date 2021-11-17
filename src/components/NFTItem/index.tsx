@@ -1,6 +1,7 @@
 import { ERC721Token } from '@/types';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 export interface NFTItemProps extends HTMLProps<HTMLDivElement> {
@@ -12,6 +13,7 @@ export interface NFTItemProps extends HTMLProps<HTMLDivElement> {
 const imagePlaceholder = 'https://picsum.photos/400/300';
 
 export const NFTItem: FC<NFTItemProps> = ({ className, contractName, token, sold, ...rest }) => {
+  const t = useLocales();
   return (
     <div className={classnames(styles.nft, className)} {...rest}>
       <div className={styles.image}>
@@ -25,7 +27,9 @@ export const NFTItem: FC<NFTItemProps> = ({ className, contractName, token, sold
             {token.tokenId.toString()}
           </h3>
         )}
-        {sold !== undefined && <h3 className={styles.saleStatus}>{sold ? 'Sold' : 'For Sale'}</h3>}
+        {sold !== undefined && (
+          <h3 className={styles.saleStatus}>{sold ? t('Sold') : t('For Sale')}</h3>
+        )}
       </div>
       {sold && <div className={styles.mask} />}
     </div>

@@ -1,5 +1,5 @@
 import { ERC721Token } from '@/types';
-import { FC, HTMLProps, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, HTMLProps, useCallback, useMemo } from 'react';
 import { Icon } from '../Icon';
 import { NFTItem } from '../NFTItem';
 import styles from './index.module.less';

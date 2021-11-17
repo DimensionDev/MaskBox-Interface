@@ -5,6 +5,7 @@ import { createContext, FC, useCallback, useContext, useMemo, useState } from 'r
 export enum Language {
   En = 'en',
   Zh = 'zh',
+  Jp = 'jp',
 }
 
 function getInitLang(): Language {

@@ -2,6 +2,7 @@ import { createShareUrl, createShareUrlForFacebook } from '@/lib';
 import classnames from 'classnames';
 import { FC, HTMLProps, useCallback } from 'react';
 import { Icon } from '../Icon';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {
@@ -9,7 +10,14 @@ interface Props extends HTMLProps<HTMLDivElement> {
 }
 
 export const SNSShare: FC<Props> = ({ className, boxName, ...rest }) => {
-  const text = `Check out NFT mystery box ${boxName} on Maskbox platform, let’s try it and good luck! Subscribe @realMaskNetwork for more updates. ${location.href}`;
+  const t = useLocales();
+  const text = t(
+    `Check out NFT mystery box {boxName} on Maskbox platform, let’s try it and good luck! Subscribe @realMaskNetwork for more updates. {link}`,
+    {
+      boxName,
+      link: window.location.href,
+    },
+  );
   const handleShareToTwitter = useCallback(() => {
     const shareLink = createShareUrl(text);
     window.open(shareLink, 'noopener noreferrer');

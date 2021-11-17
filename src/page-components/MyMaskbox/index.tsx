@@ -92,14 +92,14 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
       await cancelBox(box.box_id);
     } catch (err: any) {
       showToast({
-        title: 'Cancel Maskbox',
-        message: `Failed to cancel this Maskbox ${err.message}`,
+        title: t('Cancel Maskbox'),
+        message: t('Failed to cancel this Maskbox {message}', { message: err.message }),
         variant: 'error',
       });
     } finally {
       closeCancelDialog();
     }
-  }, [cancelBox, box.box_id]);
+  }, [cancelBox, box.box_id, t]);
 
   const claimPayment = useClaimPayment();
   const withdraw = useCallback(async () => {
@@ -108,12 +108,14 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
     const { decimals, symbol } = paymentToken ?? { decimals: 1, symbol: '' };
     if (result) {
       showToast({
-        title: 'Withdraw success',
-        message: `You got ${utils.formatUnits(result?.amount, decimals)}${symbol}`,
+        title: t('Withdraw success'),
+        message: t('You got {value}', {
+          value: `${utils.formatUnits(result?.amount, decimals)}${symbol}`,
+        }),
         variant: 'success',
       });
     }
-  }, [claimPayment, box.box_id, paymentToken]);
+  }, [claimPayment, box.box_id, paymentToken, t]);
 
   const BoxCover = (
     <div className={styles.media}>
@@ -147,10 +149,12 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   }, [box.expired, box.end_time, box.remaining]);
 
   const badgeLabel = useMemo(() => {
-    if (isEnded) return 'Ended';
-    if (box.canceled) return 'Canceled';
-    return toLocalUTC(box.start_time * 1000).getTime() < Date.now() ? 'Opened' : 'Coming soon';
-  }, [box.started, box.expired, isEnded]);
+    if (isEnded) return t('Ended');
+    if (box.canceled) return t('Canceled');
+    return toLocalUTC(box.start_time * 1000).getTime() < Date.now()
+      ? t('Opened')
+      : t('Coming soon');
+  }, [box.started, box.expired, isEnded, t]);
 
   const { unapproveAll, isApproveAll } = useERC721(box.nft_address);
 
@@ -229,8 +233,8 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
         >
           <ul className={styles.infoList}>
             <li className={styles.infoRow}>
-              <span className={styles.rowName}>{t('Mystery box name')}</span>
-              <span className={styles.rowVale}>{t('Saint Seiya')}</span>
+              <span className={styles.rowName}>{t('Maskbox name')}</span>
+              <span className={styles.rowVale}>{box.name ?? '-'}</span>
             </li>
             <li className={styles.infoRow}>
               <span className={styles.rowName}>{t('Price per box')}</span>
@@ -241,7 +245,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
               <span className={styles.rowVale}>{box.personal_limit}</span>
             </li>
             <li className={styles.infoRow}>
-              <span className={styles.rowName}>{t('NFT Contract ')}</span>
+              <span className={styles.rowName}>{t('NFT Contract')}</span>
               <span className={styles.rowVale}>{erc721Token?.name}</span>
             </li>
             <li className={styles.infoRow}>
@@ -287,13 +291,10 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
       <Dialog
         className={styles.editDialog}
         open={editDialogVisible}
-        title="Edit details"
+        title={t('Edit details')}
         onClose={closeEditDialog}
       >
-        <div className={styles.texts}>
-          As the contract has been created, you can only edit the off-chain details such as
-          mysterybox name, thumbnail and descreption.
-        </div>
+        <div className={styles.texts}>{t('before-editting-texts')}</div>
         <div className={styles.buttons}>
           <Button
             className={styles.button}
@@ -302,7 +303,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             size="large"
             onClick={closeEditDialog}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button
             className={styles.button}
@@ -313,7 +314,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
               history.push(`${RouteKeys.Edit}/desc?chain=${box.chain_id}&box=${box.box_id}`);
             }}
           >
-            Confirm
+            {t('Confirm')}
           </Button>
         </div>
       </Dialog>

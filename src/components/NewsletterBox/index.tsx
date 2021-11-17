@@ -2,7 +2,7 @@ import { FC, HTMLProps } from 'react';
 import { Button, Icon } from '@/components';
 import styles from './index.module.less';
 import classnames from 'classnames';
-import { useLocales } from './useLocales';
+import { useLocales } from '../useLocales';
 
 interface Props extends HTMLProps<HTMLDivElement> {}
 

@@ -8,6 +8,7 @@ import { FC, HTMLProps, useRef, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 import { LoadingIcon } from '../Icon';
 import { TokenIcon } from '../TokenIcon';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 export * from './ERC721TokenList';
@@ -51,6 +52,7 @@ export const Token: FC<TokenProps> = ({
   className,
   ...rest
 }) => {
+  const t = useLocales();
   const { account, ethersProvider } = useWeb3Context();
   const containerRef = useRef<HTMLDivElement>(null);
   const [balance, setBalance] = useState<BigNumber>(ZERO);
@@ -84,7 +86,7 @@ export const Token: FC<TokenProps> = ({
         <div className={styles.symbol}>{token.symbol}</div>
         <div className={styles.name}>
           {token.name}
-          {isCustomized && ' • Added by user'}
+          {isCustomized && ` • ${t('Added by uesr')}`}
         </div>
       </div>
       {!hideBalance && (
