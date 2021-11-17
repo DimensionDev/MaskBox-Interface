@@ -10,7 +10,7 @@ import {
 } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useRSS3, useWeb3Context } from '@/contexts';
-import { useTokenList } from '@/hooks';
+import { useERC721, useTokenList } from '@/hooks';
 import { createShareUrl } from '@/lib';
 import {
   ERC721TokenPickerDialog,
@@ -61,14 +61,10 @@ export const Meta: FC = () => {
   const [createdBoxId, setCreatedBoxId] = useState('');
 
   const createBox = useCreateMaskbox();
-  const {
-    isEnumable,
-    isApproveAll,
-    isApproving,
-    approveAll,
-    checkingApprove,
-    ownedTokens: ownedERC721Tokens,
-  } = useEdit();
+  const { isEnumable, ownedTokens: ownedERC721Tokens } = useEdit();
+  const { isApproveAll, isApproving, checkingApprove, approveAll } = useERC721(
+    formData.nftContractAddress,
+  );
 
   const { selectedNFTIds } = formData;
   const selectedERC721Tokens = useMemo(

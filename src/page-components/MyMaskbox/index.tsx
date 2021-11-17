@@ -11,7 +11,14 @@ import {
 import { RouteKeys } from '@/configs';
 import { useBoxOnRSS3 } from '@/contexts';
 import { MaskBoxesOfQuery } from '@/graphql-hooks';
-import { useBoxInfo, useCancelBox, useClaimPayment, useERC20Token, useERC721Token } from '@/hooks';
+import {
+  useBoxInfo,
+  useCancelBox,
+  useClaimPayment,
+  useERC20Token,
+  useERC721,
+  useERC721Token,
+} from '@/hooks';
 import { MediaType } from '@/types';
 import { formatToLocale, toLocalUTC, TZOffsetLabel } from '@/utils';
 import classnames from 'classnames';
@@ -138,11 +145,14 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
       box.expired || toLocalUTC(box.end_time * 1000).getTime() <= Date.now() || box.remaining?.eq(0)
     );
   }, [box.expired, box.end_time, box.remaining]);
+
   const badgeLabel = useMemo(() => {
     if (isEnded) return 'Ended';
     if (box.canceled) return 'Canceled';
     return toLocalUTC(box.start_time * 1000).getTime() < Date.now() ? 'Opened' : 'Coming soon';
   }, [box.started, box.expired, isEnded]);
+
+  const { unapproveAll, isApproveAll } = useERC721(box.nft_address);
 
   return (
     <div className={classnames(className, styles.maskbox)} {...rest}>
@@ -186,9 +196,16 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
         {!box.canceled && (
           <div className={styles.operations}>
             {isEnded ? (
-              <Button colorScheme="primary" disabled={box.claimed} onClick={withdraw}>
-                {box.claimed ? t('Withdrawn') : t('Withdraw {symbol}', { symbol: paymentSymbol! })}
-              </Button>
+              <>
+                <Button colorScheme="primary" disabled={!isApproveAll} onClick={unapproveAll}>
+                  {box.claimed ? t('NFT withdrawn') : t('Withdraw NFT')}
+                </Button>
+                <Button colorScheme="primary" disabled={box.claimed} onClick={withdraw}>
+                  {box.claimed
+                    ? t('{symbol} Withdrawn', { symbol: paymentSymbol! })
+                    : t('Withdraw {symbol}', { symbol: paymentSymbol! })}
+                </Button>
+              </>
             ) : (
               <Button colorScheme="primary" onClick={openEditDialog}>
                 {t('Edit Details')}
@@ -199,9 +216,6 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
                 {t('Cancel')}
               </Button>
             )}
-            <Button colorScheme="primary" onClick={openEditDialog}>
-              {t('Edit Details')}
-            </Button>
           </div>
         )}
       </div>
