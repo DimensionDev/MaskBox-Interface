@@ -41,15 +41,16 @@ export const NFTContractProvider: FC = memo(({ children }) => {
   const getMyBalance = useCallback(
     async (contract: Contract) => {
       if (!account || !ethersProvider) return 0;
-
-      const balance = await contract
-        .balanceOf(account)
-        .catch((getMyBalanceError: Error) => console.error({ getMyBalanceError }));
-      if (!balance) return 0;
-
-      return (balance as BigNumber).toNumber();
+      try {
+        const balance = await contract.balanceOf(account);
+        if (!balance) return 0;
+        return (balance as BigNumber).toNumber();
+      } catch (getMyBalanceError: any) {
+        console.error({ getMyBalanceError });
+        return 0;
+      }
     },
-    [account],
+    [account, ethersProvider],
   );
 
   const getTokenById = async (contract: Contract, tokenId: string): Promise<ERC721Token> => {

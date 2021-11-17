@@ -8,7 +8,6 @@ export * from './useERC20Approve';
 export * from './useGdpr';
 export * from './useGetERC20Allowance';
 export * from './useGetERC20TokenInfo';
-export * from './useGetERC721Token';
 export * from './useMaskboxContract';
 export * from './useMaskboxCreationEvent';
 export * from './useNFTIdsOfBox';
