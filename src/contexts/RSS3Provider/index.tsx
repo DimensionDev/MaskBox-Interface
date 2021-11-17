@@ -44,7 +44,8 @@ export function useBoxOnRSS3(creator: string | undefined, boxId: string | undefi
   const { getBoxMetas } = useRSS3();
   useEffect(() => {
     if (creator && boxId) {
-      getBoxMetas(utils.getAddress(creator), boxId)
+      const checksumAddress = utils.getAddress(creator);
+      getBoxMetas(checksumAddress, boxId)
         .then((data) => {
           if (data) {
             setBoxOnRSS3({
@@ -77,7 +78,7 @@ export const RSS3Provider: FC = ({ children }) => {
       return address
         ? new RSS3({
             endpoint,
-            address,
+            address: utils.getAddress(address),
             sign: async (message: string) => {
               return signer?.signMessage(message) ?? '';
             },
@@ -92,9 +93,10 @@ export const RSS3Provider: FC = ({ children }) => {
   const saveBox = useCallback(
     async <T extends { id: string }>(box: T) => {
       if (!account) return;
-      const rss3 = await createRSS3(account);
+      const checksumAddress = utils.getAddress(account);
+      const rss3 = await createRSS3(checksumAddress);
       if (!rss3) return;
-      const file = await rss3.files.get(account);
+      const file = await rss3.files.get(checksumAddress);
       if (!file) throw new Error('The account was not found.');
       rss3.files.set({
         ...file,
@@ -111,8 +113,9 @@ export const RSS3Provider: FC = ({ children }) => {
 
   const getBoxMetas = useCallback(
     async (owner: string, boxId: string) => {
-      const rss3 = await createRSS3(owner);
-      const file = await rss3.files.get(owner);
+      const checksumAddress = utils.getAddress(owner);
+      const rss3 = await createRSS3(checksumAddress);
+      const file = await rss3.files.get(checksumAddress);
       const nft = Object.getOwnPropertyDescriptor(file, '_box');
       if (!nft?.value?.[boxId]) {
         throw new Error(`Meta info for box ${boxId} was not found`);
