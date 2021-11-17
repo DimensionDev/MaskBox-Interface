@@ -1,9 +1,9 @@
 import {
   Button,
-  PickerDialogProps,
+  DialogProps,
   Icon,
   Input,
-  PickerDialog,
+  Dialog,
   NFTSelectList,
   NFTSelectListProps,
 } from '@/components';
@@ -11,7 +11,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
-interface Props extends PickerDialogProps, Pick<NFTSelectListProps, 'tokens' | 'selectedTokenIds'> {
+interface Props extends DialogProps, Pick<NFTSelectListProps, 'tokens' | 'selectedTokenIds'> {
   onConfirm?: (ids: string[]) => void;
 }
 export const NFTPickerDialog: FC<Props> = ({
@@ -36,7 +36,7 @@ export const NFTPickerDialog: FC<Props> = ({
   }, [selectedTokenIds]);
 
   return (
-    <PickerDialog
+    <Dialog
       {...rest}
       title={t('Select your collection')}
       onClose={() => {
@@ -71,6 +71,6 @@ export const NFTPickerDialog: FC<Props> = ({
           {t('Confirm')}
         </Button>
       </div>
-    </PickerDialog>
+    </Dialog>
   );
 };

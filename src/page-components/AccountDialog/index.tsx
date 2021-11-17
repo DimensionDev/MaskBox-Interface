@@ -1,4 +1,4 @@
-import { Button, Icon, LoadingIcon, Overlay, PickerDialog, PickerDialogProps } from '@/components';
+import { Button, Icon, LoadingIcon, Overlay, Dialog, DialogProps } from '@/components';
 import { useCopyToClipboard } from 'react-use';
 import classnames from 'classnames';
 import { useWeb3Context } from '@/contexts';
@@ -9,7 +9,7 @@ import { useLocales } from '../useLocales';
 import { useRecentTransactions } from '@/atoms';
 import { TransactionStatus } from '@/types';
 
-interface Props extends PickerDialogProps {}
+interface Props extends DialogProps {}
 
 export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
   const t = useLocales();
@@ -25,7 +25,7 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
 
   return (
     <Overlay>
-      <PickerDialog title="Account" open {...rest} onClose={onClose}>
+      <Dialog title="Account" open {...rest} onClose={onClose}>
         <div className={styles.row}>
           {t('Connected with {wallet}', {
             wallet: isMetaMask ? 'MetaMask' : (t('Unknown') as string),
@@ -99,7 +99,7 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
             <div className={styles.empty}>Your transactions will appear here...</div>
           )}
         </div>
-      </PickerDialog>
+      </Dialog>
     </Overlay>
   );
 };

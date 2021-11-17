@@ -1,12 +1,4 @@
-import {
-  Button,
-  Icon,
-  Input,
-  PickerDialog,
-  PickerDialogProps,
-  Token,
-  TokenList,
-} from '@/components';
+import { Button, Icon, Input, Dialog, DialogProps, Token, TokenList } from '@/components';
 import { useTokenList } from '@/hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType } from '@/lib';
@@ -17,7 +9,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
-interface Props extends PickerDialogProps {
+interface Props extends DialogProps {
   onPick?: (token: TokenType) => void;
 }
 
@@ -59,7 +51,7 @@ export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
   }, [isNewAddress, keyword]);
 
   return (
-    <PickerDialog className={styles.dialog} title={t('Seletct a Token') as string} {...rest}>
+    <Dialog className={styles.dialog} title={t('Seletct a Token') as string} {...rest}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth
@@ -93,6 +85,6 @@ export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
       ) : (
         <TokenList className={styles.tokenList} tokens={filteredTokens} onPick={onPick} />
       )}
-    </PickerDialog>
+    </Dialog>
   );
 };

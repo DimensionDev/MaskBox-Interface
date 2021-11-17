@@ -1,4 +1,4 @@
-import { Button, Icon, NFTItem, PickerDialog, PickerDialogProps } from '@/components';
+import { Button, Icon, NFTItem, Dialog, DialogProps } from '@/components';
 import { useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
 import { getNetworkExplorer } from '@/lib';
 import { ERC721Token } from '@/types';
@@ -8,7 +8,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './dialog.module.less';
 import { useLocales } from './useLocales';
 
-interface Props extends PickerDialogProps {
+interface Props extends DialogProps {
   sellAll?: boolean;
   nftIdList?: string[];
   nftAddress: string;
@@ -46,7 +46,7 @@ export const CreationConfirmDialog: FC<Props> = ({
   }, [loadNfts]);
 
   return (
-    <PickerDialog
+    <Dialog
       title={t('Create maskbox') as string}
       className={classnames(styles.confirmDialog, className)}
       {...rest}
@@ -80,6 +80,6 @@ export const CreationConfirmDialog: FC<Props> = ({
       <Button onClick={onConfirm} disabled={creating} fullWidth colorScheme="primary" size="large">
         {creating ? t('Creating...') : t('Confirm')}
       </Button>
-    </PickerDialog>
+    </Dialog>
   );
 };

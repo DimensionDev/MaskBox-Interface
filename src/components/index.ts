@@ -14,7 +14,6 @@ export * from './NewsletterBox';
 export * from './NFTItem';
 export * from './NFTSelectList';
 export * from './Overlay';
-export * from './PickerDialog';
 export * from './RoundButton';
 export * from './SelectedBadge';
 export * from './SNSShare';

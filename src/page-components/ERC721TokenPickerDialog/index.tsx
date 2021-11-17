@@ -4,8 +4,8 @@ import {
   ERC721TokenList,
   Icon,
   Input,
-  PickerDialog,
-  PickerDialogProps,
+  Dialog,
+  DialogProps,
 } from '@/components';
 import { useGetERC721Token } from '@/hooks';
 import { ERC721Token as ERC721TokenType } from '@/lib';
@@ -17,7 +17,7 @@ import { useERC721TokenList } from './useERC721TokenList';
 import styles from './index.module.less';
 import { useLocales } from '../useLocales';
 
-interface Props extends PickerDialogProps {
+interface Props extends DialogProps {
   onPick?: (token: ERC721TokenType) => void;
 }
 
@@ -59,7 +59,7 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
   }, [isNewAddress, keyword]);
 
   return (
-    <PickerDialog className={styles.dialog} title={t('Select an NFT') as string} {...rest}>
+    <Dialog className={styles.dialog} title={t('Select an NFT') as string} {...rest}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth
@@ -97,6 +97,6 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
       ) : (
         <ERC721TokenList className={styles.tokenList} tokens={filteredContracts} onPick={onPick} />
       )}
-    </PickerDialog>
+    </Dialog>
   );
 };

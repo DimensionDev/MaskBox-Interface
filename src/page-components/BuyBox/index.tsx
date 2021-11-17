@@ -1,4 +1,4 @@
-import { Button, LoadingIcon, PickerDialog, PickerDialogProps, TokenIcon } from '@/components';
+import { Button, LoadingIcon, Dialog, DialogProps, TokenIcon } from '@/components';
 import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
 import {
   useBalance,
@@ -17,7 +17,7 @@ import { AdjustableInput } from './AdjustableInput';
 import styles from './index.module.less';
 import { useOpenBox } from './useOpenBox';
 
-export interface BuyBoxProps extends PickerDialogProps {
+export interface BuyBoxProps extends DialogProps {
   boxId: string;
   box: Partial<ExtendedBoxInfo>;
   payment: BoxPayment;
@@ -79,7 +79,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   }, [openBox, onPurchased]);
 
   return (
-    <PickerDialog {...rest} className={styles.buyBox} title={t('Draw') as string}>
+    <Dialog {...rest} className={styles.buyBox} title={t('Draw') as string}>
       <dl className={styles.infos}>
         <dt className={styles.cost}>
           <div className={styles.currency}>
@@ -153,6 +153,6 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
           {loading ? t('Drawing') : balaneEnough ? t('Draw') : t('Insufficient balance')}
         </Button>
       </div>
-    </PickerDialog>
+    </Dialog>
   );
 };

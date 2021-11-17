@@ -2,7 +2,7 @@ import {
   Badge,
   Button,
   Icon,
-  PickerDialog,
+  Dialog,
   showToast,
   SNSShare,
   useDialog,
@@ -221,7 +221,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
       </div>
       {!isEnded && !box.canceled && <SNSShare className={styles.snsShare} boxName={box.name} />}
       {!box.canceled && box.started === false ? (
-        <PickerDialog
+        <Dialog
           className={styles.cancelDialog}
           title={t('Cancel issue')}
           open={cancelDialogVisible}
@@ -281,10 +281,10 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
               Confirm
             </Button>
           </div>
-        </PickerDialog>
+        </Dialog>
       ) : null}
 
-      <PickerDialog
+      <Dialog
         className={styles.editDialog}
         open={editDialogVisible}
         title="Edit details"
@@ -316,7 +316,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             Confirm
           </Button>
         </div>
-      </PickerDialog>
+      </Dialog>
     </div>
   );
 };

@@ -1,13 +1,13 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import classnames from 'classnames';
-import { Icon, Overlay, PickerDialog, PickerDialogProps, SelectableIcon } from '@/components';
+import { Icon, Overlay, Dialog, DialogProps, SelectableIcon } from '@/components';
 import styles from './index.module.less';
 import { connectableChains, connectableWallets } from './config';
 import { ChainId } from '@/lib';
 
 export * from './config';
 
-interface Props extends Omit<PickerDialogProps, 'onSelect'> {
+interface Props extends Omit<DialogProps, 'onSelect'> {
   chainId?: ChainId;
   walletId?: string;
   onSelect?: ({
@@ -61,7 +61,7 @@ export const ConnectDialog: FC<Props> = ({
 
   return (
     <Overlay>
-      <PickerDialog
+      <Dialog
         title="Connect Wallet"
         open
         className={classnames(className, styles.dialog)}
@@ -116,7 +116,7 @@ export const ConnectDialog: FC<Props> = ({
             </div>
           </div>
         </div>
-      </PickerDialog>
+      </Dialog>
     </Overlay>
   );
 };
