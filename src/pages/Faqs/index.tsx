@@ -1,14 +1,12 @@
 import { Faq } from '@/components';
-import { Language, useI18n } from '@/contexts';
 import { FC } from 'react';
-import { faqsInEn, faqsInZh } from './data';
+import { useFaqs } from './useFaqs';
 import styles from './index.module.less';
 import { useLocales } from './useLocales';
 
 export const Faqs: FC = () => {
-  const { language } = useI18n();
   const t = useLocales();
-  const faqs = language === Language.En ? faqsInEn : faqsInZh;
+  const faqs = useFaqs();
   return (
     <article className={styles.article}>
       <h1 className={styles.title}>{t('FAQs')}</h1>
