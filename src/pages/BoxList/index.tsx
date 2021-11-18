@@ -1,7 +1,6 @@
 import { Button, LoadingIcon } from '@/components';
-import { useWeb3Context } from '@/contexts';
 import { MaskBoxesQuery, useMaskBoxesLazyQuery } from '@/graphql-hooks';
-import { RequestConnection, RequestSwitchChain, WrapMaskbox } from '@/page-components';
+import { WrapMaskbox } from '@/page-components';
 import { FC, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.module.less';
@@ -12,7 +11,6 @@ const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
   const t = useLocales();
   const [fetchBoxes, { data: boxesData, loading }] = useMaskBoxesLazyQuery({});
-  const { providerChainId, isNotSupportedChain } = useWeb3Context();
 
   const history = useHistory();
   const location = useLocation();
@@ -50,9 +48,6 @@ export const BoxList: FC = () => {
   }
 
   const maskboxes = boxesData?.maskboxes ?? EMPTY_LIST;
-
-  if (!providerChainId) return <RequestConnection />;
-  if (isNotSupportedChain) return <RequestSwitchChain />;
 
   return (
     <>

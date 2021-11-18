@@ -23,11 +23,16 @@ const defaultOptions = {
   } as QueryOptions,
 };
 
+const hashQuery = location.hash.slice(location.hash.indexOf('?'));
+const urlChain = new URLSearchParams(location.search).get('chain');
+const hashChain = new URLSearchParams(hashQuery).get('chain');
+const fallbackChain = parseInt(urlChain || hashChain || '1', 10);
+
 export const ApolloProvider: FC = ({ children }) => {
   const { providerChainId } = useWeb3Context();
 
   const apolloClient: ApolloClient<NormalizedCacheObject> = useMemo(() => {
-    const endpoint = getSubgraphEndpoint(providerChainId ?? 1);
+    const endpoint = getSubgraphEndpoint(providerChainId ?? fallbackChain);
     const httpLink = new HttpLink({
       uri: endpoint,
       fetch: fetch,
