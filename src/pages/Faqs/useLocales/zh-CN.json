@@ -1,1 +1,6 @@
-{}
+{
+  "FAQs": "常见问题",
+  "How to login to MASKBOX?": "如何登录 MASKBOX？",
+  "Use MetaMask wallet or a wallet that supports WalletConnect to login.": "使用 MetaMask 钱包或支持 WalletConnect 登录的钱包。",
+  "How to install MetaMask?": "请在 https://metamask.io 下载钱包。"
+}
