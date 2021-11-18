@@ -10,7 +10,8 @@ export enum Language {
 
 function getInitLang(): Language {
   const storagedLang = getStorage(StorageKeys.Language);
-  return (storagedLang ?? navigator.language.split('-')[0]) as Language;
+  const urlLang = new URLSearchParams(location.search).get('lang');
+  return (storagedLang ?? urlLang ?? navigator.language.split('-')[0]) as Language;
 }
 
 const initLang = getInitLang();
