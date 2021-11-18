@@ -64,7 +64,9 @@ export const NFTPickerDialog: FC<Props> = ({
           pickable
         />
       ) : (
-        <div className={styles.empty}>{t('No result for')}</div>
+        <div className={styles.empty}>
+          {t('No result for <strong>{keyword}</strong>', { keyword })}
+        </div>
       )}
       <div className={styles.buttonGroup}>
         <Button fullWidth onClick={() => onConfirm?.(pickedIds)}>
