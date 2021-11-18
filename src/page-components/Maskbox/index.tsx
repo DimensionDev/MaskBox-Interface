@@ -46,9 +46,10 @@ export const Maskbox: FC<MaskboxProps> = ({
   const payment = box.payment?.[0];
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
+  const { isApproveAll } = useERC721(box.nft_address);
 
   const startTime = box?.start_time ? toLocalUTC(box.start_time * 1000).getTime() : 0;
-  const started = box.started === true && startTime > Date.now();
+  const isStarted = box.started === true && startTime <= Date.now();
 
   const price = useMemo(() => {
     if (payment?.price && paymentToken?.decimals) {
@@ -57,7 +58,6 @@ export const Maskbox: FC<MaskboxProps> = ({
     }
   }, [payment?.price, paymentToken?.decimals]);
   const isSoldout = useMemo(() => !!box.remaining?.eq(ZERO), [box.remaining]);
-  const { isApproveAll } = useERC721(box.nft_address);
 
   const buttonText = useMemo(() => {
     if (isSoldout) return t('Sold out');
@@ -73,11 +73,11 @@ export const Maskbox: FC<MaskboxProps> = ({
   }, [inList, price, isSoldout, isApproveAll, t]);
 
   const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}`;
-  const allowToBuy = price && started && !box.expired && !isSoldout && isApproveAll;
+  const allowToBuy = price && isStarted && !box.expired && !isSoldout && isApproveAll;
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: !inList && !allowToBuy,
+    disabled: !allowToBuy,
     onClick: () => {
       if (inList) {
         history.push(boxLink);
@@ -141,7 +141,7 @@ export const Maskbox: FC<MaskboxProps> = ({
             {t('Limit')} : {box.personal_limit?.toString()}
           </dd>
         </dl>
-        {started ? (
+        {isStarted ? (
           <Button {...buttonProps}>{buttonText}</Button>
         ) : (
           <CountdownButton {...buttonProps} startTime={startTime!} />
