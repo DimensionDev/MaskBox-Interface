@@ -3,7 +3,7 @@ import { useMaskboxAddress, useWeb3Context } from '@/contexts';
 import { useCallback, useEffect, useState } from 'react';
 import { useERC721Contract } from './useERC721Contract';
 
-export function useERC721(address: string) {
+export function useERC721(address: string | undefined) {
   const [isApproveAll, setIsApproveAll] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [checkingApprove, setCheckingApprove] = useState(false);

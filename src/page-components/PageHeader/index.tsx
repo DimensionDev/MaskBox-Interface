@@ -8,13 +8,13 @@ import {
   useDialog,
 } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useClickAway } from 'react-use';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
-import { getNetworkColor, getNetworkIcon, getNetworkName } from '@/lib';
+import { getNetworkColor, getNetworkName } from '@/lib';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useEffect, useRef } from 'react';
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
+import { useClickAway } from 'react-use';
 import { AccountDialog } from '../AccountDialog';
 import styles from './index.module.less';
 import { useLocales } from './useLocales';

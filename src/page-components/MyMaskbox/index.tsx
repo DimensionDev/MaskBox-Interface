@@ -198,7 +198,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             {isEnded ? (
               <>
                 <Button colorScheme="primary" disabled={!isApproveAll} onClick={unapproveAll}>
-                  {box.claimed ? t('NFT withdrawn') : t('Withdraw NFT')}
+                  {isApproveAll ? t('Withdraw NFT') : t('NFT withdrawn')}
                 </Button>
                 <Button colorScheme="primary" disabled={box.claimed} onClick={withdraw}>
                   {box.claimed

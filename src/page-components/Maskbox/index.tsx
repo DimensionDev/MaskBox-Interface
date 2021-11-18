@@ -1,13 +1,14 @@
 import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
+import { RouteKeys } from '@/configs';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
-import { useGetERC20TokenInfo } from '@/hooks';
-import { TokenType, ZERO } from '@/lib';
+import { useERC20Token, useERC721 } from '@/hooks';
+import { ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
 import { toLocalUTC } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
-import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
+import { FC, HTMLProps, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useLocales } from '../useLocales';
 import { CountdownButton } from './CountdownButton';
@@ -42,23 +43,12 @@ export const Maskbox: FC<MaskboxProps> = ({
   );
   const chainId = box.chain_id;
   const boxId = box.box_id;
-  const getERC20Token = useGetERC20TokenInfo();
-  const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
   const payment = box.payment?.[0];
   const history = useHistory();
+  const paymentToken = useERC20Token(payment?.token_addr);
 
-  useEffect(() => {
-    if (payment) {
-      getERC20Token(payment.token_addr).then((token) => {
-        if (token) {
-          setPaymentToken(token);
-        }
-      });
-    }
-  }, [payment]);
-
-  const startTime = box?.start_time ? toLocalUTC(box.start_time * 1000).getTime() : undefined;
-  const notStarted = box.started === false || (startTime && startTime > Date.now());
+  const startTime = box?.start_time ? toLocalUTC(box.start_time * 1000).getTime() : 0;
+  const started = box.started === true && startTime > Date.now();
 
   const price = useMemo(() => {
     if (payment?.price && paymentToken?.decimals) {
@@ -66,29 +56,31 @@ export const Maskbox: FC<MaskboxProps> = ({
       return `${digit} ${paymentToken.symbol}`;
     }
   }, [payment?.price, paymentToken?.decimals]);
-  const isSoldout = useMemo(
-    () => box.remaining !== undefined && box.remaining.eq(ZERO),
-    [box.remaining],
-  );
+  const isSoldout = useMemo(() => !!box.remaining?.eq(ZERO), [box.remaining]);
+  const { isApproveAll } = useERC721(box.nft_address);
 
   const buttonText = useMemo(() => {
     if (isSoldout) return t('Sold out');
     if (box.expired) {
       return t('Ended');
+    } else if (!isApproveAll) {
+      return t('Canceled');
     } else if (inList) {
       return t('View Details');
     }
 
     return price ? t('Draw ( {price}/Time )', { price }) : <LoadingIcon size={24} />;
-  }, [inList, price, isSoldout, t]);
+  }, [inList, price, isSoldout, isApproveAll, t]);
 
+  const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}`;
+  const allowToBuy = price && started && !box.expired && !isSoldout && isApproveAll;
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: !inList && (!price || notStarted || box.expired || isSoldout),
+    disabled: !inList && !allowToBuy,
     onClick: () => {
       if (inList) {
-        history.push(`/details?chain=${box.chain_id}&box=${box.box_id}`);
+        history.push(boxLink);
       } else if (box.started && !box.expired && onPurchase) {
         onPurchase();
       }
@@ -131,13 +123,14 @@ export const Maskbox: FC<MaskboxProps> = ({
     </div>
   );
 
+  const name = box.name ?? '-';
   return (
     <div className={classnames(styles.maskbox, className)} {...rest}>
-      {inList ? <Link to={`/details?chain=${chainId}&box=${boxId}`}>{BoxCover}</Link> : BoxCover}
+      {inList ? <Link to={boxLink}>{BoxCover}</Link> : BoxCover}
       <div className={styles.interaction}>
         <dl className={styles.infoList}>
           <dt className={styles.name} title={box.name}>
-            {box.name ?? '-'}
+            {inList ? <Link to={boxLink}>{name}</Link> : name}
           </dt>
           <dd className={styles.infoRow}>{t('Lucky Draw')}</dd>
           <dd className={styles.infoRow}>{t('Get your unique card (NFT) by lucky draw')}</dd>
@@ -148,10 +141,10 @@ export const Maskbox: FC<MaskboxProps> = ({
             {t('Limit')} : {box.personal_limit?.toString()}
           </dd>
         </dl>
-        {notStarted ? (
-          <CountdownButton {...buttonProps} startTime={startTime!} />
-        ) : (
+        {started ? (
           <Button {...buttonProps}>{buttonText}</Button>
+        ) : (
+          <CountdownButton {...buttonProps} startTime={startTime!} />
         )}
       </div>
       {inList ? null : <SNSShare boxName={box.name ?? ''} className={styles.snsShare} />}
