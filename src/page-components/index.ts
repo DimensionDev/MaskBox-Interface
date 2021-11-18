@@ -12,4 +12,3 @@ export * from './RequestSwitchChain';
 export * from './ShareBox';
 export * from './StatusOverlay';
 export * from './TokenPickerDialog';
-export * from './WipDialog';
