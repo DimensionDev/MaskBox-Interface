@@ -1,3 +1,27 @@
 {
-  "FAQs": "常见问题"
+  "FAQs": "常见问题",
+  "how-to-login": "如何登录 Maskbox ？",
+  "answer-to-how-to-login": "使用 MetaMask 钱包或支持 Wallet Connect 的钱包进行登录。",
+  "how-to-install": "如何安装 MetaMask ？",
+  "answer-to-how-to-install": "请在 <a target='_blank' rel='noopener noreferrer' href='https://metamask.io'>https://metamask.io</a> 下载适合您设备的 MateMask",
+  "what-is-an-nft": "什么是 NFT (非同质化代币)?",
+  "answer-what-is-an-nft": "NFT 英文名称为 Non-Fungible Token，翻译为中文就是：非同质化代币,具有不可分割、不可替代、独一无二的特点。简单来理解，使得它可以锚定现实社会的游戏道具、数字艺术品、门票等。让现实社会中的产品具有更高的展示和交易属性。",
+  "how-to-purchase": "如何购买 NFT (非同质化代币)？",
+  "answer-to-how-to-purchase": "连接数字钱包后，可以使用活动限定的数字货币，进行购买。",
+  "what-is-the-purchase-mechanism": "Maskbox 购买机制？",
+  "answer-to-what-is-the-purchase-mechanism": "Maskbox 采取使用 chainlink 随机数作为随机抽奖来源。使每个用户能够公平进行购买。购买成功后会成功发送 NFT 至购买用户的付款钱包。",
+  "why-it-cost": "购买为什么需要消耗 ETH ？",
+  "answer-to-why-it-cost": "在不同网络购买中会消耗主网代币，购买成功或者失败都会产生 gas 费用的消耗。",
+  "how-to-check": "如何查看已购买的 NFT ？",
+  "answer-to-how-to-check": "可以点击头部菜单中的 My item，就可以查看您在 MASKBOX 中购买的 NFT。",
+  "how-to-sell": "如何转售已购买的 NFT？",
+  "answer-to-how-to-sell": "目前 MASKBOX 尚未提供 NFT出售功能，您可以跳转至 <a target='_blank' rel='noopener noreferrer' href='https://opensea.io'>https://opensea.io</a> 出售您的 NFT",
+  "what-is-the-platform": "什么是 Maskbox 平台？",
+  "answer-to-what-is-the-platform": "Maskbox 是进行专业发行 NFT 的机构,由行业知名团队创建。和多家数字艺术出版商有较强的商业合作关系。为其提供数字艺术品 NFT 化提供技术和初始发行工作。",
+  "how-to-contact": "如何联系我们发行 NFT ？",
+  "answer-to-how-to-contact": "目前仅适用于合作方进行发行。如有业务意向请填写 <a target='_blank' rel='noopener noreferrer' href='#'>cooperation form</a>。 我们会及时和您取得联系。",
+  "is-contract-safe": "我们的合约是否安全？",
+  "answer-to-is-contract-safe": "我们的合约是经过多年资深工程师.有行业一流的 Gas 费用优化方案。也有一流的合约安全的工程师进行多轮的合约检查。合约源码请查看我们 <a target='_blank' rel='noopener noreferrer' href='https://github.com/DimensionDev/MysteryBox'>Github</a>",
+  "what-is-the-network": "我们的测试网络？",
+  "answer-to-what-is-the-network": "我们目前测试网络是 Rinkeby ，请钱包切换至 Rinkeby 网络上，进行测试。"
 }
