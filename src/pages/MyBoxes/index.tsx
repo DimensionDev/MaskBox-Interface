@@ -2,6 +2,7 @@ import { Button, LoadingIcon } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useWeb3Context } from '@/contexts';
 import { MaskBoxesOfQuery, useMaskBoxesOfLazyQuery } from '@/graphql-hooks';
+import { usePermissionGranted } from '@/hooks';
 import { MyMaskbox, RequestConnection, RequestSwitchChain } from '@/page-components';
 import { FC, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -32,6 +33,7 @@ export const MyBoxes: FC = () => {
     if (!page) return;
     history.push(`${RouteKeys.MyMaskboxes}?page=${page + 1}`);
   };
+  const permissionGranted = usePermissionGranted();
   useEffect(() => {
     if (!page || !account) return;
     fetchBoxesOf({
@@ -62,18 +64,24 @@ export const MyBoxes: FC = () => {
     <main className={styles.main}>
       <header className={styles.header}>
         <h1>{t('My Maskboxes')}</h1>
-        <Button
-          colorScheme="primary"
-          onClick={() => {
-            history.push(RouteKeys.Edit);
-          }}
-        >
-          {t('Create Maskbox')}
-        </Button>
+        {permissionGranted && (
+          <Button
+            colorScheme="primary"
+            onClick={() => {
+              history.push(RouteKeys.Edit);
+            }}
+          >
+            {t('Create Maskbox')}
+          </Button>
+        )}
       </header>
       {isEmpty ? (
         <div className={styles.empty}>
-          <p className={styles.text}>{t('You haven’t created any mystery box yet.')}</p>
+          <p className={styles.text}>
+            {permissionGranted
+              ? t('You haven’t created any mystery box yet.')
+              : t('You are not allowed to create Maskbox.')}
+          </p>
         </div>
       ) : (
         <ul className={styles.list}>

@@ -20,6 +20,7 @@ export type Scalars = {
 export type Block_Height = {
   hash?: Maybe<Scalars['Bytes']>;
   number?: Maybe<Scalars['Int']>;
+  number_gte?: Maybe<Scalars['Int']>;
 };
 
 export type Maskbox = {
@@ -345,6 +346,8 @@ export type _Block_ = {
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
+  /** The minimum block number */
+  number_gte: Scalars['Int'];
 };
 
 /** The type for the top-level _meta field */
@@ -440,6 +443,15 @@ export type MaskBoxesOfQuery = {
     sold_nft_list: Array<string>;
     nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
   }>;
+};
+
+export type CheckMaskBoxesOfQueryVariables = Exact<{
+  account: Scalars['Bytes'];
+}>;
+
+export type CheckMaskBoxesOfQuery = {
+  __typename?: 'Query';
+  maskboxes: Array<{ __typename?: 'Maskbox'; id: string }>;
 };
 
 export type SoldNftListQueryVariables = Exact<{
@@ -627,6 +639,54 @@ export type MaskBoxesOfLazyQueryHookResult = ReturnType<typeof useMaskBoxesOfLaz
 export type MaskBoxesOfQueryResult = Apollo.QueryResult<
   MaskBoxesOfQuery,
   MaskBoxesOfQueryVariables
+>;
+export const CheckMaskBoxesOfDocument = gql`
+  query CheckMaskBoxesOf($account: Bytes!) {
+    maskboxes(first: 1) {
+      id
+    }
+  }
+`;
+
+/**
+ * __useCheckMaskBoxesOfQuery__
+ *
+ * To run a query within a React component, call `useCheckMaskBoxesOfQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckMaskBoxesOfQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckMaskBoxesOfQuery({
+ *   variables: {
+ *      account: // value for 'account'
+ *   },
+ * });
+ */
+export function useCheckMaskBoxesOfQuery(
+  baseOptions: Apollo.QueryHookOptions<CheckMaskBoxesOfQuery, CheckMaskBoxesOfQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CheckMaskBoxesOfQuery, CheckMaskBoxesOfQueryVariables>(
+    CheckMaskBoxesOfDocument,
+    options,
+  );
+}
+export function useCheckMaskBoxesOfLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<CheckMaskBoxesOfQuery, CheckMaskBoxesOfQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CheckMaskBoxesOfQuery, CheckMaskBoxesOfQueryVariables>(
+    CheckMaskBoxesOfDocument,
+    options,
+  );
+}
+export type CheckMaskBoxesOfQueryHookResult = ReturnType<typeof useCheckMaskBoxesOfQuery>;
+export type CheckMaskBoxesOfLazyQueryHookResult = ReturnType<typeof useCheckMaskBoxesOfLazyQuery>;
+export type CheckMaskBoxesOfQueryResult = Apollo.QueryResult<
+  CheckMaskBoxesOfQuery,
+  CheckMaskBoxesOfQueryVariables
 >;
 export const SoldNftListDocument = gql`
   query SoldNFTList($id: ID!) {

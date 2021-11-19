@@ -9,6 +9,7 @@ import {
 } from '@/components';
 import { RouteKeys } from '@/configs';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
+import { useCreatedSomeBoxes, usePermissionGranted } from '@/hooks';
 import { getNetworkColor, getNetworkName } from '@/lib';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
@@ -46,6 +47,10 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
     closePopupNav();
   });
   useEffect(closePopupNav, [location.pathname]);
+
+  const permissionGranted = usePermissionGranted();
+  const hasCreatedSomeBoxes = useCreatedSomeBoxes();
+  const myMaskboxesVisible = permissionGranted || hasCreatedSomeBoxes;
 
   return (
     <div className={classnames(styles.pageHeader, className)} {...rest}>
@@ -114,16 +119,18 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
                 <Icon className={styles.icon} type={isMetaMask ? 'metamask' : 'wallet'} size={16} />
                 {formatAddres(account)}
               </Button>
-              <Button
-                className={styles.button}
-                colorScheme="primary"
-                title={account}
-                onClick={() => {
-                  history.push(RouteKeys.MyMaskboxes);
-                }}
-              >
-                {t('My Maskboxes')}
-              </Button>
+              {myMaskboxesVisible && (
+                <Button
+                  className={styles.button}
+                  colorScheme="primary"
+                  title={account}
+                  onClick={() => {
+                    history.push(RouteKeys.MyMaskboxes);
+                  }}
+                >
+                  {t('My Maskboxes')}
+                </Button>
+              )}
             </>
           ) : (
             <LoadingButton

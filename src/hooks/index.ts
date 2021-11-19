@@ -12,5 +12,7 @@ export * from './useMaskboxContract';
 export * from './useMaskboxCreationEvent';
 export * from './useNFTIdsOfBox';
 export * from './useOnceShowup';
+export * from './usePermissionGranted';
+export * from './useCreatedSomeBoxes';
 export * from './useSubscribeTokenPrice';
 export * from './useTokenList';

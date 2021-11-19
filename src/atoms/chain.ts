@@ -7,8 +7,8 @@ export const chainAtom = atom<number | undefined>(undefined);
 
 export function useWatchChain() {
   const { providerChainId } = useWeb3Context();
-  const updateAtom = useUpdateAtom(chainAtom);
+  const updateChain = useUpdateAtom(chainAtom);
   useEffect(() => {
-    updateAtom(providerChainId);
-  }, [providerChainId, updateAtom]);
+    updateChain(providerChainId);
+  }, [providerChainId, updateChain]);
 }
