@@ -3,6 +3,8 @@ import { ChainId, isSupportedChain, logError } from '@/lib';
 import { getStorage, StorageKeys, useStorage } from '@/utils';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ethers } from 'ethers';
+import { isMobile as checkIsMobile } from 'web3modal';
+import { SafeAppWeb3Modal as Web3Modal } from '@gnosis.pm/safe-apps-web3modal';
 import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { connectableWallets, ConnectDialog } from './ConnectDialog';
 import getProvider from './providers';
@@ -16,10 +18,26 @@ interface ContextOptions {
   openConnectionDialog: () => void;
   closeConnectionDialog: () => void;
   disconnect: () => void;
+  connectWeb3: () => Promise<void>;
   isMetaMask: boolean;
   isConnecting: boolean;
   isNotSupportedChain: boolean;
 }
+
+const providerOptions = {
+  walletconnect: {
+    package: WalletConnectProvider,
+    options: {
+      infuraId: process.env.INFURA_ID,
+    },
+  },
+};
+const web3modal = new Web3Modal({
+  cacheProvider: true,
+  providerOptions,
+});
+
+const isMobile = checkIsMobile();
 
 export const Web3Context = React.createContext<Partial<ContextOptions>>({});
 export const useWeb3Context = () => useContext(Web3Context);
@@ -34,6 +52,7 @@ type Provider =
       chainId: string;
       isMetaMask?: boolean;
       selectedAddress: null | string;
+      accounts: null | string[];
       send: (
         payload: Record<string, unknown>,
         callback: (err: Error | null, response: Record<string, unknown>) => void,
@@ -62,9 +81,25 @@ export const Web3Provider: FC = ({ children }) => {
   const setWeb3Provider = useCallback(
     async (prov: Provider) => {
       try {
-        if (!prov.selectedAddress) return;
+        if (!prov) return;
+        if (!prov.selectedAddress && !prov.accounts) return;
         const provider = new ethers.providers.Web3Provider(prov);
         const chainId = Number(prov.chainId as string);
+        const signerAddress = await provider.getSigner()?.getAddress();
+        const newAccount = prov.accounts?.[0] ?? signerAddress;
+        setWeb3State((state) => {
+          return newAccount
+            ? {
+                account: newAccount,
+                ethersProvider: provider,
+                providerChainId: chainId,
+              }
+            : {
+                ...state,
+                ethersProvider: provider,
+                providerChainId: chainId,
+              };
+        });
         if (!account) {
           const signer = provider.getSigner();
           setWeb3State({
@@ -91,6 +126,7 @@ export const Web3Provider: FC = ({ children }) => {
   );
 
   const disconnect = useCallback(() => {
+    web3modal.clearCachedProvider();
     clearWCStorage();
     setWeb3State({});
     removeStoredChainId();
@@ -98,11 +134,13 @@ export const Web3Provider: FC = ({ children }) => {
   }, []);
 
   const connectWeb3 = useCallback(
-    async (chainId: ChainId, walletType: string) => {
+    async (chainId?: ChainId, walletType?: ProviderType) => {
       try {
         setIsConnecting(true);
-        const provider = await getProvider(walletType);
-        if (chainId !== parseInt(provider.chainId as string, 16)) {
+        const provider = isMobile
+          ? await web3modal.requestProvider()
+          : await getProvider(walletType);
+        if (chainId && chainId !== parseInt(provider.chainId as string, 16)) {
           await provider.request!({
             method: 'wallet_switchEthereumChain',
             params: [
@@ -146,6 +184,7 @@ export const Web3Provider: FC = ({ children }) => {
       openConnectionDialog,
       closeConnectionDialog,
       disconnect,
+      connectWeb3,
       account,
       ethersProvider,
       providerChainId,

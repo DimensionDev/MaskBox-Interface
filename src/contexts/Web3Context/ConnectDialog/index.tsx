@@ -4,6 +4,7 @@ import { Icon, Overlay, Dialog, DialogProps, SelectableIcon } from '@/components
 import styles from './index.module.less';
 import { connectableChains, connectableWallets } from './config';
 import { ChainId } from '@/lib';
+import { ProviderType } from '../providers';
 
 export * from './config';
 
@@ -17,7 +18,7 @@ interface Props extends Omit<DialogProps, 'onSelect'> {
   }: {
     chainId: ChainId;
     walletId: string;
-    walletType: string;
+    walletType: ProviderType;
   }) => void;
 }
 

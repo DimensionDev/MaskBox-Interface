@@ -1,4 +1,6 @@
 import { ChainId } from '@/lib';
+import { ProviderType } from '../providers';
+
 export const connectableChains = [
   {
     name: 'Ethereum',
@@ -25,14 +27,14 @@ export const connectableChains = [
 export const connectableWallets = [
   {
     id: 'metamask',
-    type: 'injected',
+    type: ProviderType.Injected,
     iconType: 'metamaskWallet',
   },
-  // {
-  //   id: 'walletconnect',
-  //   type: 'walletconnect',
-  //   iconType: 'walletconnect',
-  // },
+  {
+    id: 'walletconnect',
+    type: ProviderType.WalletConnect,
+    iconType: 'walletconnect',
+  },
   // {
   //   id: 'mask',
   //   type: 'injected',

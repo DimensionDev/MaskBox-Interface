@@ -1,6 +1,6 @@
 {
-  "name": "react-ts-plus",
-  "version": "0.0.0",
+  "name": "maskbox-interface",
+  "version": "0.1.0",
   "scripts": {
     "dev": "webpack serve --mode=development --port 5000",
     "build": "webpack --mode=production",
@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.16",
+    "@gnosis.pm/safe-apps-web3modal": "^5.0.0",
     "@walletconnect/web3-provider": "^1.5.3",
     "classnames": "^2.3.1",
     "date-fns": "^2.25.0",
@@ -36,7 +37,8 @@
     "react-hot-toast": "^2.1.0",
     "react-router-dom": "^5.2.0",
     "react-use": "^17.3.1",
-    "rss3-next": "^0.6.17"
+    "rss3-next": "^0.6.17",
+    "web3modal": "^1.9.4"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.2.1",
