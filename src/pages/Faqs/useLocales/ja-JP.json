@@ -1,6 +1,3 @@
 {
-  "FAQs": "FAQ",
-  "How to login to MASKBOX?": "MASKBOXにログインする方法は？",
-  "Use MetaMask wallet or a wallet that supports WalletConnect to login.": "MetaMaskウォレットまたはWalletConnectをサポートするウォレットを使ってログインしてください",
-  "How to install MetaMask?": "お使いのPC/スマートフォンに合ったメタマスクを <a target='_blank' rel='noopener noreferrer' href='https://metamask.io'>https://metamask.io</a>からダウンロードしてください。"
+  "FAQs": "FAQ"
 }
