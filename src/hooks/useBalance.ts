@@ -5,12 +5,12 @@ import { isSameAddress } from '@/utils';
 import { BigNumber, Contract } from 'ethers';
 import { useEffect, useState } from 'react';
 
-export function useBalance(addr: string) {
+export function useBalance(addr?: string) {
   const { account, ethersProvider } = useWeb3Context();
   const [balance, setBalance] = useState<BigNumber>(ZERO);
 
   useEffect(() => {
-    if (!ethersProvider || !account) {
+    if (!ethersProvider || !account || !addr) {
       return;
     }
     if (isSameAddress(addr, ZERO_ADDRESS)) {

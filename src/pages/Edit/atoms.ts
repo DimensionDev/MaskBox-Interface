@@ -22,6 +22,7 @@ export interface FormData {
   startAt: string;
   endAt: string;
   whiteList: string;
+  minMaskAmount: string;
   selectedNFTIds: string[];
 }
 
@@ -47,6 +48,7 @@ export const initFormData: FormData = {
   startAt,
   endAt,
   whiteList: '',
+  minMaskAmount: '',
   selectedNFTIds: [],
 };
 const fieldKeys = Object.keys(initFormData) as Array<keyof FormData>;

@@ -18,6 +18,7 @@ export interface BoxOnChain {
   remaining: BigNumber;
   total: BigNumber;
   qualification: string;
+  holder_min_token_amount: BigNumber;
 }
 
 export interface CreateResult extends Pick<BoxOnChain, 'name' | 'nft_address' | 'creator'> {

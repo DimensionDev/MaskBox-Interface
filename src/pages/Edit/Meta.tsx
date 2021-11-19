@@ -10,7 +10,7 @@ import {
 } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useRSS3, useWeb3Context } from '@/contexts';
-import { useERC721, useTokenList } from '@/hooks';
+import { useERC721, useHolderToken, useTokenList } from '@/hooks';
 import { createShareUrl } from '@/lib';
 import {
   ERC721TokenPickerDialog,
@@ -45,12 +45,14 @@ import { useLocales } from './useLocales';
 export const Meta: FC = () => {
   const t = useLocales();
   const history = useHistory();
+
   const formData = useAtomValue(formDataAtom);
   const isReady = useAtomValue(readyToCreateAtom);
   const chain = useAtomValue(chainAtom);
   const isEditting = useAtomValue(isEdittingAtom);
   const editingBoxId = useAtomValue(boxIdAtom);
   const validations = useAtomValue(validationsAtom);
+
   const bindField = useBindFormField();
   const updateField = useUpdateFormField();
   const setAllDirty = useSetAllDirty();
@@ -142,6 +144,8 @@ export const Meta: FC = () => {
   const selectedPaymentToken = useMemo(() => {
     return tokens.find((token) => isSameAddress(token.address, formData.tokenAddress));
   }, [tokens, formData.tokenAddress]);
+
+  const qualifyingToken = useHolderToken();
 
   if (!providerChainId) return <RequestConnection />;
 
@@ -303,6 +307,26 @@ export const Meta: FC = () => {
           size="large"
           value={formData.whiteList}
           onChange={bindField('whiteList')}
+        />
+      </Field>
+
+      <Field className={styles.field} name={t('Minimum position')}>
+        <Input
+          placeholder="0"
+          disabled={isEditting}
+          fullWidth
+          size="large"
+          type="number"
+          value={formData.minMaskAmount}
+          onChange={bindField('minMaskAmount')}
+          rightAddon={
+            qualifyingToken ? (
+              <span className={styles.inputToken}>
+                <TokenIcon className={styles.tokenIcon} token={qualifyingToken} />
+                <span className={styles.tokenSymbol}>{qualifyingToken?.symbol || '- - -'}</span>
+              </span>
+            ) : undefined
+          }
         />
       </Field>
 

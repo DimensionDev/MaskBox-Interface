@@ -1,10 +1,11 @@
-import { Button, LoadingIcon, Dialog, DialogProps, TokenIcon } from '@/components';
+import { Button, Dialog, DialogProps, LoadingIcon, TokenIcon } from '@/components';
 import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
 import {
   useBalance,
   useERC20Approve,
+  useERC20Token,
   useGetERC20Allowance,
-  useGetERC20TokenInfo,
+  useHolderToken,
   useTrackTokenPrice,
 } from '@/hooks';
 import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
@@ -30,11 +31,10 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   const { account } = useWeb3Context();
   const purchasedNft = usePurchasedNft(boxId, account);
   const contractAddress = useMaskboxAddress();
-  const getERC20Token = useGetERC20TokenInfo();
   const getAllowance = useGetERC20Allowance();
   const approve = useERC20Approve();
   const balance = useBalance(payment.token_addr);
-  const [paymentToken, setPaymentToken] = useState<TokenType | null>(null);
+  const paymentToken = useERC20Token(payment.token_addr);
   const isNative = payment.token_addr === ZERO_ADDRESS;
   const tokenPrice = useTrackTokenPrice(
     paymentToken?.symbol ? getCoingeckoTokenId(paymentToken.symbol) : null,
@@ -43,22 +43,24 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   useEffect(() => {
     getAllowance(payment.token_addr, contractAddress).then(setAllowance);
   }, [payment.token_addr, contractAddress]);
+
+  const holderToken = useHolderToken();
+  const balanceOfHolderToken = useBalance(holderToken?.address);
+
   const [quantity, setQuantity] = useState(1);
   const costAmount = payment.price.mul(quantity);
   const limit = box.personal_limit || 1;
   const allowed = isNative || allowance.gte(costAmount);
-  const canBuy =
-    (isNative ? balance.gt(costAmount) : allowed) && purchasedNft.length + quantity <= limit;
-  const balaneEnough = isNative ? balance.gt(costAmount) : allowance.gt(costAmount);
 
-  useEffect(() => {
-    if (!payment.token_addr) return;
-    getERC20Token(payment.token_addr).then((token) => {
-      if (token) {
-        setPaymentToken(token);
-      }
-    });
-  }, [payment.token_addr]);
+  const { holder_min_token_amount } = box;
+  const qualified =
+    holder_min_token_amount?.eq(0) || balanceOfHolderToken.gte(holder_min_token_amount ?? 0);
+
+  const canBuy =
+    (isNative ? balance.gt(costAmount) : allowed) &&
+    purchasedNft.length + quantity <= limit &&
+    qualified;
+  const balaneEnough = isNative ? balance.gt(costAmount) : allowance.gt(costAmount);
 
   const cost = useMemo(() => {
     return paymentToken ? utils.formatUnits(costAmount, paymentToken.decimals) : null;
@@ -77,6 +79,14 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
       onPurchased(result);
     }
   }, [openBox, onPurchased]);
+
+  const buttonLabel = useMemo(() => {
+    if (loading) return t('Drawing');
+    if (holder_min_token_amount?.gt(0) && balanceOfHolderToken.lt(holder_min_token_amount)) {
+      return t('Not enough ${symbol} to draw', { symbol: holderToken?.symbol ?? '??' });
+    }
+    return balaneEnough ? t('Draw') : t('Insufficient balance');
+  }, [t, loading, holder_min_token_amount, holderToken, balaneEnough]);
 
   return (
     <Dialog {...rest} className={styles.buyBox} title={t('Draw') as string}>
@@ -150,7 +160,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
           disabled={!canBuy || loading}
           onClick={handleDraw}
         >
-          {loading ? t('Drawing') : balaneEnough ? t('Draw') : t('Insufficient balance')}
+          {buttonLabel}
         </Button>
       </div>
     </Dialog>

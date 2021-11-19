@@ -3,7 +3,7 @@ import { useMaskboxAddress, useWeb3Context } from '@/contexts';
 import { useCallback, useEffect, useState } from 'react';
 import { useERC721Contract } from './useERC721Contract';
 
-export function useERC721(address: string | undefined) {
+export function useERC721(address: string | undefined, owner?: string) {
   const [isApproveAll, setIsApproveAll] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [checkingApprove, setCheckingApprove] = useState(false);
@@ -11,13 +11,14 @@ export function useERC721(address: string | undefined) {
   const { account, ethersProvider } = useWeb3Context();
   const maskboxAddress = useMaskboxAddress();
 
+  const checkingAccount = owner ?? account;
   const checkIsApproveAll = useCallback(async () => {
-    if (!ethersProvider || !account || !contract) return;
+    if (!ethersProvider || !checkingAccount || !contract) return;
     setIsApproveAll(false);
 
     setCheckingApprove(true);
     try {
-      const result = await contract.isApprovedForAll(account, maskboxAddress);
+      const result = await contract.isApprovedForAll(checkingAccount, maskboxAddress);
       setIsApproveAll(result as boolean);
     } catch (err) {
       showToast({
@@ -27,7 +28,7 @@ export function useERC721(address: string | undefined) {
       console.log('Fails to check approving', err);
     }
     setCheckingApprove(false);
-  }, [account, contract, maskboxAddress]);
+  }, [checkingAccount, contract, maskboxAddress]);
 
   useEffect(() => {
     checkIsApproveAll();

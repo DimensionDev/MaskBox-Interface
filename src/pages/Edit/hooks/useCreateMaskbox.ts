@@ -2,21 +2,23 @@ import { MaskboxABI } from '@/abi';
 import { useRecentTransactions } from '@/atoms';
 import { MAX_CONFIRMATION } from '@/configs';
 import { useMaskboxContract, useWeb3Context } from '@/contexts';
+import { useHolderToken } from '@/hooks';
 import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
 import { toUTCZero } from '@/utils';
-import { ethers } from 'ethers';
+import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
 
-const abiInterface = new ethers.utils.Interface(MaskboxABI);
+const abiInterface = new utils.Interface(MaskboxABI);
 
 export function useCreateMaskbox() {
   const { ethersProvider, providerChainId: chainId } = useWeb3Context();
   const formData = useAtomValue(formDataAtom);
   const { addTransaction, updateTransactionBy } = useRecentTransactions();
   const contract = useMaskboxContract();
+  const holderToken = useHolderToken();
 
   const limit = formData.limit ?? 5;
   const startTime = Math.floor(toUTCZero(formData.startAt).getTime() / 1000);
@@ -29,7 +31,7 @@ export function useCreateMaskbox() {
       [
         {
           token_addr: formData.tokenAddress,
-          price: ethers.utils.parseUnits(formData.pricePerBox, formData.token?.decimals ?? 18),
+          price: utils.parseUnits(formData.pricePerBox, formData.token?.decimals ?? 18),
         },
       ],
       limit,
@@ -38,6 +40,9 @@ export function useCreateMaskbox() {
       formData.sellAll,
       formData.selectedNFTIds,
       formData.whiteList || ZERO_ADDRESS,
+      formData.minMaskAmount
+        ? utils.parseUnits(formData.minMaskAmount, holderToken?.decimals ?? 18)
+        : 0,
     );
     const txHash = tx.hash as string;
     addTransaction({

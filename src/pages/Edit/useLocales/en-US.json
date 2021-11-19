@@ -44,5 +44,6 @@
   "Please select some NFTs": "Please select some NFTs",
   "Please set a valid start date": "Please set a valid start date",
   "Please set a valid end date": "Please set a valid end date",
-  "End date should be later than start date": "End date should be later than start date"
+  "End date should be later than start date": "End date should be later than start date",
+  "Minimum position": "Minimum position"
 }

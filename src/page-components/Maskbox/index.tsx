@@ -2,7 +2,7 @@ import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@
 import { RouteKeys } from '@/configs';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
-import { useERC20Token, useERC721 } from '@/hooks';
+import { useERC20Token, useERC721, useHolderToken } from '@/hooks';
 import { ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
 import { toLocalUTC } from '@/utils';
@@ -46,7 +46,8 @@ export const Maskbox: FC<MaskboxProps> = ({
   const payment = box.payment?.[0];
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
-  const { isApproveAll } = useERC721(box.nft_address);
+  const { isApproveAll } = useERC721(box.nft_address, box.creator);
+  const holderToken = useHolderToken();
 
   const startTime = box?.start_time ? toLocalUTC(box.start_time * 1000).getTime() : 0;
   const isStarted = box.started === true && startTime <= Date.now();
