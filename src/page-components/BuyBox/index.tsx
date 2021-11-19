@@ -86,7 +86,14 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
       return t('Not enough ${symbol} to draw', { symbol: holderToken?.symbol ?? '??' });
     }
     return balaneEnough ? t('Draw') : t('Insufficient balance');
-  }, [t, loading, holder_min_token_amount, holderToken, balaneEnough]);
+  }, [
+    t,
+    loading,
+    holder_min_token_amount,
+    holderToken?.symbol,
+    balaneEnough,
+    balanceOfHolderToken,
+  ]);
 
   return (
     <Dialog {...rest} className={styles.buyBox} title={t('Draw') as string}>

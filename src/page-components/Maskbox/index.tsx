@@ -47,7 +47,6 @@ export const Maskbox: FC<MaskboxProps> = ({
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
   const { isApproveAll } = useERC721(box.nft_address, box.creator);
-  const holderToken = useHolderToken();
 
   const startTime = box?.start_time ? toLocalUTC(box.start_time * 1000).getTime() : 0;
   const isStarted = box.started === true && startTime <= Date.now();
@@ -124,6 +123,8 @@ export const Maskbox: FC<MaskboxProps> = ({
     </div>
   );
 
+  const holderToken = useHolderToken();
+
   const name = box.name ?? '-';
   return (
     <div className={classnames(styles.maskbox, className)} {...rest}>
@@ -141,6 +142,21 @@ export const Maskbox: FC<MaskboxProps> = ({
           <dd className={styles.infoRow}>
             {t('Limit')} : {box.personal_limit?.toString()}
           </dd>
+          {box.holder_min_token_amount?.gt(0) ? (
+            <dd className={styles.infoRow}>
+              *
+              {t(
+                'You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the Maskbox.',
+                {
+                  amount: utils.formatUnits(
+                    box.holder_min_token_amount ?? 0,
+                    holderToken?.decimals ?? 18,
+                  ),
+                  symbol: holderToken?.symbol ?? '??',
+                },
+              )}
+            </dd>
+          ) : null}
         </dl>
         {isStarted ? (
           <Button {...buttonProps}>{buttonText}</Button>
