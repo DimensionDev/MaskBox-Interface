@@ -11,6 +11,7 @@ import {
 import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, ExtendedBoxInfo } from '@/types';
 import { formatAddres, formatBalance } from '@/utils';
+import classnames from 'classnames';
 import { BigNumber, utils } from 'ethers';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
@@ -144,6 +145,18 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             )}
           </span>
         </dd>
+        {box.holder_min_token_amount?.gt(0) ? (
+          <dd className={classnames(styles.meta, styles.requirement)}>
+            *
+            {t(
+              'You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox.',
+              {
+                amount: utils.formatUnits(box.holder_min_token_amount, holderToken?.decimals ?? 18),
+                symbol: holderToken?.symbol ?? '??',
+              },
+            )}
+          </dd>
+        ) : null}
       </dl>
 
       <div className={styles.buttonGroup}>
