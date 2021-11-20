@@ -168,7 +168,7 @@ export const Details: FC = memo(() => {
         open={shareBoxVisible}
         onClose={closeShareBox}
         onShare={() => {
-          const text = `I just draw an NFT on Maskbox platform, subscribe @realMaskNetwork for more updates - ${window.location.href}`;
+          const text = t('share-to-twitter', { link: window.location.href });
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
         }}

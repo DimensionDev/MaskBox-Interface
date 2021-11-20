@@ -70,7 +70,7 @@ export function useCreateMaskbox() {
       txHash,
       status: TransactionStatus.Success,
     });
-    console.info('useCreateMaskbox', { confirmation });
+    console.info('useCreateMaskBox', { confirmation });
 
     const parsedLog = abiInterface.parseLog(log);
     return parsedLog;

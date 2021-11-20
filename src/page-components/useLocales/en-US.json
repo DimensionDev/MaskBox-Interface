@@ -39,8 +39,8 @@
   "Price": "Price",
   "Sold": "Sold",
   "Date": "Date",
-  "My Maskboxes": "My Maskboxes",
-  "Create Maskbox": "Create Maskbox",
+  "My MaskBoxes": "My MaskBoxes",
+  "Create MaskBox": "Create MaskBox",
   "Cancel issue": "Cancel issue",
   "Mystery box name": "Mystery box name",
   "Edit details": "Edit details",
@@ -51,7 +51,7 @@
   "NFT Contract": "NFT Contract",
   "Limit per wallet": "Limit per wallet",
   "Price per box": "Price per box",
-  "Maskbox name": "Maskbox name",
+  "MaskBox name": "MaskBox name",
   "Sold Total": "Sold Total",
   "Withdraw NFT": "Withdraw NFT",
   "NFT withdrawn": "NFT withdrawn",
@@ -61,6 +61,7 @@
   "Cancel": "Cancel",
   "Withdraw success": "Withdraw success",
   "You got {value}": "You got {value}",
-  "Cancel Maskbox": "Cancel Maskbox",
-  "Failed to cancel this Maskbox {message}": "Failed to cancel this Maskbox {message}"
+  "Cancel MaskBox": "Cancel MaskBox",
+  "Failed to cancel this MaskBox {message}": "Failed to cancel this MaskBox {message}",
+  "You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox.": "You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox."
 }

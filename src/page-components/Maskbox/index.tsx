@@ -146,7 +146,7 @@ export const Maskbox: FC<MaskboxProps> = ({
             <dd className={styles.infoRow}>
               *
               {t(
-                'You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the Maskbox.',
+                'You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox.',
                 {
                   amount: utils.formatUnits(
                     box.holder_min_token_amount ?? 0,

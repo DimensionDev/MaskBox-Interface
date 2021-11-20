@@ -128,7 +128,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
                     history.push(RouteKeys.MyMaskboxes);
                   }}
                 >
-                  {t('My Maskboxes')}
+                  {t('My MaskBoxes')}
                 </Button>
               )}
             </>

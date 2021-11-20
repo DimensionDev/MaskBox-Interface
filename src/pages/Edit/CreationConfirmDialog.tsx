@@ -47,7 +47,7 @@ export const CreationConfirmDialog: FC<Props> = ({
 
   return (
     <Dialog
-      title={t('Create maskbox') as string}
+      title={t('Create MaskBox') as string}
       className={classnames(styles.confirmDialog, className)}
       {...rest}
     >

@@ -63,7 +63,7 @@ export const MyBoxes: FC = () => {
   return (
     <main className={styles.main}>
       <header className={styles.header}>
-        <h1>{t('My Maskboxes')}</h1>
+        <h1>{t('My MaskBoxes')}</h1>
         {permissionGranted && (
           <Button
             colorScheme="primary"
@@ -71,7 +71,7 @@ export const MyBoxes: FC = () => {
               history.push(RouteKeys.Edit);
             }}
           >
-            {t('Create Maskbox')}
+            {t('Create MaskBox')}
           </Button>
         )}
       </header>
@@ -80,7 +80,7 @@ export const MyBoxes: FC = () => {
           <p className={styles.text}>
             {permissionGranted
               ? t('You haven’t created any mystery box yet.')
-              : t('You are not allowed to create Maskbox.')}
+              : t('You are not allowed to create MaskBox.')}
           </p>
         </div>
       ) : (

@@ -9,6 +9,7 @@ import { boxIdAtom, chainAtom, formDataAtom, initFormData, isEdittingAtom } from
 import { Description } from './Description';
 import styles from './index.module.less';
 import { Meta } from './Meta';
+import { useLocales } from './useLocales';
 
 export const Edit: FC = () => {
   const location = useLocation();
@@ -95,9 +96,10 @@ export const Edit: FC = () => {
     }
   }, [isEditting, sellingNFTIds]);
 
+  const t = useLocales();
   return (
     <main className={styles.editPage}>
-      <h1 className={styles.title}>Create Maskbox</h1>
+      <h1 className={styles.title}>{t('Create MaskBox')}</h1>
       <Switch>
         <Route exact path={RouteKeys.EditDescription} component={Description}></Route>
         <Route path={RouteKeys.EditMeta} component={Meta}></Route>
