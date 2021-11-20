@@ -1,0 +1,32 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  .bubble {
+    position: absolute;
+    bottom: calc(100% + 15px);
+    left: -33px;
+  }
+}
+.bubble {
+  background: var(--bubble-bg, rgba(15, 20, 25, 0.8));
+  color: var(--text-primary-invest, #ffffff);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  border-radius: 20px;
+  &::after {
+    position: absolute;
+    content: '';
+    bottom: -15px;
+    left: 34px;
+    background-color: var(--bubble-bg, rgba(15, 20, 25, 0.8));
+    /* path from ./down-arrow.svg */
+    clip-path: path(
+      'M10.3554 11.9833C9.58644 13.321 7.65636 13.321 6.88743 11.9833L-0.000364304 0L17.2432 0L10.3554 11.9833Z'
+    );
+    background-repeat: no-repeat;
+    height: 15px;
+    width: 18px;
+    background-position: center top;
+  }
+}

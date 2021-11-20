@@ -1,13 +1,14 @@
 import classnames from 'classnames';
-import { FC, HTMLProps } from 'react';
+import { FC, HTMLProps, ReactNode } from 'react';
 import styles from './index.module.less';
 
-interface Props extends HTMLProps<HTMLDivElement> {
+interface Props extends Omit<HTMLProps<HTMLDivElement>, 'name'> {
   required?: boolean;
-  name?: string;
+  name?: string | ReactNode;
+  hint?: ReactNode;
   tip?: string;
 }
-export const Field: FC<Props> = ({ required, name, tip, className, children, ...rest }) => {
+export const Field: FC<Props> = ({ required, name, hint, tip, className, children, ...rest }) => {
   return (
     <div
       className={classnames(styles.field, className, {
@@ -17,6 +18,7 @@ export const Field: FC<Props> = ({ required, name, tip, className, children, ...
     >
       <div className={styles.header}>
         {name && <label className={styles.fieldName}>{name}</label>}
+        {hint ? hint : null}
         {tip && <span className={styles.tip}>{tip}</span>}
       </div>
       <div className={styles.content}>{children}</div>

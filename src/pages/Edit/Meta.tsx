@@ -1,6 +1,7 @@
 import {
   Button,
   Field,
+  Hint,
   Icon,
   Input,
   NFTSelectList,
@@ -299,7 +300,15 @@ export const Meta: FC = () => {
         </Field>
       </div>
 
-      <Field className={styles.field} name={t('White list contract')}>
+      <Field
+        className={styles.field}
+        name={t('White list contract')}
+        hint={
+          <Hint width={244} height={100}>
+            {t('white-list-hint')}
+          </Hint>
+        }
+      >
         <Input
           placeholder="eg. 0x0c8FB5C985E00fb1D232b7B9700089492Fb4B9A8"
           disabled={isEditting}
@@ -310,7 +319,15 @@ export const Meta: FC = () => {
         />
       </Field>
 
-      <Field className={styles.field} name={t('Minimum position')}>
+      <Field
+        className={styles.field}
+        name={t('Minimum position')}
+        hint={
+          <Hint width={364} height={130}>
+            {t('min-token-hint', { symbol: qualifyingToken?.symbol ?? '??' })}
+          </Hint>
+        }
+      >
         <Input
           placeholder="0"
           disabled={isEditting}

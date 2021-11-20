@@ -45,5 +45,7 @@
   "Please set a valid start date": "Please set a valid start date",
   "Please set a valid end date": "Please set a valid end date",
   "End date should be later than start date": "End date should be later than start date",
-  "Minimum position": "Minimum position"
+  "Minimum position": "Minimum position",
+  "min-token-hint": "It refers to the minimum position requirement of ${symbol} in the address of mystery boxes. When the user's position is less than the input value, the user won’t be able to draw mystery boxes. Please pay attention to the network you are currently connected to.",
+  "white-list-hint": "When the whitelist contract function is enabled, you will be able to limit the user wallet addresses from which mystery boxes can be drawn."
 }

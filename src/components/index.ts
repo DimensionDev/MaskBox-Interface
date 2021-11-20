@@ -6,6 +6,7 @@ export * from './Dialog';
 export * from './Empty';
 export * from './Faq';
 export * from './Field';
+export * from './Hint';
 export * from './Icon';
 export * from './Input';
 export * from './LanguageSwitcher';
