@@ -1,5 +1,5 @@
 {
-  "Create maskbox": "crwdns9627:0crwdne9627:0",
+  "Create MaskBox": "crwdns9937:0crwdne9937:0",
   "Wallet account": "crwdns9629:0crwdne9629:0",
   "Collections": "crwdns9631:0crwdne9631:0",
   "Total Amount": "crwdns9633:0crwdne9633:0",
@@ -45,5 +45,7 @@
   "Please set a valid start date": "crwdns9711:0crwdne9711:0",
   "Please set a valid end date": "crwdns9713:0crwdne9713:0",
   "End date should be later than start date": "crwdns9715:0crwdne9715:0",
-  "Minimum position": "crwdns9915:0crwdne9915:0"
+  "Minimum position": "crwdns9915:0crwdne9915:0",
+  "min-token-hint": "crwdns9947:0${symbol}crwdne9947:0",
+  "white-list-hint": "crwdns9949:0crwdne9949:0"
 }
