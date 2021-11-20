@@ -63,5 +63,5 @@
   "You got {value}": "You got {value}",
   "Cancel MaskBox": "Cancel MaskBox",
   "Failed to cancel this MaskBox {message}": "Failed to cancel this MaskBox {message}",
-  "You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox.": "You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox."
+  "purchase-requirement": "*You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox."
 }

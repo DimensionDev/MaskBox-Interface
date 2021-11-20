@@ -144,17 +144,13 @@ export const Maskbox: FC<MaskboxProps> = ({
           </dd>
           {box.holder_min_token_amount?.gt(0) ? (
             <dd className={styles.infoRow}>
-              *
-              {t(
-                'You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox.',
-                {
-                  amount: utils.formatUnits(
-                    box.holder_min_token_amount ?? 0,
-                    holderToken?.decimals ?? 18,
-                  ),
-                  symbol: holderToken?.symbol ?? '??',
-                },
-              )}
+              {t('purchase-requirement', {
+                amount: utils.formatUnits(
+                  box.holder_min_token_amount ?? 0,
+                  holderToken?.decimals ?? 18,
+                ),
+                symbol: holderToken?.symbol ?? '??',
+              })}
             </dd>
           ) : null}
         </dl>

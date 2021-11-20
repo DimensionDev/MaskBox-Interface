@@ -3,16 +3,18 @@ import { useCopyToClipboard } from 'react-use';
 import classnames from 'classnames';
 import { useWeb3Context } from '@/contexts';
 import { getNetworkExplorer } from '@/lib';
-import { FC, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo } from 'react';
 import styles from './index.module.less';
 import { useLocales } from '../useLocales';
 import { useRecentTransactions } from '@/atoms';
 import { TransactionStatus } from '@/types';
+import { useBoolean } from '@/hooks';
 
 interface Props extends DialogProps {}
 
 export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
   const t = useLocales();
+  const [copied, setCopied, setNotCopied] = useBoolean();
   const { account, disconnect, isMetaMask, providerChainId: chainId } = useWeb3Context();
   const explorerUrl = useMemo(() => {
     const url = chainId ? getNetworkExplorer(chainId) : '';
@@ -20,6 +22,18 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
   }, [chainId, account]);
   const [_, copyToClipboard] = useCopyToClipboard();
   const { recentTransactions, clearTransactions } = useRecentTransactions();
+
+  const copy = useCallback(() => {
+    copyToClipboard(account!);
+    setCopied();
+  }, [account, copyToClipboard]);
+
+  useEffect(() => {
+    if (copied) {
+      const timer = setTimeout(setNotCopied, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [copied]);
 
   if (!open) return null;
 
@@ -58,13 +72,14 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
                 <Icon className={styles.icon} type="link" size={18} />
                 {t('View in your browser')}
               </a>
-              <div
-                role="button"
-                className={styles.copyButton}
-                onClick={() => copyToClipboard(account)}
-              >
-                <Icon className={styles.icon} type="copy" size={18} />
-                {t('Copy Address')}
+              <div role="button" className={styles.copyButton} onClick={copy}>
+                <Icon
+                  className={styles.icon}
+                  type={copied ? 'success' : 'copy'}
+                  color="green"
+                  size={18}
+                />
+                {t(copied ? 'Copied' : 'Copy Address')}
               </div>
             </div>
           </div>

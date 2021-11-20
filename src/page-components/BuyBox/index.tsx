@@ -147,14 +147,10 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
         </dd>
         {box.holder_min_token_amount?.gt(0) ? (
           <dd className={classnames(styles.meta, styles.requirement)}>
-            *
-            {t(
-              'You have to hold at least <strong>{amount} {symbol}</strong> to pruchase the MaskBox.',
-              {
-                amount: utils.formatUnits(box.holder_min_token_amount, holderToken?.decimals ?? 18),
-                symbol: holderToken?.symbol ?? '??',
-              },
-            )}
+            {t('purchase-requirement', {
+              amount: utils.formatUnits(box.holder_min_token_amount, holderToken?.decimals ?? 18),
+              symbol: holderToken?.symbol ?? '??',
+            })}
           </dd>
         ) : null}
       </dl>

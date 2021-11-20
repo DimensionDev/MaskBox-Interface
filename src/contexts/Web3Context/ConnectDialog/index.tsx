@@ -57,6 +57,15 @@ export const ConnectDialog: FC<Props> = ({
     }
   }, []);
 
+  useEffect(() => {
+    const walletType = connectableWallets.find((w) => w.id === currWalletId)?.type;
+    handleConnect({
+      chainId: currChainId,
+      walletId: currWalletId,
+      walletType,
+    });
+  }, [currWalletId, currChainId]);
+
   if (!open) return null;
 
   return (
@@ -97,16 +106,7 @@ export const ConnectDialog: FC<Props> = ({
                   className={styles.option}
                   role="button"
                   key={w.id}
-                  onClick={() => {
-                    setCurrWalletId(w.id);
-                    if (currChainId) {
-                      handleConnect({
-                        chainId: currChainId,
-                        walletId: w.id,
-                        walletType: w.type,
-                      });
-                    }
-                  }}
+                  onClick={() => setCurrWalletId(w.id)}
                 >
                   <SelectableIcon selected={w.id === currWalletId}>
                     <Icon type={w.iconType} size={48} />
