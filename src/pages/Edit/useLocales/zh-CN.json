@@ -1,4 +1,5 @@
 {
+  "Create MaskBox": "创建 Mask 盲盒",
   "Wallet account": "钱包账户",
   "Collections": "收藏品",
   "Total Amount": "总数",
@@ -24,6 +25,8 @@
   "NFT Contract": "NFT 合约",
   "Drop down to select or enter the contract address.": "下拉选择或输入合约地址。",
   "Selective part": "部分选择",
+  "Start date ({offset})": "开始日期 (UTC{offset})",
+  "End date ({offset})": "结束日期 (UTC{offset})",
   "Date": "日期",
   "White list contract": "白名单",
   "Checking...": "检查中…",
@@ -41,5 +44,8 @@
   "Please select some NFTs": "请选 NFT",
   "Please set a valid start date": "请设置有效的开始日期",
   "Please set a valid end date": "请输入有效的结束日期",
-  "End date should be later than start date": "结束日期应该晚于开始日期"
+  "End date should be later than start date": "结束日期应该晚于开始日期",
+  "Minimum position": "最低持仓要求",
+  "min-token-hint": "可抽取盲盒地址中 ${symbol} 最低持仓要求。当用户持仓小于输入值时，将无法成功抽取盲盒。请注意您当前链接的网络。",
+  "white-list-hint": "启用抽取白名单功能时，您将限制可抽取盲盒的用户钱包地址。"
 }
