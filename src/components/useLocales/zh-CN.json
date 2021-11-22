@@ -2,6 +2,11 @@
   "Join Newsletter": "订阅邮件",
   "Enter your email": "输入您的邮箱",
   "Sold": "已售出",
+  "For Sale": "出售",
+  "sns-share-to-twitter": "去 MaskBox 平台上浏览 NFT 盲盒 {boxName} ，祝你好运！订阅@realMaskNet了解更多更新。 {link}",
+  "sns-share-to-facebook": "去 MaskBox 平台上浏览 NFT 盲盒 {boxName} ，祝你好运！订阅@realMaskNet了解更多更新。 {link}",
   "Added by uesr": "用户添加",
-  "File size up to {size}MB": "文件大小不超过 {size}MB"
+  "File size up to {size}MB": "文件大小不超过 {size}MB",
+  "You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4": "您需要上传缩略图，支持 jpg, png, svg, gif, bmp, webp, mp4等格式。",
+  "You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed": "您需要上传缩略图，支持 jpg, png, svg, gif, bmp, webp, mp4等格式。"
 }
