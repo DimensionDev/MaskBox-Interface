@@ -25,8 +25,6 @@
   "NFT Contract": "NFT契約",
   "Drop down to select or enter the contract address.": "ドロップダウンで契約者の住所を選択または入力",
   "Selective part": "選択部分",
-  "Start date (UTC{offset})": "開始日 (UTC{offset})",
-  "End date (UTC{offset})": "終了日 (UTC{offset})",
   "Date": "日付",
   "White list contract": "ホワイトリスト契約",
   "Checking...": "確認中…",
