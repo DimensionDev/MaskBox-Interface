@@ -3,6 +3,7 @@ import { MediaType } from '@/types';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
 import { Icon, LoadingIcon } from '../Icon';
+import { Image } from '../Image';
 import { useLocales } from '../useLocales';
 import { VideoPlayer } from '../VideoPlayer';
 import styles from './index.module.less';
@@ -102,7 +103,13 @@ export const UploadBox: FC<Props> = ({
           switch (mediaType) {
             case MediaType.Image:
             case MediaType.Unknown:
-              return <img className={styles.previewImage} src={mediaUrl} />;
+              return (
+                <Image
+                  className={styles.previewImage}
+                  src={mediaUrl}
+                  alternative={<LoadingIcon size={48} color="inherit" />}
+                />
+              );
             case MediaType.Video:
               return <VideoPlayer className={styles.previewImage} src={mediaUrl} />;
             case MediaType.Audio:

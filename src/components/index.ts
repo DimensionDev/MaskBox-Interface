@@ -8,6 +8,7 @@ export * from './Faq';
 export * from './Field';
 export * from './Hint';
 export * from './Icon';
+export * from './Image';
 export * from './Input';
 export * from './LanguageSwitcher';
 export * from './NewsletterBox';

@@ -1,8 +1,10 @@
 import {
   Badge,
   Button,
-  Icon,
   Dialog,
+  Icon,
+  Image,
+  LoadingIcon,
   showToast,
   SNSShare,
   useDialog,
@@ -129,8 +131,9 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             return <audio src={box.mediaUrl} controls />;
           default:
             return (
-              <img
+              <Image
                 src={box.mediaUrl}
+                alternative={<Icon type="mask" size={48} />}
                 loading="lazy"
                 width="100%"
                 height="100%"

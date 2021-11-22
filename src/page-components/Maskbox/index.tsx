@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
+import { Button, ButtonProps, Icon, Image, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
@@ -130,8 +130,9 @@ export const Maskbox: FC<MaskboxProps> = ({
             return <audio src={box.mediaUrl} controls />;
           default:
             return (
-              <img
+              <Image
                 src={box.mediaUrl}
+                alternative={<Icon type="mask" size={48} />}
                 loading="lazy"
                 width="480"
                 height="320"
