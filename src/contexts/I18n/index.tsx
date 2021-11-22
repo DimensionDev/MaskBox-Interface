@@ -57,7 +57,7 @@ export function createLocales(configs: LocaleConfig) {
       (key: string, data?: Record<string, string | number>) => {
         const config = configs[language as string] ?? {};
         let text = config[key] || configs.en?.[key] || key;
-        if (process.env.NODE_ENV === 'development' && (!config[key] || !configs.en?.[key])) {
+        if (process.env.NODE_ENV === 'development' && !configs.en?.[key]) {
           console.error(`No locale config for ${key}`);
         }
         if (data) {

@@ -1,6 +1,6 @@
 {
-  "name": "react-ts-plus",
-  "version": "0.0.0",
+  "name": "maskbox-interface",
+  "version": "0.1.0",
   "scripts": {
     "dev": "webpack serve --mode=development --port 5000",
     "build": "webpack --mode=production",
