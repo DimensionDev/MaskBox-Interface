@@ -20,7 +20,7 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
     const url = chainId ? getNetworkExplorer(chainId) : '';
     return `${url}/address/${account}`;
   }, [chainId, account]);
-  const [_, copyToClipboard] = useCopyToClipboard();
+  const [, copyToClipboard] = useCopyToClipboard();
   const { recentTransactions, clearTransactions } = useRecentTransactions();
 
   const copy = useCallback(() => {
@@ -39,7 +39,7 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
 
   return (
     <Overlay>
-      <Dialog title="Account" open {...rest} onClose={onClose}>
+      <Dialog title={t('Account')} open {...rest} onClose={onClose}>
         <div className={styles.row}>
           {t('Connected with {wallet}', {
             wallet: isMetaMask ? 'MetaMask' : (t('Unknown') as string),
@@ -86,10 +86,10 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
         ) : null}
         <div className={styles.recentTxes}>
           <h3 className={styles.title}>
-            Recent Transactions
+            {t('Recent Transactions')}
             {recentTransactions.length > 0 && (
               <button className={styles.clearButton} onClick={clearTransactions}>
-                Clear All
+                {t('Clear All')}
               </button>
             )}
           </h3>
@@ -111,7 +111,7 @@ export const AccountDialog: FC<Props> = ({ onClose, open, ...rest }) => {
               ))}
             </ul>
           ) : (
-            <div className={styles.empty}>Your transactions will appear here...</div>
+            <div className={styles.empty}>{t('Your transactions will appear here...')}</div>
           )}
         </div>
       </Dialog>

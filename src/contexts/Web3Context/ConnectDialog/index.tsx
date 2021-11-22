@@ -4,6 +4,7 @@ import { Icon, Overlay, Dialog, DialogProps, SelectableIcon } from '@/components
 import styles from './index.module.less';
 import { connectableChains, connectableWallets } from './config';
 import { ChainId } from '@/lib';
+import { useLocales } from '../../useLocales';
 
 export * from './config';
 
@@ -29,6 +30,7 @@ export const ConnectDialog: FC<Props> = ({
   onSelect,
   ...rest
 }) => {
+  const t = useLocales();
   const [currChainId, setCurrChainId] = useState<ChainId | undefined>(chainId);
   const [currWalletId, setCurrWalletId] = useState<string | undefined>(walletId);
 
@@ -71,13 +73,13 @@ export const ConnectDialog: FC<Props> = ({
   return (
     <Overlay>
       <Dialog
-        title="Connect Wallet"
+        title={t('Connect Wallet')}
         open
         className={classnames(className, styles.dialog)}
         {...rest}
       >
         <div className={styles.step}>
-          <p className={styles.stepTitle}>1.Choose Network</p>
+          <p className={styles.stepTitle}>{t('1.Choose Network')}</p>
           <div className={classnames(styles.stepContent, styles.list)}>
             {connectableChains.map((c) => (
               <div
@@ -98,7 +100,7 @@ export const ConnectDialog: FC<Props> = ({
         </div>
 
         <div className={styles.step}>
-          <p className={styles.stepTitle}>2.Choose Wallet</p>
+          <p className={styles.stepTitle}>{t('2.Choose Wallet')}</p>
           <div className={classnames(styles.stepContent, styles.list)}>
             <div className={classnames(styles.stepContent, styles.list)}>
               {connectableWallets.map((w) => (

@@ -38,7 +38,7 @@ export const Home: FC = () => {
             <img src={boxUrl} alt="box" loading="lazy" />
           </div>
           <div className={styles.texts}>
-            <h2 className={styles.title}>{t('Mint your NFT Mystery with a suitbale gas fee')}</h2>
+            <h2 className={styles.title}>{t('Mint your NFT Mystery with a suitable gas fee')}</h2>
             <p className={styles.description}>{t('description2')}</p>
           </div>
         </div>

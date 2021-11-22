@@ -55,8 +55,11 @@ export function createLocales(configs: LocaleConfig) {
     const { language } = useI18n();
     const t = useCallback(
       (key: string, data?: Record<string, string | number>) => {
-        const config = configs[language as string];
-        let text = config?.[key] || configs.en?.[key] || key;
+        const config = configs[language as string] ?? {};
+        let text = config[key] || configs.en?.[key] || key;
+        if (process.env.NODE_ENV === 'development' && (!config[key] || !configs.en?.[key])) {
+          console.error(`No locale config for ${key}`);
+        }
         if (data) {
           text = text.replace(/{(.*?)}/g, (_, key) => (data[key] as string) ?? key);
         }
