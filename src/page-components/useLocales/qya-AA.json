@@ -39,8 +39,8 @@
   "Price": "crwdns9769:0crwdne9769:0",
   "Sold": "crwdns9771:0crwdne9771:0",
   "Date": "crwdns9773:0crwdne9773:0",
-  "My Maskboxes": "crwdns9775:0crwdne9775:0",
-  "Create Maskbox": "crwdns9777:0crwdne9777:0",
+  "My MaskBoxes": "crwdns9923:0crwdne9923:0",
+  "Create MaskBox": "crwdns9925:0crwdne9925:0",
   "Cancel issue": "crwdns9783:0crwdne9783:0",
   "Mystery box name": "crwdns9785:0crwdne9785:0",
   "Edit details": "crwdns9821:0crwdne9821:0",
@@ -51,7 +51,7 @@
   "NFT Contract": "crwdns9831:0crwdne9831:0",
   "Limit per wallet": "crwdns9833:0crwdne9833:0",
   "Price per box": "crwdns9835:0crwdne9835:0",
-  "Maskbox name": "crwdns9837:0crwdne9837:0",
+  "MaskBox name": "crwdns9927:0crwdne9927:0",
   "Sold Total": "crwdns9839:0crwdne9839:0",
   "Withdraw NFT": "crwdns9841:0crwdne9841:0",
   "NFT withdrawn": "crwdns9843:0crwdne9843:0",
@@ -61,6 +61,7 @@
   "Cancel": "crwdns9851:0crwdne9851:0",
   "Withdraw success": "crwdns9853:0crwdne9853:0",
   "You got {value}": "crwdns9855:0{value}crwdne9855:0",
-  "Cancel Maskbox": "crwdns9857:0crwdne9857:0",
-  "Failed to cancel this Maskbox {message}": "crwdns9859:0{message}crwdne9859:0"
+  "Cancel MaskBox": "crwdns9929:0crwdne9929:0",
+  "Failed to cancel this MaskBox {message}": "crwdns9931:0{message}crwdne9931:0",
+  "purchase-requirement": "crwdns9951:0{amount}crwdnd9951:0{symbol}crwdne9951:0"
 }
