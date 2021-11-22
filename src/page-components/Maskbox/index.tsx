@@ -2,7 +2,13 @@ import { Button, ButtonProps, Icon, LoadingIcon, SNSShare, VideoPlayer } from '@
 import { RouteKeys } from '@/configs';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
-import { useERC20Token, useERC721, useHolderToken } from '@/hooks';
+import {
+  useBalance,
+  useERC20Token,
+  useERC721,
+  useHolderToken,
+  usePermissionGranted,
+} from '@/hooks';
 import { ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
 import { toLocalUTC } from '@/utils';
@@ -41,6 +47,7 @@ export const Maskbox: FC<MaskboxProps> = ({
     }),
     [boxOnChain, boxOnRSS3, boxOnSubgraph],
   );
+  const { holder_min_token_amount } = box;
   const chainId = box.chain_id;
   const boxId = box.box_id;
   const payment = box.payment?.[0];
@@ -58,6 +65,12 @@ export const Maskbox: FC<MaskboxProps> = ({
     }
   }, [payment?.price, paymentToken?.decimals]);
   const isSoldout = useMemo(() => !!box.remaining?.eq(ZERO), [box.remaining]);
+  const isPermissionGranted = usePermissionGranted();
+  const holderToken = useHolderToken();
+  const holderTokenBalance = useBalance(holderToken?.address);
+  const isQualified = useMemo(() => {
+    return holder_min_token_amount?.eq(0) || holderTokenBalance.gte(holder_min_token_amount ?? 0);
+  }, [holder_min_token_amount, holderTokenBalance]);
 
   const buttonText = useMemo(() => {
     if (isSoldout) return t('Sold out');
@@ -65,15 +78,22 @@ export const Maskbox: FC<MaskboxProps> = ({
       return t('Ended');
     } else if (!isApproveAll) {
       return t('Canceled');
-    } else if (inList) {
-      return t('View Details');
+    }
+    if (inList) return t('View Details');
+
+    if (isPermissionGranted) {
+      if (!isQualified)
+        return t(`Not enough {symbol} to draw`, { symbol: holderToken?.symbol ?? '??' });
+    } else {
+      return t('Current address is not in the whitelist.');
     }
 
     return price ? t('Draw ( {price}/Time )', { price }) : <LoadingIcon size={24} />;
-  }, [inList, price, isSoldout, isApproveAll, t]);
+  }, [inList, price, isSoldout, isApproveAll, t, isPermissionGranted, isQualified]);
 
   const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}`;
-  const allowToBuy = price && isStarted && !box.expired && !isSoldout && isApproveAll;
+  const allowToBuy =
+    price && isStarted && !box.expired && !isSoldout && isApproveAll && isQualified;
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
@@ -123,8 +143,6 @@ export const Maskbox: FC<MaskboxProps> = ({
     </div>
   );
 
-  const holderToken = useHolderToken();
-
   const name = box.name ?? '-';
   return (
     <div className={classnames(styles.maskbox, className)} {...rest}>
@@ -142,11 +160,11 @@ export const Maskbox: FC<MaskboxProps> = ({
           <dd className={styles.infoRow}>
             {t('Limit')} : {box.personal_limit?.toString()}
           </dd>
-          {box.holder_min_token_amount?.gt(0) ? (
+          {holder_min_token_amount?.gt(0) ? (
             <dd className={styles.infoRow}>
               {t('purchase-requirement', {
                 amount: utils.formatUnits(
-                  box.holder_min_token_amount ?? 0,
+                  holder_min_token_amount ?? 0,
                   holderToken?.decimals ?? 18,
                 ),
                 symbol: holderToken?.symbol ?? '??',
