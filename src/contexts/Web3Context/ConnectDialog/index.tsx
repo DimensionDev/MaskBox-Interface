@@ -87,10 +87,14 @@ export const ConnectDialog: FC<Props> = ({
                   role="button"
                   key={w.id}
                   onClick={() => {
-                    handleConnect({
-                      chainId: currChainId,
-                      walletId: w.id,
-                    });
+                    if (w.installed) {
+                      handleConnect({
+                        chainId: currChainId,
+                        walletId: w.id,
+                      });
+                    } else if (w.installUrl) {
+                      window.open(w.installUrl, '_blank noopener noreferrer');
+                    }
                   }}
                 >
                   <SelectableIcon selected={w.id === walletId}>

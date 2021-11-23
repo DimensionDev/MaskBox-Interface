@@ -23,7 +23,6 @@ function isImageValid(src?: string): Promise<boolean> {
       cleanup();
     };
     img.onload = () => {
-      console.log('image loaded');
       cache[src] = lazyTrue;
       resolve(true);
       cleanup();

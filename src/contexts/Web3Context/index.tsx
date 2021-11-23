@@ -1,5 +1,5 @@
 import { showToast, useDialog } from '@/components';
-import { ChainId, isSupportedChain, logError } from '@/lib';
+import { ChainId, isSupportedChain } from '@/lib';
 import { getStorage, StorageKeys, useStorage } from '@/utils';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ethers } from 'ethers';
@@ -62,8 +62,9 @@ export const Web3Provider: FC = ({ children }) => {
   const setWeb3Provider = useCallback(
     async (prov: Provider) => {
       try {
-        if (!prov.selectedAddress) return;
         const provider = new ethers.providers.Web3Provider(prov);
+        const accounts: string[] = await provider.send('eth_accounts', []);
+        if (accounts.length === 0) return;
         const chainId = Number(prov.chainId as string);
         if (!account) {
           const signer = provider.getSigner();

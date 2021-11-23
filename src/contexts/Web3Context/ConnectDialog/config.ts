@@ -22,12 +22,43 @@ export const connectableChains = [
   // },
 ] as const;
 
+interface WalletProvider {
+  id: string;
+  installed?: boolean;
+  type: 'injected';
+  installUrl?: string;
+  iconType: 'metamaskWallet' | 'c98';
+}
+
+const metamaskWallet: WalletProvider = {
+  id: 'metamask',
+  installed: true,
+  type: 'injected',
+  iconType: 'metamaskWallet',
+};
+const c98Wallet: WalletProvider = {
+  id: 'c98',
+  installed: true,
+  type: 'injected',
+  iconType: 'c98',
+};
+
+const ethereum = window.ethereum ?? {};
+const getInjectedWallet = (): WalletProvider => {
+  if (ethereum.isCoin98) {
+    return c98Wallet;
+  } else if (ethereum.isMetaMask) {
+    return metamaskWallet;
+  }
+  return {
+    ...metamaskWallet,
+    installed: false,
+    installUrl: 'https://metamask.io/',
+  };
+};
+
 export const connectableWallets = [
-  {
-    id: 'metamask',
-    type: 'injected',
-    iconType: 'metamaskWallet',
-  },
+  getInjectedWallet(),
   // {
   //   id: 'walletconnect',
   //   type: 'walletconnect',

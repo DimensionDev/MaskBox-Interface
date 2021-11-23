@@ -1,5 +1,6 @@
-import { getInjectedProvider } from './injected';
+export * from './addChainToWallet';
 
+import { getInjectedProvider } from './injected';
 enum ProviderType {
   Injected = 'injected',
 }

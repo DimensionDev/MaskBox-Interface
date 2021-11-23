@@ -4,6 +4,7 @@ export type IconType =
   | 'arrowRight'
   | 'binanceChain'
   | 'binance'
+  | 'c98'
   | 'checked'
   | 'chevronRight'
   | 'close'
@@ -50,6 +51,7 @@ export const iconNameMap = {
   arrowRight: 'arrow-right.svg',
   binanceChain: 'binance-chain.svg',
   binance: 'binance.svg',
+  c98: 'c98.png',
   checked: 'checked.svg',
   chevronRight: 'chevron-right.svg',
   close: 'close.svg',
@@ -99,6 +101,7 @@ export const arrowRightIcon =
   '<svg width="100%" height="100%" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M14.0909 7.27644C14.4968 6.90183 15.1294 6.92713 15.504 7.33295L18.7348 10.8329C19.0884 11.216 19.0884 11.8064 18.7348 12.1895L15.504 15.6895C15.1294 16.0953 14.4968 16.1206 14.091 15.746C13.6851 15.3714 13.6598 14.7388 14.0344 14.333L15.716 12.5112L6 12.5112C5.44771 12.5112 5 12.0635 5 11.5112C5 10.9589 5.44771 10.5112 6 10.5112L15.716 10.5112L14.0344 8.68952C13.6598 8.2837 13.6851 7.65104 14.0909 7.27644Z" fill="currentColor"/>\n</svg>';
 export const binanceChainIcon = new URL('./icons/binance-chain.svg', import.meta.url).href;
 export const binanceIcon = new URL('./icons/binance.svg', import.meta.url).href;
+export const c98Icon = new URL('./icons/c98.png', import.meta.url).href;
 export const checkedIcon = new URL('./icons/checked.svg', import.meta.url).href;
 export const chevronRightIcon =
   '<svg width="100%" height="100%" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M8.45794 5.31585C8.81592 4.95787 9.39632 4.95787 9.7543 5.31585L14.796 10.3575C15.1539 10.7155 15.1539 11.2959 14.796 11.6539L9.7543 16.6955C9.39632 17.0535 8.81592 17.0535 8.45794 16.6955C8.09996 16.3376 8.09996 15.7572 8.45794 15.3992L12.8514 11.0057L8.45794 6.61221C8.09996 6.25423 8.09996 5.67383 8.45794 5.31585Z" fill="currentColor"/>\n</svg>';
@@ -202,6 +205,7 @@ const icons = {
   arrowRight: arrowRightIcon,
   binanceChain: binanceChainIcon,
   binance: binanceIcon,
+  c98: c98Icon,
   checked: checkedIcon,
   chevronRight: chevronRightIcon,
   close: closeIcon,
