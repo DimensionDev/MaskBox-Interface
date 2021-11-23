@@ -118,8 +118,6 @@ export const Web3Provider: FC = ({ children }) => {
         provider.on('accountsChanged', updateWeb3Provider);
         provider.on('chainChanged', updateWeb3Provider);
         provider.on('disconnect', disconnect);
-      } catch (error: any) {
-        logError({ web3ModalError: error });
       } finally {
         setIsConnecting(false);
       }
@@ -163,14 +161,16 @@ export const Web3Provider: FC = ({ children }) => {
         onClose={closeConnectionDialog}
         chainId={storedChainId ?? ChainId.Mainnet}
         walletId={storedWalletId ?? undefined}
-        onSelect={({ chainId, walletId, walletType }) => {
+        onSelect={({ chainId, walletId }) => {
           setWeb3State((state) => ({
             ...state,
             providerChainId: chainId,
           }));
-          setStoredChainId(chainId);
-          setStoredWalletId(walletId);
-          connectWeb3(chainId, walletType);
+          const walletType = connectableWallets.find((w) => w.id === walletId)?.type;
+          connectWeb3(chainId, walletType!).then(() => {
+            setStoredChainId(chainId);
+            setStoredWalletId(walletId);
+          });
           closeConnectionDialog();
         }}
       />

@@ -11,15 +11,7 @@ export * from './config';
 interface Props extends Omit<DialogProps, 'onSelect'> {
   chainId?: ChainId;
   walletId?: string;
-  onSelect?: ({
-    chainId,
-    walletId,
-    walletType,
-  }: {
-    chainId: ChainId;
-    walletId: string;
-    walletType: string;
-  }) => void;
+  onSelect?: ({ chainId, walletId }: { chainId: ChainId; walletId: string }) => void;
 }
 
 export const ConnectDialog: FC<Props> = ({
@@ -32,7 +24,6 @@ export const ConnectDialog: FC<Props> = ({
 }) => {
   const t = useLocales();
   const [currChainId, setCurrChainId] = useState<ChainId | undefined>(chainId);
-  const [currWalletId, setCurrWalletId] = useState<string | undefined>(walletId);
 
   useEffect(() => {
     if (chainId) {
@@ -41,34 +32,19 @@ export const ConnectDialog: FC<Props> = ({
   }, [chainId]);
 
   useEffect(() => {
-    setCurrWalletId(walletId);
-  }, [walletId]);
-
-  useEffect(() => {
     if (!open) {
       setCurrChainId(chainId);
-      setCurrWalletId(walletId);
     }
-  }, [chainId, walletId, open]);
+  }, [chainId, open]);
 
-  const handleConnect = useCallback(({ chainId, walletId, walletType }) => {
+  const handleConnect = useCallback(({ chainId, walletId }) => {
     if (chainId && walletId && onSelect) {
       onSelect({
         chainId,
         walletId,
-        walletType,
       });
     }
   }, []);
-
-  useEffect(() => {
-    const walletType = connectableWallets.find((w) => w.id === currWalletId)?.type;
-    handleConnect({
-      chainId: currChainId,
-      walletId: currWalletId,
-      walletType,
-    });
-  }, [currWalletId, currChainId]);
 
   if (!open) return null;
 
@@ -110,9 +86,14 @@ export const ConnectDialog: FC<Props> = ({
                   className={styles.option}
                   role="button"
                   key={w.id}
-                  onClick={() => setCurrWalletId(w.id)}
+                  onClick={() => {
+                    handleConnect({
+                      chainId: currChainId,
+                      walletId: w.id,
+                    });
+                  }}
                 >
-                  <SelectableIcon selected={w.id === currWalletId}>
+                  <SelectableIcon selected={w.id === walletId}>
                     <Icon type={w.iconType} size={48} />
                   </SelectableIcon>
                 </div>
