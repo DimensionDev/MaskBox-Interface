@@ -161,7 +161,7 @@ export const Web3Provider: FC = ({ children }) => {
       <ConnectDialog
         open={dialogVisible}
         onClose={closeConnectionDialog}
-        chainId={storedChainId ?? undefined}
+        chainId={storedChainId ?? ChainId.Mainnet}
         walletId={storedWalletId ?? undefined}
         onSelect={({ chainId, walletId, walletType }) => {
           setWeb3State((state) => ({

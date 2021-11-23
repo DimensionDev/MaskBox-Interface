@@ -1,10 +1,10 @@
-import { FC, useCallback, useEffect, useState } from 'react';
-import classnames from 'classnames';
-import { Icon, Overlay, Dialog, DialogProps, SelectableIcon } from '@/components';
-import styles from './index.module.less';
-import { connectableChains, connectableWallets } from './config';
+import { Dialog, DialogProps, Icon, Overlay, SelectableIcon } from '@/components';
 import { ChainId } from '@/lib';
+import classnames from 'classnames';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useLocales } from '../../useLocales';
+import { connectableChains, connectableWallets } from './config';
+import styles from './index.module.less';
 
 export * from './config';
 
@@ -35,7 +35,9 @@ export const ConnectDialog: FC<Props> = ({
   const [currWalletId, setCurrWalletId] = useState<string | undefined>(walletId);
 
   useEffect(() => {
-    setCurrChainId(chainId);
+    if (chainId) {
+      setCurrChainId(chainId);
+    }
   }, [chainId]);
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import { Button, ButtonProps, Icon, Image, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
+import { useWeb3Context } from '@/contexts';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import {
@@ -54,6 +55,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
   const { isApproveAll } = useERC721(box.nft_address, box.creator);
+  const { ethersProvider, openConnectionDialog, isConnecting } = useWeb3Context();
 
   const startTime = box?.start_time ? toLocalUTC(box.start_time * 1000).getTime() : 0;
   const isStarted = box.started === true && startTime <= Date.now();
@@ -73,13 +75,16 @@ export const Maskbox: FC<MaskboxProps> = ({
   }, [holder_min_token_amount, holderTokenBalance]);
 
   const buttonText = useMemo(() => {
-    if (isSoldout) return t('Sold out');
-    if (box.expired) {
-      return t('Ended');
-    } else if (!isApproveAll) {
-      return t('Canceled');
+    if (ethersProvider) {
+      if (isSoldout) return t('Sold out');
+      if (box.expired) {
+        return t('Ended');
+      } else if (!isApproveAll) {
+        return t('Canceled');
+      }
     }
     if (inList) return t('View Details');
+    if (!ethersProvider) return t('Connect Wallet');
 
     if (isPermissionGranted) {
       if (!isQualified)
@@ -89,7 +94,7 @@ export const Maskbox: FC<MaskboxProps> = ({
     }
 
     return price ? t('Draw ( {price}/Time )', { price }) : <LoadingIcon size={24} />;
-  }, [inList, price, isSoldout, isApproveAll, t, isPermissionGranted, isQualified]);
+  }, [inList, price, isSoldout, isApproveAll, t, isPermissionGranted, isQualified, ethersProvider]);
 
   const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}`;
   const allowToBuy =
@@ -97,10 +102,12 @@ export const Maskbox: FC<MaskboxProps> = ({
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: !allowToBuy,
+    disabled: (ethersProvider && !allowToBuy) || isConnecting,
     onClick: () => {
       if (inList) {
         history.push(boxLink);
+      } else if (!ethersProvider) {
+        openConnectionDialog?.();
       } else if (box.started && !box.expired && onPurchase) {
         onPurchase();
       }
@@ -173,7 +180,7 @@ export const Maskbox: FC<MaskboxProps> = ({
             </dd>
           ) : null}
         </dl>
-        {isStarted ? (
+        {isStarted || !ethersProvider ? (
           <Button {...buttonProps}>{buttonText}</Button>
         ) : (
           <CountdownButton {...buttonProps} startTime={startTime!} />

@@ -92,21 +92,6 @@ export const Details: FC = memo(() => {
     loadNfts();
   }, [loadNfts]);
 
-  if (!ethersProvider) {
-    return (
-      <main className={styles.main}>
-        <RequestConnection />
-      </main>
-    );
-  }
-  if (isNotSupportedChain) {
-    return (
-      <main className={styles.main}>
-        <RequestSwitchChain chainId={chainId as ChainId} />
-      </main>
-    );
-  }
-
   if (!chainId || !boxId) {
     return (
       <main className={styles.main}>
