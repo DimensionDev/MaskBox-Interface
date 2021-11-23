@@ -12,6 +12,7 @@ export enum StorageKeys {
   ChainId = 'chain-id',
   WalletType = 'wallet-type',
   RecentTransations = 'recent-transitions',
+  BoxDraft = 'box-draft',
 }
 
 export const setStorage = <T extends any>(key: string, value: T) => {

@@ -1,10 +1,11 @@
 import { ERC721Token, TokenType, ZERO_ADDRESS } from '@/lib';
 import { Activity, MediaType } from '@/types';
+import { getStorage, setStorage, StorageKeys } from '@/utils';
 import { format, isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
-import { useUpdateAtom } from 'jotai/utils';
+import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { eq } from 'lodash-es';
-import { FormEvent, useCallback } from 'react';
+import { FormEvent, useCallback, useEffect } from 'react';
 
 export interface FormData {
   name: string;
@@ -33,7 +34,7 @@ const startAt = format(date, "yyyy-MM-dd'T'HH:mm");
 date.setDate(date.getDate() + 30);
 const endAt = format(date, "yyyy-MM-dd'T'HH:mm");
 
-export const initFormData: FormData = {
+export const defaultFormData: FormData = {
   name: '',
   mediaUrl: '',
   mediaType: MediaType.Unknown,
@@ -51,6 +52,8 @@ export const initFormData: FormData = {
   minMaskAmount: '',
   selectedNFTIds: [],
 };
+export const initFormData: FormData = getStorage<FormData>(StorageKeys.BoxDraft) ?? defaultFormData;
+
 const fieldKeys = Object.keys(initFormData) as Array<keyof FormData>;
 
 export const formDataAtom = atom<FormData>(initFormData);
@@ -157,6 +160,13 @@ export function useUpdateFormField() {
       [fieldName]: newValue,
     }));
   };
+}
+
+export function useUpdateDraft() {
+  const formData = useAtomValue(formDataAtom);
+  useEffect(() => {
+    setStorage<FormData>(StorageKeys.BoxDraft, formData);
+  }, [formData]);
 }
 
 export function useBindFormField() {

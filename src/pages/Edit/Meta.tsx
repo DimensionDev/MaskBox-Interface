@@ -23,12 +23,13 @@ import {
 import { isSameAddress, TZOffsetLabel } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
-import { useAtomValue } from 'jotai/utils';
+import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   boxIdAtom,
   chainAtom,
+  defaultFormData,
   formDataAtom,
   isEdittingAtom,
   readyToCreateAtom,
@@ -79,6 +80,7 @@ export const Meta: FC = () => {
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useDialog();
   const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
   const [creating, setCreating] = useState(false);
+  const updateFormData = useUpdateAtom(formDataAtom);
   const create = useCallback(async () => {
     setAllDirty();
     if (!isReady || validations.length) {
@@ -110,6 +112,7 @@ export const Meta: FC = () => {
         });
         closeConfirmDialog();
         openShareBox();
+        updateFormData(defaultFormData);
       }
     } catch (err) {
       showToast({
