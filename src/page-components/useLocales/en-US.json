@@ -13,6 +13,7 @@
   "Current Wallet": "Current Wallet",
   "Available": "Available",
   "Allow MaskBox to use your {symbol}": "Allow MaskBox to use your {symbol}",
+  "You must give the MaskBox smart contracts permission to use your {symbol}": "You must give the MaskBox smart contracts permission to use your {symbol}",
   "Drawing": "Drawing",
   "Insufficient balance": "Insufficient balance",
   "Select an NFT": "Select an NFT",

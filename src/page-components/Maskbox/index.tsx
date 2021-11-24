@@ -12,9 +12,8 @@ import {
 } from '@/hooks';
 import { ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
-import { toLocalUTC } from '@/utils';
+import { formatBalance, toLocalUTC } from '@/utils';
 import classnames from 'classnames';
-import { utils } from 'ethers';
 import { FC, HTMLProps, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useLocales } from '../useLocales';
@@ -62,7 +61,7 @@ export const Maskbox: FC<MaskboxProps> = ({
 
   const price = useMemo(() => {
     if (payment?.price && paymentToken?.decimals) {
-      const digit = utils.formatUnits(payment.price, paymentToken.decimals);
+      const digit = formatBalance(payment.price, paymentToken.decimals);
       return `${digit} ${paymentToken.symbol}`;
     }
   }, [payment?.price, paymentToken?.decimals]);
@@ -171,10 +170,7 @@ export const Maskbox: FC<MaskboxProps> = ({
           {holder_min_token_amount?.gt(0) ? (
             <dd className={styles.infoRow}>
               {t('purchase-requirement', {
-                amount: utils.formatUnits(
-                  holder_min_token_amount ?? 0,
-                  holderToken?.decimals ?? 18,
-                ),
+                amount: formatBalance(holder_min_token_amount ?? 0, holderToken?.decimals ?? 18),
                 symbol: holderToken?.symbol ?? '??',
               })}
             </dd>

@@ -7,6 +7,10 @@
     bottom: calc(100% + 15px);
     left: -33px;
   }
+  &.right .bubble {
+    left: auto;
+    right: -33px;
+  }
 }
 .bubble {
   background: var(--bubble-bg, rgba(15, 20, 25, 0.8));
@@ -14,6 +18,7 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   padding: 16px;
   border-radius: 20px;
+  white-space: pre-line;
   &::after {
     position: absolute;
     content: '';
@@ -28,5 +33,11 @@
     height: 15px;
     width: 18px;
     background-position: center top;
+  }
+}
+.container.right {
+  .bubble::after {
+    left: auto;
+    right: 34px;
   }
 }

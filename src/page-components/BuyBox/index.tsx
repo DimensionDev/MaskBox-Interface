@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogProps, LoadingIcon, TokenIcon } from '@/components';
+import { Button, Dialog, DialogProps, Hint, LoadingIcon, TokenIcon } from '@/components';
 import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
 import {
   useBalance,
@@ -36,10 +36,9 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   const approve = useERC20Approve();
   const balance = useBalance(payment.token_addr);
   const paymentToken = useERC20Token(payment.token_addr);
+  const { decimals: tokenDecimals = 1, symbol: tokenSymbol } = paymentToken ?? {};
   const isNative = payment.token_addr === ZERO_ADDRESS;
-  const tokenPrice = useTrackTokenPrice(
-    paymentToken?.symbol ? getCoingeckoTokenId(paymentToken.symbol) : null,
-  );
+  const tokenPrice = useTrackTokenPrice(tokenSymbol ? getCoingeckoTokenId(tokenSymbol) : null);
   const [allowance, setAllowance] = useState<BigNumber>(ZERO);
   useEffect(() => {
     getAllowance(payment.token_addr, contractAddress).then(setAllowance);
@@ -102,7 +101,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
         <dt className={styles.cost}>
           <div className={styles.currency}>
             <strong className={styles.value}>{cost}</strong>
-            <span className={styles.unit}>{paymentToken?.symbol}</span>
+            <span className={styles.unit}>{tokenSymbol}</span>
           </div>
           {isNative && cost && (
             <div className={styles.estimate}>≈ $ {parseFloat(cost) * tokenPrice}</div>
@@ -137,9 +136,12 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
         </dd>
         <dd className={styles.meta}>
           <span className={styles.metaName}>{t('Available')}</span>
-          <span className={styles.metaValue}>
-            {paymentToken?.decimals ? (
-              `${formatBalance(balance, paymentToken.decimals, 6)} ${paymentToken?.symbol}`
+          <span
+            className={styles.metaValue}
+            title={`${formatBalance(balance, tokenDecimals, tokenDecimals)}${tokenSymbol}`}
+          >
+            {tokenDecimals ? (
+              `${formatBalance(balance, tokenDecimals, 6)} ${tokenSymbol!}`
             ) : (
               <LoadingIcon size={24} />
             )}
@@ -148,7 +150,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
         {box.holder_min_token_amount?.gt(0) ? (
           <dd className={classnames(styles.meta, styles.requirement)}>
             {t('purchase-requirement', {
-              amount: utils.formatUnits(box.holder_min_token_amount, holderToken?.decimals ?? 18),
+              amount: formatBalance(box.holder_min_token_amount, holderToken?.decimals ?? 18),
               symbol: holderToken?.symbol ?? '??',
             })}
           </dd>
@@ -165,7 +167,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             onClick={handleApprove}
           >
             <TokenIcon className={styles.tokenIcon} token={paymentToken ?? ({} as TokenType)} />
-            {t('Allow MASKBOX to use your {symbol}', { symbol: paymentToken?.symbol ?? '-' })}
+            {t('Allow MaskBox to use your {symbol}', { symbol: paymentToken?.symbol ?? '-' })}
           </Button>
         )}
         <Button

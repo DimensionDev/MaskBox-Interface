@@ -4,7 +4,6 @@ import {
   Dialog,
   Icon,
   Image,
-  LoadingIcon,
   showToast,
   SNSShare,
   useDialog,
@@ -184,7 +183,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             <span className={styles.rowValue}>{totalPrice}</span>
           </dd>
           <dd className={styles.infoRow}>
-            <span className={styles.rowName}>Limit:</span>
+            <span className={styles.rowName}>{t('Limit')}:</span>
             <span className={styles.rowValue}>{box.personal_limit}</span>
           </dd>
           <dd className={styles.infoRow}>
@@ -215,7 +214,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
               </>
             ) : (
               <Button colorScheme="primary" onClick={openEditDialog}>
-                {t('Edit Details')}
+                {t('Edit details')}
               </Button>
             )}
             {box.started === false && (
