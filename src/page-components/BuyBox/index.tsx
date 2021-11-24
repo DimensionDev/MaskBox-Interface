@@ -1,11 +1,10 @@
-import { Button, Dialog, DialogProps, Hint, LoadingIcon, TokenIcon } from '@/components';
+import { Button, Dialog, DialogProps, LoadingIcon, TokenIcon } from '@/components';
 import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
 import {
   useBalance,
   useERC20Approve,
   useERC20Token,
   useGetERC20Allowance,
-  useHolderToken,
   useTrackTokenPrice,
 } from '@/hooks';
 import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
@@ -44,7 +43,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
     getAllowance(payment.token_addr, contractAddress).then(setAllowance);
   }, [payment.token_addr, contractAddress]);
 
-  const holderToken = useHolderToken();
+  const holderToken = useERC20Token(box.holder_token_addr);
   const balanceOfHolderToken = useBalance(holderToken?.address);
 
   const [quantity, setQuantity] = useState(1);

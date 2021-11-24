@@ -16,7 +16,7 @@ function isImageValid(src?: string): Promise<boolean> {
     const cleanup = () => {
       img.onerror = null;
       img.onload = null;
-      img = undefined;
+      img = undefined!;
     };
     img.onerror = () => {
       resolve(false);

@@ -6,8 +6,8 @@ import { getStorage, isSameAddress, setStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { useLocales } from '../useLocales';
 import styles from './index.module.less';
+import { useLocales } from '../../useLocales';
 
 interface Props extends DialogProps {
   onPick?: (token: TokenType) => void;

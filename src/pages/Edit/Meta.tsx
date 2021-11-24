@@ -10,15 +10,14 @@ import {
   useDialog,
 } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useRSS3, useWeb3Context } from '@/contexts';
-import { useERC721, useHolderToken, useTokenList } from '@/hooks';
+import { usePickERC20, useRSS3, useWeb3Context } from '@/contexts';
+import { useERC721, useTokenList } from '@/hooks';
 import { createShareUrl } from '@/lib';
 import {
   ERC721TokenPickerDialog,
   NFTPickerDialog,
   RequestConnection,
   ShareBox,
-  TokenPickerDialog,
 } from '@/page-components';
 import { isSameAddress, TZOffsetLabel } from '@/utils';
 import classnames from 'classnames';
@@ -60,7 +59,6 @@ export const Meta: FC = () => {
   const setAllDirty = useSetAllDirty();
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
-  const [tokenBoxVisible, openTokenBox, closeTokenBox] = useDialog();
   const [erc721DialogVisible, openERC721PickerDialog, closeERC721PickerDialog] = useDialog();
   const [createdBoxId, setCreatedBoxId] = useState('');
 
@@ -144,12 +142,15 @@ export const Meta: FC = () => {
     }
   }, [formData.pricePerBox]);
 
+  const pickERC20 = usePickERC20();
   const { tokens } = useTokenList();
   const selectedPaymentToken = useMemo(() => {
     return tokens.find((token) => isSameAddress(token.address, formData.tokenAddress));
   }, [tokens, formData.tokenAddress]);
 
-  const qualifyingToken = useHolderToken();
+  const qualifyingToken = useMemo(() => {
+    return tokens.find((token) => isSameAddress(token.address, formData.holderTokenAddress));
+  }, [tokens, formData.holderTokenAddress]);
 
   if (!providerChainId) return <RequestConnection />;
 
@@ -181,7 +182,15 @@ export const Meta: FC = () => {
           value={formData.pricePerBox}
           onChange={bindField('pricePerBox')}
           rightAddon={
-            <span className={styles.pickButton} onClick={isEditting ? undefined : openTokenBox}>
+            <span
+              className={styles.pickButton}
+              onClick={async () => {
+                if (isEditting) return;
+                const token = await pickERC20();
+                updateField('tokenAddress', token.address);
+                updateField('token', token);
+              }}
+            >
               {selectedPaymentToken ? (
                 <TokenIcon className={styles.tokenIcon} token={selectedPaymentToken} />
               ) : null}
@@ -337,15 +346,24 @@ export const Meta: FC = () => {
           fullWidth
           size="large"
           type="number"
-          value={formData.minMaskAmount}
-          onChange={bindField('minMaskAmount')}
+          value={formData.holderMinTokenAmount}
+          onChange={bindField('holderMinTokenAmount')}
           rightAddon={
-            qualifyingToken ? (
-              <span className={styles.inputToken}>
+            <span
+              className={styles.pickButton}
+              onClick={async () => {
+                if (isEditting) return;
+                const token = await pickERC20();
+                updateField('holderTokenAddress', token.address);
+                updateField('holderToken', token);
+              }}
+            >
+              {qualifyingToken ? (
                 <TokenIcon className={styles.tokenIcon} token={qualifyingToken} />
-                <span className={styles.tokenSymbol}>{qualifyingToken?.symbol || '- - -'}</span>
-              </span>
-            ) : undefined
+              ) : null}
+              <span className={styles.tokenSymbol}>{qualifyingToken?.symbol || '- - -'}</span>
+              <Icon size={24} type="arrowDown" />
+            </span>
           }
         />
       </Field>
@@ -415,15 +433,6 @@ export const Meta: FC = () => {
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
           history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
-        }}
-      />
-      <TokenPickerDialog
-        open={tokenBoxVisible}
-        onClose={closeTokenBox}
-        onPick={(token) => {
-          updateField('tokenAddress', token.address);
-          updateField('token', token);
-          closeTokenBox();
         }}
       />
       <ERC721TokenPickerDialog

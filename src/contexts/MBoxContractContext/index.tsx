@@ -1,5 +1,5 @@
 import { ZERO } from '@/lib';
-import { BoxOnChain } from '@/types';
+import { BoxInfoOnChain, BoxOnChain, BoxStatusOnChain } from '@/types';
 import { addGasMargin } from '@/utils';
 import { BigNumber } from 'ethers';
 import { createContext, FC, memo, useCallback, useContext, useEffect, useState } from 'react';
@@ -10,7 +10,8 @@ export * from './useAddress';
 export * from './useContract';
 
 interface ContextOptions {
-  getBoxInfo: (boxId: string) => Promise<BoxOnChain>;
+  getBoxInfo: (boxId: string) => Promise<BoxInfoOnChain>;
+  getBoxStatus: (boxId: string) => Promise<BoxStatusOnChain>;
   getNftListForSale: (box: string, cursor?: BigNumber, amount?: BigNumber) => Promise<string[]>;
   openBox: (
     boxId: string,
@@ -23,7 +24,8 @@ interface ContextOptions {
 }
 
 export const MBoxContractContext = createContext<ContextOptions>({
-  getBoxInfo: () => Promise.resolve({} as BoxOnChain),
+  getBoxInfo: () => Promise.resolve({} as BoxInfoOnChain),
+  getBoxStatus: () => Promise.resolve({} as BoxStatusOnChain),
   getNftListForSale: () => Promise.resolve([]),
   openBox: () => Promise.resolve(null),
   getPurchasedNft: () => Promise.resolve([]),
@@ -52,6 +54,15 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
       if (!contract) return;
       const boxInfo = await contract.getBoxInfo(boxId);
       return boxInfo;
+    },
+    [contract],
+  );
+
+  const getBoxStatus = useCallback(
+    async (boxId: string) => {
+      if (!contract) return;
+      const boxStatus = await contract.getBoxStatus(boxId);
+      return boxStatus;
     },
     [contract],
   );
@@ -100,6 +111,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
 
   const contextValue = {
     getBoxInfo,
+    getBoxStatus,
     getNftListForSale,
     openBox,
     getPurchasedNft,

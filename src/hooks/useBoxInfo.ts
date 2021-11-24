@@ -1,6 +1,6 @@
 import { useMBoxContract } from '@/contexts';
-import { BoxOnChain } from '@/types';
-import { useCallback, useEffect, useState } from 'react';
+import { BoxInfoOnChain, BoxOnChain, BoxStatusOnChain } from '@/types';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 /**
  * Get box info from chain
@@ -8,16 +8,33 @@ import { useCallback, useEffect, useState } from 'react';
  * @param {string | undefined | null} boxId
  */
 export function useBoxInfo(boxId: string | undefined | null) {
-  const { getBoxInfo } = useMBoxContract();
-  const [boxOnChain, setBoxOnChain] = useState<BoxOnChain | null>(null);
+  const { getBoxInfo, getBoxStatus } = useMBoxContract();
+  const [boxInfoOnChain, setBoxInfoOnChain] = useState<BoxInfoOnChain | null>(null);
+  const [boxStatusOnChain, setBoxStatusOnChain] = useState<BoxStatusOnChain | null>(null);
 
   const fetchBoxInfo = useCallback(() => {
     if (boxId) {
-      getBoxInfo(boxId).then(setBoxOnChain);
+      getBoxInfo(boxId).then(setBoxInfoOnChain);
     }
   }, [getBoxInfo, boxId]);
 
-  useEffect(fetchBoxInfo, [fetchBoxInfo]);
+  const fetchBoxStatus = useCallback(() => {
+    if (boxId) {
+      getBoxStatus(boxId).then(setBoxStatusOnChain);
+    }
+  }, [boxId]);
 
-  return { box: boxOnChain, fetch: fetchBoxInfo };
+  const fetchData = useCallback(() => {
+    fetchBoxInfo();
+    fetchBoxStatus();
+  }, [fetchBoxInfo, fetchBoxStatus]);
+
+  const boxOnChain: Partial<BoxOnChain> = useMemo(
+    () => ({ ...boxInfoOnChain, ...boxStatusOnChain }),
+    [boxInfoOnChain, boxStatusOnChain],
+  );
+
+  useEffect(fetchData, [fetchData]);
+
+  return { box: boxOnChain, fetch: fetchData };
 }

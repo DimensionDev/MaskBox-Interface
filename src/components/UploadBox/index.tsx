@@ -12,6 +12,7 @@ interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onError'> {
   mediaUrl?: string;
   mediaType?: MediaType;
   onDragUpload?: (file: File) => void;
+  onStartUpload?: () => void;
   onUploaded?: (opts: { url: string; mediaType: MediaType }) => void;
   onError?: (err: Error) => void;
 }
@@ -33,6 +34,7 @@ export const UploadBox: FC<Props> = ({
   mediaUrl,
   mediaType,
   onUploaded,
+  onStartUpload,
   onError,
   ...rest
 }) => {
@@ -43,6 +45,7 @@ export const UploadBox: FC<Props> = ({
   const handleUpload = async (file?: File) => {
     setInvalidMessage('');
     try {
+      onStartUpload?.();
       const result = await upload(file, (f) => {
         const mediaType = getMediaType(f.name);
         const maxSize = getMaxSize(mediaType);

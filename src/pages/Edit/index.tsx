@@ -25,7 +25,7 @@ export const Edit: FC = () => {
   const [boxId, updateBoxId] = useAtom(boxIdAtom);
   const updateFormData = useUpdateAtom(formDataAtom);
   const { boxOnSubgraph, boxOnRSS3, boxOnChain } = useBox(boxId);
-  const paymentToken = useERC20Token(boxOnChain?.payment[0]?.token_addr);
+  const paymentToken = useERC20Token(boxOnChain?.payment?.[0]?.token_addr);
   const erc721Token = useERC721Token(boxOnChain?.nft_address);
 
   useEffect(() => {
@@ -62,14 +62,15 @@ export const Edit: FC = () => {
   useEffect(() => {
     if (isEditting && boxOnChain && paymentToken) {
       updateFormData((fd) => {
-        const payment = boxOnChain.payment[0];
+        const payment = boxOnChain?.payment?.[0];
+        if (!payment) return fd;
         return {
           ...fd,
           pricePerBox: formatUnits(payment.price, paymentToken.decimals),
           tokenAddress: paymentToken.address,
           token: paymentToken,
-          limit: boxOnChain.personal_limit,
-          nftContractAddress: boxOnChain.nft_address,
+          limit: boxOnChain.personal_limit!,
+          nftContractAddress: boxOnChain.nft_address!,
         };
       });
     }

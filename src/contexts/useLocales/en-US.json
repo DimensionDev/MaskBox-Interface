@@ -1,5 +1,8 @@
 {
   "Connect Wallet": "Connect Wallet",
   "1.Choose Network": "1.Choose Network",
-  "2.Choose Wallet": "2.Choose Wallet"
+  "2.Choose Wallet": "2.Choose Wallet",
+  "Seletct a Token": "Seletct a Token",
+  "Search name or paste address": "Search name or paste address",
+  "Import": "Import"
 }

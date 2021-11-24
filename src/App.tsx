@@ -6,6 +6,7 @@ import { Layout } from './Layout';
 
 import {
   ApolloProvider,
+  ERC20Provider,
   I18nProvider,
   MBoxContractProvider,
   NFTContractProvider,
@@ -28,17 +29,19 @@ function App() {
           <I18nProvider>
             <UploadProvider>
               <Web3Provider>
-                <ApolloProvider>
-                  <NFTContractProvider>
-                    <MBoxContractProvider>
-                      <RSS3Provider>
-                        <Layout>
-                          <Routes />
-                        </Layout>
-                      </RSS3Provider>
-                    </MBoxContractProvider>
-                  </NFTContractProvider>
-                </ApolloProvider>
+                <ERC20Provider>
+                  <ApolloProvider>
+                    <NFTContractProvider>
+                      <MBoxContractProvider>
+                        <RSS3Provider>
+                          <Layout>
+                            <Routes />
+                          </Layout>
+                        </RSS3Provider>
+                      </MBoxContractProvider>
+                    </NFTContractProvider>
+                  </ApolloProvider>
+                </ERC20Provider>
               </Web3Provider>
               <Toaster
                 position="top-right"

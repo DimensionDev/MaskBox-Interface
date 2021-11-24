@@ -1,6 +1,7 @@
 import { Button, Field, Input, Textarea, UploadBox } from '@/components';
 import { RouteKeys } from '@/configs';
 import { UploadResult } from '@/contexts';
+import { useBoolean } from '@/hooks';
 import { Activity, MediaType } from '@/types';
 import classnames from 'classnames';
 import { useAtom } from 'jotai';
@@ -54,8 +55,10 @@ export const Description: FC = () => {
       };
     });
   };
+  const [uploading, setUploading, setNotUploading] = useBoolean();
   const handleUploaded = useCallback(({ url: mediaUrl, mediaType }: UploadResult) => {
     setUploadError(null);
+    setNotUploading();
     setFormData((fd) => ({ ...fd, mediaUrl, mediaType }));
   }, []);
 
@@ -67,9 +70,9 @@ export const Description: FC = () => {
         {t('Description')}
         <span className={styles.step}>1/2</span>
       </h2>
-      <Field className={styles.field} name={t('MaskBox name') as string} required>
+      <Field className={styles.field} name={t('MaskBox name')} required>
         <Input
-          placeholder={t('eg. Punk & Mask Special Edition') as string}
+          placeholder={t('eg. Punk & Mask Special Edition')}
           fullWidth
           size="large"
           value={formData.name}
@@ -78,14 +81,15 @@ export const Description: FC = () => {
       </Field>
       <Field
         className={classnames(styles.field, styles.mediaField)}
-        name={t('Mystery thumbnail') as string}
-        tip={t('Recommendation: 480*320/960*640') as string}
+        name={t('Mystery thumbnail')}
+        tip={t('Recommendation: 480*320/960*640')}
         required
       >
         <UploadBox
           mediaUrl={formData.mediaUrl}
           mediaType={formData.mediaType}
           tabIndex={0}
+          onStartUpload={setUploading}
           onUploaded={handleUploaded}
           onError={setUploadError}
         />
@@ -159,7 +163,7 @@ export const Description: FC = () => {
       <div className={styles.field}>
         <Button
           fullWidth
-          disabled={!fullfilled}
+          disabled={!fullfilled || uploading}
           colorScheme="primary"
           size="large"
           onClick={() => {
@@ -167,7 +171,7 @@ export const Description: FC = () => {
             history.replace(`${RouteKeys.EditMeta}${search}`);
           }}
         >
-          {t('Next')}
+          {uploading ? t('Uploading thumbnail') : t('Next')}
         </Button>
       </div>
     </section>

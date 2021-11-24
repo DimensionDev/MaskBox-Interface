@@ -11,4 +11,3 @@ export * from './RequestConnection';
 export * from './RequestSwitchChain';
 export * from './ShareBox';
 export * from './StatusOverlay';
-export * from './TokenPickerDialog';

@@ -23,7 +23,9 @@ export interface FormData {
   startAt: string;
   endAt: string;
   whiteList: string;
-  minMaskAmount: string;
+  holderTokenAddress: string;
+  holderMinTokenAmount: string;
+  holderToken: TokenType | null;
   selectedNFTIds: string[];
 }
 
@@ -49,10 +51,15 @@ export const defaultFormData: FormData = {
   startAt,
   endAt,
   whiteList: '',
-  minMaskAmount: '',
+  holderTokenAddress: '',
+  holderMinTokenAmount: '',
+  holderToken: null,
   selectedNFTIds: [],
 };
-export const initFormData: FormData = getStorage<FormData>(StorageKeys.BoxDraft) ?? defaultFormData;
+const storedDraft = getStorage<FormData>(StorageKeys.BoxDraft);
+export const initFormData: FormData = storedDraft
+  ? { ...defaultFormData, ...storedDraft }
+  : defaultFormData;
 
 const fieldKeys = Object.keys(initFormData) as Array<keyof FormData>;
 

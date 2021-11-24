@@ -2,7 +2,7 @@ import { MaskboxABI } from '@/abi';
 import { useRecentTransactions } from '@/atoms';
 import { MAX_CONFIRMATION } from '@/configs';
 import { useMaskboxContract, useWeb3Context } from '@/contexts';
-import { useHolderToken } from '@/hooks';
+import { useERC20Token } from '@/hooks';
 import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
 import { toUTCZero } from '@/utils';
@@ -18,7 +18,7 @@ export function useCreateMaskbox() {
   const formData = useAtomValue(formDataAtom);
   const { addTransaction, updateTransactionBy } = useRecentTransactions();
   const contract = useMaskboxContract();
-  const holderToken = useHolderToken();
+  const holderToken = useERC20Token(formData.holderTokenAddress);
 
   const limit = formData.limit ?? 5;
   const startTime = Math.floor(toUTCZero(formData.startAt).getTime() / 1000);
@@ -40,8 +40,9 @@ export function useCreateMaskbox() {
       formData.sellAll,
       formData.selectedNFTIds,
       formData.whiteList || ZERO_ADDRESS,
-      formData.minMaskAmount
-        ? utils.parseUnits(formData.minMaskAmount, holderToken?.decimals ?? 18)
+      formData.holderTokenAddress,
+      formData.holderMinTokenAmount
+        ? utils.parseUnits(formData.holderMinTokenAmount, holderToken?.decimals ?? 18)
         : 0,
     );
     const txHash = tx.hash as string;

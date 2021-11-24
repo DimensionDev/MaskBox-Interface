@@ -14,6 +14,9 @@ export const tokenListUrls: Record<number, string> = {
     'https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42161/tokens.json',
 };
 
+/**
+ * TODO rename to ERC20Token
+ */
 export interface TokenType {
   address: string;
   chainId: number;

@@ -1,4 +1,5 @@
 export * from './ApolloProvider';
+export * from './ERC20';
 export * from './I18n';
 export * from './MBoxContractContext';
 export * from './NFTContractContext';

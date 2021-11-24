@@ -6,20 +6,26 @@ export interface BoxPayment {
   receivable_amount: string;
 }
 
-export interface BoxOnChain {
+export interface BoxInfoOnChain {
   creator: string;
   nft_address: string;
   name: string;
-  payment: BoxPayment[];
   personal_limit: number;
+  qualification: string;
+  holder_token_addr: string;
+  holder_min_token_amount: BigNumber;
+}
+
+export interface BoxStatusOnChain {
+  payment: BoxPayment[];
   started: boolean;
   expired: boolean;
   canceled: boolean;
   remaining: BigNumber;
   total: BigNumber;
-  qualification: string;
-  holder_min_token_amount: BigNumber;
 }
+
+export type BoxOnChain = BoxInfoOnChain & BoxStatusOnChain;
 
 export interface CreateResult extends Pick<BoxOnChain, 'name' | 'nft_address' | 'creator'> {
   box_id: string;
