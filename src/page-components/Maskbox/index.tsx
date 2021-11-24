@@ -96,12 +96,12 @@ export const Maskbox: FC<MaskboxProps> = ({
   }, [inList, price, isSoldout, isApproveAll, t, isPermissionGranted, isQualified, ethersProvider]);
 
   const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}`;
-  const allowToBuy =
-    price && isStarted && !box.expired && !isSoldout && isApproveAll && isQualified;
+  const notReadyToView = !isStarted || isSoldout || box.expired || box.canceled || !isApproveAll;
+  const allowToBuy = price && !notReadyToView && isQualified;
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: (ethersProvider && !allowToBuy) || isConnecting,
+    disabled: inList ? notReadyToView : !allowToBuy || isConnecting,
     onClick: () => {
       if (inList) {
         history.push(boxLink);
