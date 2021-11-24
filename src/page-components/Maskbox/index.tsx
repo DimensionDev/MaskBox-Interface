@@ -90,7 +90,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: inList ? notReadyToView : !allowToBuy || isConnecting,
+    disabled: inList ? notReadyToView : ethersProvider ? !allowToBuy : isConnecting,
     onClick: () => {
       if (inList) {
         history.push(boxLink);

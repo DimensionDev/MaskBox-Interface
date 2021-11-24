@@ -12,22 +12,12 @@ export function useBoxInfo(boxId: string | undefined | null) {
   const [boxInfoOnChain, setBoxInfoOnChain] = useState<BoxInfoOnChain | null>(null);
   const [boxStatusOnChain, setBoxStatusOnChain] = useState<BoxStatusOnChain | null>(null);
 
-  const fetchBoxInfo = useCallback(() => {
+  const fetchData = useCallback(() => {
     if (boxId) {
       getBoxInfo(boxId).then(setBoxInfoOnChain);
-    }
-  }, [getBoxInfo, boxId]);
-
-  const fetchBoxStatus = useCallback(() => {
-    if (boxId) {
       getBoxStatus(boxId).then(setBoxStatusOnChain);
     }
-  }, [boxId]);
-
-  const fetchData = useCallback(() => {
-    fetchBoxInfo();
-    fetchBoxStatus();
-  }, [fetchBoxInfo, fetchBoxStatus]);
+  }, [boxId, getBoxInfo, getBoxStatus]);
 
   const boxOnChain: Partial<BoxOnChain> = useMemo(
     () => ({ ...boxInfoOnChain, ...boxStatusOnChain }),
