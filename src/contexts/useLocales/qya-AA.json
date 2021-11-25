@@ -4,5 +4,14 @@
   "2.Choose Wallet": "crwdns9963:0crwdne9963:0",
   "Seletct a Token": "crwdns9995:0crwdne9995:0",
   "Search name or paste address": "crwdns9997:0crwdne9997:0",
-  "Import": "crwdns9999:0crwdne9999:0"
+  "Import": "crwdns9999:0crwdne9999:0",
+  "Account": "crwdns10003:0crwdne10003:0",
+  "Connected with {wallet}": "crwdns10005:0{wallet}crwdne10005:0",
+  "Disconnect": "crwdns10007:0crwdne10007:0",
+  "View in your browser": "crwdns10009:0crwdne10009:0",
+  "Copied": "crwdns10011:0crwdne10011:0",
+  "Copy Address": "crwdns10013:0crwdne10013:0",
+  "Recent Transactions": "crwdns10015:0crwdne10015:0",
+  "Clear All": "crwdns10017:0crwdne10017:0",
+  "Your transactions will appear here...": "crwdns10019:0crwdne10019:0"
 }
