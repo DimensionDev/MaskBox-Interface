@@ -6,7 +6,7 @@ import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
 import { ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
-import { formatBalance, toLocalUTC } from '@/utils';
+import { formatBalance } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -50,7 +50,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   const { isApproveAll } = useERC721(box.nft_address, box.creator);
   const { ethersProvider, openConnectionDialog, isConnecting } = useWeb3Context();
 
-  const startTime = box?.start_time ? toLocalUTC(box.start_time * 1000).getTime() : 0;
+  const startTime = box?.start_time ? new Date(box.start_time * 1000).getTime() : 0;
   const isStarted = box.started === true && startTime <= Date.now();
 
   const price = useMemo(() => {

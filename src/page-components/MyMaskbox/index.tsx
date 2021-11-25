@@ -21,8 +21,9 @@ import {
   useERC721Token,
 } from '@/hooks';
 import { MediaType } from '@/types';
-import { formatToLocale, toLocalUTC, TZOffsetLabel } from '@/utils';
+import { TZOffsetLabel } from '@/utils';
 import classnames from 'classnames';
+import { format as formatDate } from 'date-fns';
 import { utils } from 'ethers';
 import { FC, HTMLProps, useCallback, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -33,7 +34,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxesOfQuery['maskboxes'][number];
 }
 
-const formatTime = (time: number) => formatToLocale(new Date(time * 1000), 'yyyy-MM-dd hh:mm');
+const formatTime = (time: number) => formatDate(new Date(time * 1000), 'yyyy-MM-dd hh:mm');
 
 export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const t = useLocales();
@@ -146,16 +147,14 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
 
   const isEnded = useMemo(() => {
     return (
-      box.expired || toLocalUTC(box.end_time * 1000).getTime() <= Date.now() || box.remaining?.eq(0)
+      box.expired || new Date(box.end_time * 1000).getTime() <= Date.now() || box.remaining?.eq(0)
     );
   }, [box.expired, box.end_time, box.remaining]);
 
   const badgeLabel = useMemo(() => {
     if (isEnded) return t('Ended');
     if (box.canceled) return t('Canceled');
-    return toLocalUTC(box.start_time * 1000).getTime() < Date.now()
-      ? t('Opened')
-      : t('Coming soon');
+    return new Date(box.start_time * 1000).getTime() < Date.now() ? t('Opened') : t('Coming soon');
   }, [box.started, box.expired, isEnded, t]);
 
   const { unapproveAll, isApproveAll } = useERC721(box.nft_address);

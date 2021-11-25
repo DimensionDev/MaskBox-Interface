@@ -5,7 +5,6 @@ import { useMaskboxContract, useWeb3Context } from '@/contexts';
 import { useERC20Token } from '@/hooks';
 import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
-import { toUTCZero } from '@/utils';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
@@ -21,11 +20,11 @@ export function useCreateMaskbox() {
   const holderToken = useERC20Token(formData.holderTokenAddress);
 
   const limit = formData.limit ?? 5;
-  const startTime = Math.floor(toUTCZero(formData.startAt).getTime() / 1000);
-  const endTime = Math.floor(toUTCZero(formData.endAt).getTime() / 1000);
+  const startTime = Math.floor(new Date(formData.startAt).getTime() / 1000);
+  const endTime = Math.floor(new Date(formData.endAt).getTime() / 1000);
   const createBox = useCallback(async () => {
     if (!ethersProvider || !chainId || !contract) return;
-    const tx = await contract.connect(ethersProvider.getSigner()).createBox(
+    const createBoxOptions = [
       formData.nftContractAddress,
       formData.name,
       [
@@ -44,7 +43,10 @@ export function useCreateMaskbox() {
       formData.holderMinTokenAmount
         ? utils.parseUnits(formData.holderMinTokenAmount, holderToken?.decimals ?? 18)
         : 0,
-    );
+    ];
+    const connectedContract = contract.connect(ethersProvider.getSigner());
+    const estimatedGas = await connectedContract.estimateGas.createBox(...createBoxOptions);
+    const tx = await connectedContract.createBox(...createBoxOptions, { gasLimit: estimatedGas });
     const txHash = tx.hash as string;
     addTransaction({
       chainId,
@@ -57,6 +59,7 @@ export function useCreateMaskbox() {
     while (!log) {
       await tx.wait(1);
       confirmation += 1;
+      console.log(`waited ${confirmation} block`);
       const logs = await ethersProvider.getLogs(contract.filters.CreationSuccess());
       log = logs[0];
       if (!log && confirmation >= MAX_CONFIRMATION) {
