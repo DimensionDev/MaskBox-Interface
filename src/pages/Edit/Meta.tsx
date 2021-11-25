@@ -66,6 +66,8 @@ export const Meta: FC = () => {
   const { isApproveAll, isApproving, checkingApprove, approveAll } = useERC721(
     formData.nftContractAddress,
   );
+  const [sellingNFTIds, setSellingNFTIds] = useState<string[]>([]);
+  const [sellingContractAddress, setSellingContractAddress] = useState<string>('');
 
   const { selectedNFTIds } = formData;
   const selectedERC721Tokens = useMemo(
@@ -96,6 +98,8 @@ export const Meta: FC = () => {
       duration: Infinity,
     });
     try {
+      setSellingContractAddress(formData.nftContractAddress);
+      if (!formData.sellAll) setSellingNFTIds(formData.selectedNFTIds);
       const result = await createBox();
       if (result) {
         const { args } = result;
@@ -417,15 +421,13 @@ export const Meta: FC = () => {
       />
       <ShareBox
         open={shareBoxVisible}
-        nftAddress={formData.nftContractAddress}
+        nftAddress={sellingContractAddress}
         title="Successful"
         onClose={() => {
           closeShareBox();
           history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
         }}
-        nftIds={
-          formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : formData.selectedNFTIds
-        }
+        nftIds={formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : sellingNFTIds}
         onShare={() => {
           const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}`;
           const text = t('share-text', { name: formData.name, link: link });

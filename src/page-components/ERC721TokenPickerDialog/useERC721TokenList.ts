@@ -1,6 +1,7 @@
 import { useWeb3Context } from '@/contexts';
 import { getNFTContracts, ERC721Token } from '@/lib';
 import { getStorage, StorageKeys } from '@/utils';
+import { uniqBy } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
 
 export function useERC721TokenList() {
@@ -14,7 +15,7 @@ export function useERC721TokenList() {
     const storedContracts = (getStorage<ERC721Token[]>(StorageKeys.ERC721Tokens) ?? []).filter(
       (tk) => tk.chainId === chainId,
     );
-    setTokens([...contracts, ...storedContracts]);
+    setTokens(uniqBy([...contracts, ...storedContracts], 'address'));
   }, [chainId]);
 
   useEffect(updateERC721Tokens, [updateERC721Tokens]);

@@ -1,11 +1,11 @@
 import {
   Button,
+  Dialog,
+  DialogProps,
   ERC721Token,
   ERC721TokenList,
   Icon,
   Input,
-  Dialog,
-  DialogProps,
 } from '@/components';
 import { useGetERC721Token } from '@/hooks';
 import { ERC721Token as ERC721TokenType } from '@/lib';
@@ -13,9 +13,9 @@ import { getStorage, isSameAddress, setStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
-import { useERC721TokenList } from './useERC721TokenList';
-import styles from './index.module.less';
 import { useLocales } from '../useLocales';
+import styles from './index.module.less';
+import { useERC721TokenList } from './useERC721TokenList';
 
 interface Props extends DialogProps {
   onPick?: (token: ERC721TokenType) => void;

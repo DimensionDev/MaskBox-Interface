@@ -22,7 +22,7 @@ export const ShareBox: FC<Props> = ({ nftAddress, nftIds, onShare, ...rest }) =>
   }, [nftAddress, nftIds]);
 
   return (
-    <Dialog className={styles.shareBox} title={t('Successful') as string} {...rest}>
+    <Dialog className={styles.shareBox} title={t('Successful')} {...rest}>
       <ul className={styles.nftList}>
         {tokens.map((token) => (
           <li key={token.tokenId} className={styles.item}>
