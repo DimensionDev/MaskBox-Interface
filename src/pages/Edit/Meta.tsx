@@ -427,7 +427,7 @@ export const Meta: FC = () => {
           formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : formData.selectedNFTIds
         }
         onShare={() => {
-          const link = `${window.location.origin}.io/#/details?chain=${providerChainId}&box=${createdBoxId}`;
+          const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}`;
           const text = t('share-text', { name: formData.name, link: link });
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
