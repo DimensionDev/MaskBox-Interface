@@ -1,4 +1,3 @@
-export * from './AccountDialog';
 export * from './BuyBox';
 export * from './ERC721TokenPickerDialog';
 export * from './Maskbox';
@@ -11,3 +10,4 @@ export * from './RequestConnection';
 export * from './RequestSwitchChain';
 export * from './ShareBox';
 export * from './StatusOverlay';
+export * from './WalletDocker';

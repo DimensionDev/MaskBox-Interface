@@ -4,5 +4,14 @@
   "2.Choose Wallet": "2.Choose Wallet",
   "Seletct a Token": "Seletct a Token",
   "Search name or paste address": "Search name or paste address",
-  "Import": "Import"
+  "Import": "Import",
+  "Account": "Account",
+  "Connected with {wallet}": "Connected with {wallet}",
+  "Disconnect": "Disconnect",
+  "View in your browser": "View in your browser",
+  "Copied": "Copied",
+  "Copy Address": "Copy Address",
+  "Recent Transactions": "Recent Transactions",
+  "Clear All": "Clear All",
+  "Your transactions will appear here...": "Your transactions will appear here..."
 }

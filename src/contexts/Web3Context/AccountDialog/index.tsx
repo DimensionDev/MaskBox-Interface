@@ -5,7 +5,7 @@ import { useWeb3Context } from '@/contexts';
 import { getNetworkExplorer } from '@/lib';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import styles from './index.module.less';
-import { useLocales } from '../useLocales';
+import { useLocales } from '../../useLocales';
 import { useRecentTransactions } from '@/atoms';
 import { TransactionStatus } from '@/types';
 import { useBoolean } from '@/hooks';

@@ -35,6 +35,16 @@
     border-top: solid 1px var(--bottom-border);
   }
 }
+.walletDocker {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @media (max-width: @mid-screen) {
+    display: flex;
+  }
+}
 @media (max-width: @sm-screen) {
   .container {
     .body {

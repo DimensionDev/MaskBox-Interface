@@ -16,7 +16,6 @@ import classnames from 'classnames';
 import { FC, HTMLProps, useEffect, useRef } from 'react';
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
 import { useClickAway } from 'react-use';
-import { AccountDialog } from '../AccountDialog';
 import styles from './index.module.less';
 import { useLocales } from './useLocales';
 
@@ -27,12 +26,12 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
   const {
     account,
     providerChainId,
+    openAccountDialog,
     openConnectionDialog,
     isNotSupportedChain,
     isMetaMask,
     isConnecting,
   } = useWeb3Context();
-  const [accountDialogVisible, openAccountDialog, closeAccountDialog] = useDialog();
   const [popupNavVisible, openPopupNav, closePopupNav] = useDialog();
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === ThemeType.Dark;
@@ -194,7 +193,6 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         </NavLink>
         <LanguageSwitcher className={styles.langSwitchItem} />
       </nav>
-      <AccountDialog open={accountDialogVisible} onClose={closeAccountDialog} />
     </div>
   );
 };

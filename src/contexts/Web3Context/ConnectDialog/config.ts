@@ -1,4 +1,5 @@
 import { ChainId } from '@/lib';
+import { ProviderType } from '../providers';
 export const connectableChains = [
   {
     name: 'Ethereum',
@@ -25,15 +26,15 @@ export const connectableChains = [
 interface WalletProvider {
   id: string;
   installed?: boolean;
-  type: 'injected';
+  type: ProviderType;
   installUrl?: string;
-  iconType: 'metamaskWallet' | 'c98';
+  iconType: 'metamaskWallet' | 'c98' | 'walletconnect';
 }
 
 const metamaskWallet: WalletProvider = {
   id: 'metamask',
   installed: true,
-  type: 'injected',
+  type: ProviderType.Injected,
   iconType: 'metamaskWallet',
 };
 // const c98Wallet: WalletProvider = {
@@ -55,16 +56,17 @@ const getInjectedWallet = (): WalletProvider => {
   };
 };
 
-export const connectableWallets = [
+export const connectableWallets: WalletProvider[] = [
   getInjectedWallet(),
-  // {
-  //   id: 'walletconnect',
-  //   type: 'walletconnect',
-  //   iconType: 'walletconnect',
-  // },
+  {
+    id: 'walletconnect',
+    installed: true,
+    type: ProviderType.Walletconnect,
+    iconType: 'walletconnect',
+  },
   // {
   //   id: 'mask',
   //   type: 'injected',
   //   iconType: 'maskWallet',
   // },
-] as const;
+];

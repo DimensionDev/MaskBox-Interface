@@ -2,10 +2,15 @@ import { showToast, useDialog } from '@/components';
 import { ChainId, isSupportedChain } from '@/lib';
 import { getStorage, StorageKeys, useStorage } from '@/utils';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import { isMobile as checkIsMobile } from 'web3modal';
+import { SafeAppWeb3Modal as Web3Modal } from '@gnosis.pm/safe-apps-web3modal';
 import { ethers } from 'ethers';
 import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { connectableWallets, ConnectDialog } from './ConnectDialog';
-import getProvider from './providers';
+import getProvider, { ProviderType } from './providers';
+import { AccountDialog } from './AccountDialog';
+
+export * from './providers';
 
 interface ContextOptions {
   /** TODO rename to chainId */
@@ -15,11 +20,30 @@ interface ContextOptions {
   account: string;
   openConnectionDialog: () => void;
   closeConnectionDialog: () => void;
+  openAccountDialog: () => void;
+  closeAccountDialog: () => void;
   disconnect: () => void;
+  connectWeb3: (chainId?: ChainId, providerType?: ProviderType) => Promise<void>;
   isMetaMask: boolean;
   isConnecting: boolean;
   isNotSupportedChain: boolean;
 }
+
+const providerOptions = {
+  walletconnect: {
+    package: WalletConnectProvider,
+    options: {
+      infuraId: process.env.INFURA_ID,
+    },
+  },
+};
+const web3modal = new Web3Modal({
+  cacheProvider: true,
+  disableInjectedProvider: false,
+  providerOptions,
+});
+
+const isMobile = checkIsMobile();
 
 export const Web3Context = React.createContext<Partial<ContextOptions>>({});
 export const useWeb3Context = () => useContext(Web3Context);
@@ -47,6 +71,7 @@ type Provider =
 interface Web3State extends Omit<ContextOptions, 'disconnect'> {}
 
 export const Web3Provider: FC = ({ children }) => {
+  const [accountDialogVisible, setAccountDialogVisible] = useState(false);
   const [storedChainId, setStoredChainId, removeStoredChainId] = useStorage<ChainId>(
     StorageKeys.ChainId,
   );
@@ -62,6 +87,7 @@ export const Web3Provider: FC = ({ children }) => {
   const setWeb3Provider = useCallback(
     async (prov: Provider) => {
       try {
+        if (!prov) return;
         const provider = new ethers.providers.Web3Provider(prov);
         const accounts: string[] = await provider.send('eth_accounts', []);
         if (accounts.length === 0) return;
@@ -92,6 +118,7 @@ export const Web3Provider: FC = ({ children }) => {
   );
 
   const disconnect = useCallback(() => {
+    web3modal.clearCachedProvider();
     clearWCStorage();
     setWeb3State({});
     removeStoredChainId();
@@ -99,11 +126,13 @@ export const Web3Provider: FC = ({ children }) => {
   }, []);
 
   const connectWeb3 = useCallback(
-    async (chainId: ChainId, walletType: string) => {
+    async (chainId?: ChainId, walletType?: ProviderType) => {
       try {
         setIsConnecting(true);
-        const provider = await getProvider(walletType);
-        if (chainId !== parseInt(provider.chainId as string, 16)) {
+        const provider = isMobile
+          ? await web3modal.requestProvider()
+          : await getProvider(walletType);
+        if (chainId && chainId !== parseInt(provider.chainId as string, 16)) {
           await provider.request!({
             method: 'wallet_switchEthereumChain',
             params: [
@@ -139,20 +168,39 @@ export const Web3Provider: FC = ({ children }) => {
     })();
   }, [connectWeb3]);
 
+  const openAccountDialog = useCallback(() => {
+    setAccountDialogVisible(true);
+  }, []);
+  const closeAccountDialog = useCallback(() => {
+    setAccountDialogVisible(false);
+  }, []);
+
   const value = useMemo(() => {
     const isNotSupportedChain = providerChainId !== undefined && !isSupportedChain(providerChainId);
     return {
       openConnectionDialog,
       closeConnectionDialog,
+      openAccountDialog,
+      closeAccountDialog,
       disconnect,
       account,
       ethersProvider,
       providerChainId,
+      connectWeb3,
       isMetaMask: !!ethersProvider?.provider?.isMetaMask,
       isConnecting,
       isNotSupportedChain,
     };
-  }, [disconnect, account, ethersProvider, providerChainId, isConnecting]);
+  }, [
+    disconnect,
+    account,
+    ethersProvider,
+    connectWeb3,
+    providerChainId,
+    isConnecting,
+    openAccountDialog,
+    closeAccountDialog,
+  ]);
 
   return (
     <Web3Context.Provider value={value}>
@@ -168,13 +216,14 @@ export const Web3Provider: FC = ({ children }) => {
             providerChainId: chainId,
           }));
           const walletType = connectableWallets.find((w) => w.id === walletId)?.type;
-          connectWeb3(chainId, walletType!).then(() => {
+          connectWeb3(chainId, walletType).then(() => {
             setStoredChainId(chainId);
             setStoredWalletId(walletId);
           });
           closeConnectionDialog();
         }}
       />
+      <AccountDialog open={accountDialogVisible} onClose={closeAccountDialog} />
     </Web3Context.Provider>
   );
 };
