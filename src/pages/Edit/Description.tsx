@@ -1,8 +1,8 @@
 import { Button, Field, Input, Textarea, UploadBox } from '@/components';
 import { RouteKeys } from '@/configs';
 import { UploadResult } from '@/contexts';
-import { useBoolean } from '@/hooks';
 import { Activity, MediaType } from '@/types';
+import { useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';

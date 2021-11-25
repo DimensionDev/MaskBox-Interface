@@ -8,7 +8,7 @@ import styles from './index.module.less';
 import { useLocales } from '../../useLocales';
 import { useRecentTransactions } from '@/atoms';
 import { TransactionStatus } from '@/types';
-import { useBoolean } from '@/hooks';
+import { useBoolean } from '@/utils';
 
 interface Props extends DialogProps {}
 

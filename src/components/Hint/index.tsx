@@ -1,4 +1,4 @@
-import { useBoolean } from '@/hooks';
+import { useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
 import { Icon } from '../Icon';

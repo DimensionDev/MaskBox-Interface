@@ -1,6 +1,5 @@
 export * from './erc721';
 export * from './useBalance';
-export * from './useBoolean';
 export * from './useBox';
 export * from './useBoxInfo';
 export * from './useCancelBox';

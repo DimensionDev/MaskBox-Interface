@@ -1,17 +1,11 @@
-import { ArticleSection, Button, NFTItem, useDialog } from '@/components';
-import { useMBoxContract, useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
+import { ArticleSection, Button, NFTItem } from '@/components';
+import { useMBoxContract, useNFTContract, useNFTName } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
 import { useBox } from '@/hooks';
-import { ChainId, createShareUrl, ZERO } from '@/lib';
-import {
-  BuyBox,
-  BuyBoxProps,
-  Maskbox,
-  RequestConnection,
-  RequestSwitchChain,
-  ShareBox,
-} from '@/page-components';
+import { createShareUrl, ZERO } from '@/lib';
+import { BuyBox, BuyBoxProps, Maskbox, ShareBox } from '@/page-components';
 import { ERC721Token } from '@/types';
+import { useBoolean } from '@/utils';
 import { BigNumber } from 'ethers';
 import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -23,7 +17,6 @@ import { useLocales } from './useLocales';
 const PAGE_SIZE = BigNumber.from(50);
 export const Details: FC = memo(() => {
   const t = useLocales();
-  const { ethersProvider, isNotSupportedChain } = useWeb3Context();
   const location = useLocation();
   const { getNftListForSale } = useMBoxContract();
   const { getByIdList } = useNFTContract();
@@ -49,9 +42,9 @@ export const Details: FC = memo(() => {
     [boxOnChain, boxOnRSS3, boxOnSubgraph],
   );
 
-  const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
+  const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
   const [purchasedNfts, setPurchasedNfts] = useState<string[]>([]);
-  const [buyBoxVisible, openBuyBox, closeBuyBox] = useDialog();
+  const [buyBoxVisible, openBuyBox, closeBuyBox] = useBoolean();
 
   const contractName = useNFTName(box.nft_address);
   const activities = box.activities ?? [];

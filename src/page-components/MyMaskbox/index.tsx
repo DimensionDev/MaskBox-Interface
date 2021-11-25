@@ -1,14 +1,4 @@
-import {
-  Badge,
-  Button,
-  Dialog,
-  Icon,
-  Image,
-  showToast,
-  SNSShare,
-  useDialog,
-  VideoPlayer,
-} from '@/components';
+import { Badge, Button, Dialog, Icon, Image, showToast, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useBoxOnRSS3 } from '@/contexts';
 import { MaskBoxesOfQuery } from '@/graphql-hooks';
@@ -21,7 +11,7 @@ import {
   useERC721Token,
 } from '@/hooks';
 import { MediaType } from '@/types';
-import { TZOffsetLabel } from '@/utils';
+import { TZOffsetLabel, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { format as formatDate } from 'date-fns';
 import { utils } from 'ethers';
@@ -41,8 +31,8 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
 
   const { box: boxOnChain } = useBoxInfo(boxOnSubgraph?.box_id);
   const cancelBox = useCancelBox();
-  const [cancelDialogVisible, openCancelDialog, closeCancelDialog] = useDialog();
-  const [editDialogVisible, openEditDialog, closeEditDialog] = useDialog();
+  const [cancelDialogVisible, openCancelDialog, closeCancelDialog] = useBoolean();
+  const [editDialogVisible, openEditDialog, closeEditDialog] = useBoolean();
 
   const boxOnRSS3 = useBoxOnRSS3(boxOnSubgraph?.creator, boxOnSubgraph?.box_id);
 

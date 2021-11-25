@@ -1,6 +1,6 @@
-import { showToast, useDialog } from '@/components';
+import { showToast } from '@/components';
 import { ChainId, isSupportedChain } from '@/lib';
-import { getStorage, StorageKeys, useStorage } from '@/utils';
+import { getStorage, StorageKeys, useBoolean, useStorage } from '@/utils';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { isMobile as checkIsMobile } from 'web3modal';
 import { SafeAppWeb3Modal as Web3Modal } from '@gnosis.pm/safe-apps-web3modal';
@@ -82,7 +82,7 @@ export const Web3Provider: FC = ({ children }) => {
   const [{ providerChainId, ethersProvider, account }, setWeb3State] = useState<Partial<Web3State>>(
     {},
   );
-  const [dialogVisible, openConnectionDialog, closeConnectionDialog] = useDialog();
+  const [dialogVisible, openConnectionDialog, closeConnectionDialog] = useBoolean();
 
   const setWeb3Provider = useCallback(
     async (prov: Provider) => {

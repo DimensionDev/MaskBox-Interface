@@ -7,7 +7,6 @@ import {
   NFTSelectList,
   showToast,
   TokenIcon,
-  useDialog,
 } from '@/components';
 import { RouteKeys } from '@/configs';
 import { usePickERC20, useRSS3, useWeb3Context } from '@/contexts';
@@ -19,7 +18,7 @@ import {
   RequestConnection,
   ShareBox,
 } from '@/page-components';
-import { isSameAddress, TZOffsetLabel } from '@/utils';
+import { isSameAddress, TZOffsetLabel, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
@@ -59,7 +58,7 @@ export const Meta: FC = () => {
   const setAllDirty = useSetAllDirty();
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
-  const [erc721DialogVisible, openERC721PickerDialog, closeERC721PickerDialog] = useDialog();
+  const [erc721DialogVisible, openERC721PickerDialog, closeERC721PickerDialog] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
 
   const createBox = useCreateMaskbox();
@@ -75,8 +74,8 @@ export const Meta: FC = () => {
   );
 
   const { saveBox } = useRSS3();
-  const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useDialog();
-  const [shareBoxVisible, openShareBox, closeShareBox] = useDialog();
+  const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useBoolean();
+  const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
   const [creating, setCreating] = useState(false);
   const resetForm = useResetForm();
   const create = useCallback(async () => {

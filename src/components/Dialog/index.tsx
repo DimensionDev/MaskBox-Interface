@@ -3,8 +3,6 @@ import { FC, HTMLProps } from 'react';
 import { Icon } from '../Icon';
 import styles from './index.module.less';
 
-export * from './useDialog';
-
 export interface DialogProps extends HTMLProps<HTMLDivElement> {
   open?: boolean;
   title?: string;

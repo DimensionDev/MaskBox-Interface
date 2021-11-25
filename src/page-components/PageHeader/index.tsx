@@ -1,17 +1,10 @@
 import { logoImage } from '@/assets';
-import {
-  Button,
-  Icon,
-  LanguageSwitcher,
-  LoadingButton,
-  LoadingIcon,
-  useDialog,
-} from '@/components';
+import { Button, Icon, LanguageSwitcher, LoadingButton, LoadingIcon } from '@/components';
 import { RouteKeys } from '@/configs';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
 import { useCreatedSomeBoxes, usePermissionGranted } from '@/hooks';
 import { getNetworkColor, getNetworkName } from '@/lib';
-import { formatAddres } from '@/utils';
+import { formatAddres, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useEffect, useRef } from 'react';
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom';
@@ -32,7 +25,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
     isMetaMask,
     isConnecting,
   } = useWeb3Context();
-  const [popupNavVisible, openPopupNav, closePopupNav] = useDialog();
+  const [popupNavVisible, openPopupNav, closePopupNav] = useBoolean();
   const { theme, toggleTheme } = useTheme();
   const isDark = theme === ThemeType.Dark;
   const history = useHistory();
