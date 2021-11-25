@@ -24,7 +24,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxesOfQuery['maskboxes'][number];
 }
 
-const formatTime = (time: number) => formatDate(new Date(time * 1000), 'yyyy-MM-dd hh:mm');
+const formatTime = (time: number) => formatDate(new Date(time * 1000), 'yyyy-MM-dd hh:mm aa');
 
 export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const t = useLocales();
