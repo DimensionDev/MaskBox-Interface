@@ -91,6 +91,11 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
     balanceOfHolderToken,
   ]);
 
+  const personalRemaining = limit - purchasedNft.length;
+  const availableAmount = box.remaining?.lt(personalRemaining)
+    ? box.remaining.toNumber()
+    : personalRemaining;
+
   return (
     <Dialog {...rest} className={styles.buyBox} title={t('Draw') as string}>
       <dl className={styles.infos}>
@@ -109,7 +114,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             className={styles.metaValue}
             value={quantity}
             min={1}
-            max={limit}
+            max={availableAmount}
             disabled={loading}
             onUpdate={setQuantity}
           />
@@ -121,7 +126,7 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
         <dd className={styles.meta}>
           <span className={styles.metaName}>{t('Available amount')}:</span>
           <span className={styles.metaValue} title={account}>
-            {limit - purchasedNft.length} / {limit}
+            {availableAmount} / {box.total?.toString()}
           </span>
         </dd>
         <dd className={styles.meta}>

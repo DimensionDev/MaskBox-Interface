@@ -1,16 +1,18 @@
+import { ChainId } from './chainId';
+
 export const chainUrls = {
-  1: {
+  [ChainId.Mainnet]: {
     rpc: 'https://mainnet-nethermind.blockscout.com/',
     explorer: 'https://etherscan.io',
     explorerName: 'etherscan',
-    chainId: 1,
+    chainId: ChainId.Mainnet,
     name: 'ETH Mainnet',
   },
-  56: {
+  [ChainId.BSC]: {
     rpc: 'https://bsc-dataseed.binance.org',
     explorer: 'https://bscscan.com',
     explorerName: 'bscscan',
-    chainId: 56,
+    chainId: ChainId.BSC,
     name: 'Binance Smart Chain',
   },
 };

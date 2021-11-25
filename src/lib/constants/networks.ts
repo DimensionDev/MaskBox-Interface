@@ -4,17 +4,15 @@ import { ChainId as ChainIdEnum } from './chainId';
 export const supportedChains = [ChainIdEnum.Mainnet, ChainIdEnum.Rinkeby, ChainIdEnum.Matic];
 
 export const networkNames: Record<number, string> = {
-  1: 'ETH',
-  3: 'Ropsten',
-  4: 'Rinkeby',
-  5: 'Kovan',
-  42: 'Kovan Testnet',
-  56: 'BSC',
-  77: 'Sokol Testnet',
-  97: 'BSC Testnet',
-  100: 'xDai Chain',
-  137: 'Matic Mainnet',
-  80001: 'Matic Testnet Mumbai',
+  [ChainIdEnum.Mainnet]: 'ETH',
+  [ChainIdEnum.Ropsten]: 'Ropsten',
+  [ChainIdEnum.Rinkeby]: 'Rinkeby',
+  [ChainIdEnum.Kovan]: 'Kovan',
+  [ChainIdEnum.BSC]: 'BSC',
+  [ChainIdEnum.BSCT]: 'BSC Testnet',
+  [ChainIdEnum.xDai]: 'xDai Chain',
+  [ChainIdEnum.Matic]: 'Matic Mainnet',
+  [ChainIdEnum.Mumbai]: 'Matic Testnet Mumbai',
 };
 
 type ChainId = keyof typeof networkNames;
