@@ -14,12 +14,14 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install
+      - name: pnpm cache
         uses: actions/cache@v2
-        run: pnpm install
         with:
           path: ~/.pnpm-store
           key: ${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install
+        run: pnpm install
 
       - name: Build
         run: |
