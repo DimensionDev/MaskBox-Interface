@@ -39,7 +39,7 @@ export function useCreateMaskbox() {
       formData.sellAll,
       formData.selectedNFTIds,
       formData.whiteList || ZERO_ADDRESS,
-      formData.holderTokenAddress,
+      formData.holderTokenAddress || ZERO_ADDRESS,
       formData.holderMinTokenAmount
         ? utils.parseUnits(formData.holderMinTokenAmount, holderToken?.decimals ?? 18)
         : 0,
