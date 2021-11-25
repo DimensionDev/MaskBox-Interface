@@ -184,3 +184,13 @@ export function useBindFormField() {
     };
   };
 }
+
+export function useResetForm() {
+  const updateFormData = useUpdateAtom(formDataAtom);
+  const setDirty = useUpdateAtom(fieldDirtyAtom);
+  const reset = useCallback(() => {
+    updateFormData(defaultFormData);
+    setDirty({});
+  }, []);
+  return reset;
+}
