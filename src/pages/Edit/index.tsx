@@ -5,14 +5,7 @@ import { useAtom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
 import { FC, useEffect } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import {
-  boxIdAtom,
-  chainAtom,
-  formDataAtom,
-  initFormData,
-  isEdittingAtom,
-  useUpdateDraft,
-} from './atoms';
+import { boxIdAtom, chainAtom, formDataAtom, initFormData, isEdittingAtom } from './atoms';
 import { Description } from './Description';
 import styles from './index.module.less';
 import { Meta } from './Meta';
@@ -43,7 +36,6 @@ export const Edit: FC = () => {
       updateFormData(initFormData);
     }
   }, [isEditting]);
-  useUpdateDraft();
 
   useEffect(() => {
     if (isEditting && boxOnRSS3) {

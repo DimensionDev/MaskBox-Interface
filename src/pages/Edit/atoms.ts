@@ -56,10 +56,7 @@ export const defaultFormData: FormData = {
   holderToken: null,
   selectedNFTIds: [],
 };
-const storedDraft = getStorage<FormData>(StorageKeys.BoxDraft);
-export const initFormData: FormData = storedDraft
-  ? { ...defaultFormData, ...storedDraft }
-  : defaultFormData;
+export const initFormData: FormData = defaultFormData;
 
 const fieldKeys = Object.keys(initFormData) as Array<keyof FormData>;
 
@@ -169,6 +166,10 @@ export function useUpdateFormField() {
   };
 }
 
+/**
+ * @deprecated
+ * No need anymore
+ */
 export function useUpdateDraft() {
   const formData = useAtomValue(formDataAtom);
   useEffect(() => {
