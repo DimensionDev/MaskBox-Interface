@@ -36,18 +36,16 @@ const metamaskWallet: WalletProvider = {
   type: 'injected',
   iconType: 'metamaskWallet',
 };
-const c98Wallet: WalletProvider = {
-  id: 'c98',
-  installed: true,
-  type: 'injected',
-  iconType: 'c98',
-};
+// const c98Wallet: WalletProvider = {
+//   id: 'c98',
+//   installed: true,
+//   type: 'injected',
+//   iconType: 'c98',
+// };
 
 const ethereum = window.ethereum ?? {};
 const getInjectedWallet = (): WalletProvider => {
-  if (ethereum.isCoin98) {
-    return c98Wallet;
-  } else if (ethereum.isMetaMask) {
+  if (ethereum.isMetaMask) {
     return metamaskWallet;
   }
   return {
