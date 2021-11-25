@@ -521,8 +521,8 @@ html .darkMode {
   --bottom-border: #313545;
   --footer-background: #1e202c;
   --darker-background: #313545;
-  --button-default-bg: #ffffff;
-  --button-default-color: #000;
+  --button-default-bg: #1e202c;
+  --button-default-color: #fff;
   --button-primary-bg: #0057ff;
   --button-primary-color: #fff;
   --button-light-bg: #313545;
@@ -2725,4 +2725,4 @@ body {
 }
 
 
-/*# sourceMappingURL=main-4d8f54e7db88aa9d7046.css.map*/
+/*# sourceMappingURL=main-70755c2c82e612574c99.css.map*/
