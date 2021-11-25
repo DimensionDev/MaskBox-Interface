@@ -35,7 +35,7 @@
   "Unlock NFT": "Unlock NFT",
   "Create Mystery box": "Create Mystery box",
   "Update": "Update",
-  "share-text": "I just created an NFT mystery box {formData.name} on MaskBox platform. Try to draw and good luck! {link}",
+  "share-text": "I just created an NFT mystery box {name} on MaskBox platform. Try to draw and good luck! {link}",
   "Please input mystery box name": "Please input mystery box name",
   "Please provide Mystery thumbnail": "Please provide Mystery thumbnail",
   "Please provide price for a box": "Please provide price for a box",
