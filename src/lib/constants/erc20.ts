@@ -1,3 +1,4 @@
+import { ChainId } from './chainId';
 import { ZERO_ADDRESS } from './common';
 
 export const tokenListUrls: Record<number, string> = {
@@ -40,8 +41,8 @@ export interface TokenListConfig {
 }
 
 export const nativeTokens: Record<number, TokenType> = {
-  1: {
-    chainId: 1,
+  [ChainId.Mainnet]: {
+    chainId: ChainId.Mainnet,
     address: ZERO_ADDRESS,
     symbol: 'ETH',
     decimals: 18,
@@ -49,13 +50,21 @@ export const nativeTokens: Record<number, TokenType> = {
     logoURI:
       'https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png',
   },
-  4: {
-    chainId: 4,
+  [ChainId.Rinkeby]: {
+    chainId: ChainId.Rinkeby,
     address: ZERO_ADDRESS,
     symbol: 'RIN',
     decimals: 18,
     name: 'Rinkeby Ether',
     logoURI:
       'https://static.debank.com/image/token/logo_url/eth/935ae4e4d1d12d59a99717a24f2540b5.png',
+  },
+  [ChainId.Matic]: {
+    chainId: ChainId.Matic,
+    address: ZERO_ADDRESS,
+    symbol: 'MATIC',
+    decimals: 18,
+    name: 'MATIC',
+    logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png',
   },
 };

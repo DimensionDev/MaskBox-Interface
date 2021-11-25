@@ -1,7 +1,7 @@
 import { ethereumIcon, binanceIcon, polygonIcon } from '../../components/Icon/icon-data';
 import { ChainId as ChainIdEnum } from './chainId';
 
-export const supportedChains = [1, 4];
+export const supportedChains = [ChainIdEnum.Mainnet, ChainIdEnum.Rinkeby, ChainIdEnum.Matic];
 
 export const networkNames: Record<number, string> = {
   1: 'ETH',
@@ -25,10 +25,10 @@ type Network = {
 };
 
 export const networkIcons: Record<number, string> = {
-  1: ethereumIcon,
-  4: ethereumIcon,
-  56: binanceIcon,
-  137: polygonIcon,
+  [ChainIdEnum.Matic]: ethereumIcon,
+  [ChainIdEnum.Rinkeby]: ethereumIcon,
+  [ChainIdEnum.BSC]: binanceIcon,
+  [ChainIdEnum.Matic]: polygonIcon,
 };
 
 export const networks: Network[] = ([1, 4] as const).map((chainId) => {
@@ -40,10 +40,10 @@ export const networks: Network[] = ([1, 4] as const).map((chainId) => {
 });
 
 export const networkExplorers: Record<number, string> = {
-  1: 'https://etherscan.io',
-  4: 'https://rinkeby.etherscan.io',
-  56: 'https://bscscan.com',
-  137: 'https://polygonscan.com',
+  [ChainIdEnum.Matic]: 'https://etherscan.io',
+  [ChainIdEnum.Rinkeby]: 'https://rinkeby.etherscan.io',
+  [ChainIdEnum.BSC]: 'https://bscscan.com',
+  [ChainIdEnum.Matic]: 'https://polygonscan.com',
 };
 
 export function isSupportedChain(chainId: number) {

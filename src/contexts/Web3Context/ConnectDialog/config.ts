@@ -11,11 +11,11 @@ export const connectableChains = [
     chainId: ChainId.Rinkeby,
     iconType: 'ethereumChain',
   },
-  // {
-  //   name: 'polygon',
-  //   chainId: ChainId.Matic,
-  //   iconType: 'polygonChain',
-  // },
+  {
+    name: 'polygon',
+    chainId: ChainId.Matic,
+    iconType: 'polygonChain',
+  },
   // {
   //   name: 'binance',
   //   chainId: ChainId.BSC,
