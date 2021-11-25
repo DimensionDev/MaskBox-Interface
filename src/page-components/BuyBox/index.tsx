@@ -55,11 +55,8 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   const qualified =
     holder_min_token_amount?.eq(0) || balanceOfHolderToken.gte(holder_min_token_amount ?? 0);
 
-  const canBuy =
-    (isNative ? balance.gt(costAmount) : allowed) &&
-    purchasedNft.length + quantity <= limit &&
-    qualified;
-  const balaneEnough = isNative ? balance.gt(costAmount) : allowance.gt(costAmount);
+  const balaneEnough = isNative ? balance.gt(costAmount) : allowance.gte(costAmount);
+  const canBuy = balaneEnough && purchasedNft.length + quantity <= limit && qualified;
 
   const cost = useMemo(() => {
     return paymentToken ? utils.formatUnits(costAmount, paymentToken.decimals) : null;

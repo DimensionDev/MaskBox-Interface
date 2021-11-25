@@ -55,7 +55,8 @@ export const Maskbox: FC<MaskboxProps> = ({
 
   const price = useMemo(() => {
     if (payment?.price && paymentToken?.decimals) {
-      const digit = formatBalance(payment.price, paymentToken.decimals);
+      console.log(payment.price.toString());
+      const digit = formatBalance(payment.price, paymentToken.decimals, 6);
       return `${digit} ${paymentToken.symbol}`;
     }
   }, [payment?.price, paymentToken?.decimals]);
@@ -159,7 +160,7 @@ export const Maskbox: FC<MaskboxProps> = ({
           {holder_min_token_amount?.gt(0) ? (
             <dd className={styles.infoRow}>
               {t('purchase-requirement', {
-                amount: formatBalance(holder_min_token_amount ?? 0, holderToken?.decimals ?? 18),
+                amount: formatBalance(holder_min_token_amount ?? 0, holderToken?.decimals ?? 18, 6),
                 symbol: holderToken?.symbol ?? '??',
               })}
             </dd>

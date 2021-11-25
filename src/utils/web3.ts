@@ -18,10 +18,32 @@ export function addGasMargin(value: BigNumber, scale = 5000) {
     .div(10000);
 }
 
-export function formatBalance(bn: BigNumber, decimals: number, significant = decimals) {
-  const value = parseFloat(utils.formatUnits(bn, decimals));
-  if (bn.eq(ZERO)) return '0';
-  const ONE = BigNumber.from(10).pow(decimals);
-  if (bn.mod(ONE).eq(ZERO)) return value;
-  return value.toFixed(significant);
+/**
+ * borrow from Maskbook
+ */
+export function formatBalance(balance: BigNumber, decimals: number, significant = decimals) {
+  const negative = balance.isNegative(); // balance < 0n
+  const base = BigNumber.from(10).pow(decimals); // 10n ** decimals
+
+  if (negative) balance = balance.abs(); // balance * -1n
+
+  let fraction = balance.mod(base).toString(); // (balance % base).toString(10)
+
+  // add leading zeros
+  while (fraction.length < decimals) fraction = `0${fraction}`;
+
+  // match significant digits
+  const matchSignificantDigits = new RegExp(
+    `^0*[1-9]\\d{0,${significant > 0 ? significant - 1 : 0}}`,
+  );
+  fraction = fraction.match(matchSignificantDigits)?.[0] ?? '';
+
+  // trim tailing zeros
+  fraction = fraction.replace(/0+$/g, '');
+
+  const whole = balance.div(base).toString(); // (balance / base).toString(10)
+  const value = `${whole}${fraction === '' ? '' : `.${fraction}`}`;
+
+  const raw = negative ? `-${value}` : value;
+  return raw.includes('.') ? raw.replace(/0+$/, '').replace(/\.$/, '') : raw;
 }
