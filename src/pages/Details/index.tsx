@@ -60,13 +60,14 @@ export const Details: FC = memo(() => {
     setErc721Tokens((oldList) => uniqBy<ERC721Token>([...oldList, ...tokens], 'tokenId'));
   }, [box?.nft_address, boxId]);
 
+  // excluded drawed by the maskbox creator
   const { data: soldNFTData } = useSoldNftListQuery({
     variables: {
       id: boxId ?? '',
     },
   });
 
-  const soldTokens = useGetTokensByIds(box?.nft_address, soldNFTData?.maskbox?.sold_nft_list);
+  const soldTokens = useGetTokensByIds(box?.nft_address, soldNFTData?.maskbox?.drawed_by_customer);
 
   const handlePurchased: BuyBoxProps['onPurchased'] = useCallback(
     ({ nftIds }) => {

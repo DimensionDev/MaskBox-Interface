@@ -76,6 +76,7 @@ query CheckMaskBoxesOf($account: Bytes!) {
 query SoldNFTList($id: ID!) {
   maskbox(id: $id) {
     id
-    sold_nft_list
+    # excluded drawed by the maskbox creator
+    drawed_by_customer
   }
 }

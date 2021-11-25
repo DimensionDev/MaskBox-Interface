@@ -164,7 +164,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
           <dd className={styles.infoRow}>
             <span className={styles.rowName}>{t('Sold')}:</span>
             <span className={styles.rowValue}>
-              {total ? `${total.sub(box.remaining!).toString()}/${total.toString()}` : '-/-'}
+              {total ? `${box.sold_nft_list.length}/${total.toString()}` : '-/-'}
             </span>
           </dd>
           <dd className={styles.infoRow}>

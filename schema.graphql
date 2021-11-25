@@ -31,6 +31,7 @@ type Maskbox {
   sell_all: Boolean!
   nft_contract: NFTContract!
   sold_nft_list: [BigInt!]!
+  drawed_by_customer: [BigInt!]!
   canceled: Boolean!
   claimed: Boolean!
 }
@@ -152,6 +153,10 @@ input Maskbox_filter {
   sold_nft_list_not: [BigInt!]
   sold_nft_list_contains: [BigInt!]
   sold_nft_list_not_contains: [BigInt!]
+  drawed_by_customer: [BigInt!]
+  drawed_by_customer_not: [BigInt!]
+  drawed_by_customer_contains: [BigInt!]
+  drawed_by_customer_not_contains: [BigInt!]
   canceled: Boolean
   canceled_not: Boolean
   canceled_in: [Boolean!]
@@ -177,6 +182,7 @@ enum Maskbox_orderBy {
   sell_all
   nft_contract
   sold_nft_list
+  drawed_by_customer
   canceled
   claimed
 }

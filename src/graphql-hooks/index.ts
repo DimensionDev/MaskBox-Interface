@@ -32,6 +32,7 @@ export type Maskbox = {
   claimed: Scalars['Boolean'];
   create_time: Scalars['Int'];
   creator: Scalars['Bytes'];
+  drawed_by_customer: Array<Scalars['BigInt']>;
   end_time: Scalars['Int'];
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -96,6 +97,10 @@ export type Maskbox_Filter = {
   creator_not?: Maybe<Scalars['Bytes']>;
   creator_not_contains?: Maybe<Scalars['Bytes']>;
   creator_not_in?: Maybe<Array<Scalars['Bytes']>>;
+  drawed_by_customer?: Maybe<Array<Scalars['BigInt']>>;
+  drawed_by_customer_contains?: Maybe<Array<Scalars['BigInt']>>;
+  drawed_by_customer_not?: Maybe<Array<Scalars['BigInt']>>;
+  drawed_by_customer_not_contains?: Maybe<Array<Scalars['BigInt']>>;
   end_time?: Maybe<Scalars['Int']>;
   end_time_gt?: Maybe<Scalars['Int']>;
   end_time_gte?: Maybe<Scalars['Int']>;
@@ -178,6 +183,7 @@ export enum Maskbox_OrderBy {
   Claimed = 'claimed',
   CreateTime = 'create_time',
   Creator = 'creator',
+  DrawedByCustomer = 'drawed_by_customer',
   EndTime = 'end_time',
   Id = 'id',
   Name = 'name',
@@ -460,7 +466,10 @@ export type SoldNftListQueryVariables = Exact<{
 
 export type SoldNftListQuery = {
   __typename?: 'Query';
-  maskbox?: { __typename?: 'Maskbox'; id: string; sold_nft_list: Array<string> } | null | undefined;
+  maskbox?:
+    | { __typename?: 'Maskbox'; id: string; drawed_by_customer: Array<string> }
+    | null
+    | undefined;
 };
 
 export const MaskBoxDocument = gql`
@@ -692,7 +701,7 @@ export const SoldNftListDocument = gql`
   query SoldNFTList($id: ID!) {
     maskbox(id: $id) {
       id
-      sold_nft_list
+      drawed_by_customer
     }
   }
 `;
