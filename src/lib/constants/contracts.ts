@@ -13,11 +13,11 @@ export const contractAddresses: Record<string, Record<string, string>> = {
     MaskboxNFT: '0x56136E69A5771436a9598804c5eA792230c21181',
   },
   Rinkeby: {
-    Maskbox: '0xc3D410eDd9C54662fa3D87731bfAf33EBbf04A39',
+    Maskbox: '0xF8ED169BC0cdA735A88d32AC10b88AA5B69181ac',
     MaskboxNFT: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
   },
   Matic: {
-    Maskbox: '0xaf9959cF65eFCcaf6f35b7e42FbdD34fCb9515f4',
+    Maskbox: '0x02F98667b3A1202a320F67a669a5e4e451fD0cc1',
     MaskboxNFT: '0x49C2a3D93C4B94eAd101d9936f1ebCA634394a78',
   },
 };
