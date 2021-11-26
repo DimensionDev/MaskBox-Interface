@@ -9,7 +9,7 @@ import {
 } from '@/hooks';
 import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, ExtendedBoxInfo } from '@/types';
-import { formatAddres, formatBalance } from '@/utils';
+import { formatAddres, formatBalance, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { BigNumber, utils } from 'ethers';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -55,17 +55,27 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   const qualified =
     holder_min_token_amount?.eq(0) || balanceOfHolderToken.gte(holder_min_token_amount ?? 0);
 
-  const balaneEnough = isNative ? balance.gt(costAmount) : allowance.gte(costAmount);
-  const canBuy = balaneEnough && purchasedNft.length + quantity <= limit && qualified;
+  const balanceEnough = balance.gt(costAmount);
+  const allowanceEnough = allowance.gte(costAmount);
+  const isEnough = isNative ? balanceEnough : allowanceEnough;
+  const canBuy = isEnough && purchasedNft.length + quantity <= limit && qualified;
 
   const cost = useMemo(() => {
     return paymentToken ? utils.formatUnits(costAmount, paymentToken.decimals) : null;
   }, [paymentToken, costAmount]);
 
+  const [isApproving, setApproving, setNotApproving] = useBoolean();
   const handleApprove = useCallback(async () => {
-    const tx = await approve(payment.token_addr, contractAddress, costAmount);
-    await tx.wait(1);
-    await getAllowance(payment.token_addr, contractAddress).then(setAllowance);
+    setApproving();
+    try {
+      const tx = await approve(payment.token_addr, contractAddress, costAmount);
+      await tx.wait(1);
+      await getAllowance(payment.token_addr, contractAddress).then(setAllowance);
+    } catch (err) {
+      console.log('Fails to approve', err);
+    } finally {
+      setNotApproving();
+    }
   }, [approve, payment.token_addr, contractAddress, costAmount, getAllowance]);
 
   const { open: openBox, loading } = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
@@ -81,13 +91,17 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
     if (holder_min_token_amount?.gt(0) && balanceOfHolderToken.lt(holder_min_token_amount)) {
       return t('Not enough ${symbol} to draw', { symbol: holderToken?.symbol ?? '??' });
     }
-    return balaneEnough ? t('Draw') : t('Insufficient balance');
+    if (!balanceEnough) return t('Insufficient balance');
+    if (isNative) return t('Draw');
+    return allowanceEnough ? t('Draw') : t('Insufficient allowance');
   }, [
     t,
     loading,
     holder_min_token_amount,
     holderToken?.symbol,
-    balaneEnough,
+    allowanceEnough,
+    isNative,
+    balanceEnough,
     balanceOfHolderToken,
   ]);
 
@@ -166,9 +180,12 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
             fullWidth
             size="middle"
             onClick={handleApprove}
+            disabled={isApproving}
           >
             <TokenIcon className={styles.tokenIcon} token={paymentToken ?? ({} as TokenType)} />
-            {t('Allow MaskBox to use your {symbol}', { symbol: paymentToken?.symbol ?? '-' })}
+            {isApproving
+              ? t('Approving...')
+              : t('Allow MaskBox to use your {symbol}', { symbol: paymentToken?.symbol ?? '-' })}
           </Button>
         )}
         <Button

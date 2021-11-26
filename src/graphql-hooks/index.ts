@@ -452,6 +452,15 @@ export type MaskBoxesOfQuery = {
   }>;
 };
 
+export type MaskBoxClaimedStatusQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type MaskBoxClaimedStatusQuery = {
+  __typename?: 'Query';
+  maskbox?: { __typename?: 'Maskbox'; id: string; claimed: boolean } | null | undefined;
+};
+
 export type CheckMaskBoxesOfQueryVariables = Exact<{
   account: Scalars['Bytes'];
 }>;
@@ -650,6 +659,63 @@ export type MaskBoxesOfLazyQueryHookResult = ReturnType<typeof useMaskBoxesOfLaz
 export type MaskBoxesOfQueryResult = Apollo.QueryResult<
   MaskBoxesOfQuery,
   MaskBoxesOfQueryVariables
+>;
+export const MaskBoxClaimedStatusDocument = gql`
+  query MaskBoxClaimedStatus($id: ID!) {
+    maskbox(id: $id) {
+      id
+      claimed
+    }
+  }
+`;
+
+/**
+ * __useMaskBoxClaimedStatusQuery__
+ *
+ * To run a query within a React component, call `useMaskBoxClaimedStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMaskBoxClaimedStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMaskBoxClaimedStatusQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMaskBoxClaimedStatusQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    MaskBoxClaimedStatusQuery,
+    MaskBoxClaimedStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MaskBoxClaimedStatusQuery, MaskBoxClaimedStatusQueryVariables>(
+    MaskBoxClaimedStatusDocument,
+    options,
+  );
+}
+export function useMaskBoxClaimedStatusLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    MaskBoxClaimedStatusQuery,
+    MaskBoxClaimedStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MaskBoxClaimedStatusQuery, MaskBoxClaimedStatusQueryVariables>(
+    MaskBoxClaimedStatusDocument,
+    options,
+  );
+}
+export type MaskBoxClaimedStatusQueryHookResult = ReturnType<typeof useMaskBoxClaimedStatusQuery>;
+export type MaskBoxClaimedStatusLazyQueryHookResult = ReturnType<
+  typeof useMaskBoxClaimedStatusLazyQuery
+>;
+export type MaskBoxClaimedStatusQueryResult = Apollo.QueryResult<
+  MaskBoxClaimedStatusQuery,
+  MaskBoxClaimedStatusQueryVariables
 >;
 export const CheckMaskBoxesOfDocument = gql`
   query CheckMaskBoxesOf($account: Bytes!) {

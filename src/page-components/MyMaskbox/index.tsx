@@ -1,7 +1,11 @@
 import { Badge, Button, Dialog, Icon, Image, showToast, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useBoxOnRSS3, useWeb3Context } from '@/contexts';
-import { MaskBoxesOfQuery } from '@/graphql-hooks';
+import {
+  MaskBoxesOfQuery,
+  useMaskBoxClaimedStatusLazyQuery,
+  useMaskBoxesOfQuery,
+} from '@/graphql-hooks';
 import {
   useBoxInfo,
   useCancelBox,
@@ -36,6 +40,11 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const [editDialogVisible, openEditDialog, closeEditDialog] = useBoolean();
 
   const boxOnRSS3 = useBoxOnRSS3(boxOnSubgraph?.creator, boxOnSubgraph?.box_id);
+  const [fetchClaimeStatus] = useMaskBoxClaimedStatusLazyQuery({
+    variables: {
+      id: boxOnSubgraph.id,
+    },
+  });
 
   const box = useMemo(
     () => ({
@@ -102,6 +111,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
     console.log({ result });
     const { decimals, symbol } = paymentToken ?? { decimals: 1, symbol: '' };
     if (result) {
+      fetchClaimeStatus();
       showToast({
         title: t('Withdraw success'),
         message: t('You got {value}', {
@@ -110,7 +120,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
         variant: 'success',
       });
     }
-  }, [claimPayment, box.box_id, paymentToken, t]);
+  }, [claimPayment, box.box_id, paymentToken, t, fetchClaimeStatus]);
 
   const BoxCover = (
     <div className={styles.media}>

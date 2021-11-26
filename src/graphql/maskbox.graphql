@@ -68,6 +68,13 @@ query MaskBoxesOf($first: Int! = 10, $skip: Int! = 0, $account: Bytes!) {
   }
 }
 
+query MaskBoxClaimedStatus($id: ID!) {
+  maskbox(id: $id) {
+    id
+    claimed
+  }
+}
+
 query CheckMaskBoxesOf($account: Bytes!) {
   maskboxes(first: 1) {
     id
