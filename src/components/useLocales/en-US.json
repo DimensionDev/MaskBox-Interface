@@ -3,14 +3,14 @@
   "Enter your email": "Enter your email",
   "Sold": "Sold",
   "For Sale": "For Sale",
-  "sns-share-to-twitter": "Check out NFT mystery box {boxName} on MaskBox platform, let’s try it and good luck! Subscribe @realMaskNetwork for more updates. {link}",
-  "sns-share-to-facebook": "Check out NFT mystery box {boxName} on MaskBox platform, let’s try it and good luck! Subscribe @masknetwork for more updates. {link}",
+  "sns-share-to-twitter": "Check out NFT mystery box {boxName} on MaskBox platform, let’s try it and good luck! Follow @realMaskNetwork for more updates. {link}",
+  "sns-share-to-facebook": "Check out NFT mystery box {boxName} on MaskBox platform, let’s try it and good luck! Follow @masknetwork for more updates. {link}",
   "Added by uesr": "Added by uesr",
   "File size up to {size}MB": "File size up to {size}MB",
   "You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4": "You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4",
   "You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed": "You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed",
   "You have no NFT of this kind for sale": "You have no NFT of this kind for sale",
   "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.": "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.",
-  "Drag-and-drap file, or": "Drag-and-drap file, or",
+  "Drag-and-drop file, or": "Drag-and-drop file, or",
   "Browse computer": "Browse computer"
 }
