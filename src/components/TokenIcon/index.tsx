@@ -1,11 +1,11 @@
-import { ERC721Token, TokenType } from '@/lib';
+import { ERC721Contract, TokenType } from '@/lib';
 import { FC, ImgHTMLAttributes, useMemo } from 'react';
 import { create } from 'ethereum-blockies';
 import classnames from 'classnames';
 import styles from './index.module.less';
 
 interface Props extends ImgHTMLAttributes<HTMLImageElement> {
-  token: TokenType | ERC721Token;
+  token: TokenType | ERC721Contract;
 }
 
 export const TokenIcon: FC<Props> = ({ token, className, ...rest }) => {

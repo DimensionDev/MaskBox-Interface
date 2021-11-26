@@ -13,7 +13,7 @@ import { usePickERC20, useRSS3, useWeb3Context } from '@/contexts';
 import { useERC721, useTokenList } from '@/hooks';
 import { createShareUrl } from '@/lib';
 import {
-  ERC721TokenPickerDialog,
+  ERC721ContractPicker,
   NFTPickerDialog,
   RequestConnection,
   ShareBox,
@@ -58,7 +58,7 @@ export const Meta: FC = () => {
   const setAllDirty = useSetAllDirty();
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, setNftPickerVisible] = useState(false);
-  const [erc721DialogVisible, openERC721PickerDialog, closeERC721PickerDialog] = useBoolean();
+  const [contractPickerVisible, openContractPicker, closeContractPicker] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
 
   const createBox = useCreateMaskbox();
@@ -160,7 +160,7 @@ export const Meta: FC = () => {
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>
-        Contract
+        {t('Contract')}
         <span className={styles.step}>2/2</span>
         <Button
           colorScheme="light"
@@ -225,18 +225,18 @@ export const Meta: FC = () => {
           size="large"
           readOnly
           disabled={isEditting}
-          value={formData.erc721Token?.name ?? formData.nftContractAddress}
+          value={formData.erc721Contract?.name ?? formData.nftContractAddress}
           onChange={bindField('nftContractAddress')}
-          onClick={isEditting ? undefined : openERC721PickerDialog}
+          onClick={isEditting ? undefined : openContractPicker}
           leftAddon={
-            formData.erc721Token ? (
-              <TokenIcon className={styles.tokenIcon} token={formData.erc721Token} />
+            formData.erc721Contract ? (
+              <TokenIcon className={styles.tokenIcon} token={formData.erc721Contract} />
             ) : null
           }
           rightAddon={
             <span
               className={styles.pickButton}
-              onClick={isEditting ? undefined : openERC721PickerDialog}
+              onClick={isEditting ? undefined : openContractPicker}
             >
               <Icon size={24} type="arrowDown" />
             </span>
@@ -252,7 +252,7 @@ export const Meta: FC = () => {
                 checked={formData.sellAll}
                 onChange={(evt) => updateField('sellAll', evt.currentTarget.checked)}
               />
-              All
+              {t('All')}
             </label>
             <label className={styles.selectType}>
               <input
@@ -436,13 +436,13 @@ export const Meta: FC = () => {
           history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
         }}
       />
-      <ERC721TokenPickerDialog
-        open={erc721DialogVisible}
-        onClose={closeERC721PickerDialog}
-        onPick={(token) => {
-          updateField('nftContractAddress', token.address);
-          updateField('erc721Token', token);
-          closeERC721PickerDialog();
+      <ERC721ContractPicker
+        open={contractPickerVisible}
+        onClose={closeContractPicker}
+        onPick={(contract) => {
+          updateField('nftContractAddress', contract.address);
+          updateField('erc721Contract', contract);
+          closeContractPicker();
         }}
       />
       <NFTPickerDialog

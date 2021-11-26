@@ -1,6 +1,6 @@
-import { ERC721Token, TokenType, ZERO_ADDRESS } from '@/lib';
+import { ERC721Contract, TokenType, ZERO_ADDRESS } from '@/lib';
 import { Activity, MediaType } from '@/types';
-import { getStorage, setStorage, StorageKeys } from '@/utils';
+import { setStorage, StorageKeys } from '@/utils';
 import { format, isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
 import { useAtomValue, useUpdateAtom } from 'jotai/utils';
@@ -16,7 +16,7 @@ export interface FormData {
   // TODO rename to paymentTokenAddress
   tokenAddress: string;
   token: TokenType | null;
-  erc721Token: ERC721Token | null;
+  erc721Contract: ERC721Contract | null;
   limit: number | null;
   nftContractAddress: string;
   sellAll: boolean;
@@ -44,7 +44,7 @@ export const defaultFormData: FormData = {
   pricePerBox: '',
   tokenAddress: ZERO_ADDRESS,
   token: null,
-  erc721Token: null,
+  erc721Contract: null,
   limit: 5,
   sellAll: true,
   nftContractAddress: '',

@@ -55,7 +55,6 @@ export const Maskbox: FC<MaskboxProps> = ({
 
   const price = useMemo(() => {
     if (payment?.price && paymentToken?.decimals) {
-      console.log(payment.price.toString());
       const digit = formatBalance(payment.price, paymentToken.decimals, 6);
       return `${digit} ${paymentToken.symbol}`;
     }

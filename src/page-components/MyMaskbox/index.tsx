@@ -8,7 +8,7 @@ import {
   useClaimPayment,
   useERC20Token,
   useERC721,
-  useERC721Token,
+  useERC721Contract,
 } from '@/hooks';
 import { MediaType } from '@/types';
 import { TZOffsetLabel, useBoolean } from '@/utils';
@@ -47,7 +47,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   );
   const payment = box.payment?.[0];
   const paymentToken = useERC20Token(payment?.token_addr);
-  const erc721Token = useERC721Token(box.nft_address);
+  const erc721Token = useERC721Contract(box.nft_address);
 
   const {
     unitPrice,

@@ -5,7 +5,7 @@ const getKey = (key: string) => `${STORE_PREFIX}/${key}`;
 
 export enum StorageKeys {
   ERC20Tokens = 'erc20-tokens',
-  ERC721Tokens = 'erc721-tokens',
+  ERC721Contracts = 'erc721-contracts',
   Language = 'language',
   Theme = 'theme',
   WalletId = 'wallet-id',

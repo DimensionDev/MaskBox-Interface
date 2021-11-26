@@ -1,5 +1,5 @@
 import { RouteKeys } from '@/configs';
-import { useBox, useERC20Token, useERC721Token, useNFTIdsOfBox } from '@/hooks';
+import { useBox, useERC20Token, useERC721Contract, useNFTIdsOfBox } from '@/hooks';
 import { formatUnits } from 'ethers/lib/utils';
 import { useAtom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
@@ -19,7 +19,7 @@ export const Edit: FC = () => {
   const updateFormData = useUpdateAtom(formDataAtom);
   const { boxOnSubgraph, boxOnRSS3, boxOnChain } = useBox(boxId);
   const paymentToken = useERC20Token(boxOnChain?.payment?.[0]?.token_addr);
-  const erc721Token = useERC721Token(boxOnChain?.nft_address);
+  const erc721Contract = useERC721Contract(boxOnChain?.nft_address);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -78,13 +78,13 @@ export const Edit: FC = () => {
   }, [isEditting, boxOnSubgraph]);
 
   useEffect(() => {
-    if (isEditting && erc721Token) {
+    if (isEditting && erc721Contract) {
       updateFormData((fd) => ({
         ...fd,
-        erc721Token,
+        erc721Contract: erc721Contract,
       }));
     }
-  }, [isEditting, erc721Token]);
+  }, [isEditting, erc721Contract]);
 
   const sellingNFTIds = useNFTIdsOfBox(boxId, boxOnSubgraph?.sell_all);
 

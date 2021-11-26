@@ -3,7 +3,7 @@ import { useWeb3Context } from '@/contexts';
 import { Contract } from 'ethers';
 import { useMemo } from 'react';
 
-export function useERC721Contract(address: string | undefined) {
+export function useERC721InteractContract(address: string | undefined) {
   const { ethersProvider } = useWeb3Context();
 
   return useMemo(() => {

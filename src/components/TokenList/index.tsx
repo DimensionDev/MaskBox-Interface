@@ -1,9 +1,10 @@
+import { ERC20_ABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { useOnceShowup } from '@/hooks';
 import { TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
 import { formatBalance, getStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
-import { BigNumber, Contract, utils } from 'ethers';
+import { BigNumber, Contract } from 'ethers';
 import { FC, HTMLProps, useRef, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 import { LoadingIcon } from '../Icon';
@@ -11,7 +12,7 @@ import { TokenIcon } from '../TokenIcon';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
-export * from './ERC721TokenList';
+export * from './ERC721ContractList';
 
 interface TokenListProps extends HTMLProps<HTMLUListElement> {
   tokens: TokenType[];
@@ -43,7 +44,6 @@ interface TokenProps extends HTMLProps<HTMLDivElement> {
   isCustomized?: boolean;
   hideBalance?: boolean;
 }
-const erc20Abi = ['function balanceOf(address) view returns (uint256)'];
 export const Token: FC<TokenProps> = ({
   token,
   isCustomized,
@@ -64,7 +64,7 @@ export const Token: FC<TokenProps> = ({
       setBalance(balanceResult);
       return;
     } else {
-      const contract = new Contract(token.address, erc20Abi, ethersProvider);
+      const contract = new Contract(token.address, ERC20_ABI, ethersProvider);
       const balanceResult: BigNumber = await contract.balanceOf(account);
       setBalance(balanceResult);
     }

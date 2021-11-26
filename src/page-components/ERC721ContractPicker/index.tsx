@@ -2,40 +2,40 @@ import {
   Button,
   Dialog,
   DialogProps,
-  ERC721Token,
-  ERC721TokenList,
+  ERC721Contract,
+  ERC721ContractList,
   Icon,
   Input,
 } from '@/components';
-import { useGetERC721Token } from '@/hooks';
-import { ERC721Token as ERC721TokenType } from '@/lib';
+import { useGetERC721Contract } from '@/hooks';
+import { ERC721Contract as ERC721ContractType } from '@/lib';
 import { getStorage, isSameAddress, setStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
-import { useERC721TokenList } from './useERC721TokenList';
+import { useERC721ContractList } from './useERC721ContractList';
 
 interface Props extends DialogProps {
-  onPick?: (token: ERC721TokenType) => void;
+  onPick?: (token: ERC721ContractType) => void;
 }
 
-function storeNewToken(newToken: ERC721TokenType) {
-  const contracts = getStorage<ERC721TokenType[]>(StorageKeys.ERC721Tokens);
-  setStorage(StorageKeys.ERC721Tokens, contracts ? [...contracts, newToken] : [newToken]);
+function storeNewToken(newToken: ERC721ContractType) {
+  const contracts = getStorage<ERC721ContractType[]>(StorageKeys.ERC721Contracts);
+  setStorage(StorageKeys.ERC721Contracts, contracts ? [...contracts, newToken] : [newToken]);
 }
 
-export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
+export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
   const t = useLocales();
-  const { erc721Tokens, updateERC721Tokens } = useERC721TokenList();
+  const { erc721Contracts, updateERC721Contracts } = useERC721ContractList();
   const [keyword, setKeyword] = useState('');
-  const getERC721Token = useGetERC721Token();
-  const [newToken, setNewToken] = useState<ERC721TokenType | null>(null);
+  const getERC721Contract = useGetERC721Contract();
+  const [newContract, setNewContract] = useState<ERC721ContractType | null>(null);
 
   const filteredContracts = useMemo(() => {
     const kw = keyword.toLowerCase();
-    return erc721Tokens.filter((token) => {
+    return erc721Contracts.filter((token) => {
       const { symbol, name, address } = token;
       return (
         symbol.toLowerCase().includes(kw) ||
@@ -43,20 +43,20 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
         address.toLowerCase().startsWith(kw)
       );
     });
-  }, [keyword, erc721Tokens]);
+  }, [keyword, erc721Contracts]);
 
   const isNewAddress = useMemo(() => {
     return (
       utils.isAddress(keyword) &&
-      erc721Tokens.findIndex((token) => isSameAddress(token.address, keyword)) === -1
+      erc721Contracts.findIndex((token) => isSameAddress(token.address, keyword)) === -1
     );
-  }, [keyword, erc721Tokens]);
+  }, [keyword, erc721Contracts]);
 
   useEffect(() => {
     if (isNewAddress) {
-      getERC721Token(keyword).then((token) => token && setNewToken(token));
+      getERC721Contract(keyword).then((token) => token && setNewContract(token));
     }
-  }, [isNewAddress, keyword]);
+  }, [isNewAddress, keyword, getERC721Contract]);
 
   return (
     <Dialog className={styles.dialog} title={t('Select an NFT') as string} {...rest}>
@@ -72,17 +72,17 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
         />
       </div>
       {isNewAddress ? (
-        newToken && (
+        newContract && (
           <div className={classnames(styles.tokenList, styles.newList)}>
             <div className={styles.row}>
-              <ERC721Token className={styles.token} token={newToken} hideBalance />
+              <ERC721Contract className={styles.token} token={newContract} hideBalance />
               <Button
                 size="small"
                 colorScheme="primary"
                 onClick={() => {
-                  storeNewToken(newToken);
+                  storeNewToken(newContract);
                   setKeyword('');
-                  updateERC721Tokens();
+                  updateERC721Contracts();
                 }}
               >
                 {t('Import')}
@@ -95,7 +95,11 @@ export const ERC721TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
           {t('No results for')} <strong className={styles.keyword}>{keyword}</strong>
         </div>
       ) : (
-        <ERC721TokenList className={styles.tokenList} tokens={filteredContracts} onPick={onPick} />
+        <ERC721ContractList
+          className={styles.tokenList}
+          contracts={filteredContracts}
+          onPick={onPick}
+        />
       )}
     </Dialog>
   );

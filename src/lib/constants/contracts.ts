@@ -22,16 +22,14 @@ export const contractAddresses: Record<string, Record<string, string>> = {
   },
 };
 
-// TODO deduplicate with src/types/ERC721#ERC721Token
-/** @deprecated */
-export interface ERC721Token {
+export interface ERC721Contract {
   name: string;
   chainId: number;
   address: string;
   symbol: string;
 }
 
-export const NFTContracts: Record<number, ERC721Token[]> = {
+export const NFTContracts: Record<number, ERC721Contract[]> = {
   [ChainId.Mainnet]: [
     {
       chainId: 1,

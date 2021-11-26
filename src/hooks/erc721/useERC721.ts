@@ -1,13 +1,13 @@
 import { showToast } from '@/components';
 import { useMaskboxAddress, useWeb3Context } from '@/contexts';
 import { useCallback, useEffect, useState } from 'react';
-import { useERC721Contract } from './useERC721Contract';
+import { useERC721InteractContract } from './useERC721InteractContract';
 
 export function useERC721(address: string | undefined, owner?: string) {
   const [isApproveAll, setIsApproveAll] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
   const [checkingApprove, setCheckingApprove] = useState(false);
-  const contract = useERC721Contract(address);
+  const contract = useERC721InteractContract(address);
   const { account, ethersProvider } = useWeb3Context();
   const maskboxAddress = useMaskboxAddress();
 

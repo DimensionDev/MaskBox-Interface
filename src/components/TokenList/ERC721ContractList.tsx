@@ -1,7 +1,7 @@
 import { MaskboxNFTABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
 import { useOnceShowup } from '@/hooks';
-import { ERC721Token as ERC721TokenType, ZERO } from '@/lib';
+import { ERC721Contract as ERC721ContractType, ZERO } from '@/lib';
 import { getStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
 import { BigNumber, Contract } from 'ethers';
@@ -9,24 +9,30 @@ import { FC, HTMLProps, useRef, useState } from 'react';
 import { useAsyncFn } from 'react-use';
 import { LoadingIcon } from '../Icon';
 import { TokenIcon } from '../TokenIcon';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
-interface TokenListProps extends HTMLProps<HTMLUListElement> {
-  tokens: ERC721TokenType[];
-  onPick?: (token: ERC721TokenType) => void;
+interface ContractListProps extends HTMLProps<HTMLUListElement> {
+  contracts: ERC721ContractType[];
+  onPick?: (token: ERC721ContractType) => void;
 }
 
-export const ERC721TokenList: FC<TokenListProps> = ({ tokens, className, onPick, ...rest }) => {
-  const storedTokens = getStorage<ERC721TokenType[]>(StorageKeys.ERC721Tokens) ?? [];
+export const ERC721ContractList: FC<ContractListProps> = ({
+  contracts,
+  className,
+  onPick,
+  ...rest
+}) => {
+  const storedTokens = getStorage<ERC721ContractType[]>(StorageKeys.ERC721Contracts) ?? [];
   const addresses = storedTokens.map((t) => t.address);
   return (
     <ul className={classnames(styles.list, className)} {...rest}>
-      {tokens.map((token) => (
-        <li className={styles.item} key={token.address}>
-          <ERC721Token
-            isCustomized={addresses.includes(token.address)}
-            token={token}
-            onClick={() => onPick?.(token)}
+      {contracts.map((contract) => (
+        <li className={styles.item} key={contract.address}>
+          <ERC721Contract
+            isCustomized={addresses.includes(contract.address)}
+            token={contract}
+            onClick={() => onPick?.(contract)}
           />
         </li>
       ))}
@@ -35,11 +41,11 @@ export const ERC721TokenList: FC<TokenListProps> = ({ tokens, className, onPick,
 };
 
 interface ERC721TokenProps extends HTMLProps<HTMLDivElement> {
-  token: ERC721TokenType;
+  token: ERC721ContractType;
   isCustomized?: boolean;
   hideBalance?: boolean;
 }
-export const ERC721Token: FC<ERC721TokenProps> = ({
+export const ERC721Contract: FC<ERC721TokenProps> = ({
   token,
   isCustomized,
   onClick,
@@ -47,6 +53,7 @@ export const ERC721Token: FC<ERC721TokenProps> = ({
   className,
   ...rest
 }) => {
+  const t = useLocales();
   const { account, ethersProvider } = useWeb3Context();
   const containerRef = useRef<HTMLDivElement>(null);
   const [balance, setBalance] = useState<BigNumber>(ZERO);
@@ -65,7 +72,7 @@ export const ERC721Token: FC<ERC721TokenProps> = ({
     <div
       className={classnames(className, styles.token, { [styles.disabled]: hasNoToken })}
       onClick={hasNoToken ? undefined : onClick}
-      title={hasNoToken ? 'You have no NFT of this kind for sale' : undefined}
+      title={hasNoToken ? t('You have no NFT of this kind for sale') : undefined}
       ref={containerRef}
       {...rest}
     >
@@ -76,7 +83,7 @@ export const ERC721Token: FC<ERC721TokenProps> = ({
         <div className={styles.symbol}>{token.symbol}</div>
         <div className={styles.name}>
           {token.name}
-          {isCustomized && ' • Added by user'}
+          {isCustomized && ` • ${t('Added by uesr')}`}
         </div>
       </div>
       {!hideBalance && (

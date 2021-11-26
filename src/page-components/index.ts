@@ -1,5 +1,5 @@
 export * from './BuyBox';
-export * from './ERC721TokenPickerDialog';
+export * from './ERC721ContractPicker';
 export * from './Maskbox';
 export * from './Maskbox/WrapMaskbox';
 export * from './MyMaskbox';

@@ -1,13 +1,12 @@
 import { MaskboxNFTABI } from '@/abi';
 import { useWeb3Context } from '@/contexts';
-import { ERC721Token } from '@/lib';
+import { ERC721Contract } from '@/lib';
 import { Contract } from 'ethers';
 import { useCallback } from 'react';
 
-// TODO refactor to `const token = useERC20Token(address)`
-export function useGetERC721Token() {
+export function useGetERC721Contract() {
   const { ethersProvider, providerChainId: chainId } = useWeb3Context();
-  const getToken = useCallback(
+  const getContract = useCallback(
     async (addr: string) => {
       if (!ethersProvider || !chainId) return;
       const contract = new Contract(addr, MaskboxNFTABI, ethersProvider);
@@ -17,11 +16,11 @@ export function useGetERC721Token() {
           chainId,
           address: addr,
           symbol: symbol as string,
-        } as ERC721Token;
+        } as ERC721Contract;
       });
       return token;
     },
     [ethersProvider, chainId],
   );
-  return getToken;
+  return getContract;
 }

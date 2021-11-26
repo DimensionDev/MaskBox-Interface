@@ -1,18 +1,18 @@
-import { ERC721Token } from '@/lib';
+import { ERC721Contract } from '@/lib';
 import { useEffect, useState } from 'react';
-import { useGetERC721Token } from './useGetERC721Token';
+import { useGetERC721Contract } from './useGetERC721Contract';
 
-export function useERC721Token(address: string | undefined) {
-  const [token, setToken] = useState<ERC721Token | undefined>();
+export function useERC721Contract(address: string | undefined) {
+  const [contract, setContract] = useState<ERC721Contract | null>();
 
-  const getTokenInfo = useGetERC721Token();
+  const getContract = useGetERC721Contract();
   useEffect(() => {
     if (!address) {
-      setToken(undefined);
+      setContract(null);
       return;
     }
-    getTokenInfo(address).then(setToken);
+    getContract(address).then(setContract);
   }, [address]);
 
-  return token;
+  return contract;
 }
