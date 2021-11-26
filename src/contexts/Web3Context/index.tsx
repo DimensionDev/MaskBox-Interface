@@ -2,13 +2,12 @@ import { showToast } from '@/components';
 import { ChainId, isSupportedChain } from '@/lib';
 import { getStorage, StorageKeys, useBoolean, useStorage } from '@/utils';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { isMobile as checkIsMobile } from 'web3modal';
-import { SafeAppWeb3Modal as Web3Modal } from '@gnosis.pm/safe-apps-web3modal';
 import { ethers } from 'ethers';
 import React, { FC, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { isMobile as checkIsMobile } from 'web3modal';
+import { AccountDialog } from './AccountDialog';
 import { connectableWallets, ConnectDialog } from './ConnectDialog';
 import getProvider, { ProviderType } from './providers';
-import { AccountDialog } from './AccountDialog';
 
 export * from './providers';
 
@@ -29,28 +28,10 @@ interface ContextOptions {
   isNotSupportedChain: boolean;
 }
 
-const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider,
-    options: {
-      infuraId: process.env.INFURA_ID,
-    },
-  },
-};
-const web3modal = new Web3Modal({
-  cacheProvider: true,
-  disableInjectedProvider: false,
-  providerOptions,
-});
-
 const isMobile = checkIsMobile();
 
 export const Web3Context = React.createContext<Partial<ContextOptions>>({});
 export const useWeb3Context = () => useContext(Web3Context);
-
-const clearWCStorage = () => {
-  localStorage.removeItem('walletconnect');
-};
 
 type Provider =
   | WalletConnectProvider
@@ -118,8 +99,6 @@ export const Web3Provider: FC = ({ children }) => {
   );
 
   const disconnect = useCallback(() => {
-    web3modal.clearCachedProvider();
-    clearWCStorage();
     setWeb3State({});
     removeStoredChainId();
     removeStoredWalletId();
@@ -129,9 +108,7 @@ export const Web3Provider: FC = ({ children }) => {
     async (chainId?: ChainId, walletType?: ProviderType) => {
       try {
         setIsConnecting(true);
-        const provider = isMobile
-          ? await web3modal.requestProvider()
-          : await getProvider(walletType);
+        const provider = await getProvider(isMobile ? undefined : walletType);
         if (chainId && chainId !== parseInt(provider.chainId as string, 16)) {
           await provider.request!({
             method: 'wallet_switchEthereumChain',

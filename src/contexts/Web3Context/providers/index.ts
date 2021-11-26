@@ -21,14 +21,26 @@ const web3modal = new Web3Modal({
   providerOptions,
 });
 
+const clearWCStorage = () => {
+  localStorage.removeItem('walletconnect');
+};
+
 export default async function getProvider(type?: string) {
+  let provider: any;
   switch (type) {
     case ProviderType.Injected:
-      return getInjectedProvider();
+      provider = getInjectedProvider();
+      break;
     case ProviderType.Walletconnect:
-      return await web3modal.connectTo('walletconnect');
+      provider = await web3modal.connectTo('walletconnect');
+      break;
     default:
-      return await web3modal.requestProvider();
+      provider = await web3modal.requestProvider();
   }
+  provider.on('disconnect', () => {
+    web3modal.clearCachedProvider();
+    clearWCStorage();
+  });
+  return provider;
 }
 export * from './addChainToWallet';
