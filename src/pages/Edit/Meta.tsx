@@ -99,7 +99,9 @@ export const Meta: FC = () => {
     });
     try {
       setSellingContractAddress(formData.nftContractAddress);
-      if (!formData.sellAll) setSellingNFTIds(formData.selectedNFTIds);
+      setSellingNFTIds(
+        formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : [...formData.selectedNFTIds],
+      );
       const result = await createBox();
       if (result) {
         const { args } = result;
@@ -125,7 +127,7 @@ export const Meta: FC = () => {
       closeToast();
       setCreating(false);
     }
-  }, [createBox, isReady, setAllDirty, formData]);
+  }, [createBox, isReady, setAllDirty, formData, ownedERC721Tokens]);
 
   const update = useCallback(async () => {
     if (!editingBoxId) return;
@@ -427,7 +429,7 @@ export const Meta: FC = () => {
           closeShareBox();
           history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
         }}
-        nftIds={formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : sellingNFTIds}
+        nftIds={sellingNFTIds}
         onShare={() => {
           const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}`;
           const text = t('share-text', { name: formData.name, link: link });
