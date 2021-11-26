@@ -129,7 +129,7 @@ export const Details: FC = memo(() => {
                   size="small"
                   onClick={loadNfts}
                 >
-                  {allLoaded ? ' All NFTs have been loaded :)' : 'Load more'}
+                  {allLoaded ? t('All NFTs have been loaded :)') : t('Load more')}
                 </Button>
               ) : null}
             </div>

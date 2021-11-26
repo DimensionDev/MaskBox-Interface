@@ -5,6 +5,7 @@ import { useMaskboxContract } from '@/hooks';
 import { getNetworkExplorer, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, TransactionStatus } from '@/types';
 import { useCallback, useState } from 'react';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 export function useOpenBox(
@@ -14,6 +15,7 @@ export function useOpenBox(
   paymentTokenIndex: number,
   proof: string[] = [],
 ) {
+  const t = useLocales();
   const { ethersProvider, providerChainId: chainId, account } = useWeb3Context();
   const { openBox, getPurchasedNft } = useMBoxContract();
   const contract = useMaskboxContract(true);
@@ -26,7 +28,7 @@ export function useOpenBox(
     setLoading(true);
     showToast({
       title: 'Drawing',
-      message: 'Sending transaction',
+      message: t('Sending transaction'),
     });
     try {
       const purchasedNfts = await getPurchasedNft(boxId, account);
@@ -39,17 +41,17 @@ export function useOpenBox(
       addTransaction({
         chainId,
         txHash,
-        name: 'Draw MaskBox',
+        name: t('Draw MaskBox'),
         status: TransactionStatus.Pending,
       });
 
       const exploreUrl = chainId ? `${getNetworkExplorer(chainId)}/tx/${tx?.hash}` : '';
       const closeToast = showToast({
-        title: 'Transaction sent',
+        title: t('Transaction sent'),
         processing: true,
         message: (
           <span className={styles.drawMessage}>
-            Transaction Submitted{' '}
+            {t('Transaction Submitted')}{' '}
             <a
               href={exploreUrl}
               target="_blank"
@@ -69,7 +71,7 @@ export function useOpenBox(
       console.log({ newlyPurchasedNfts });
       closeToast();
       showToast({
-        title: `Draw Success`,
+        title: t('Draw Success'),
         variant: 'success',
       });
       updateTransactionBy({
@@ -82,7 +84,9 @@ export function useOpenBox(
       };
     } catch (err: any) {
       showToast({
-        title: `Fails to draw the box ${boxId}: ${err.error ? err.error.message : err.message}`,
+        title: t('Fails to draw the box: {message}', {
+          message: err.error ? err.error.message : err.message,
+        }),
         variant: 'error',
       });
     } finally {

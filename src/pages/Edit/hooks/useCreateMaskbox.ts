@@ -9,10 +9,12 @@ import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
 import { formDataAtom } from '../atoms';
+import { useLocales } from '../useLocales';
 
 const abiInterface = new utils.Interface(MaskboxABI);
 
 export function useCreateMaskbox() {
+  const t = useLocales();
   const { ethersProvider, providerChainId: chainId } = useWeb3Context();
   const formData = useAtomValue(formDataAtom);
   const { addTransaction, updateTransactionBy } = useRecentTransactions();
@@ -51,7 +53,7 @@ export function useCreateMaskbox() {
     addTransaction({
       chainId,
       txHash,
-      name: 'Create MaskBox',
+      name: t('Create MaskBox'),
       status: TransactionStatus.Pending,
     });
     let log;

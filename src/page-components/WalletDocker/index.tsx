@@ -36,7 +36,7 @@ export const WalletDocker: FC<Props> = ({ className, ...rest }) => {
                 color={getNetworkColor(providerChainId!)}
                 size={20}
               />
-              {isNotSupportedChain ? 'Network error' : getNetworkName(providerChainId!)}
+              {isNotSupportedChain ? t('Network error') : getNetworkName(providerChainId!)}
             </Button>
 
             <Button className={styles.button} title={account} onClick={openAccountDialog}>
