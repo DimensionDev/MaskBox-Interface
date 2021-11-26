@@ -37,10 +37,12 @@ export default async function getProvider(type?: string) {
     default:
       provider = await web3modal.requestProvider();
   }
-  provider.on('disconnect', () => {
-    web3modal.clearCachedProvider();
-    clearWCStorage();
-  });
+  if (provider) {
+    provider.on('disconnect', () => {
+      web3modal.clearCachedProvider();
+      clearWCStorage();
+    });
+  }
   return provider;
 }
 export * from './addChainToWallet';
