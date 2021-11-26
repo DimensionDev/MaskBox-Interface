@@ -1,4 +1,5 @@
-import { createShareUrl, createShareUrlForFacebook } from '@/lib';
+import { RouteKeys } from '@/configs';
+import { createShareUrl } from '@/lib';
 import classnames from 'classnames';
 import { FC, HTMLProps, useCallback } from 'react';
 import { Icon } from '../Icon';
@@ -6,14 +7,16 @@ import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 interface Props extends HTMLProps<HTMLDivElement> {
+  chainId: string | number;
+  boxId: string | number;
   boxName: string;
 }
 
-export const SNSShare: FC<Props> = ({ className, boxName, ...rest }) => {
+export const SNSShare: FC<Props> = ({ className, chainId, boxId, boxName, ...rest }) => {
   const t = useLocales();
   const twText = t('sns-share-to-twitter', {
     boxName,
-    link: window.location.href,
+    link: `${location.origin}/#${RouteKeys.Details}?chain=${chainId}&box=${boxId}`,
   });
   const handleShareToTwitter = useCallback(() => {
     const shareLink = createShareUrl(twText);

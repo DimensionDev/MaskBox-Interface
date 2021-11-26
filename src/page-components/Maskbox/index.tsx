@@ -171,7 +171,14 @@ export const Maskbox: FC<MaskboxProps> = ({
           <CountdownButton {...buttonProps} startTime={startTime!} />
         )}
       </div>
-      {inList ? null : <SNSShare boxName={box.name ?? ''} className={styles.snsShare} />}
+      {inList ? null : (
+        <SNSShare
+          className={styles.snsShare}
+          chainId={chainId!}
+          boxId={boxId!}
+          boxName={box.name ?? ''}
+        />
+      )}
     </div>
   );
 };

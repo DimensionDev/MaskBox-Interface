@@ -1,6 +1,6 @@
 import { Badge, Button, Dialog, Icon, Image, showToast, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useBoxOnRSS3 } from '@/contexts';
+import { useBoxOnRSS3, useWeb3Context } from '@/contexts';
 import { MaskBoxesOfQuery } from '@/graphql-hooks';
 import {
   useBoxInfo,
@@ -30,6 +30,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const t = useLocales();
 
   const { box: boxOnChain } = useBoxInfo(boxOnSubgraph?.box_id);
+  const { providerChainId: chainId } = useWeb3Context();
   const cancelBox = useCancelBox();
   const [cancelDialogVisible, openCancelDialog, closeCancelDialog] = useBoolean();
   const [editDialogVisible, openEditDialog, closeEditDialog] = useBoolean();
@@ -224,7 +225,14 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
           </div>
         )}
       </div>
-      {!isEnded && !box.canceled && <SNSShare className={styles.snsShare} boxName={box.name} />}
+      {!isEnded && !box.canceled && (
+        <SNSShare
+          className={styles.snsShare}
+          chainId={chainId!}
+          boxId={box.id}
+          boxName={box.name}
+        />
+      )}
       {!box.canceled && box.started === false ? (
         <Dialog
           className={styles.cancelDialog}
