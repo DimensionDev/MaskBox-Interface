@@ -1,5 +1,6 @@
 import { RouteKeys } from '@/configs';
 import { useBox, useERC20Token, useERC721Contract, useNFTIdsOfBox } from '@/hooks';
+import { format } from 'date-fns';
 import { formatUnits } from 'ethers/lib/utils';
 import { useAtom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
@@ -27,8 +28,7 @@ export const Edit: FC = () => {
     const _boxId = params.get('box');
     updateChain(_chain);
     updateBoxId(_boxId);
-    const editting = !!_chain && !!_boxId;
-    updateIsEditting(editting);
+    updateIsEditting(!!_chain && !!_boxId);
   }, [location.search]);
 
   useEffect(() => {
@@ -73,6 +73,8 @@ export const Edit: FC = () => {
       updateFormData((fd) => ({
         ...fd,
         sellAll: boxOnSubgraph.sell_all,
+        startAt: format(boxOnSubgraph.start_time * 1000, "yyyy-MM-dd'T'HH:mm"),
+        endAt: format(boxOnSubgraph.end_time * 1000, "yyyy-MM-dd'T'HH:mm"),
       }));
     }
   }, [isEditting, boxOnSubgraph]);
