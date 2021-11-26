@@ -447,6 +447,7 @@ export type MaskBoxesOfQuery = {
     canceled: boolean;
     claimed: boolean;
     sold_nft_list: Array<string>;
+    drawed_by_customer: Array<string>;
     nft_contract: { __typename?: 'NFTContract'; address: string; name: string };
   }>;
 };
@@ -606,6 +607,7 @@ export const MaskBoxesOfDocument = gql`
         name
       }
       sold_nft_list
+      drawed_by_customer
     }
   }
 `;

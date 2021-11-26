@@ -76,6 +76,8 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
     }
     return box.total;
   }, [box.total, box.remaining]);
+  // excluded drawed by the creator
+  const isSoldout = total?.eq(box.drawed_by_customer.length);
 
   const history = useHistory();
 
@@ -192,10 +194,18 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
           <div className={styles.operations}>
             {isEnded ? (
               <>
-                <Button colorScheme="primary" disabled={!isApproveAll} onClick={unapproveAll}>
+                <Button
+                  colorScheme="primary"
+                  disabled={!isApproveAll || isSoldout}
+                  onClick={unapproveAll}
+                >
                   {isApproveAll ? t('Withdraw NFT') : t('NFT withdrawn')}
                 </Button>
-                <Button colorScheme="primary" disabled={box.claimed} onClick={withdraw}>
+                <Button
+                  colorScheme="primary"
+                  disabled={box.claimed || box.sold_nft_list.length === 0}
+                  onClick={withdraw}
+                >
                   {box.claimed
                     ? t('{symbol} Withdrawn', { symbol: paymentSymbol! })
                     : t('Withdraw {symbol}', { symbol: paymentSymbol! })}
