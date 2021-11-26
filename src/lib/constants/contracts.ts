@@ -9,7 +9,7 @@ export const chainShortNameMap: Record<number, string> = {
 
 export const contractAddresses: Record<string, Record<string, string>> = {
   Mainnet: {
-    Maskbox: '0x0dFB34D213f613Dda67a2924F60b5301d42ABFb7',
+    Maskbox: '0x294428f04b0F9EbC49B7Ad61E2736ebD6808c145',
     MaskboxNFT: '0x56136E69A5771436a9598804c5eA792230c21181',
   },
   Rinkeby: {
