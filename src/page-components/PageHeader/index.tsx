@@ -181,6 +181,15 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         >
           {t('My Items')}
         </NavLink>
+        {myMaskboxesVisible && (
+          <NavLink
+            className={styles.navItem}
+            activeClassName={styles.activeNav}
+            to={RouteKeys.MyMaskboxes}
+          >
+            {t('My MaskBoxes')}
+          </NavLink>
+        )}
         <NavLink className={styles.navItem} activeClassName={styles.activeNav} to={RouteKeys.Faqs}>
           {t('FAQs')}
         </NavLink>
