@@ -54,13 +54,19 @@ export function useClaimPayment() {
         while (!log) {
           await tx.wait(1);
           confirmation += 1;
-          const logs = await ethersProvider.getLogs(contract.filters.ClaimPayment());
-          log = logs[0];
+          try {
+            const logs = await ethersProvider.getLogs(contract.filters.ClaimPayment());
+            log = logs[0];
+          } catch (err) {
+            console.log('Fails to get logs', err);
+          }
+          console.log(`waited ${confirmation} block`);
           if (!log && confirmation >= MAX_CONFIRMATION) {
             updateTransactionBy({
               txHash,
               status: TransactionStatus.Fails,
             });
+            closeToast();
             throw new Error('Fails to get log of ClaimPayment');
           }
         }
