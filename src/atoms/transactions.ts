@@ -6,10 +6,11 @@ import { useUpdateAtom } from 'jotai/utils';
 import { uniqBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo } from 'react';
 import { chainAtom } from './chain';
+import { accountAtom } from './account';
 
 const STORAGE_KEY = StorageKeys.RecentTransations;
 
-type StoredTransactionMap = Record<number, Transaction[]>;
+type StoredTransactionMap = Record<string, Transaction[]>;
 
 const initialStoredTxesMap = getStorage<Transaction[]>(STORAGE_KEY) ?? {};
 
@@ -17,21 +18,28 @@ export const transactionsMapAtom = atom<StoredTransactionMap>(initialStoredTxesM
 
 type Update = Transaction[] | ((txes: Transaction[]) => Transaction[]);
 
+const keyAtom = atom<string | null>((get) => {
+  const chainId = get(chainAtom);
+  const account = get(accountAtom);
+  if (!chainId || !account) return null;
+  return `${chainId}/${account}`;
+});
+
 export const recentTransactionsAtom = atom<Transaction[], Update>(
   (get) => {
-    const chainId = get(chainAtom);
-    if (!chainId) return [];
+    const key = get(keyAtom);
+    if (!key) return [];
     const txesMap = get(transactionsMapAtom);
-    return txesMap[chainId] ?? [];
+    return txesMap[key] ?? [];
   },
   (get, set, update) => {
-    const chainId = get(chainAtom);
-    if (!chainId) return;
+    const key = get(keyAtom);
+    if (!key) return;
     const txesMap = get(transactionsMapAtom);
-    const updatedTxes = typeof update === 'function' ? update(txesMap[chainId] ?? []) : update;
+    const updatedTxes = typeof update === 'function' ? update(txesMap[key] ?? []) : update;
     const updatedMap = {
       ...txesMap,
-      [chainId]: updatedTxes,
+      [key]: updatedTxes,
     };
     set(transactionsMapAtom, updatedMap);
     setStorage<StoredTransactionMap>(STORAGE_KEY, updatedMap);

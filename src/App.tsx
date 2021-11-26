@@ -3,6 +3,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { Routes } from './Routes';
 import { Layout } from './Layout';
+import { AtomWatchers } from './atoms';
 
 import {
   ApolloProvider,
@@ -29,19 +30,21 @@ function App() {
           <I18nProvider>
             <UploadProvider>
               <Web3Provider>
-                <ERC20Provider>
-                  <ApolloProvider>
-                    <NFTContractProvider>
-                      <MBoxContractProvider>
-                        <RSS3Provider>
-                          <Layout>
-                            <Routes />
-                          </Layout>
-                        </RSS3Provider>
-                      </MBoxContractProvider>
-                    </NFTContractProvider>
-                  </ApolloProvider>
-                </ERC20Provider>
+                <AtomWatchers>
+                  <ERC20Provider>
+                    <ApolloProvider>
+                      <NFTContractProvider>
+                        <MBoxContractProvider>
+                          <RSS3Provider>
+                            <Layout>
+                              <Routes />
+                            </Layout>
+                          </RSS3Provider>
+                        </MBoxContractProvider>
+                      </NFTContractProvider>
+                    </ApolloProvider>
+                  </ERC20Provider>
+                </AtomWatchers>
               </Web3Provider>
               <Toaster
                 position="top-right"
