@@ -15,27 +15,14 @@ export const SNSShare: FC<Props> = ({ className, boxName, ...rest }) => {
     boxName,
     link: window.location.href,
   });
-  const fbText = t('sns-share-to-facebook', {
-    boxName,
-    link: window.location.href,
-  });
   const handleShareToTwitter = useCallback(() => {
     const shareLink = createShareUrl(twText);
     window.open(shareLink, 'noopener noreferrer');
   }, [twText]);
-  const handleShareToFacebook = useCallback(() => {
-    const shareLink = createShareUrlForFacebook(fbText);
-    window.open(shareLink, 'noopener noreferrer');
-  }, [fbText]);
+
   return (
     <div className={classnames(styles.snsShare, className)} {...rest}>
       <Icon type="twitter" className={styles.button} role="button" onClick={handleShareToTwitter} />
-      <Icon
-        type="facebook"
-        className={styles.button}
-        role="button"
-        onClick={handleShareToFacebook}
-      />
     </div>
   );
 };
