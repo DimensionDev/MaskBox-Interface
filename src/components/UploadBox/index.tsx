@@ -126,10 +126,11 @@ export const UploadBox: FC<Props> = ({
           <div className={styles.description}>
             <div className={styles.texts}>
               <p className={styles.filetypes}>
-                JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.
+                {t('JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.')}
               </p>
               <p>
-                Drag-and-drap file, or <span className={styles.highlight}>Browse computer</span>
+                {t('Drag-and-drap file, or')}{' '}
+                <span className={styles.highlight}>{t('Browse computer')}</span>
               </p>
             </div>
           </div>

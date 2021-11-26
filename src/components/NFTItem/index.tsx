@@ -1,6 +1,8 @@
 import { ERC721Token } from '@/types';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
+import { Icon } from '../Icon';
+import { Image } from '../Image';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
@@ -17,7 +19,13 @@ export const NFTItem: FC<NFTItemProps> = ({ className, contractName, token, sold
   return (
     <div className={classnames(styles.nft, className)} {...rest}>
       <div className={styles.image}>
-        <img loading="lazy" src={token.image ?? imagePlaceholder} alt={token.name} height="100%" />
+        <Image
+          loading="lazy"
+          src={token.image ?? imagePlaceholder}
+          alt={token.name}
+          height="100%"
+          alternative={<Icon type="mask" size={48}></Icon>}
+        />
       </div>
       <div className={styles.info}>
         {contractName && <h3 className={styles.contractName}>{contractName}</h3>}

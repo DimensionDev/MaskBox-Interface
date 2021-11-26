@@ -9,5 +9,8 @@
   "File size up to {size}MB": "File size up to {size}MB",
   "You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4": "You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4",
   "You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed": "You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed",
-  "You have no NFT of this kind for sale": "You have no NFT of this kind for sale"
+  "You have no NFT of this kind for sale": "You have no NFT of this kind for sale",
+  "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.": "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.",
+  "Drag-and-drap file, or": "Drag-and-drap file, or",
+  "Browse computer": "Browse computer"
 }
