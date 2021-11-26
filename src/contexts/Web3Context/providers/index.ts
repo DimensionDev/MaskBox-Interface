@@ -29,7 +29,7 @@ export default async function getProvider(type?: string) {
   let provider: any;
   switch (type) {
     case ProviderType.Injected:
-      provider = getInjectedProvider();
+      provider = await getInjectedProvider();
       break;
     case ProviderType.Walletconnect:
       provider = await web3modal.connectTo('walletconnect');
