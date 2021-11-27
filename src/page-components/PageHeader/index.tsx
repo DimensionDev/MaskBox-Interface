@@ -115,7 +115,6 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
                 <Button
                   className={styles.button}
                   colorScheme="primary"
-                  title={account}
                   onClick={() => {
                     history.push(RouteKeys.MyMaskboxes);
                   }}
