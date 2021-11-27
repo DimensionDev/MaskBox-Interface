@@ -12,6 +12,9 @@ const providerOptions = {
     package: WalletConnectProvider,
     options: {
       infuraId: process.env.INFURA_ID,
+      qrcodeModalOptions: {
+        desktopLinks: [],
+      },
     },
   },
 };
