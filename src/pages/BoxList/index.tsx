@@ -1,4 +1,5 @@
-import { Button, LoadingIcon } from '@/components';
+import { Button, Icon, LoadingIcon } from '@/components';
+import { ThemeType, useTheme } from '@/contexts';
 import { MaskBoxesQuery, useMaskBoxesLazyQuery } from '@/graphql-hooks';
 import { WrapMaskbox } from '@/page-components';
 import { FC, useEffect, useMemo } from 'react';
@@ -7,6 +8,7 @@ import styles from './index.module.less';
 import { useLocales } from './useLocales';
 
 const PAGE_SIZE = 5;
+const SKIP = 3; // Strip testing dirty data
 const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
   const t = useLocales();
@@ -14,6 +16,7 @@ export const BoxList: FC = () => {
 
   const history = useHistory();
   const location = useLocation();
+  const { theme } = useTheme();
 
   const page = useMemo(() => {
     const p = new URLSearchParams(location.search).get('page');
@@ -33,7 +36,7 @@ export const BoxList: FC = () => {
     if (!page) return;
     fetchBoxes({
       variables: {
-        skip: (page - 1) * PAGE_SIZE,
+        skip: (page - 1) * PAGE_SIZE + SKIP,
         first: PAGE_SIZE,
       },
     });
@@ -48,6 +51,14 @@ export const BoxList: FC = () => {
   }
 
   const maskboxes = boxesData?.maskboxes ?? EMPTY_LIST;
+  if (maskboxes.length === 0) {
+    return (
+      <div className={styles.status}>
+        <p className={styles.text}>{t('No items to display.')}</p>
+        <Icon type={theme === ThemeType.Light ? 'empty' : 'emptyDark'} size={96} />
+      </div>
+    );
+  }
 
   return (
     <>
