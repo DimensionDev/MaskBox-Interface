@@ -38,7 +38,7 @@ export const networks: Network[] = ([1, 4] as const).map((chainId) => {
 });
 
 export const networkExplorers: Record<number, string> = {
-  [ChainIdEnum.Matic]: 'https://etherscan.io',
+  [ChainIdEnum.Mainnet]: 'https://etherscan.io',
   [ChainIdEnum.Rinkeby]: 'https://rinkeby.etherscan.io',
   [ChainIdEnum.BSC]: 'https://bscscan.com',
   [ChainIdEnum.Matic]: 'https://polygonscan.com',
