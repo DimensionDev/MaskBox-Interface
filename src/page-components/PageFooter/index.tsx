@@ -1,5 +1,6 @@
 import { logoImage } from '@/assets';
 import { NewsletterBox } from '@/components';
+import { RouteKeys } from '@/configs';
 import { useGdpr } from '@/hooks';
 import classnames from 'classnames';
 import { FC, HTMLProps } from 'react';
@@ -29,7 +30,13 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
               <dd className={styles.groupList}>
                 <ul className={styles.links}>
                   <li className={styles.link}>
-                    <a href="https://twitter.com/realMaskNetwork">Twitter</a>
+                    <a
+                      href="https://twitter.com/realMaskNetwork"
+                      target="_blank"
+                      rel="nooppner noreferrer"
+                    >
+                      Twitter
+                    </a>
                   </li>
                   <li className={styles.link}>
                     <a href="https://t.me/maskbook_group">Telegram</a>
@@ -46,7 +53,7 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
                     <a href="https://masknetwork.medium.com/">Medium</a>
                   </li>
                   <li className={styles.link}>
-                    <NavLink to="/faqs">{t('FAQs')}</NavLink>
+                    <NavLink to={RouteKeys.Faqs}>{t('FAQs')}</NavLink>
                   </li>
                 </ul>
               </dd>
@@ -56,7 +63,7 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
               <dd className={styles.groupList}>
                 <ul className={styles.links}>
                   <li className={styles.link}>
-                    <a href="#">{t('Mystery')}</a>
+                    <NavLink to={RouteKeys.BoxList}>{t('Mystery')}</NavLink>
                   </li>
                 </ul>
               </dd>
