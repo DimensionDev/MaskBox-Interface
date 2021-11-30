@@ -8,7 +8,6 @@ import styles from './index.module.less';
 import { useLocales } from './useLocales';
 
 const PAGE_SIZE = 5;
-const SKIP = 3; // Strip testing dirty data
 const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
   const t = useLocales();
@@ -36,7 +35,7 @@ export const BoxList: FC = () => {
     if (!page) return;
     fetchBoxes({
       variables: {
-        skip: (page - 1) * PAGE_SIZE + SKIP,
+        skip: (page - 1) * PAGE_SIZE,
         first: PAGE_SIZE,
       },
     });
