@@ -21,7 +21,7 @@
   "how-to-contact": "NFTを発行するにはどうすればいいですか?",
   "answer-to-how-to-contact": "現在、MaskBoxでのNFTの販売は公式パートナー/アーティストにのみ適用されます。\nビジネス上の意図をお持ちの方は、<a href='mailto:hi@mask.io'>cooperation form</a>にご連絡ください。折り返しご連絡させていただきます。",
   "is-contract-safe": "私たちのコントラクトは安全ですか?",
-  "answer-to-is-contract-safe": "当社のコントラクトは、長年の経験を持つシニアエンジニアが作成しています。私たちは\nガスコスト最適化のための業界最先端のソリューションを提供します。また、コントラクトの点検を何度も行う一流コントラクトセキュリティエンジニアもいます。\n契約書のソースコードは、当社の< target='_blank' rel='noopener noreferrer' href='https://github.com/DimensionDev/MysteryBox'>Github</a>でご確認ください。",
+  "answer-to-is-contract-safe": "当社のコントラクトは、長年の経験を持つシニアエンジニアが作成しています。私たちは\nガスコスト最適化のための業界最先端のソリューションを提供します。また、コントラクトの点検を何度も行う一流コントラクトセキュリティエンジニアもいます。\n契約書のソースコードは、当社の<a target='_blank' rel='noopener noreferrer' href='https://github.com/DimensionDev/MysteryBox'>Github</a>でご確認ください。",
   "what-is-the-network": "テストネットワークとは何ですか？",
   "answer-to-what-is-the-network": "現在のテストネットワークはRinkebyです。ウォレットをRinkebyネットワークに切り替えてテストしてください。"
 }
