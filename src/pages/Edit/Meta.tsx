@@ -11,7 +11,7 @@ import {
 import { RouteKeys } from '@/configs';
 import { usePickERC20, useRSS3, useWeb3Context } from '@/contexts';
 import { useERC721, useTokenList } from '@/hooks';
-import { createShareUrl } from '@/lib';
+import { createShareUrl, ZERO_ADDRESS } from '@/lib';
 import {
   ERC721ContractPicker,
   NFTPickerDialog,
@@ -358,7 +358,9 @@ export const Meta: FC = () => {
               className={styles.pickButton}
               onClick={async () => {
                 if (isEditting) return;
-                const token = await pickERC20();
+                const token = await pickERC20({
+                  exclude: [ZERO_ADDRESS],
+                });
                 updateField('holderTokenAddress', token.address);
                 updateField('holderToken', token);
               }}

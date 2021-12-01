@@ -1,5 +1,6 @@
 import { RouteKeys } from '@/configs';
 import { useBox, useERC20Token, useERC721Contract, useNFTIdsOfBox } from '@/hooks';
+import { isZeroAddress } from '@/utils';
 import { format } from 'date-fns';
 import { formatUnits } from 'ethers/lib/utils';
 import { useAtom } from 'jotai';
@@ -63,6 +64,9 @@ export const Edit: FC = () => {
           token: paymentToken,
           limit: boxOnChain.personal_limit!,
           nftContractAddress: boxOnChain.nft_address!,
+          holderTokenAddress: isZeroAddress(boxOnChain.holder_token_addr!)
+            ? ''
+            : boxOnChain.holder_token_addr!,
         };
       });
     }

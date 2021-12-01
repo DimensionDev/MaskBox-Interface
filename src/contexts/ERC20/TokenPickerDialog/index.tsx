@@ -9,7 +9,8 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import styles from './index.module.less';
 import { useLocales } from '../../useLocales';
 
-interface Props extends DialogProps {
+interface TokenPickerDialogProps extends DialogProps {
+  exclude?: string[];
   onPick?: (token: TokenType) => void;
 }
 
@@ -18,7 +19,11 @@ function storeNewToken(newToken: TokenType) {
   setStorage(StorageKeys.ERC20Tokens, tokens ? [...tokens, newToken] : [newToken]);
 }
 
-export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
+export const TokenPickerDialog: FC<TokenPickerDialogProps> = ({
+  onPick,
+  exclude = [],
+  ...rest
+}) => {
   const t = useLocales();
   const { tokens, updateTokens } = useTokenList();
   const [keyword, setKeyword] = useState('');
@@ -27,15 +32,17 @@ export const TokenPickerDialog: FC<Props> = ({ onPick, ...rest }) => {
 
   const filteredTokens = useMemo(() => {
     const kw = keyword.toLowerCase();
-    return tokens.filter((token) => {
-      const { symbol, name, address } = token;
-      return (
-        symbol.toLowerCase().includes(kw) ||
-        name.toLowerCase().includes(kw) ||
-        address.toLowerCase().startsWith(kw)
-      );
-    });
-  }, [keyword, tokens]);
+    return tokens
+      .filter((token) => !exclude.includes(token.address))
+      .filter((token) => {
+        const { symbol, name, address } = token;
+        return (
+          symbol.toLowerCase().includes(kw) ||
+          name.toLowerCase().includes(kw) ||
+          address.toLowerCase().startsWith(kw)
+        );
+      });
+  }, [keyword, tokens, exclude.join()]);
 
   const isNewAddress = useMemo(() => {
     return (
