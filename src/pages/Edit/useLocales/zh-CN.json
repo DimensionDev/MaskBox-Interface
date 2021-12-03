@@ -34,7 +34,7 @@
   "Unlock NFT": "解锁 NFT",
   "Create Mystery box": "创建盲盒",
   "Update": "更新",
-  "share-text": "我刚刚在 MaskBox 平台上创建了一个 NFT 盲盒 {formData.name} ，祝你好运！ {link}",
+  "share-text": "我刚刚在 MaskBox 平台上创建了一个 NFT 盲盒 {name} ，祝你好运！ {link}",
   "Please input mystery box name": "请输入盲盒名称",
   "Please provide Mystery thumbnail": "请提供盲盒缩略图",
   "Please provide price for a box": "请为提供每个盲盒的售价",
