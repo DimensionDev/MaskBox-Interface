@@ -88,3 +88,12 @@ query SoldNFTList($id: ID!) {
     drawed_by_customer
   }
 }
+
+query NFTContractsOf($addr: ID!) {
+  user(id: $addr) {
+    nft_contracts {
+      id
+      address
+    }
+  }
+}

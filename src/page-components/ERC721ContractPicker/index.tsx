@@ -7,7 +7,7 @@ import {
   Icon,
   Input,
 } from '@/components';
-import { useGetERC721Contract } from '@/hooks';
+import { useERC721ContractList, useGetERC721Contract } from '@/hooks';
 import { ERC721Contract as ERC721ContractType } from '@/lib';
 import { getStorage, isSameAddress, setStorage, StorageKeys } from '@/utils';
 import classnames from 'classnames';
@@ -15,7 +15,6 @@ import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
-import { useERC721ContractList } from './useERC721ContractList';
 
 interface Props extends DialogProps {
   onPick?: (token: ERC721ContractType) => void;

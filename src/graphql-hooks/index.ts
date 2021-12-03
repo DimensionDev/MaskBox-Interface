@@ -544,6 +544,21 @@ export type SoldNftListQuery = {
     | undefined;
 };
 
+export type NftContractsOfQueryVariables = Exact<{
+  addr: Scalars['ID'];
+}>;
+
+export type NftContractsOfQuery = {
+  __typename?: 'Query';
+  user?:
+    | {
+        __typename?: 'User';
+        nft_contracts: Array<{ __typename?: 'NFTContract'; id: string; address: string }>;
+      }
+    | null
+    | undefined;
+};
+
 export const MaskBoxDocument = gql`
   query MaskBox($id: ID!) {
     maskbox(id: $id) {
@@ -872,4 +887,55 @@ export type SoldNftListLazyQueryHookResult = ReturnType<typeof useSoldNftListLaz
 export type SoldNftListQueryResult = Apollo.QueryResult<
   SoldNftListQuery,
   SoldNftListQueryVariables
+>;
+export const NftContractsOfDocument = gql`
+  query NFTContractsOf($addr: ID!) {
+    user(id: $addr) {
+      nft_contracts {
+        id
+        address
+      }
+    }
+  }
+`;
+
+/**
+ * __useNftContractsOfQuery__
+ *
+ * To run a query within a React component, call `useNftContractsOfQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNftContractsOfQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNftContractsOfQuery({
+ *   variables: {
+ *      addr: // value for 'addr'
+ *   },
+ * });
+ */
+export function useNftContractsOfQuery(
+  baseOptions: Apollo.QueryHookOptions<NftContractsOfQuery, NftContractsOfQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<NftContractsOfQuery, NftContractsOfQueryVariables>(
+    NftContractsOfDocument,
+    options,
+  );
+}
+export function useNftContractsOfLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<NftContractsOfQuery, NftContractsOfQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<NftContractsOfQuery, NftContractsOfQueryVariables>(
+    NftContractsOfDocument,
+    options,
+  );
+}
+export type NftContractsOfQueryHookResult = ReturnType<typeof useNftContractsOfQuery>;
+export type NftContractsOfLazyQueryHookResult = ReturnType<typeof useNftContractsOfLazyQuery>;
+export type NftContractsOfQueryResult = Apollo.QueryResult<
+  NftContractsOfQuery,
+  NftContractsOfQueryVariables
 >;

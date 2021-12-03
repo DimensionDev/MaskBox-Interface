@@ -18,14 +18,6 @@
   margin-right: auto;
   margin-top: 48px;
   padding-bottom: 30px;
-  .nftList {
-    grid-gap: 30px;
-  }
-  .buttonGroup {
-    display: flex;
-    justify-content: center;
-    margin-left: 70px;
-  }
 }
 .emptyContainer {
   display: flex;
@@ -74,5 +66,28 @@
     width: auto;
     margin-left: 40px;
     margin-right: 40px;
+  }
+}
+
+.collection {
+  .listContainer {
+    max-height: 480px;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+  .nftList {
+    grid-gap: 30px;
+  }
+  .loadmore {
+    display: flex;
+    width: 300px;
+    margin: 16px auto;
+  }
+  .bottom {
+    height: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
