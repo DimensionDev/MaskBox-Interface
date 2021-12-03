@@ -29,3 +29,7 @@ export function createDefer<T extends any = any, E extends unknown = unknown>():
 }
 
 export const EMPTY_LIST: never[] = Object.freeze([]) as never[];
+
+export const wait = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

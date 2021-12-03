@@ -1,13 +1,17 @@
 import { ZERO } from '@/lib';
 import { ERC721Token } from '@/types';
-import { useBoolean } from '@/utils';
+import { createDefer, DeferTuple, useBoolean } from '@/utils';
 import { uniqBy } from 'lodash-es';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useERC721Balance } from './useERC721Balance';
 import { useGetERC721Tokens } from './useERC721Tokens';
 
 const SIZE = 50;
-export function useLazyLoadERC721Tokens(address: string) {
+export function useLazyLoadERC721Tokens(
+  address: string,
+  autoLoadNext: boolean = true,
+  loadSize: number = SIZE,
+) {
   const balance = useERC721Balance(address);
   const offsetRef = useRef(0);
   const liveRef = useRef(true);
@@ -21,42 +25,50 @@ export function useLazyLoadERC721Tokens(address: string) {
     };
   }, []);
 
-  const lazyLoadTokens = useCallback(async () => {
+  const deferRef = useRef<DeferTuple<void>>();
+  const loadMore = useCallback(async () => {
     if (balance.lte(offsetRef.current)) return;
-    setIsLoading();
     const remaining = balance.sub(offsetRef.current);
-    if (remaining.lte(ZERO)) return;
-    const size = remaining.gt(SIZE) ? SIZE : remaining.toNumber();
+    if (remaining.lte(ZERO) || !liveRef.current) return;
+
+    setIsLoading();
+    if (deferRef.current) {
+      await deferRef.current[0];
+    }
+
+    deferRef.current = createDefer<void>();
+    const size = remaining.gt(loadSize) ? loadSize : remaining.toNumber();
     const result = await getERC721Tokens(offsetRef.current, size);
-    offsetRef.current += size;
     if (result.length && liveRef.current) {
       setTokens((list) => {
         const newList = uniqBy([...list, ...result], 'tokenId');
+        offsetRef.current = newList.length;
         return newList;
       });
     }
+    deferRef.current[1]();
     // continue loading more
-    if (SIZE === size && remaining.gt(0)) {
-      await lazyLoadTokens();
+    if (loadSize === size && remaining.gt(0) && autoLoadNext) {
+      await loadMore();
     } else {
       setNotLoading();
     }
-  }, [getERC721Tokens, balance]);
+  }, [getERC721Tokens, balance, autoLoadNext, loadSize]);
 
   useEffect(() => {
-    lazyLoadTokens();
+    loadMore();
     return () => {
       offsetRef.current = 0;
     };
-  }, [lazyLoadTokens]);
+  }, [loadMore]);
 
-  const finished = balance.eq(offsetRef.current);
+  const finished = balance.lte(offsetRef.current);
 
   return {
     balance,
     loading,
     finished,
     tokens,
-    lazyLoadTokens,
+    loadMore,
   };
 }

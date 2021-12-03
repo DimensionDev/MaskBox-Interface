@@ -1,4 +1,7 @@
 {
   "My Collectibles": "My Collectibles",
-  "No items to display.": "No items to display."
+  "No items to display.": "No items to display.",
+  "Loading more": "Loading more",
+  "All {count} NFTs loaded": "All {count} NFTs loaded",
+  "Loaded {count} NFTs": "Loaded {count} NFTs"
 }

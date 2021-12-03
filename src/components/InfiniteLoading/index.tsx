@@ -1,30 +1,41 @@
-import { FC, useState, useRef, useEffect, HTMLProps } from 'react';
 import { noop } from 'lodash-es';
+import { FC, HTMLProps, useCallback, useEffect, useRef } from 'react';
 import styles from './index.module.less';
 
 export interface InfiniteLoadingProps extends HTMLProps<HTMLDivElement> {
-  loading?: boolean;
-  onReachBottom?: () => void;
+  finished?: boolean;
+  onReachBottom?: () => Promise<void | boolean>;
 }
 
 export const InfiniteLoading: FC<InfiniteLoadingProps> = ({
+  finished,
   onReachBottom,
-  loading,
   children,
   ...rest
 }) => {
   const anchorRef = useRef<HTMLDivElement>(null);
-  const [reachedBottom, setReachedBottom] = useState(false);
+  const visibleRef = useRef<boolean>(false);
+
+  const executeOnReachBottom = useCallback(async () => {
+    if (finished) return;
+    const result = await onReachBottom?.();
+    if (visibleRef.current && !result) {
+      setTimeout(executeOnReachBottom, 300);
+    }
+  }, [onReachBottom, finished]);
 
   useEffect(() => {
-    if (!anchorRef.current) {
-      return noop;
-    }
+    if (!anchorRef.current) return noop;
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setReachedBottom(entry.intersectionRatio === 1);
-        });
+      async (entries) => {
+        const entry = entries[0];
+        if (entry.intersectionRatio === 1) {
+          visibleRef.current = true;
+          executeOnReachBottom();
+        }
+        if (entry.intersectionRatio < 0.5) {
+          visibleRef.current = false;
+        }
       },
       {
         threshold: 1,
@@ -34,13 +45,7 @@ export const InfiniteLoading: FC<InfiniteLoadingProps> = ({
     return () => {
       anchorRef.current && observer.unobserve(anchorRef.current);
     };
-  }, []);
-
-  useEffect(() => {
-    if (!loading && reachedBottom && onReachBottom) {
-      onReachBottom();
-    }
-  }, [loading, reachedBottom, onReachBottom]);
+  }, [executeOnReachBottom]);
 
   return (
     <div {...rest}>

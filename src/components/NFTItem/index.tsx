@@ -56,36 +56,12 @@ export const NFTItem: FC<NFTItemProps> = ({
       />
       <div className={styles.info}>
         {contractName && <h3 className={styles.contractName}>{contractName}</h3>}
-        <h3 className={styles.name}>{fetching ? <LoadingIcon size={14} /> : tokenMeta.name}</h3>
+        <h3 className={styles.name}>{tokenMeta.name || `#${token.tokenId}`}</h3>
         {sold !== undefined && (
           <h3 className={styles.saleStatus}>{sold ? t('Sold') : t('For Sale')}</h3>
         )}
       </div>
       {sold && <div className={styles.mask} />}
     </div>
-  );
-};
-
-interface CollectionProps
-  extends HTMLProps<HTMLUListElement>,
-    Pick<NFTItemProps, 'contractName' | 'sold'> {
-  tokens: ERC721Token[];
-}
-
-export const Collection: FC<CollectionProps> = ({
-  tokens,
-  contractName,
-  sold,
-  className,
-  ...rest
-}) => {
-  return (
-    <ul className={classnames(styles.nftList, className)} {...rest}>
-      {tokens.map((token) => (
-        <li key={token.tokenId} className={styles.nftItem}>
-          <NFTItem contractName={contractName} token={token} sold={sold} />
-        </li>
-      ))}
-    </ul>
   );
 };

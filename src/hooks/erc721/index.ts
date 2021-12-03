@@ -6,3 +6,4 @@ export * from './useERC721Tokens';
 export * from './useERC721TokensByIds';
 export * from './useIsOwned';
 export * from './useLazyLoadERC721Tokens';
+export * from './useERC721ContractList';
