@@ -31,7 +31,7 @@
   "Unlocking": "ロック解除",
   "Unlock NFT": "NFTをアンロック",
   "Create Mystery box": "Mysteryboxを作成",
-  "share-text": "NFTミステリーボックス {formData.name} を MaskBox プラットフォーム上に作成しました。頑張って絵を描いてください！ {link}",
+  "share-text": "NFTミステリーボックス {name} を MaskBox プラットフォーム上に作成しました。頑張って絵を描いてください！ {link}",
   "Please input mystery box name": "ミステリーボックスの名前を入力してください",
   "Please provide Mystery thumbnail": "ミステリーのサムネイルを記入してください",
   "Please provide price for a box": "ボックスの価格を入力してください",
