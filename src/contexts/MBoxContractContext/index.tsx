@@ -1,5 +1,5 @@
 import { ZERO } from '@/lib';
-import { BoxInfoOnChain, BoxOnChain, BoxStatusOnChain } from '@/types';
+import { BoxInfoOnChain, BoxStatusOnChain } from '@/types';
 import { addGasMargin } from '@/utils';
 import { BigNumber } from 'ethers';
 import { createContext, FC, memo, useCallback, useContext, useEffect, useState } from 'react';

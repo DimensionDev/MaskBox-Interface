@@ -1,11 +1,7 @@
 import { Badge, Button, Dialog, Icon, Image, showToast, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useBoxOnRSS3, useWeb3Context } from '@/contexts';
-import {
-  MaskBoxesOfQuery,
-  useMaskBoxClaimedStatusLazyQuery,
-  useMaskBoxesOfQuery,
-} from '@/graphql-hooks';
+import { MaskBoxesOfQuery, useMaskBoxClaimedStatusLazyQuery } from '@/graphql-hooks';
 import {
   useBoxInfo,
   useCancelBox,

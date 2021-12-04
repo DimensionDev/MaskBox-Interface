@@ -54,7 +54,7 @@ export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
 
   useEffect(() => {
     if (isNewAddress) {
-      getERC721Contract(keyword).then((token) => token && setNewContract(token));
+      getERC721Contract(keyword).then((contract) => contract && setNewContract(contract));
     }
   }, [isNewAddress, keyword, getERC721Contract]);
 
