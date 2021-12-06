@@ -1,5 +1,5 @@
 import { ERC721Token } from '@/types';
-import { ipfsUrl } from './ipfs';
+import { defsUrl } from './defs';
 
 const nftCache = new Map();
 export async function fetchNFTTokenDetail(uri: string): Promise<Omit<ERC721Token, 'tokenId'>> {
@@ -7,9 +7,9 @@ export async function fetchNFTTokenDetail(uri: string): Promise<Omit<ERC721Token
     return nftCache.get(uri);
   }
 
-  const response = await fetch(ipfsUrl(uri));
+  const response = await fetch(defsUrl(uri));
   const data = (await response.json()) as Omit<ERC721Token, 'tokenId'>;
-  data.image = ipfsUrl(data.image);
+  data.image = defsUrl(data.image);
   nftCache.set(uri, data);
 
   return data;
