@@ -47,7 +47,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   const payment = box.payment?.[0];
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
-  const { isApproveAll } = useERC721(box.nft_address, box.creator);
+  const { isApproveAll, checkingApprove } = useERC721(box.nft_address, box.creator);
   const { ethersProvider, openConnectionDialog, isConnecting } = useWeb3Context();
 
   const startTime = box?.start_time ? new Date(box.start_time * 1000).getTime() : 0;
@@ -69,11 +69,8 @@ export const Maskbox: FC<MaskboxProps> = ({
   const buttonText = useMemo(() => {
     if (ethersProvider) {
       if (isSoldout) return t('Sold out');
-      if (box.expired) {
-        return t('Ended');
-      } else if (!isApproveAll) {
-        return t('Canceled');
-      }
+      if (box.expired) return t('Ended');
+      if (!isApproveAll) return t('Canceled');
     }
     if (inList) return t('View Details');
     if (!ethersProvider) return t('Connect Wallet');
@@ -165,11 +162,18 @@ export const Maskbox: FC<MaskboxProps> = ({
             </dd>
           ) : null}
         </dl>
-        {isStarted || !ethersProvider ? (
-          <Button {...buttonProps}>{buttonText}</Button>
-        ) : (
-          <CountdownButton {...buttonProps} startTime={startTime!} />
-        )}
+        {(() => {
+          if (checkingApprove || isConnecting)
+            return (
+              <Button {...buttonProps} disabled>
+                <LoadingIcon />
+              </Button>
+            );
+          if (isStarted || !ethersProvider) {
+            return <Button {...buttonProps}>{buttonText}</Button>;
+          }
+          return <CountdownButton {...buttonProps} startTime={startTime!} />;
+        })()}
       </div>
       {inList ? null : (
         <SNSShare
