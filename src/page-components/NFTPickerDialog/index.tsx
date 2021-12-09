@@ -69,7 +69,7 @@ export const NFTPickerDialog: FC<Props> = ({
             pickable
           />
           <div className={styles.summary}>
-            <span className={styles.selected}>{pickedIds.length}</span>/<span>{tokens.length}</span>
+            <span className={styles.picked}>{pickedIds.length}</span> / <span>{tokens.length}</span>
           </div>
         </>
       ) : (

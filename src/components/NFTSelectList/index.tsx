@@ -1,4 +1,5 @@
 import { ERC721Token } from '@/types';
+import classnames from 'classnames';
 import { noop } from 'lodash-es';
 import { ChangeEvent, FC, HTMLProps, useCallback, useMemo, useState } from 'react';
 import { Icon } from '../Icon';
@@ -64,10 +65,10 @@ export const NFTSelectList: FC<NFTSelectListProps> = ({
   };
 
   return (
-    <div className={className} {...rest}>
+    <div className={classnames(className, styles.selectList)} {...rest}>
       {pickable && (
         <div className={styles.operations}>
-          <label>
+          <label className={styles.togglAll}>
             <input type="checkbox" checked={isSelectedAll} onChange={toggleSelectAll} />
             {t('Select all')}
           </label>

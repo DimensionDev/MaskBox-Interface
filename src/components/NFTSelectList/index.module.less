@@ -6,16 +6,28 @@
   margin-bottom: 5px;
   font-size: 14px;
   color: var(--text-primary, #1e202c);
+  .toggleAll {
+    cursor: pointer;
+  }
   .tip {
     kbd {
       color: var(--text-link, #0057ff);
     }
   }
 }
+.selectList {
+  display: flex;
+  flex-direction: column;
+  .list {
+    flex-grow: 1;
+    overflow: auto;
+  }
+}
 .list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 12px;
+  border-radius: 8px;
   .item {
     display: flex;
     justify-content: center;
