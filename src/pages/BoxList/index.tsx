@@ -50,24 +50,23 @@ export const BoxList: FC = () => {
   }
 
   const maskboxes = boxesData?.maskboxes ?? EMPTY_LIST;
-  if (maskboxes.length === 0) {
-    return (
-      <div className={styles.status}>
-        <p className={styles.text}>{t('No items to display.')}</p>
-        <Icon type={theme === ThemeType.Light ? 'empty' : 'emptyDark'} size={96} />
-      </div>
-    );
-  }
 
   return (
     <>
-      <ul className={styles.list}>
-        {maskboxes.map((maskbox) => (
-          <li key={maskbox.box_id} className={styles.item}>
-            <WrapMaskbox boxOnSubgraph={maskbox} inList />
-          </li>
-        ))}
-      </ul>
+      {maskboxes.length === 0 ? (
+        <div className={styles.status}>
+          <p className={styles.text}>{t('No items to display.')}</p>
+          <Icon type={theme === ThemeType.Light ? 'empty' : 'emptyDark'} size={96} />
+        </div>
+      ) : (
+        <ul className={styles.list}>
+          {maskboxes.map((maskbox) => (
+            <li key={maskbox.box_id} className={styles.item}>
+              <WrapMaskbox boxOnSubgraph={maskbox} inList />
+            </li>
+          ))}
+        </ul>
+      )}
       {page === 1 && maskboxes.length < PAGE_SIZE ? null : (
         <div className={styles.paginaton}>
           <Button className={styles.button} disabled={page === 1 || loading} onClick={loadPrevPage}>
