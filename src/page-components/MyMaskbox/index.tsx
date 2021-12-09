@@ -29,13 +29,14 @@ const formatTime = (time: number) => formatDate(new Date(time * 1000), 'yyyy-MM-
 export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const t = useLocales();
 
-  const { box: boxOnChain } = useBoxInfo(boxOnSubgraph?.box_id);
+  const boxIdOnSubgraph = boxOnSubgraph?.box_id.toString();
+  const { box: boxOnChain } = useBoxInfo(boxIdOnSubgraph);
   const { providerChainId: chainId } = useWeb3Context();
   const cancelBox = useCancelBox();
   const [cancelDialogVisible, openCancelDialog, closeCancelDialog] = useBoolean();
   const [editDialogVisible, openEditDialog, closeEditDialog] = useBoolean();
 
-  const boxOnRSS3 = useBoxOnRSS3(boxOnSubgraph?.creator, boxOnSubgraph?.box_id);
+  const boxOnRSS3 = useBoxOnRSS3(boxOnSubgraph?.creator, boxIdOnSubgraph);
   const [fetchClaimeStatus] = useMaskBoxClaimedStatusLazyQuery({
     variables: {
       id: boxOnSubgraph.id,
@@ -87,9 +88,10 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
 
   const history = useHistory();
 
+  const boxId = box.box_id.toString();
   const cancel = useCallback(async () => {
     try {
-      await cancelBox(box.box_id);
+      await cancelBox(boxId);
     } catch (err: any) {
       showToast({
         title: t('Cancel Maskbox'),
@@ -103,7 +105,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
 
   const claimPayment = useClaimPayment();
   const withdraw = useCallback(async () => {
-    const result = await claimPayment(box.box_id);
+    const result = await claimPayment(boxId);
     console.log({ result });
     const { decimals, symbol } = paymentToken ?? { decimals: 1, symbol: '' };
     if (result) {
@@ -116,7 +118,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
         variant: 'success',
       });
     }
-  }, [claimPayment, box.box_id, paymentToken, t, fetchClaimeStatus]);
+  }, [claimPayment, boxId, paymentToken, t, fetchClaimeStatus]);
 
   const BoxCover = (
     <div className={styles.media}>

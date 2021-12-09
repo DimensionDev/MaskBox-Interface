@@ -7,9 +7,10 @@ interface Props extends Omit<MaskboxProps, 'boxOnChain' | 'boxOnRSS3'> {}
 
 export const WrapMaskbox: FC<Props> = (props) => {
   const { boxOnSubgraph: box } = props;
-  const { box: boxOnChain } = useBoxInfo(box?.box_id);
+  const boxId = box?.box_id.toString();
+  const { box: boxOnChain } = useBoxInfo(boxId);
 
-  const boxOnRSS3 = useBoxOnRSS3(box?.creator, box?.box_id);
+  const boxOnRSS3 = useBoxOnRSS3(box?.creator, boxId);
 
   return <Maskbox {...props} boxOnChain={boxOnChain} boxOnRSS3={boxOnRSS3} />;
 };

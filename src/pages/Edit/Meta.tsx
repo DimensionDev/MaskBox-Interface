@@ -208,6 +208,7 @@ export const Meta: FC = () => {
       <Field className={styles.field} name={t('Limit of purchase per wallet')} required>
         <Input
           type="number"
+          max="255"
           placeholder={t('Limit of purchase per wallet')}
           fullWidth
           size="large"

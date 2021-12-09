@@ -18,7 +18,7 @@ export interface BoxRSS3Node {
 interface IRSS3Context {
   createRSS3: () => Promise<RSS3 | null>;
   saveBox: <T extends { id: string }>(box: T) => Promise<void>;
-  getBoxMetas: (addr: string, boxId: string) => Promise<BoxRSS3Node | undefined>;
+  getBoxMetas: (addr: string, boxId: string | number) => Promise<BoxRSS3Node | undefined>;
 }
 
 const RSS3Context = createContext<IRSS3Context>({
@@ -112,7 +112,7 @@ export const RSS3Provider: FC = ({ children }) => {
   );
 
   const getBoxMetas = useCallback(
-    async (owner: string, boxId: string) => {
+    async (owner: string, boxId: string | number) => {
       const checksumAddress = utils.getAddress(owner);
       const rss3 = await createRSS3(checksumAddress);
       const file = await rss3.files.get(checksumAddress);

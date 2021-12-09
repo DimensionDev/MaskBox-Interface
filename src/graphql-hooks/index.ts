@@ -26,7 +26,7 @@ export type Block_Height = {
 export type Maskbox = {
   __typename?: 'Maskbox';
   blockNumber: Scalars['BigInt'];
-  box_id: Scalars['String'];
+  box_id: Scalars['Int'];
   canceled: Scalars['Boolean'];
   chain_id: Scalars['Int'];
   claimed: Scalars['Boolean'];
@@ -53,20 +53,14 @@ export type Maskbox_Filter = {
   blockNumber_lte?: Maybe<Scalars['BigInt']>;
   blockNumber_not?: Maybe<Scalars['BigInt']>;
   blockNumber_not_in?: Maybe<Array<Scalars['BigInt']>>;
-  box_id?: Maybe<Scalars['String']>;
-  box_id_contains?: Maybe<Scalars['String']>;
-  box_id_ends_with?: Maybe<Scalars['String']>;
-  box_id_gt?: Maybe<Scalars['String']>;
-  box_id_gte?: Maybe<Scalars['String']>;
-  box_id_in?: Maybe<Array<Scalars['String']>>;
-  box_id_lt?: Maybe<Scalars['String']>;
-  box_id_lte?: Maybe<Scalars['String']>;
-  box_id_not?: Maybe<Scalars['String']>;
-  box_id_not_contains?: Maybe<Scalars['String']>;
-  box_id_not_ends_with?: Maybe<Scalars['String']>;
-  box_id_not_in?: Maybe<Array<Scalars['String']>>;
-  box_id_not_starts_with?: Maybe<Scalars['String']>;
-  box_id_starts_with?: Maybe<Scalars['String']>;
+  box_id?: Maybe<Scalars['Int']>;
+  box_id_gt?: Maybe<Scalars['Int']>;
+  box_id_gte?: Maybe<Scalars['Int']>;
+  box_id_in?: Maybe<Array<Scalars['Int']>>;
+  box_id_lt?: Maybe<Scalars['Int']>;
+  box_id_lte?: Maybe<Scalars['Int']>;
+  box_id_not?: Maybe<Scalars['Int']>;
+  box_id_not_in?: Maybe<Array<Scalars['Int']>>;
   canceled?: Maybe<Scalars['Boolean']>;
   canceled_in?: Maybe<Array<Scalars['Boolean']>>;
   canceled_not?: Maybe<Scalars['Boolean']>;
@@ -262,6 +256,8 @@ export type Query = {
   maskboxes: Array<Maskbox>;
   nftcontract?: Maybe<NftContract>;
   nftcontracts: Array<NftContract>;
+  user?: Maybe<User>;
+  users: Array<User>;
 };
 
 export type Query_MetaArgs = {
@@ -300,6 +296,22 @@ export type QueryNftcontractsArgs = {
   where?: Maybe<NftContract_Filter>;
 };
 
+export type QueryUserArgs = {
+  block?: Maybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type QueryUsersArgs = {
+  block?: Maybe<Block_Height>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<User_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  skip?: Maybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: Maybe<User_Filter>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   /** Access to subgraph metadata */
@@ -308,6 +320,8 @@ export type Subscription = {
   maskboxes: Array<Maskbox>;
   nftcontract?: Maybe<NftContract>;
   nftcontracts: Array<NftContract>;
+  user?: Maybe<User>;
+  users: Array<User>;
 };
 
 export type Subscription_MetaArgs = {
@@ -346,14 +360,62 @@ export type SubscriptionNftcontractsArgs = {
   where?: Maybe<NftContract_Filter>;
 };
 
+export type SubscriptionUserArgs = {
+  block?: Maybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type SubscriptionUsersArgs = {
+  block?: Maybe<Block_Height>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<User_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  skip?: Maybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: Maybe<User_Filter>;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  nft_contracts: Array<NftContract>;
+};
+
+export type UserNft_ContractsArgs = {
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<NftContract_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<NftContract_Filter>;
+};
+
+export type User_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  nft_contracts?: Maybe<Array<Scalars['String']>>;
+  nft_contracts_contains?: Maybe<Array<Scalars['String']>>;
+  nft_contracts_not?: Maybe<Array<Scalars['String']>>;
+  nft_contracts_not_contains?: Maybe<Array<Scalars['String']>>;
+};
+
+export enum User_OrderBy {
+  Id = 'id',
+  NftContracts = 'nft_contracts',
+}
+
 export type _Block_ = {
   __typename?: '_Block_';
   /** The hash of the block */
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
-  /** The minimum block number */
-  number_gte: Scalars['Int'];
 };
 
 /** The type for the top-level _meta field */
@@ -389,7 +451,7 @@ export type MaskBoxQuery = {
     | {
         __typename?: 'Maskbox';
         id: string;
-        box_id: string;
+        box_id: number;
         chain_id: number;
         name: string;
         creator: string;
@@ -413,7 +475,7 @@ export type MaskBoxesQuery = {
   maskboxes: Array<{
     __typename?: 'Maskbox';
     id: string;
-    box_id: string;
+    box_id: number;
     chain_id: number;
     name: string;
     creator: string;
@@ -436,7 +498,7 @@ export type MaskBoxesOfQuery = {
   maskboxes: Array<{
     __typename?: 'Maskbox';
     id: string;
-    box_id: string;
+    box_id: number;
     chain_id: number;
     name: string;
     creator: string;
@@ -540,7 +602,7 @@ export const MaskBoxesDocument = gql`
       orderDirection: desc
       first: $first
       skip: $skip
-      where: { canceled: false, id_gt: 3 }
+      where: { canceled: false, box_id_gt: 3 }
     ) {
       id
       box_id
