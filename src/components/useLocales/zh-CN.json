@@ -8,5 +8,9 @@
   "Added by uesr": "用户添加",
   "File size up to {size}MB": "文件大小不超过 {size}MB",
   "You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4": "您需要上传缩略图，支持 jpg, png, svg, gif, bmp, webp, mp4等格式。",
-  "You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed": "您需要上传缩略图，支持 jpg, png, svg, gif, bmp, webp, mp4等格式。"
+  "You should upload an image, only jpg, png, svg, gif, bmp, webp, mp4 are supposed": "您需要上传缩略图，支持 jpg, png, svg, gif, bmp, webp, mp4等格式。",
+  "You have no NFT of this kind for sale": "您没有此类型的 NFT 可供售卖",
+  "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.": "JPG, PNG, SVG, GIF, BMP, WEBP格式的文件大小最多不超过2MB, MP4格式的文件大小最多不超过30MB.",
+  "Drag-and-drop file, or": "拖放文件或者",
+  "Browse computer": "浏览计算机"
 }
