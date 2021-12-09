@@ -36,7 +36,7 @@
   "Get your unique card (NFT) by lucky draw": "crwdns9595:0crwdne9595:0",
   "Limit": "crwdns9767:0crwdne9767:0",
   "Select your collection": "crwdns9599:0crwdne9599:0",
-  "Token ID": "crwdns9601:0crwdne9601:0",
+  "Token ID separated by comma, e.g. 23453, 2565": "crwdns10515:0crwdne10515:0",
   "Search": "crwdns9603:0crwdne9603:0",
   "Connecting": "crwdns9605:0crwdne9605:0",
   "Please connect your wallet.": "crwdns9607:0crwdne9607:0",
@@ -77,5 +77,6 @@
   "Account": "crwdns9975:0crwdne9975:0",
   "Recent Transactions": "crwdns9977:0crwdne9977:0",
   "Clear All": "crwdns9979:0crwdne9979:0",
-  "Your transactions will appear here...": "crwdns9981:0crwdne9981:0"
+  "Your transactions will appear here...": "crwdns9981:0crwdne9981:0",
+  "Select all": "crwdns10517:0crwdne10517:0"
 }
