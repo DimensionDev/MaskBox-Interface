@@ -1,7 +1,9 @@
 import { ERC721Token } from '@/types';
-import { FC, HTMLProps, useCallback, useMemo } from 'react';
+import { noop } from 'lodash-es';
+import { ChangeEvent, FC, HTMLProps, useCallback, useMemo, useState } from 'react';
 import { Icon } from '../Icon';
 import { NFTItem } from '../NFTItem';
+import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 export interface NFTSelectListProps extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
@@ -21,7 +23,10 @@ export const NFTSelectList: FC<NFTSelectListProps> = ({
   className,
   ...rest
 }) => {
+  const t = useLocales();
   const allIds = useMemo(() => tokens.map((token) => token.tokenId), [tokens]);
+  const isSelectedAll = allIds.length === selectedTokenIds.length;
+  const [lastIndex, setLastIndex] = useState<number | null>(null);
   const toggleItem = useCallback(
     (currentId: string, checked: boolean) => {
       if (!onChange) return;
@@ -33,17 +38,57 @@ export const NFTSelectList: FC<NFTSelectListProps> = ({
     },
     [allIds, selectedTokenIds],
   );
+  const toggleSelectAll = (evt: ChangeEvent<HTMLInputElement>) => {
+    if (!onChange) return;
+    if (evt.currentTarget.checked) {
+      if (isSelectedAll) {
+        onChange([]);
+      } else {
+        onChange(allIds);
+      }
+    } else {
+      onChange([]);
+    }
+  };
+
+  const toggleRange = (from: number, to: number) => {
+    if (!onChange) return;
+    const [min, max] = from > to ? [to, from] : [from, to];
+    const rangeIds = tokens.slice(min, max + 1).map((t) => t.tokenId);
+    const previouslyChecked = selectedTokenIds.includes(tokens[to].tokenId);
+    const newIds = allIds.filter((id) => {
+      if (rangeIds.includes(id)) return !previouslyChecked;
+      return selectedTokenIds.includes(id);
+    });
+    onChange(newIds);
+  };
 
   return (
     <div className={className} {...rest}>
+      {pickable && (
+        <div className={styles.operations}>
+          <label>
+            <input type="checkbox" checked={isSelectedAll} onChange={toggleSelectAll} />
+            {t('Select all')}
+          </label>
+          <div className={styles.tip}>
+            You can also use <kbd>Shift</kbd> to select multiple NFTs.
+          </div>
+        </div>
+      )}
       <ul className={styles.list}>
-        {tokens.map((token) => (
+        {tokens.map((token, index) => (
           <li className={styles.item} key={token.tokenId}>
             <NFTItem
               token={token}
               className={styles.nft}
-              onClick={() => {
-                toggleItem(token.tokenId, !selectedTokenIds.includes(token.tokenId));
+              onClick={(evt) => {
+                setLastIndex(index);
+                if (evt.shiftKey && lastIndex !== null) {
+                  toggleRange(lastIndex, index);
+                } else {
+                  toggleItem(token.tokenId, !selectedTokenIds.includes(token.tokenId));
+                }
               }}
             />
             {pickable && (
@@ -51,7 +96,15 @@ export const NFTSelectList: FC<NFTSelectListProps> = ({
                 type="checkbox"
                 className={styles.checkbox}
                 checked={selectedTokenIds.includes(token.tokenId)}
-                onChange={(evt) => toggleItem(token.tokenId, evt.currentTarget.checked)}
+                onChange={noop}
+                onClick={(evt) => {
+                  setLastIndex(index);
+                  if (evt.shiftKey && lastIndex !== null) {
+                    toggleRange(lastIndex, index);
+                  } else {
+                    toggleItem(token.tokenId, !selectedTokenIds.includes(token.tokenId));
+                  }
+                }}
               />
             )}
           </li>

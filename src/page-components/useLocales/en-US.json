@@ -36,7 +36,7 @@
   "Get your unique card (NFT) by lucky draw": "Get your unique card (NFT) by lucky draw",
   "Limit": "Limit",
   "Select your collection": "Select your collection",
-  "Token ID": "Token ID",
+  "Token ID separated by comma, e.g. 23453, 2565": "Token ID separated by comma, e.g. 23453, 2565",
   "Search": "Search",
   "Connecting": "Connecting",
   "Please connect your wallet.": "Please connect your wallet.",
@@ -77,5 +77,6 @@
   "Account": "Account",
   "Recent Transactions": "Recent Transactions",
   "Clear All": "Clear All",
-  "Your transactions will appear here...": "Your transactions will appear here..."
+  "Your transactions will appear here...": "Your transactions will appear here...",
+  "Select all": "Select all"
 }

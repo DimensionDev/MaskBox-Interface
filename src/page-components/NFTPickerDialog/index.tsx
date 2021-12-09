@@ -1,9 +1,9 @@
 import {
   Button,
+  Dialog,
   DialogProps,
   Icon,
   Input,
-  Dialog,
   NFTSelectList,
   NFTSelectListProps,
 } from '@/components';
@@ -26,7 +26,11 @@ export const NFTPickerDialog: FC<Props> = ({
   const [pickedIds, setPickedIds] = useState(selectedTokenIds);
   const filteredList = useMemo(() => {
     if (keyword) {
-      return tokens.filter((token) => token.tokenId.toString().includes(keyword));
+      const searchingIds = keyword
+        .split(',')
+        .map((id) => id.trim())
+        .filter(Boolean);
+      return tokens.filter((token) => searchingIds.includes(token.tokenId));
     }
     return tokens;
   }, [keyword, tokens]);
@@ -49,20 +53,25 @@ export const NFTPickerDialog: FC<Props> = ({
           fullWidth
           value={keyword}
           className={styles.input}
-          placeholder={t('Token ID') as string}
+          placeholder={t('Token ID separated by comma, e.g. 23453, 2565') as string}
           onChange={(evt) => setKeyword(evt.currentTarget.value)}
           leftAddon={<Icon type="search" size={24} />}
         />
         <Button round={false}>{t('Search')}</Button>
       </div>
       {filteredList.length ? (
-        <NFTSelectList
-          tokens={filteredList}
-          selectedTokenIds={pickedIds}
-          onChange={setPickedIds}
-          className={styles.selectList}
-          pickable
-        />
+        <>
+          <NFTSelectList
+            tokens={filteredList}
+            selectedTokenIds={pickedIds}
+            onChange={setPickedIds}
+            className={styles.selectList}
+            pickable
+          />
+          <div className={styles.summary}>
+            <span className={styles.selected}>{pickedIds.length}</span>/<span>{tokens.length}</span>
+          </div>
+        </>
       ) : (
         <div className={styles.empty}>
           {t('No result for <strong>{keyword}</strong>', { keyword })}
