@@ -1,1 +1,8 @@
-{}
+{
+  "Enter your email": "輸入你的郵箱地址",
+  "Sold": "售出",
+  "For Sale": "待售",
+  "sns-share-to-twitter": "在MaskBox平台查看NFT盲盒 {boxName}， 好運一擲來！追蹤@realMaskNetwork獲得更多資訊 {link}",
+  "sns-share-to-facebook": "在MaskBox平台查看NFT盲盒 {boxName}， 好運一擲來！追蹤@masknetwork獲得更多資訊 {link}",
+  "You should upload an image, only accept jpg, png, svg, gif, bmp, webp, mp4": "需要上傳一張圖片，僅接受jpg/png/svg/gif/bmp/webp/mp4格式"
+}
