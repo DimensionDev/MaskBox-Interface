@@ -57,7 +57,7 @@ export const Meta: FC = () => {
   const updateField = useUpdateFormField();
   const setAllDirty = useSetAllDirty();
   const { providerChainId } = useWeb3Context();
-  const [nftPickerVisible, setNftPickerVisible] = useState(false);
+  const [nftPickerVisible, openNftPicker, closeNftPicker] = useBoolean();
   const [contractPickerVisible, openContractPicker, closeContractPicker] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
 
@@ -78,7 +78,7 @@ export const Meta: FC = () => {
   const { saveBox } = useRSS3();
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useBoolean();
   const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
-  const [creating, setCreating] = useState(false);
+  const [creating, startCreating, finishCreating] = useBoolean();
   const resetForm = useResetForm();
   const create = useCallback(async () => {
     setAllDirty();
@@ -91,7 +91,7 @@ export const Meta: FC = () => {
       });
       return;
     }
-    setCreating(true);
+    startCreating();
     const closeToast = showToast({
       title: t('Creating Mystery Box'),
       processing: true,
@@ -125,7 +125,7 @@ export const Meta: FC = () => {
       throw err;
     } finally {
       closeToast();
-      setCreating(false);
+      finishCreating();
     }
   }, [createBox, isReady, setAllDirty, formData, ownedERC721Tokens]);
 
@@ -276,7 +276,7 @@ export const Meta: FC = () => {
             <NFTSelectList
               tokens={selectedERC721Tokens}
               selectedTokenIds={formData.selectedNFTIds}
-              onPick={() => (isEditting ? undefined : setNftPickerVisible(true))}
+              onPick={isEditting ? undefined : openNftPicker}
             />
           </div>
         </Field>
@@ -450,14 +450,14 @@ export const Meta: FC = () => {
         }}
       />
       <NFTPickerDialog
+        open={nftPickerVisible}
         tokens={ownedERC721Tokens}
         selectedTokenIds={formData.selectedNFTIds}
-        onClose={() => setNftPickerVisible(false)}
+        onClose={closeNftPicker}
         onConfirm={(ids) => {
           updateField('selectedNFTIds', ids);
-          setNftPickerVisible(false);
+          closeNftPicker();
         }}
-        open={nftPickerVisible}
       />
     </section>
   );
