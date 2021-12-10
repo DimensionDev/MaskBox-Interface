@@ -23,9 +23,33 @@
   margin-top: 24px;
 }
 .summary {
-  text-align: right;
   margin-top: 10px;
+  display: flex;
+  align-items: center;
+  .warning {
+    color: var(--text-error, #fb2047);
+  }
+  .total {
+    margin-right: 4px;
+  }
   .picked {
+    margin-left: auto;
     color: var(--text-link, #0057ff);
+  }
+}
+
+.searchView {
+  width: 549px;
+  min-height: 235px;
+  .status {
+    min-height: 235px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .notfound {
+    span {
+      color: var(--text-link, #0057ff);
+    }
   }
 }

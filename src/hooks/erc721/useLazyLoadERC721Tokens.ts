@@ -1,6 +1,7 @@
 import { ZERO } from '@/lib';
 import { ERC721Token } from '@/types';
 import { useBoolean } from '@/utils';
+import { uniqBy } from 'lodash-es';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useERC721Balance } from './useERC721Balance';
 import { useGetERC721Tokens } from './useERC721Tokens';
@@ -30,7 +31,7 @@ export function useLazyLoadERC721Tokens(address: string) {
     offsetRef.current += size;
     if (result && liveRef.current) {
       setTokens((list) => {
-        const newList = [...list, ...result];
+        const newList = uniqBy([...list, ...result], 'tokenId');
         return newList;
       });
     }
@@ -52,6 +53,7 @@ export function useLazyLoadERC721Tokens(address: string) {
   const finished = balance.eq(offsetRef.current);
 
   return {
+    balance,
     loading,
     finished,
     tokens,

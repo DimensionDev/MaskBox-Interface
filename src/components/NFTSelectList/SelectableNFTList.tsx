@@ -68,7 +68,6 @@ export const SelectableNFTList: FC<SelectableNFTListProps> = ({
     const changingIds = previouslyChecked
       ? rangeIds
       : rangeIds.slice(0, Math.min(remainingAmount, limit) + 1);
-    console.log({ changingIds, rangeIds });
     const newIds = allIds.filter((id) => {
       if (changingIds.includes(id)) return !previouslyChecked;
       return selectedTokenIds.includes(id);

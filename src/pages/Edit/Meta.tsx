@@ -54,9 +54,11 @@ export const Meta: FC = () => {
 
   const createBox = useCreateMaskbox();
   const { isEnumable } = useEdit();
-  const { tokens: ownedERC721Tokens, loading: nftLoading } = useLazyLoadERC721Tokens(
-    formData.nftContractAddress,
-  );
+  const {
+    tokens: ownedERC721Tokens,
+    balance,
+    loading: nftLoading,
+  } = useLazyLoadERC721Tokens(formData.nftContractAddress);
   const { isApproveAll, isApproving, checkingApprove, approveAll } = useERC721(
     formData.nftContractAddress,
   );
@@ -253,7 +255,7 @@ export const Meta: FC = () => {
                 checked={formData.sellAll}
                 onChange={(evt) => updateField('sellAll', evt.currentTarget.checked)}
               />
-              {t('All')}
+              {t('All ({balance} NFT)', { balance: balance.toString() })}
             </label>
             <label className={styles.selectType}>
               <input
@@ -263,8 +265,9 @@ export const Meta: FC = () => {
                 checked={!formData.sellAll}
                 onChange={(evt) => updateField('sellAll', !evt.currentTarget.checked)}
               />
-              {t('Selective part')}
+              {t('Select partially')}
             </label>
+            {formData.sellAll && <div className={styles.warning}>{t('select-all-warning')}</div>}
           </div>
         )}
       </Field>
@@ -448,6 +451,7 @@ export const Meta: FC = () => {
         open={nftPickerVisible}
         tokens={ownedERC721Tokens}
         loading={nftLoading}
+        contractAddress={formData.nftContractAddress}
         selectedTokenIds={formData.selectedNFTIds}
         onClose={closeNftPicker}
         onConfirm={(ids) => {

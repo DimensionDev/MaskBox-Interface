@@ -52,7 +52,11 @@ export const NFTItem: FC<NFTItemProps> = ({
       </div>
       <div className={styles.info}>
         {contractName && <h3 className={styles.contractName}>{contractName}</h3>}
-        {verboseToken.name && <h3 className={styles.name}>{verboseToken.name}</h3>}
+        {verboseToken.name && (
+          <h3 className={styles.name}>
+            {verboseToken.name}/{verboseToken.tokenId}
+          </h3>
+        )}
         {sold !== undefined && (
           <h3 className={styles.saleStatus}>{sold ? t('Sold') : t('For Sale')}</h3>
         )}
