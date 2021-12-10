@@ -1,30 +1,27 @@
-import { Button, NFTItem, Dialog, DialogProps } from '@/components';
-import { useNFTContract, useNFTName } from '@/contexts';
+import { Button, Dialog, DialogProps, NFTItem } from '@/components';
+import { useNFTName } from '@/contexts';
+import { useERC721TokensByIds } from '@/hooks';
 import { ERC721Token } from '@/types';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 interface Props extends DialogProps {
+  tokens?: ERC721Token[];
+  nftIds?: string[];
   nftAddress: string;
-  nftIds: string[];
   onShare?: () => void;
 }
 
-export const ShareBox: FC<Props> = ({ nftAddress, nftIds, onShare, ...rest }) => {
+export const ShareBox: FC<Props> = ({ nftAddress, nftIds = [], tokens, onShare, ...rest }) => {
   const t = useLocales();
-  const { getByIdList } = useNFTContract();
-  const [tokens, setTokens] = useState<ERC721Token[]>([]);
   const nftName = useNFTName(nftAddress);
-
-  useEffect(() => {
-    getByIdList(nftAddress, nftIds).then(setTokens);
-  }, [nftAddress, nftIds]);
+  const { tokens: tokensByIds } = useERC721TokensByIds(nftAddress, nftIds);
 
   return (
     <Dialog className={styles.shareBox} title={t('Successful')} {...rest}>
       <ul className={styles.nftList}>
-        {tokens.map((token) => (
+        {(tokens ?? tokensByIds).map((token) => (
           <li key={token.tokenId} className={styles.item}>
             <NFTItem contractName={nftName} token={token} />
           </li>

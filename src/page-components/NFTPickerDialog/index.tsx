@@ -4,20 +4,23 @@ import {
   DialogProps,
   Icon,
   Input,
-  NFTSelectList,
-  NFTSelectListProps,
+  LoadingIcon,
+  SelectableNFTList,
+  SelectableNFTListProps,
 } from '@/components';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
-interface Props extends DialogProps, Pick<NFTSelectListProps, 'tokens' | 'selectedTokenIds'> {
+interface Props extends DialogProps, Pick<SelectableNFTListProps, 'tokens' | 'selectedTokenIds'> {
   onConfirm?: (ids: string[]) => void;
+  loading: boolean;
 }
 export const NFTPickerDialog: FC<Props> = ({
   tokens,
   selectedTokenIds = [],
   onConfirm,
+  loading,
   onClose,
   ...rest
 }) => {
@@ -61,15 +64,17 @@ export const NFTPickerDialog: FC<Props> = ({
       </div>
       {filteredList.length ? (
         <>
-          <NFTSelectList
-            tokens={filteredList}
+          <SelectableNFTList
+            tokens={tokens}
+            loading={loading}
+            limit={10}
             selectedTokenIds={pickedIds}
             onChange={setPickedIds}
             className={styles.selectList}
-            pickable
           />
           <div className={styles.summary}>
             <span className={styles.picked}>{pickedIds.length}</span> / <span>{tokens.length}</span>
+            {loading && <LoadingIcon size={14} />}
           </div>
         </>
       ) : (

@@ -9,6 +9,7 @@ export * from './Field';
 export * from './Hint';
 export * from './Icon';
 export * from './Image';
+export * from './InfiniteLoading';
 export * from './Input';
 export * from './LanguageSwitcher';
 export * from './NewsletterBox';

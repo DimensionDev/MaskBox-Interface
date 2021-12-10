@@ -1,24 +1,25 @@
-import { Button, Icon, NFTItem, Dialog, DialogProps } from '@/components';
-import { useNFTContract, useNFTName, useWeb3Context } from '@/contexts';
+import { Button, Dialog, DialogProps, Icon, LoadingIcon, NFTItem } from '@/components';
+import { useNFTName, useWeb3Context } from '@/contexts';
 import { getNetworkExplorer } from '@/lib';
 import { ERC721Token } from '@/types';
 import { formatAddres } from '@/utils';
 import classnames from 'classnames';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useMemo } from 'react';
 import styles from './dialog.module.less';
 import { useLocales } from './useLocales';
 
 interface Props extends DialogProps {
-  sellAll?: boolean;
-  nftIdList?: string[];
+  loading: boolean;
+  tokens: ERC721Token[];
   nftAddress: string;
   onConfirm?: () => void;
   creating?: boolean;
 }
 
 export const CreationConfirmDialog: FC<Props> = ({
-  sellAll,
-  nftIdList = [],
+  open,
+  loading,
+  tokens,
   nftAddress,
   className,
   onConfirm,
@@ -27,28 +28,17 @@ export const CreationConfirmDialog: FC<Props> = ({
 }) => {
   const t = useLocales();
   const { account, providerChainId: chainId } = useWeb3Context();
-  const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>([]);
   const accountExplorerUrl = useMemo(
     () => (chainId ? `${getNetworkExplorer(chainId)}/address/${account}` : ''),
     [account, chainId],
   );
-  const { getByIdList, getMyTokens } = useNFTContract();
   const contractName = useNFTName(nftAddress);
-  const loadNfts = useCallback(async () => {
-    const tokens = sellAll
-      ? await getMyTokens(nftAddress)
-      : await getByIdList(nftAddress, nftIdList);
-    setErc721Tokens(tokens);
-  }, [sellAll, nftIdList, nftAddress, getByIdList, getMyTokens]);
-
-  useEffect(() => {
-    loadNfts();
-  }, [loadNfts]);
 
   return (
     <Dialog
       title={t('Create MaskBox') as string}
       className={classnames(styles.confirmDialog, className)}
+      open={open}
       {...rest}
     >
       {account ? (
@@ -67,7 +57,7 @@ export const CreationConfirmDialog: FC<Props> = ({
         <div className={styles.value}>{contractName}</div>
       </div>
       <ul className={classnames(styles.meta, styles.nftList)}>
-        {erc721Tokens.map((token) => (
+        {tokens.map((token) => (
           <li key={token.tokenId}>
             <NFTItem className={styles.nft} token={token}></NFTItem>
           </li>
@@ -75,7 +65,10 @@ export const CreationConfirmDialog: FC<Props> = ({
       </ul>
       <div className={styles.meta}>
         <div className={styles.name}>{t('Total Amount')}</div>
-        <div className={styles.value}>{erc721Tokens.length}</div>
+        <div className={styles.value}>
+          {tokens.length}
+          {loading && <LoadingIcon size={14} />}
+        </div>
       </div>
       <Button onClick={onConfirm} disabled={creating} fullWidth colorScheme="primary" size="large">
         {creating ? t('Creating...') : t('Confirm')}

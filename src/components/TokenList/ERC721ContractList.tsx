@@ -32,6 +32,7 @@ export const ERC721ContractList: FC<ContractListProps> = ({
           <ERC721Contract
             isCustomized={addresses.includes(contract.address)}
             token={contract}
+            role="button"
             onClick={() => onPick?.(contract)}
           />
         </li>
@@ -72,7 +73,7 @@ export const ERC721Contract: FC<ERC721TokenProps> = ({
     <div
       className={classnames(className, styles.token, { [styles.disabled]: hasNoToken })}
       onClick={hasNoToken ? undefined : onClick}
-      title={hasNoToken ? t('You have no NFT of this kind for sale') : undefined}
+      title={hasNoToken && !loading ? t('You have no NFT of this kind for sale') : undefined}
       ref={containerRef}
       {...rest}
     >

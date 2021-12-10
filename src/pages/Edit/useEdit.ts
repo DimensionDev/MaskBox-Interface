@@ -27,11 +27,11 @@ export function useEdit() {
     })();
   }, [ethersProvider, formData.nftContractAddress, chainId]);
 
-  const { getMyTokens } = useNFTContract();
+  // const { getMyTokens } = useNFTContract();
 
-  useEffect(() => {
-    getMyTokens(formData.nftContractAddress).then(setOwnedTokens);
-  }, [formData.nftContractAddress, getMyTokens]);
+  // useEffect(() => {
+  //   getMyTokens(formData.nftContractAddress).then(setOwnedTokens);
+  // }, [formData.nftContractAddress, getMyTokens]);
 
   return {
     ownedTokens,
