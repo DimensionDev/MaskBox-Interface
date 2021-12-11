@@ -19,7 +19,6 @@ export function useGetERC721TokensByIds(address: string) {
             tokenURI,
           };
         } catch (err) {
-          debugger;
           return null;
         }
       });

@@ -115,38 +115,37 @@ export const NFTPickerDialog: FC<Props> = ({
             closeSearch();
           }}
         />
-      ) : (
-        <>
-          <SelectableNFTList
-            tokens={tokens}
-            loading={loading}
-            limit={limit}
-            selectedTokenIds={pickedIds}
-            onChange={setPickedIds}
-            className={styles.selectList}
-          />
-          <div className={styles.summary}>
-            {pickedIds.length >= limit && (
-              <span className={styles.warning}>
-                {t('The mystery box contract supports up to {limit} NFTs for sale.', { limit })}
-              </span>
-            )}
-            <span className={classnames(styles.picked, styles.error)}>{pickedIds.length}</span> /{' '}
-            <span className={styles.total}>{tokens.length}</span>
-            <Hint width={256} position="right">
-              {t('The maximum number of NFTs to be sold in one mystery box contract is {limit}.', {
-                limit,
-              })}
-            </Hint>
-            {loading && <LoadingIcon size={14} />}
-          </div>
-          <div className={styles.buttonGroup}>
-            <Button fullWidth onClick={() => onConfirm?.(pickedIds)} colorScheme="primary">
-              {t('Confirm')}
-            </Button>
-          </div>
-        </>
-      )}
+      ) : null}
+      <div style={{ display: searchVisible ? 'none' : 'block' }}>
+        <SelectableNFTList
+          tokens={tokens}
+          loading={loading}
+          limit={limit}
+          selectedTokenIds={pickedIds}
+          onChange={setPickedIds}
+          className={styles.selectList}
+        />
+        <div className={styles.summary}>
+          {pickedIds.length >= limit && (
+            <span className={styles.warning}>
+              {t('The mystery box contract supports up to {limit} NFTs for sale.', { limit })}
+            </span>
+          )}
+          <span className={classnames(styles.picked, styles.error)}>{pickedIds.length}</span> /{' '}
+          <span className={styles.total}>{tokens.length}</span>
+          <Hint width={256} position="right">
+            {t('The maximum number of NFTs to be sold in one mystery box contract is {limit}.', {
+              limit,
+            })}
+          </Hint>
+          {loading && <LoadingIcon size={14} />}
+        </div>
+        <div className={styles.buttonGroup}>
+          <Button fullWidth onClick={() => onConfirm?.(pickedIds)} colorScheme="primary">
+            {t('Confirm')}
+          </Button>
+        </div>
+      </div>
     </Dialog>
   );
 };

@@ -1,9 +1,9 @@
 import { useOnceShowup } from '@/hooks';
 import { ERC721Token } from '@/types';
-import { fetchNFTTokenDetail } from '@/utils';
+import { fetchNFTTokenDetail, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useCallback, useRef, useState } from 'react';
-import { Icon } from '../Icon';
+import { Icon, LoadingIcon } from '../Icon';
 import { Image } from '../Image';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
@@ -26,13 +26,19 @@ export const NFTItem: FC<NFTItemProps> = ({
   const t = useLocales();
   const ref = useRef<HTMLDivElement>(null);
   const [verboseToken, setVerboseToken] = useState<ERC721Token>(token);
+  const [fetching, setIsFetching, setNotFetching] = useBoolean(true);
   const fetchDetail = useCallback(async () => {
-    if (!token.tokenURI) return;
+    if (!token.tokenURI) {
+      setNotFetching();
+      return;
+    }
+    setIsFetching();
     const detail = await fetchNFTTokenDetail(token.tokenURI);
     setVerboseToken({
       ...detail,
       tokenId: token.tokenId,
     });
+    setNotFetching();
   }, [token.tokenId, token.tokenURI]);
   useOnceShowup(ref, fetchDetail);
   return (
@@ -53,7 +59,7 @@ export const NFTItem: FC<NFTItemProps> = ({
       </div>
       <div className={styles.info}>
         {contractName && <h3 className={styles.contractName}>{contractName}</h3>}
-        {verboseToken.name && <h3 className={styles.name}>{verboseToken.name}</h3>}
+        <h3 className={styles.name}>{fetching ? <LoadingIcon size={14} /> : verboseToken.name}</h3>
         {sold !== undefined && (
           <h3 className={styles.saleStatus}>{sold ? t('Sold') : t('For Sale')}</h3>
         )}

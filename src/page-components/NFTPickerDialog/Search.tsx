@@ -56,7 +56,12 @@ export const Search: FC<Props> = ({
         </div>
       ) : null}
       <div className={styles.buttonGroup}>
-        <Button fullWidth onClick={handleConfirm} colorScheme="primary">
+        <Button
+          fullWidth
+          onClick={handleConfirm}
+          colorScheme="primary"
+          disabled={pickedIds.length === 0 || tokens.length === 0}
+        >
           {t('Add')}
         </Button>
       </div>

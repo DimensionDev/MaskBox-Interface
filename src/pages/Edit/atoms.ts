@@ -81,7 +81,7 @@ export const metaFullfilledAtom = atom((get) => {
     formData.startAt &&
     formData.endAt &&
     new Date(formData.endAt).getTime() > new Date(formData.startAt).getTime();
-  const limitIsOk = formData.limit && formData.limit > 0;
+  const limitIsOk = formData.limit && formData.limit > 0 && formData.limit < 256;
   return (
     formData.pricePerBox && limitIsOk && formData.nftContractAddress && sellListIsOk && datesIsOk
   );
