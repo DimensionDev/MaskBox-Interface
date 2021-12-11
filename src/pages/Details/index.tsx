@@ -1,17 +1,16 @@
-import { ArticleSection, Button, NFTItem } from '@/components';
+import { ArticleSection, Button, LoadingIcon, NFTItem } from '@/components';
 import { useMBoxContract, useNFTName } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
-import { useBox, useGetERC721TokensByIds } from '@/hooks';
+import { useBox, useERC721TokensByIds, useGetERC721TokensByIds } from '@/hooks';
 import { createShareUrl, ZERO } from '@/lib';
 import { BuyBox, BuyBoxProps, Maskbox, ShareBox } from '@/page-components';
 import { ERC721Token } from '@/types';
-import { useBoolean } from '@/utils';
+import { EMPTY_LIST, useBoolean } from '@/utils';
 import { BigNumber } from 'ethers';
 import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './index.module.less';
-import { useGetTokensByIds } from './useGetTokensByIds';
 import { useLocales } from './useLocales';
 
 const PAGE_SIZE = BigNumber.from(50);
@@ -19,7 +18,7 @@ export const Details: FC = memo(() => {
   const t = useLocales();
   const location = useLocation();
   const { getNftListForSale } = useMBoxContract();
-  const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>([]);
+  const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>(EMPTY_LIST);
 
   const { chainId, boxId } = useMemo(() => {
     const params = new URLSearchParams(location.search);
@@ -42,22 +41,25 @@ export const Details: FC = memo(() => {
   );
 
   const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
-  const [purchasedNfts, setPurchasedNfts] = useState<string[]>([]);
+  const [purchasedNfts, setPurchasedNfts] = useState<string[]>(EMPTY_LIST);
   const [buyBoxVisible, openBuyBox, closeBuyBox] = useBoolean();
 
   const contractName = useNFTName(box.nft_address);
-  const activities = box.activities ?? [];
+  const activities = box.activities ?? EMPTY_LIST;
 
   const cursorRef = useRef<BigNumber>(ZERO);
   const [allLoaded, setAllLoaded] = useState(false);
   const getERC721TokensByIds = useGetERC721TokensByIds(box.nft_address);
+  const [isLoading, setIsLoading, setNotLoading] = useBoolean();
   const loadNfts = useCallback(async () => {
     if (!getERC721TokensByIds || !boxId) return;
+    setIsLoading();
     const idList = await getNftListForSale(boxId, cursorRef.current, PAGE_SIZE);
     setAllLoaded(PAGE_SIZE.gt(idList.length));
     cursorRef.current = cursorRef.current.add(idList.length);
     const tokens = await getERC721TokensByIds(idList);
     setErc721Tokens((oldList) => uniqBy<ERC721Token>([...oldList, ...tokens], 'tokenId'));
+    setNotLoading();
   }, [getERC721TokensByIds, boxId]);
 
   // excluded drawed by the maskbox creator
@@ -67,7 +69,10 @@ export const Details: FC = memo(() => {
     },
   });
 
-  const soldTokens = useGetTokensByIds(box?.nft_address, soldNFTData?.maskbox?.drawed_by_customer);
+  const { tokens: soldTokens } = useERC721TokensByIds(
+    box?.nft_address,
+    soldNFTData?.maskbox?.drawed_by_customer ?? EMPTY_LIST,
+  );
 
   const handlePurchased: BuyBoxProps['onPurchased'] = useCallback(
     ({ nftIds }) => {
@@ -75,7 +80,7 @@ export const Details: FC = memo(() => {
       openShareBox();
       setPurchasedNfts(nftIds);
       refetch();
-      setErc721Tokens([]);
+      setErc721Tokens(EMPTY_LIST);
       cursorRef.current = ZERO;
       loadNfts();
     },
@@ -117,17 +122,17 @@ export const Details: FC = memo(() => {
                 ))}
                 {erc721Tokens.map((token) => (
                   <li key={token.tokenId}>
-                    <NFTItem contractName={contractName} token={token} sold={false} />
+                    <NFTItem contractName={contractName} token={token} />
                   </li>
                 ))}
               </ul>
               {PAGE_SIZE.lte(erc721Tokens.length) ? (
                 <Button
                   className={styles.loadmore}
-                  fullWidth
-                  disabled={allLoaded}
+                  disabled={allLoaded || isLoading}
                   size="small"
                   onClick={loadNfts}
+                  leftIcon={isLoading ? <LoadingIcon size={16} /> : null}
                 >
                   {allLoaded ? t('All NFTs have been loaded :)') : t('Load more')}
                 </Button>

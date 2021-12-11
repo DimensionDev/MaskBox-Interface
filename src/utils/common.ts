@@ -27,3 +27,5 @@ export function createDefer<T extends any = any, E extends unknown = unknown>():
 
   return [promise, resolve!, reject!];
 }
+
+export const EMPTY_LIST: never[] = Object.freeze([]) as never[];
