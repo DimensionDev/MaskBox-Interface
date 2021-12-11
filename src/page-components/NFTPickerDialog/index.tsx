@@ -13,7 +13,8 @@ import { useCheckIsOwned, useGetERC721TokensByIds } from '@/hooks';
 import { ERC721Token } from '@/types';
 import { useBoolean } from '@/utils';
 import classnames from 'classnames';
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { uniq } from 'lodash-es';
+import { FC, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 import { Search } from './Search';
@@ -24,7 +25,6 @@ interface Props extends DialogProps, Pick<SelectableNFTListProps, 'tokens' | 'se
   loading: boolean;
 }
 const limit = 1000;
-const emptyList: any[] = [];
 export const NFTPickerDialog: FC<Props> = ({
   tokens,
   contractAddress,
@@ -59,19 +59,23 @@ export const NFTPickerDialog: FC<Props> = ({
   }, [keyword]);
 
   const checkIsOwned = useCheckIsOwned(contractAddress);
-  const search = useCallback(async () => {
-    if (!keyword || tokenIds.length === 0) return;
-    openSearch();
-    setIsSearching();
-    const [tokens, isOwnedFlags] = await Promise.all([
-      getERC721TokensByIds(tokenIds),
-      Promise.all(tokenIds.map(checkIsOwned)),
-    ]);
-    const ids = tokens.filter((_, index) => !isOwnedFlags[index]).map((t) => t.tokenId);
-    setNotOwnedIds(ids);
-    setSearchedTokens(tokens.filter((_, index) => isOwnedFlags[index]));
-    setNotSearching();
-  }, [tokenIds, getERC721TokensByIds]);
+  const search = useCallback(
+    async (evt: FormEvent<HTMLFormElement>) => {
+      evt.preventDefault();
+      if (!keyword || tokenIds.length === 0) return;
+      openSearch();
+      setIsSearching();
+      const [tokens, isOwnedFlags] = await Promise.all([
+        getERC721TokensByIds(tokenIds),
+        Promise.all(tokenIds.map((id) => checkIsOwned(id))),
+      ]);
+      const ids = tokens.filter((_, index) => !isOwnedFlags[index]).map((t) => t.tokenId);
+      setNotOwnedIds(ids);
+      setSearchedTokens(tokens.filter((_, index) => isOwnedFlags[index]));
+      setNotSearching();
+    },
+    [tokenIds, getERC721TokensByIds],
+  );
 
   return (
     <Dialog
@@ -82,27 +86,34 @@ export const NFTPickerDialog: FC<Props> = ({
         setPickedIds(selectedTokenIds);
       }}
     >
-      <div className={styles.searchGroup}>
-        <Input
-          fullWidth
-          value={keyword}
-          className={styles.input}
-          placeholder={t('Token ID separated by comma, e.g. 23453, 2565') as string}
-          onChange={(evt) => setKeyword(evt.currentTarget.value)}
-          leftAddon={<Icon type="search" size={24} />}
-        />
-        <Button round={false} onClick={search}>
-          {t('Search')}
-        </Button>
-      </div>
+      <form onSubmit={search}>
+        <div className={styles.searchGroup}>
+          <Input
+            fullWidth
+            value={keyword}
+            className={styles.input}
+            placeholder={t('Token ID separated by comma, e.g. 23453, 2565') as string}
+            onChange={(evt) => setKeyword(evt.currentTarget.value)}
+            leftAddon={<Icon type="search" size={24} />}
+          />
+          <Button round={false} type="submit" colorScheme="primary">
+            {t('Search')}
+          </Button>
+        </div>
+      </form>
       {searchVisible ? (
         <Search
           tokens={searchedTokens}
-          keyword={keyword}
           notOwnedIds={notOwnedIds}
           limit={limit}
           loading={isSearching}
-          selectedTokenIds={selectedTokenIds}
+          selectedTokenIds={pickedIds}
+          onConfirm={(ids) => {
+            if (ids.join() !== pickedIds.join()) {
+              setPickedIds(uniq([...pickedIds, ...ids]));
+            }
+            closeSearch();
+          }}
         />
       ) : (
         <>
@@ -129,13 +140,13 @@ export const NFTPickerDialog: FC<Props> = ({
             </Hint>
             {loading && <LoadingIcon size={14} />}
           </div>
+          <div className={styles.buttonGroup}>
+            <Button fullWidth onClick={() => onConfirm?.(pickedIds)} colorScheme="primary">
+              {t('Confirm')}
+            </Button>
+          </div>
         </>
       )}
-      <div className={styles.buttonGroup}>
-        <Button fullWidth onClick={() => onConfirm?.(pickedIds)}>
-          {t('Confirm')}
-        </Button>
-      </div>
     </Dialog>
   );
 };

@@ -11,7 +11,7 @@ import styles from './index.module.less';
 export interface SelectableNFTListProps extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
   tokens: ERC721Token[];
   limit: number;
-  loading: boolean;
+  loading?: boolean;
   selectedTokenIds?: string[];
   onChange?: (ids: string[]) => void;
   onLoadMore?: () => void;

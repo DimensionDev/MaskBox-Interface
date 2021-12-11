@@ -10,8 +10,12 @@ export function useCheckIsOwned(address: string) {
   const checkIsOwned = useCallback(
     async (tokenId: string) => {
       if (!contract || !account) return false;
-      const ownerAddress = await contract.ownerOf(tokenId);
-      return isSameAddress(ownerAddress, address);
+      try {
+        const ownerAddress = await contract.ownerOf(tokenId);
+        return isSameAddress(ownerAddress, account);
+      } catch {
+        return false;
+      }
     },
     [contract, account, address],
   );

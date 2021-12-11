@@ -29,7 +29,7 @@ export function useLazyLoadERC721Tokens(address: string) {
     const size = remaining.gt(SIZE) ? SIZE : remaining.toNumber();
     const result = await getERC721Tokens(offsetRef.current, size);
     offsetRef.current += size;
-    if (result && liveRef.current) {
+    if (result.length && liveRef.current) {
       setTokens((list) => {
         const newList = uniqBy([...list, ...result], 'tokenId');
         return newList;

@@ -10,7 +10,7 @@ export function useGetERC721Tokens(address: string) {
   const { account } = useWeb3Context();
   const getERC721Tokens = useCallback(
     async (offset: number, size: number) => {
-      if (!contract || !account) return;
+      if (!contract || !account) return [];
       const getTokens = new Array(size).fill(0).map(async (_, index) => {
         const tokenIdBn: BigNumber = await contract.tokenOfOwnerByIndex(
           account,

@@ -12,11 +12,16 @@ export function useGetERC721TokensByIds(address: string) {
     async (tokenIds: string[]): Promise<ERC721Token[]> => {
       if (!contract) return emptyList;
       const getTokens = tokenIds.map(async (tokenId) => {
-        const tokenURI: string = await contract.tokenURI(tokenId);
-        return {
-          tokenId,
-          tokenURI,
-        };
+        try {
+          const tokenURI: string = await contract.tokenURI(tokenId);
+          return {
+            tokenId,
+            tokenURI,
+          };
+        } catch (err) {
+          debugger;
+          return null;
+        }
       });
       const tokens = (await Promise.all(getTokens)).filter(notEmpty);
       return tokens;

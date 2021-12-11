@@ -38,6 +38,7 @@ export const NFTItem: FC<NFTItemProps> = ({
   return (
     <div
       className={classnames(styles.nft, className, disabled ? styles.disabled : null)}
+      title={`${verboseToken.name} #${verboseToken.tokenId}`}
       {...rest}
       ref={ref}
     >
@@ -52,11 +53,7 @@ export const NFTItem: FC<NFTItemProps> = ({
       </div>
       <div className={styles.info}>
         {contractName && <h3 className={styles.contractName}>{contractName}</h3>}
-        {verboseToken.name && (
-          <h3 className={styles.name}>
-            {verboseToken.name}/{verboseToken.tokenId}
-          </h3>
-        )}
+        {verboseToken.name && <h3 className={styles.name}>{verboseToken.name}</h3>}
         {sold !== undefined && (
           <h3 className={styles.saleStatus}>{sold ? t('Sold') : t('For Sale')}</h3>
         )}
