@@ -1,16 +1,7 @@
-import {
-  Button,
-  Field,
-  Hint,
-  Icon,
-  Input,
-  NFTSelectList,
-  showToast,
-  TokenIcon,
-} from '@/components';
+import { Button, Field, Hint, Icon, Input, NFTList, showToast, TokenIcon } from '@/components';
 import { RouteKeys } from '@/configs';
 import { usePickERC20, useRSS3, useWeb3Context } from '@/contexts';
-import { useERC721, useTokenList } from '@/hooks';
+import { useERC721, useLazyLoadERC721Tokens, useTokenList } from '@/hooks';
 import { createShareUrl, ZERO_ADDRESS } from '@/lib';
 import {
   ERC721ContractPicker,
@@ -62,12 +53,21 @@ export const Meta: FC = () => {
   const [createdBoxId, setCreatedBoxId] = useState('');
 
   const createBox = useCreateMaskbox();
-  const { isEnumable, ownedTokens: ownedERC721Tokens } = useEdit();
+  const { isEnumable } = useEdit();
+  const {
+    tokens: ownedERC721Tokens,
+    balance,
+    loading: nftLoading,
+  } = useLazyLoadERC721Tokens(formData.nftContractAddress);
   const { isApproveAll, isApproving, checkingApprove, approveAll } = useERC721(
     formData.nftContractAddress,
   );
   const [sellingNFTIds, setSellingNFTIds] = useState<string[]>([]);
   const [sellingContractAddress, setSellingContractAddress] = useState<string>('');
+  const sellingERC721Tokens = useMemo(
+    () => ownedERC721Tokens.filter((t) => sellingNFTIds.includes(t.tokenId)),
+    [ownedERC721Tokens, sellingNFTIds],
+  );
 
   const { selectedNFTIds } = formData;
   const selectedERC721Tokens = useMemo(
@@ -255,7 +255,7 @@ export const Meta: FC = () => {
                 checked={formData.sellAll}
                 onChange={(evt) => updateField('sellAll', evt.currentTarget.checked)}
               />
-              {t('All')}
+              {t('All ({balance} NFT)', { balance: balance.toString() })}
             </label>
             <label className={styles.selectType}>
               <input
@@ -265,8 +265,9 @@ export const Meta: FC = () => {
                 checked={!formData.sellAll}
                 onChange={(evt) => updateField('sellAll', !evt.currentTarget.checked)}
               />
-              {t('Selective part')}
+              {t('Select partially')}
             </label>
+            {formData.sellAll && <div className={styles.warning}>{t('select-all-warning')}</div>}
           </div>
         )}
       </Field>
@@ -274,11 +275,7 @@ export const Meta: FC = () => {
       {formData.nftContractAddress && !formData.sellAll && (
         <Field className={styles.field} name="Select NFT" required>
           <div className={styles.selectedNft}>
-            <NFTSelectList
-              tokens={selectedERC721Tokens}
-              selectedTokenIds={formData.selectedNFTIds}
-              onPick={isEditting ? undefined : openNftPicker}
-            />
+            <NFTList tokens={selectedERC721Tokens} pickable={!isEditting} onPick={openNftPicker} />
           </div>
         </Field>
       )}
@@ -417,22 +414,22 @@ export const Meta: FC = () => {
       </div>
       <CreationConfirmDialog
         open={confirmDialogVisible}
+        tokens={formData.sellAll ? ownedERC721Tokens : selectedERC721Tokens}
+        loading={nftLoading}
         onClose={closeConfirmDialog}
-        sellAll={formData.sellAll}
         nftAddress={formData.nftContractAddress}
-        nftIdList={formData.selectedNFTIds}
         onConfirm={create}
         creating={creating}
       />
       <ShareBox
         open={shareBoxVisible}
         nftAddress={sellingContractAddress}
+        tokens={sellingERC721Tokens}
         title="Successful"
         onClose={() => {
           closeShareBox();
           history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
         }}
-        nftIds={sellingNFTIds}
         onShare={() => {
           const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}`;
           const text = t('share-text', { name: formData.name, link: link });
@@ -453,6 +450,8 @@ export const Meta: FC = () => {
       <NFTPickerDialog
         open={nftPickerVisible}
         tokens={ownedERC721Tokens}
+        loading={nftLoading}
+        contractAddress={formData.nftContractAddress}
         selectedTokenIds={formData.selectedNFTIds}
         onClose={closeNftPicker}
         onConfirm={(ids) => {

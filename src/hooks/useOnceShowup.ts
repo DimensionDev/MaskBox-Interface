@@ -1,6 +1,6 @@
 import { RefObject, useEffect } from 'react';
 
-export function useOnceShowup(ref: RefObject<HTMLElement>, callback: () => void) {
+export function useOnceShowup(ref: RefObject<HTMLElement>, callback: () => void | Promise<void>) {
   useEffect(() => {
     if (!ref.current) return;
     let invoked = false;

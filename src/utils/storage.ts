@@ -13,6 +13,7 @@ export enum StorageKeys {
   WalletType = 'wallet-type',
   RecentTransations = 'recent-transitions',
   BoxDraft = 'box-draft',
+  ERC721TokenURI = 'erc721-token-uris',
 }
 
 export const setStorage = <T extends any>(key: string, value: T) => {

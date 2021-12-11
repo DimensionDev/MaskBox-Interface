@@ -141,17 +141,19 @@ export const Details: FC = memo(() => {
           </ArticleSection>
         ))}
       </main>
-      <ShareBox
-        nftIds={purchasedNfts}
-        nftAddress={box.nft_address!}
-        open={shareBoxVisible}
-        onClose={closeShareBox}
-        onShare={() => {
-          const text = t('share-to-twitter', { link: window.location.href });
-          const shareLink = createShareUrl(text);
-          window.open(shareLink, 'noopener noreferrer');
-        }}
-      />
+      {shareBoxVisible && (
+        <ShareBox
+          nftIds={purchasedNfts}
+          nftAddress={box.nft_address!}
+          open
+          onClose={closeShareBox}
+          onShare={() => {
+            const text = t('share-to-twitter', { link: window.location.href });
+            const shareLink = createShareUrl(text);
+            window.open(shareLink, 'noopener noreferrer');
+          }}
+        />
+      )}
       {payment && (
         <BuyBox
           open={buyBoxVisible}

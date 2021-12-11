@@ -78,5 +78,7 @@
   "Recent Transactions": "Recent Transactions",
   "Clear All": "Clear All",
   "Your transactions will appear here...": "Your transactions will appear here...",
-  "Select all": "Select all"
+  "Select all": "Select all",
+  "The mystery box contract supports up to {limit} NFTs for sale.": "The mystery box contract supports up to {limit} NFTs for sale.",
+  "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "The maximum number of NFTs to be sold in one mystery box contract is {limit}."
 }

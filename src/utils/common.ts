@@ -6,6 +6,11 @@ export function tenify(num: number) {
   return Math.abs(num) > 9 ? num : `0${num}`;
 }
 
+export function arrayRemove<T>(arr: T[], item: T): T[] {
+  const idx = arr.indexOf(item);
+  return arr.splice(idx, 1);
+}
+
 export type DeferTuple<T extends any = any, E extends unknown = unknown> = [
   Promise<T>,
   (value: T | PromiseLike<T>) => void,
