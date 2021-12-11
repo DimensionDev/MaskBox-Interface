@@ -119,8 +119,12 @@ export const validationsAtom = atom<string[]>((get) => {
   if (formData.pricePerBox && parseFloat(formData.pricePerBox) < 0) {
     validations.push('Price box must be positive');
   }
-  if ((!formData.limit || formData.limit < 1) && dirtyFileds.limit) {
-    validations.push('Limit of purchase per wallet is at least 1');
+  if (dirtyFileds.limit) {
+    if (!formData.limit || formData.limit < 1) {
+      validations.push('Limit of purchase per wallet is at least 1');
+    } else if (formData.limit > 255) {
+      validations.push('Limit of purchase per wallet is up to 255');
+    }
   }
 
   if (!formData.nftContractAddress && dirtyFileds.nftContractAddress) {
