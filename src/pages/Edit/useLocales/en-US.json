@@ -44,6 +44,7 @@
   "Please provide price for a box": "Please provide price for a box",
   "Price box must be positive": "Price box must be positive",
   "Limit of purchase per wallet is at least 1": "Limit of purchase per wallet is at least 1",
+  "Limit of purchase per wallet is up to 255": "Limit of purchase per wallet is up to 255",
   "Please select a contract": "Please select a contract",
   "Please select some NFTs": "Please select some NFTs",
   "Please set a valid start date": "Please set a valid start date",
