@@ -80,5 +80,7 @@
   "Your transactions will appear here...": "crwdns9981:0crwdne9981:0",
   "Select all": "crwdns10517:0crwdne10517:0",
   "The mystery box contract supports up to {limit} NFTs for sale.": "crwdns10579:0{limit}crwdne10579:0",
-  "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "crwdns10581:0{limit}crwdne10581:0"
+  "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "crwdns10581:0{limit}crwdne10581:0",
+  "Token ID <span>{ids}</span> does not exist or belong to you.": "crwdns10591:0{ids}crwdne10591:0",
+  "Add": "crwdns10593:0crwdne10593:0"
 }
