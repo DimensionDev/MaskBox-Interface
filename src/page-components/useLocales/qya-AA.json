@@ -78,5 +78,7 @@
   "Recent Transactions": "crwdns9977:0crwdne9977:0",
   "Clear All": "crwdns9979:0crwdne9979:0",
   "Your transactions will appear here...": "crwdns9981:0crwdne9981:0",
-  "Select all": "crwdns10517:0crwdne10517:0"
+  "Select all": "crwdns10517:0crwdne10517:0",
+  "The mystery box contract supports up to {limit} NFTs for sale.": "crwdns10579:0{limit}crwdne10579:0",
+  "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "crwdns10581:0{limit}crwdne10581:0"
 }
