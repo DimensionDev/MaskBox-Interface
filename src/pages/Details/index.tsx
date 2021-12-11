@@ -1,7 +1,7 @@
 import { ArticleSection, Button, NFTItem } from '@/components';
-import { useMBoxContract, useNFTContract, useNFTName } from '@/contexts';
+import { useMBoxContract, useNFTName } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
-import { useBox } from '@/hooks';
+import { useBox, useGetERC721TokensByIds } from '@/hooks';
 import { createShareUrl, ZERO } from '@/lib';
 import { BuyBox, BuyBoxProps, Maskbox, ShareBox } from '@/page-components';
 import { ERC721Token } from '@/types';
@@ -19,7 +19,6 @@ export const Details: FC = memo(() => {
   const t = useLocales();
   const location = useLocation();
   const { getNftListForSale } = useMBoxContract();
-  const { getByIdList } = useNFTContract();
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>([]);
 
   const { chainId, boxId } = useMemo(() => {
@@ -51,14 +50,15 @@ export const Details: FC = memo(() => {
 
   const cursorRef = useRef<BigNumber>(ZERO);
   const [allLoaded, setAllLoaded] = useState(false);
+  const getERC721TokensByIds = useGetERC721TokensByIds(box.nft_address);
   const loadNfts = useCallback(async () => {
-    if (!box?.nft_address || !boxId) return;
+    if (!getERC721TokensByIds || !boxId) return;
     const idList = await getNftListForSale(boxId, cursorRef.current, PAGE_SIZE);
     setAllLoaded(PAGE_SIZE.gt(idList.length));
     cursorRef.current = cursorRef.current.add(idList.length);
-    const tokens = await getByIdList(box.nft_address, idList);
+    const tokens = await getERC721TokensByIds(idList);
     setErc721Tokens((oldList) => uniqBy<ERC721Token>([...oldList, ...tokens], 'tokenId'));
-  }, [box?.nft_address, boxId]);
+  }, [getERC721TokensByIds, boxId]);
 
   // excluded drawed by the maskbox creator
   const { data: soldNFTData } = useSoldNftListQuery({

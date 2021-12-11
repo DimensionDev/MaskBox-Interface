@@ -10,21 +10,20 @@ export function useOnceShowup(ref: RefObject<HTMLElement>, callback: () => void 
           unobserve();
           return;
         }
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            invoked = true;
-            callback();
-          }
-        });
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
+          invoked = true;
+          callback();
+        }
       },
       {
         threshold: 0,
       },
     );
+    observer.observe(ref.current);
     const unobserve = () => {
       if (ref.current) observer.unobserve(ref.current);
     };
-    observer.observe(ref.current);
 
     return unobserve;
   }, [callback]);

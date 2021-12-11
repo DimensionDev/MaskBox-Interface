@@ -1,7 +1,7 @@
 import { MaskboxNFTABI } from '@/abi';
 import { showToast } from '@/components';
 import { ERC721Token } from '@/types';
-import { fetchNFTTokenDetail, notEmpty } from '@/utils';
+import { notEmpty } from '@/utils';
 import { BigNumber, Contract, utils } from 'ethers';
 import React, { FC, memo, useCallback, useContext, useEffect, useState } from 'react';
 import { useWeb3Context } from './Web3Context';
@@ -55,8 +55,7 @@ export const NFTContractProvider: FC = memo(({ children }) => {
 
   const getTokenById = async (contract: Contract, tokenId: string): Promise<ERC721Token> => {
     const uri = await contract.tokenURI(tokenId);
-    const data = await fetchNFTTokenDetail(uri);
-    return { ...data, tokenId };
+    return { tokenURI: uri, tokenId };
   };
 
   const getMyToken = useCallback(

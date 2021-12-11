@@ -1,10 +1,10 @@
 import { useOnceShowup } from '@/hooks';
-import { ERC721Token } from '@/types';
+import { ERC721Token, ERC721TokenMeta } from '@/types';
 import { fetchNFTTokenDetail, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useCallback, useRef, useState } from 'react';
-import { Icon, LoadingIcon } from '../Icon';
-import { Image } from '../Image';
+import { LoadingIcon } from '../Icon';
+import { MediaViewer } from '../MediaViewer';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
@@ -25,7 +25,10 @@ export const NFTItem: FC<NFTItemProps> = ({
 }) => {
   const t = useLocales();
   const ref = useRef<HTMLDivElement>(null);
-  const [verboseToken, setVerboseToken] = useState<ERC721Token>(token);
+  const [tokenMeta, setVerboseToken] = useState<ERC721TokenMeta>({
+    name: token.name,
+    image: token.image ?? '',
+  });
   const [fetching, setIsFetching, setNotFetching] = useBoolean(true);
   const fetchDetail = useCallback(async () => {
     if (!token.tokenURI) {
@@ -33,33 +36,27 @@ export const NFTItem: FC<NFTItemProps> = ({
       return;
     }
     setIsFetching();
-    const detail = await fetchNFTTokenDetail(token.tokenURI);
-    setVerboseToken({
-      ...detail,
-      tokenId: token.tokenId,
-    });
+    const meta = await fetchNFTTokenDetail(token.tokenURI);
+    setVerboseToken(meta);
     setNotFetching();
   }, [token.tokenId, token.tokenURI]);
   useOnceShowup(ref, fetchDetail);
   return (
     <div
       className={classnames(styles.nft, className, disabled ? styles.disabled : null)}
-      title={`${verboseToken.name} #${verboseToken.tokenId}`}
+      title={`${tokenMeta.name} #${token.tokenId}`}
       {...rest}
       ref={ref}
     >
-      <div className={styles.image}>
-        <Image
-          loading="lazy"
-          src={verboseToken.image}
-          alt={verboseToken.name}
-          height="100%"
-          alternative={<Icon type="mask" size={48}></Icon>}
-        />
-      </div>
+      <MediaViewer
+        className={styles.media}
+        name={tokenMeta.name}
+        image={tokenMeta.image}
+        animationUrl={tokenMeta.animation_url}
+      />
       <div className={styles.info}>
         {contractName && <h3 className={styles.contractName}>{contractName}</h3>}
-        <h3 className={styles.name}>{fetching ? <LoadingIcon size={14} /> : verboseToken.name}</h3>
+        <h3 className={styles.name}>{fetching ? <LoadingIcon size={14} /> : tokenMeta.name}</h3>
         {sold !== undefined && (
           <h3 className={styles.saleStatus}>{sold ? t('Sold') : t('For Sale')}</h3>
         )}
