@@ -44,6 +44,7 @@
   "Please provide price for a box": "crwdns9701:0crwdne9701:0",
   "Price box must be positive": "crwdns9703:0crwdne9703:0",
   "Limit of purchase per wallet is at least 1": "crwdns9705:0crwdne9705:0",
+  "Limit of purchase per wallet is up to 255": "crwdns10589:0crwdne10589:0",
   "Please select a contract": "crwdns9707:0crwdne9707:0",
   "Please select some NFTs": "crwdns9709:0crwdne9709:0",
   "Please set a valid start date": "crwdns9711:0crwdne9711:0",
