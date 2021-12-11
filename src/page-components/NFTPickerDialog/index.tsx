@@ -96,7 +96,7 @@ export const NFTPickerDialog: FC<Props> = ({
             onChange={(evt) => setKeyword(evt.currentTarget.value)}
             leftAddon={<Icon type="search" size={24} />}
           />
-          <Button round={false} type="submit" colorScheme="primary">
+          <Button round={false} disabled={!keyword} type="submit" colorScheme="primary">
             {t('Search')}
           </Button>
         </div>
