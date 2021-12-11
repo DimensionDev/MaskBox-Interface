@@ -1,16 +1,16 @@
 import { ERC721Token } from '@/types';
-import { notEmpty, useBoolean } from '@/utils';
+import { EMPTY_LIST, notEmpty, useBoolean } from '@/utils';
 import { uniqBy } from 'lodash-es';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLiveRef } from '../common';
 import { useERC721InteractContract } from './useERC721InteractContract';
 
 const SIZE = 50;
-const emptyList: any[] = [];
-export function useGetERC721TokensByIds(address: string) {
+export function useGetERC721TokensByIds(address: string | undefined) {
   const contract = useERC721InteractContract(address);
   const getERC721TokensByIds = useCallback(
     async (tokenIds: string[]): Promise<ERC721Token[]> => {
-      if (!contract) return emptyList;
+      if (!contract) return EMPTY_LIST;
       const getTokens = tokenIds.map(async (tokenId) => {
         try {
           const tokenURI: string = await contract.tokenURI(tokenId);
@@ -29,19 +29,13 @@ export function useGetERC721TokensByIds(address: string) {
   );
   return getERC721TokensByIds;
 }
-export function useERC721TokensByIds(address: string, tokenIds: string[]) {
+export function useERC721TokensByIds(address: string | undefined, tokenIds: string[]) {
   const getTokensByIds = useGetERC721TokensByIds(address);
   const total = tokenIds.length;
   const offsetRef = useRef(0);
-  const liveRef = useRef(true);
+  const liveRef = useLiveRef();
   const [loading, setIsLoading, setNotLoading] = useBoolean();
-  const [tokens, setTokens] = useState<ERC721Token[]>([]);
-
-  useEffect(() => {
-    return () => {
-      liveRef.current = false;
-    };
-  }, []);
+  const [tokens, setTokens] = useState<ERC721Token[]>(EMPTY_LIST);
 
   const loadTokens = useCallback(async () => {
     if (total <= offsetRef.current) return;
