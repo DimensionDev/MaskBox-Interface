@@ -1,6 +1,6 @@
 import { ERC721Contract, TokenType, ZERO_ADDRESS } from '@/lib';
 import { Activity, MediaType } from '@/types';
-import { setStorage, StorageKeys } from '@/utils';
+import { EMPTY_OBJECT, setStorage, StorageKeys } from '@/utils';
 import { format, isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
 import { useAtomValue, useUpdateAtom } from 'jotai/utils';
@@ -71,7 +71,7 @@ export const descriptionFullfilledAtom = atom((get) => {
   return !!formData.name && formData.mediaUrl;
 });
 
-export const fieldDirtyAtom = atom<Partial<Record<keyof FormData, boolean>>>({});
+export const fieldDirtyAtom = atom<Partial<Record<keyof FormData, boolean>>>(EMPTY_OBJECT);
 
 export const metaFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);
@@ -195,7 +195,7 @@ export function useResetForm() {
   const setDirty = useUpdateAtom(fieldDirtyAtom);
   const reset = useCallback(() => {
     updateFormData(defaultFormData);
-    setDirty({});
+    setDirty(EMPTY_OBJECT);
   }, []);
   return reset;
 }

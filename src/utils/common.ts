@@ -29,3 +29,4 @@ export function createDefer<T extends any = any, E extends unknown = unknown>():
 }
 
 export const EMPTY_LIST: never[] = Object.freeze([]) as never[];
+export const EMPTY_OBJECT: Record<never, never> = Object.freeze({});
