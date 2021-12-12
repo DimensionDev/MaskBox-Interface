@@ -1,16 +1,27 @@
 import { ChainId } from '@/lib';
+import { getStorage, notEmpty, setStorage, StorageKeys } from '@/utils';
 import { ProviderType } from '../providers';
+
+const devModeEnabled = process.env.NODE_ENV === 'development' || getStorage(StorageKeys.DevMode);
+
+window.enableDevMode = () => {
+  setStorage(StorageKeys.DevMode, true);
+  location.reload();
+};
+
 export const connectableChains = [
   {
     name: 'Ethereum',
     chainId: ChainId.Mainnet,
     iconType: 'ethereumChain',
   },
-  {
-    name: 'Rinkeby',
-    chainId: ChainId.Rinkeby,
-    iconType: 'ethereumChain',
-  },
+  devModeEnabled
+    ? {
+        name: 'Rinkeby',
+        chainId: ChainId.Rinkeby,
+        iconType: 'ethereumChain',
+      }
+    : null,
   {
     name: 'polygon',
     chainId: ChainId.Matic,
@@ -21,7 +32,7 @@ export const connectableChains = [
   //   chainId: ChainId.BSC,
   //   iconType: 'binanceChain',
   // },
-] as const;
+].filter(notEmpty);
 
 interface WalletProvider {
   id: string;

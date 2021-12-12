@@ -1,4 +1,4 @@
-import { Dialog, DialogProps, Icon, Overlay, SelectableIcon } from '@/components';
+import { Dialog, DialogProps, Icon, IconType, Overlay, SelectableIcon } from '@/components';
 import { ChainId } from '@/lib';
 import classnames from 'classnames';
 import { FC, useCallback, useEffect, useState } from 'react';
@@ -69,7 +69,7 @@ export const ConnectDialog: FC<Props> = ({
                 onClick={() => setCurrChainId(c.chainId)}
               >
                 <SelectableIcon key={c.name} selected={c.chainId === currChainId}>
-                  <Icon type={c.iconType} size={48} />
+                  <Icon type={c.iconType as IconType} size={48} />
                 </SelectableIcon>
                 <p className={styles.name}>{c.name}</p>
               </div>

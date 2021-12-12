@@ -14,6 +14,8 @@ export enum StorageKeys {
   RecentTransations = 'recent-transitions',
   BoxDraft = 'box-draft',
   ERC721TokenURI = 'erc721-token-uris',
+  //
+  DevMode = 'dev-mode',
 }
 
 export const setStorage = <T extends any>(key: string, value: T) => {
