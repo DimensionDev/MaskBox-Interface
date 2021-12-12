@@ -1,4 +1,7 @@
 {
   "My Collectibles": "crwdns9743:0crwdne9743:0",
-  "No items to display.": "crwdns9745:0crwdne9745:0"
+  "No items to display.": "crwdns9745:0crwdne9745:0",
+  "Loading more": "crwdns10595:0crwdne10595:0",
+  "All {count} NFTs loaded": "crwdns10597:0{count}crwdne10597:0",
+  "Loaded {count} NFTs": "crwdns10599:0{count}crwdne10599:0"
 }
