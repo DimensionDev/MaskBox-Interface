@@ -16,7 +16,9 @@ export const MediaViewer: FC<Props> = ({ name, image, animationUrl, ...rest }) =
   const ref = useRef<HTMLDivElement>(null);
   const showup = useShowup(ref);
   let hero: JSX.Element = <MockViewer />;
-  if (mediaUrl?.match(/\.(png|jpg|gif)$/)) {
+  if (mediaUrl.match(/\.mp4$/)) {
+    hero = <VideoPlayer className={styles.videoPlayer} src={mediaUrl} alt={name} height="100%" />;
+  } else {
     hero = (
       <Image
         className={styles.image}
@@ -27,8 +29,6 @@ export const MediaViewer: FC<Props> = ({ name, image, animationUrl, ...rest }) =
         alternative={<Icon type="mask" size={48} />}
       />
     );
-  } else if (mediaUrl.match(/\.mp4$/)) {
-    hero = <VideoPlayer className={styles.videoPlayer} src={mediaUrl} alt={name} height="100%" />;
   }
 
   return (
