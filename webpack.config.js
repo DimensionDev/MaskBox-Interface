@@ -36,7 +36,7 @@ const config = {
             options: {
               sourceMap: true,
               modules: {
-                localIdentName: '[local]--[hash:base64:5]',
+                localIdentName: '[local]--[chunkhash:base64:5]',
               },
             },
           },
@@ -56,7 +56,7 @@ const config = {
       Buffer: ['buffer', 'Buffer'],
     }),
     new MiniCssExtractPlugin({
-      filename: '[name]-[hash].css',
+      filename: '[name]-[chunkhash].css',
     }),
     new webpack.EnvironmentPlugin({
       INFURA_ID: process.env.INFURA_ID || 'd74bd8586b9e44449cef131d39ceeefb',
