@@ -8,14 +8,18 @@ import { useCallback, useEffect, useState } from 'react';
 export function useGetERC20TokenInfo() {
   const { ethersProvider, providerChainId } = useWeb3Context();
   const getTokenInfo = useCallback(
-    async (addr: string): Promise<TokenType | undefined> => {
-      if (!ethersProvider || !providerChainId) return;
+    async (addr: string): Promise<TokenType | null> => {
+      if (!ethersProvider || !providerChainId) return null;
       if (isSameAddress(addr, ZERO_ADDRESS)) {
         return getNativeToken(providerChainId);
       }
       const contract = new Contract(addr, ERC20_ABI, ethersProvider);
-      const token = Promise.all([contract.name(), contract.symbol(), contract.decimals()]).then(
+      const namePromise = contract.name().catch(() => null);
+      const symbolPromise = contract.symbol().catch(() => null);
+      const decimalsPromise = contract.decimals().catch(() => null);
+      const token = await Promise.all([namePromise, symbolPromise, decimalsPromise]).then(
         ([name, symbol, decimals]) => {
+          if (!name && !symbol && !decimals) return null;
           return {
             address: addr,
             chainId: providerChainId as number,
@@ -33,13 +37,13 @@ export function useGetERC20TokenInfo() {
   return getTokenInfo;
 }
 
-export function useERC20Token(address: string | undefined) {
-  const [token, setToken] = useState<TokenType | undefined>();
+export function useERC20Token(address: string | null | undefined) {
+  const [token, setToken] = useState<TokenType | null>();
 
   const getTokenInfo = useGetERC20TokenInfo();
   useEffect(() => {
     if (!address) {
-      setToken(undefined);
+      setToken(null);
       return;
     }
     getTokenInfo(address).then(setToken);

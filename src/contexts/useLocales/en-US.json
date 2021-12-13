@@ -13,5 +13,6 @@
   "Copy Address": "Copy Address",
   "Recent Transactions": "Recent Transactions",
   "Clear All": "Clear All",
-  "Your transactions will appear here...": "Your transactions will appear here..."
+  "Your transactions will appear here...": "Your transactions will appear here...",
+  "The contract address is incorrect or does not exist": "The contract address is incorrect or does not exist"
 }

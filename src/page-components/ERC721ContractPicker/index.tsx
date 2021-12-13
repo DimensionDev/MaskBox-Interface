@@ -45,7 +45,6 @@ export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
     });
   }, [keyword, erc721Contracts]);
 
-  const [checking, startChecking, finishChecking] = useBoolean();
   const isNewAddress = useMemo(() => {
     return (
       utils.isAddress(keyword) &&
@@ -53,6 +52,7 @@ export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
     );
   }, [keyword, erc721Contracts]);
 
+  const [checking, startChecking, finishChecking] = useBoolean();
   useEffect(() => {
     if (isNewAddress) {
       startChecking();

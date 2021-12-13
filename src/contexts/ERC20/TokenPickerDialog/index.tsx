@@ -1,8 +1,17 @@
-import { Button, Icon, Input, Dialog, DialogProps, Token, TokenList } from '@/components';
+import {
+  Button,
+  Icon,
+  Input,
+  Dialog,
+  DialogProps,
+  Token,
+  TokenList,
+  LoadingIcon,
+} from '@/components';
 import { useTokenList } from '@/hooks';
 import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
 import { TokenType } from '@/lib';
-import { getStorage, isSameAddress, setStorage, StorageKeys } from '@/utils';
+import { getStorage, isSameAddress, setStorage, StorageKeys, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
@@ -51,11 +60,46 @@ export const TokenPickerDialog: FC<TokenPickerDialogProps> = ({
     );
   }, [keyword, tokens]);
 
+  const [checking, startChecking, finishChecking] = useBoolean();
   useEffect(() => {
     if (isNewAddress) {
-      getERC20Token(keyword).then((token) => token && setNewToken(token));
+      startChecking();
+      getERC20Token(keyword).then(setNewToken).finally(finishChecking);
     }
   }, [isNewAddress, keyword]);
+
+  let content: JSX.Element;
+  if (isNewAddress) {
+    if (checking) content = <LoadingIcon size={18} />;
+    if (newToken) {
+      content = (
+        <div className={classnames(styles.tokenList, styles.newList)}>
+          <div className={styles.row}>
+            <Token className={styles.token} token={newToken} hideBalance />
+            <Button
+              size="small"
+              colorScheme="primary"
+              onClick={() => {
+                storeNewToken(newToken);
+                setKeyword('');
+                updateTokens();
+              }}
+            >
+              {t('Import')}
+            </Button>
+          </div>
+        </div>
+      );
+    } else {
+      content = (
+        <div className={styles.noResult}>
+          {t('The contract address is incorrect or does not exist')}
+        </div>
+      );
+    }
+  } else {
+    content = <TokenList className={styles.tokenList} tokens={filteredTokens} onPick={onPick} />;
+  }
 
   return (
     <Dialog className={styles.dialog} title={t('Seletct a Token') as string} {...rest}>
@@ -71,28 +115,7 @@ export const TokenPickerDialog: FC<TokenPickerDialogProps> = ({
           leftAddon={<Icon type="search" size={24} />}
         />
       </div>
-      {isNewAddress ? (
-        newToken && (
-          <div className={classnames(styles.tokenList, styles.newList)}>
-            <div className={styles.row}>
-              <Token className={styles.token} token={newToken} hideBalance />
-              <Button
-                size="small"
-                colorScheme="primary"
-                onClick={() => {
-                  storeNewToken(newToken);
-                  setKeyword('');
-                  updateTokens();
-                }}
-              >
-                {t('Import')}
-              </Button>
-            </div>
-          </div>
-        )
-      ) : (
-        <TokenList className={styles.tokenList} tokens={filteredTokens} onPick={onPick} />
-      )}
+      {content}
     </Dialog>
   );
 };
