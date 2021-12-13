@@ -9,7 +9,7 @@ import {
   LoadingIcon,
 } from '@/components';
 import { useTokenList } from '@/hooks';
-import { useGetERC20TokenInfo } from '@/hooks/useGetERC20TokenInfo';
+import { useGetERC20TokenInfo } from '@/hooks/erc20/useGetERC20TokenInfo';
 import { TokenType } from '@/lib';
 import { getStorage, isSameAddress, setStorage, StorageKeys, useBoolean } from '@/utils';
 import classnames from 'classnames';
