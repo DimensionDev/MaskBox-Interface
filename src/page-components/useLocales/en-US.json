@@ -18,7 +18,7 @@
   "Drawing": "Drawing",
   "Insufficient balance": "Insufficient balance",
   "Insufficient allowance": "Insufficient allowance",
-  "Select an NFT": "Select an NFT",
+  "Seletct an NFT contract": "Seletct an NFT contract",
   "Search name or paste address": "Search name or paste address",
   "Import": "Import",
   "No results for": "No results for",
@@ -82,5 +82,6 @@
   "The mystery box contract supports up to {limit} NFTs for sale.": "The mystery box contract supports up to {limit} NFTs for sale.",
   "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "The maximum number of NFTs to be sold in one mystery box contract is {limit}.",
   "Token ID <span>{ids}</span> does not exist or belong to you.": "Token ID <span>{ids}</span> does not exist or belong to you.",
-  "Add": "Add"
+  "Add": "Add",
+  "The contract address is incorrect or does not exist": "The contract address is incorrect or does not exist"
 }

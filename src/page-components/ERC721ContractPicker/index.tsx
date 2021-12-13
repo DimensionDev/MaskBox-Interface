@@ -6,10 +6,11 @@ import {
   ERC721ContractList,
   Icon,
   Input,
+  LoadingIcon,
 } from '@/components';
 import { useERC721ContractList, useGetERC721Contract } from '@/hooks';
 import { ERC721Contract as ERC721ContractType } from '@/lib';
-import { getStorage, isSameAddress, setStorage, StorageKeys } from '@/utils';
+import { getStorage, isSameAddress, setStorage, StorageKeys, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { FC, useEffect, useMemo, useState } from 'react';
@@ -44,6 +45,7 @@ export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
     });
   }, [keyword, erc721Contracts]);
 
+  const [checking, startChecking, finishChecking] = useBoolean();
   const isNewAddress = useMemo(() => {
     return (
       utils.isAddress(keyword) &&
@@ -53,12 +55,58 @@ export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
 
   useEffect(() => {
     if (isNewAddress) {
-      getERC721Contract(keyword).then((contract) => contract && setNewContract(contract));
+      startChecking();
+      getERC721Contract(keyword).then(setNewContract).finally(finishChecking);
     }
   }, [isNewAddress, keyword, getERC721Contract]);
 
+  let content: JSX.Element;
+  if (isNewAddress) {
+    if (checking) content = <LoadingIcon size={18} />;
+    if (newContract) {
+      content = (
+        <div className={classnames(styles.tokenList, styles.newList)}>
+          <div className={styles.row}>
+            <ERC721Contract className={styles.token} token={newContract} hideBalance />
+            <Button
+              size="small"
+              colorScheme="primary"
+              onClick={() => {
+                storeNewToken(newContract);
+                setKeyword('');
+                updateERC721Contracts();
+              }}
+            >
+              {t('Import')}
+            </Button>
+          </div>
+        </div>
+      );
+    } else {
+      content = (
+        <div className={styles.noResult}>
+          {t('The contract address is incorrect or does not exist')}
+        </div>
+      );
+    }
+  } else if (keyword && filteredContracts.length === 0) {
+    content = (
+      <div className={styles.noResult}>
+        {t('No results for')} <strong className={styles.keyword}>{keyword}</strong>
+      </div>
+    );
+  } else {
+    content = (
+      <ERC721ContractList
+        className={styles.tokenList}
+        contracts={filteredContracts}
+        onPick={onPick}
+      />
+    );
+  }
+
   return (
-    <Dialog className={styles.dialog} title={t('Select an NFT') as string} {...rest}>
+    <Dialog className={styles.dialog} title={t('Seletct an NFT contract') as string} {...rest}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth
@@ -70,36 +118,7 @@ export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
           leftAddon={<Icon type="search" size={24} />}
         />
       </div>
-      {isNewAddress ? (
-        newContract && (
-          <div className={classnames(styles.tokenList, styles.newList)}>
-            <div className={styles.row}>
-              <ERC721Contract className={styles.token} token={newContract} hideBalance />
-              <Button
-                size="small"
-                colorScheme="primary"
-                onClick={() => {
-                  storeNewToken(newContract);
-                  setKeyword('');
-                  updateERC721Contracts();
-                }}
-              >
-                {t('Import')}
-              </Button>
-            </div>
-          </div>
-        )
-      ) : keyword && filteredContracts.length === 0 ? (
-        <div className={styles.noResult}>
-          {t('No results for')} <strong className={styles.keyword}>{keyword}</strong>
-        </div>
-      ) : (
-        <ERC721ContractList
-          className={styles.tokenList}
-          contracts={filteredContracts}
-          onPick={onPick}
-        />
-      )}
+      {content}
     </Dialog>
   );
 };
