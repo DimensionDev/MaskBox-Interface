@@ -21,7 +21,7 @@ export const Collection: FC<Props> = ({ className, contractAddress, ...rest }) =
   const { theme } = useTheme();
   const t = useLocales();
 
-  const { tokens, loadMore, loading, finished } = useLazyLoadERC721Tokens(
+  const { tokens, balance, loadMore, loading, finished } = useLazyLoadERC721Tokens(
     contractAddress,
     false,
     5,
@@ -32,10 +32,11 @@ export const Collection: FC<Props> = ({ className, contractAddress, ...rest }) =
     if (finished) return true;
     await loadMore();
   }, [finished, loadMore]);
+  const name = collection ? collection.name || collection.symbol : '';
   return (
     <ArticleSection
       className={classnames(className, styles.collection)}
-      title={collection?.name ?? collection?.symbol ?? '-'}
+      title={`${name} ${balance.gt(0) ? `( ${balance.toString()} )` : ''}`}
       {...rest}
     >
       {(() => {
