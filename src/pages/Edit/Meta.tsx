@@ -329,6 +329,7 @@ export const Meta: FC = () => {
           disabled={isEditting}
           fullWidth
           size="large"
+          spellCheck={false}
           value={formData.whiteList}
           onChange={bindField('whiteList')}
         />

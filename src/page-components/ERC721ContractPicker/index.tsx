@@ -113,6 +113,7 @@ export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
           round
           className={styles.input}
           value={keyword}
+          spellCheck={false}
           onChange={(evt) => setKeyword(evt.currentTarget.value)}
           placeholder={t('Search name or paste address') as string}
           leftAddon={<Icon type="search" size={24} />}
