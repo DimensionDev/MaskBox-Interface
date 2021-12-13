@@ -106,7 +106,7 @@ export const ERC721ContractPicker: FC<Props> = ({ onPick, ...rest }) => {
   }
 
   return (
-    <Dialog className={styles.dialog} title={t('Seletct an NFT contract') as string} {...rest}>
+    <Dialog className={styles.dialog} title={t('Seletct a Collection') as string} {...rest}>
       <div className={styles.searchGroup}>
         <Input
           fullWidth
