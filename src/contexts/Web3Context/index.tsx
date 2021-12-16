@@ -11,11 +11,14 @@ import getProvider, { ProviderType } from './providers';
 
 export * from './providers';
 
+type Web3Provider = ethers.providers.Web3Provider;
+type JsonRpcProvider = ethers.providers.JsonRpcProvider;
+
 interface ContextOptions {
   /** TODO rename to chainId */
   providerChainId: number;
   /** TODO rename to provider */
-  ethersProvider: ethers.providers.Web3Provider;
+  ethersProvider: Web3Provider | JsonRpcProvider;
   account: string;
   openConnectionDialog: () => void;
   closeConnectionDialog: () => void;
@@ -98,6 +101,17 @@ export const Web3Provider: FC = ({ children }) => {
     [account],
   );
 
+  const setDefaultProvider = useCallback(() => {
+    const provider = new ethers.providers.JsonRpcProvider(
+      `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`,
+    );
+    setWeb3State((state) => ({
+      ...state,
+      ethersProvider: provider,
+      providerChainId: ChainId.Mainnet as number,
+    }));
+  }, []);
+
   const disconnect = useCallback(() => {
     setWeb3State({});
     removeStoredChainId();
@@ -141,9 +155,11 @@ export const Web3Provider: FC = ({ children }) => {
         if (provider) {
           connectWeb3(parseInt(provider.chainId, 16), walletType);
         }
+      } else {
+        setDefaultProvider();
       }
     })();
-  }, [connectWeb3]);
+  }, [connectWeb3, setDefaultProvider]);
 
   const openAccountDialog = useCallback(() => {
     setAccountDialogVisible(true);
@@ -164,7 +180,7 @@ export const Web3Provider: FC = ({ children }) => {
       ethersProvider,
       providerChainId,
       connectWeb3,
-      isMetaMask: !!ethersProvider?.provider?.isMetaMask,
+      isMetaMask: !!(ethersProvider as Web3Provider)?.provider?.isMetaMask,
       isConnecting,
       isNotSupportedChain,
     };
