@@ -31,9 +31,9 @@ export function useLazyLoadERC721Tokens(
 
   const deferRef = useRef<DeferTuple<void>>();
   const loadMore = useCallback(async () => {
-    if (balance.lte(offsetRef.current) || !address) return;
+    if (balance.lte(offsetRef.current) || !address || !liveRef.current) return;
     const remaining = balance.sub(offsetRef.current);
-    if (remaining.lte(ZERO) || !liveRef.current) return;
+    if (remaining.lte(ZERO)) return;
 
     setIsLoading();
     if (deferRef.current) {

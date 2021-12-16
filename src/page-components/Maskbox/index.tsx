@@ -72,6 +72,7 @@ export const Maskbox: FC<MaskboxProps> = ({
       if (box.expired) return t('Ended');
       if (!isApproveAll) return t('Canceled');
     }
+    if (box.canceled) return t('Canceled');
     if (inList) return t('View Details');
     if (!ethersProvider) return t('Connect Wallet');
 
@@ -169,7 +170,7 @@ export const Maskbox: FC<MaskboxProps> = ({
                 <LoadingIcon />
               </Button>
             );
-          if (isStarted || !ethersProvider) {
+          if (isStarted || box.canceled || !ethersProvider) {
             return <Button {...buttonProps}>{buttonText}</Button>;
           }
           return <CountdownButton {...buttonProps} startTime={startTime!} />;
