@@ -3,6 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const packageJson = require('./package.json');
 
 /** import('webpack').Configuration */
 const config = {
@@ -60,6 +61,7 @@ const config = {
     }),
     new webpack.EnvironmentPlugin({
       INFURA_ID: process.env.INFURA_ID || 'd74bd8586b9e44449cef131d39ceeefb',
+      VERSION: `${packageJson.version}-${process.env.COMMIT ?? 'dev'}`,
     }),
   ],
   devServer: {

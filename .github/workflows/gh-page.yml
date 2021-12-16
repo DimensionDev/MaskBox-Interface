@@ -31,6 +31,7 @@ jobs:
           cp public/logo.png dist
         env:
           INFURA_ID: d74bd8586b9e44449cef131d39ceeefb
+          COMMIT: ${{ github.sha }}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
