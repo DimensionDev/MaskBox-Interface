@@ -25,9 +25,13 @@ export function useLazyLoadERC721Tokens(
     };
   }, []);
 
+  useEffect(() => {
+    offsetRef.current = 0;
+  }, [address]);
+
   const deferRef = useRef<DeferTuple<void>>();
   const loadMore = useCallback(async () => {
-    if (balance.lte(offsetRef.current)) return;
+    if (balance.lte(offsetRef.current) || !address) return;
     const remaining = balance.sub(offsetRef.current);
     if (remaining.lte(ZERO) || !liveRef.current) return;
 
@@ -48,12 +52,12 @@ export function useLazyLoadERC721Tokens(
     }
     deferRef.current[1]();
     // continue loading more
-    if (loadSize === size && remaining.gt(0) && autoLoadNext) {
+    if (remaining.gt(0) && result.length && autoLoadNext) {
       await loadMore();
     } else {
       setNotLoading();
     }
-  }, [getERC721Tokens, balance, autoLoadNext, loadSize]);
+  }, [getERC721Tokens, balance, autoLoadNext, loadSize, address]);
 
   useEffect(() => {
     loadMore();
