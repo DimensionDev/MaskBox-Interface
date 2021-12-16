@@ -148,7 +148,7 @@ export const Meta: FC = () => {
   }, [formData.pricePerBox]);
 
   const pickERC20 = usePickERC20();
-  const { tokens } = useTokenList();
+  const { tokens, updateTokens } = useTokenList();
   const selectedPaymentToken = useMemo(() => {
     return tokens.find((token) => isSameAddress(token.address, formData.tokenAddress));
   }, [tokens, formData.tokenAddress]);
@@ -192,6 +192,11 @@ export const Meta: FC = () => {
               onClick={async () => {
                 if (isEditting) return;
                 const token = await pickERC20();
+                // TODO move this checking into pickERC20
+                const existed = tokens.find((t) => isSameAddress(t.address, token.address));
+                if (!existed) {
+                  updateTokens();
+                }
                 updateField('tokenAddress', token.address);
                 updateField('token', token);
               }}
@@ -360,6 +365,11 @@ export const Meta: FC = () => {
                 const token = await pickERC20({
                   exclude: [ZERO_ADDRESS],
                 });
+                // TODO move this checking into pickERC20
+                const existed = tokens.find((t) => isSameAddress(t.address, token.address));
+                if (!existed) {
+                  updateTokens();
+                }
                 updateField('holderTokenAddress', token.address);
                 updateField('holderToken', token);
               }}
