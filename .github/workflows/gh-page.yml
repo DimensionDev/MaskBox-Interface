@@ -2,8 +2,6 @@ name: Github Pages
 
 on:
   push:
-    branches:
-      - master
 
 jobs:
   deploy:
@@ -13,18 +11,22 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v2
-      - uses: actions/cache@v2
+
+      - uses: pnpm/action-setup@v2
         with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          version: '6.23.1'
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'pnpm'
 
       - name: Install
-        run: yarn install
+        run: pnpm install
 
       - name: Build
         run: |
-          yarn build
+          pnpm build
           cp public/CNAME dist
           cp public/logo.png dist
         env:
