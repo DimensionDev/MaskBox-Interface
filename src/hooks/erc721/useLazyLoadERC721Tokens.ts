@@ -6,7 +6,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useERC721Balance } from './useERC721Balance';
 import { useGetERC721Tokens } from './useERC721Tokens';
 
-const SIZE = 50;
+// https://rpc-mainnet.maticvigil.com/ used by MetaMask, limit 40 per second
+const SIZE = 10;
 export function useLazyLoadERC721Tokens(
   address: string,
   autoLoadNext: boolean = true,
