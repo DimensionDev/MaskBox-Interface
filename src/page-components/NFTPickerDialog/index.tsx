@@ -9,7 +9,7 @@ import {
   SelectableNFTList,
   SelectableNFTListProps,
 } from '@/components';
-import { useCheckIsOwned, useGetERC721TokensByIds } from '@/hooks';
+import { useCheckIsOwned, useERC721Balance, useGetERC721TokensByIds } from '@/hooks';
 import { ERC721Token } from '@/types';
 import { useBoolean } from '@/utils';
 import classnames from 'classnames';
@@ -35,6 +35,7 @@ export const NFTPickerDialog: FC<Props> = ({
   ...rest
 }) => {
   const t = useLocales();
+  const balance = useERC721Balance(contractAddress);
   const [keyword, setKeyword] = useState('');
   const [isSearching, setIsSearching, setNotSearching] = useBoolean();
   const [searchVisible, openSearch, closeSearch] = useBoolean();
@@ -132,7 +133,7 @@ export const NFTPickerDialog: FC<Props> = ({
             </span>
           )}
           <span className={classnames(styles.picked, styles.error)}>{pickedIds.length}</span> /{' '}
-          <span className={styles.total}>{tokens.length}</span>
+          <span className={styles.total}>{balance.toString()}</span>
           <Hint width={256} position="right">
             {t('The maximum number of NFTs to be sold in one mystery box contract is {limit}.', {
               limit,
