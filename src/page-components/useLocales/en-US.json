@@ -81,7 +81,7 @@
   "Select all": "Select all",
   "The mystery box contract supports up to {limit} NFTs for sale.": "The mystery box contract supports up to {limit} NFTs for sale.",
   "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "The maximum number of NFTs to be sold in one mystery box contract is {limit}.",
-  "Token ID <span>{ids}</span> does not exist or belong to you.": "Token ID <span>{ids}</span> does not exist or belong to you.",
+  "Token ID {ids} does not exist or belong to you.": "Token ID {ids} does not exist or belong to you.",
   "Add": "Add",
   "The contract address is incorrect or does not exist": "The contract address is incorrect or does not exist"
 }
