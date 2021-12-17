@@ -1,4 +1,5 @@
 import { FC, ImgHTMLAttributes, ReactElement, useEffect, useState } from 'react';
+import { LoadingCircle } from '../Icon';
 interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   alternative?: ReactElement;
 }
@@ -35,15 +36,23 @@ function isImageValid(src?: string): Promise<boolean> {
 
 export const Image: FC<ImageProps> = ({ alternative, src, ...rest }) => {
   const [loaded, setLoaded] = useState(src ? loadedMap[src] : false);
+  const [loading, setIsLoading] = useState(src ? !loadedMap[src] : true);
 
   useEffect(() => {
-    isImageValid(src).then((isValid) => {
-      if (isValid && src) {
-        loadedMap[src] = true;
-      }
-      setLoaded(isValid);
-    });
+    setIsLoading(true);
+    isImageValid(src)
+      .then((isValid) => {
+        if (isValid && src) {
+          loadedMap[src] = true;
+        }
+        setLoaded(isValid);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [src]);
+
+  if (loading) return <LoadingCircle />;
 
   return loaded || !alternative ? <img {...rest} src={src} /> : alternative;
 };

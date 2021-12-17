@@ -1,9 +1,8 @@
 import { useOnceShowup } from '@/hooks';
 import { ERC721Token, ERC721TokenMeta } from '@/types';
-import { fetchNFTTokenDetail, useBoolean } from '@/utils';
+import { fetchNFTTokenDetail } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useCallback, useRef, useState } from 'react';
-import { LoadingIcon } from '../Icon';
 import { MediaViewer } from '../MediaViewer';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
@@ -29,16 +28,12 @@ export const NFTItem: FC<NFTItemProps> = ({
     name: token.name,
     image: token.image ?? '',
   });
-  const [fetching, setIsFetching, setNotFetching] = useBoolean(true);
   const fetchDetail = useCallback(async () => {
     if (!token.tokenURI) {
-      setNotFetching();
       return;
     }
-    setIsFetching();
     const meta = await fetchNFTTokenDetail(token.tokenURI);
     setVerboseToken(meta);
-    setNotFetching();
   }, [token.tokenId, token.tokenURI]);
   useOnceShowup(ref, fetchDetail);
   return (
