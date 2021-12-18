@@ -1,4 +1,5 @@
 import { RouteKeys } from '@/configs';
+import { useWeb3Context } from '@/contexts';
 import { useBox, useERC20Token, useERC721Contract, useNFTIdsOfBox } from '@/hooks';
 import { isZeroAddress } from '@/utils';
 import { format } from 'date-fns';
@@ -7,7 +8,14 @@ import { useAtom } from 'jotai';
 import { useUpdateAtom } from 'jotai/utils';
 import { FC, useEffect } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
-import { boxIdAtom, chainAtom, formDataAtom, initFormData, isEdittingAtom } from './atoms';
+import {
+  boxIdAtom,
+  chainAtom,
+  formDataAtom,
+  initFormData,
+  isEdittingAtom,
+  useResetForm,
+} from './atoms';
 import { Description } from './Description';
 import styles from './index.module.less';
 import { Meta } from './Meta';
@@ -22,6 +30,8 @@ export const Edit: FC = () => {
   const { boxOnSubgraph, boxOnRSS3, boxOnChain } = useBox(boxId);
   const paymentToken = useERC20Token(boxOnChain?.payment?.[0]?.token_addr);
   const erc721Contract = useERC721Contract(boxOnChain?.nft_address);
+  const { providerChainId } = useWeb3Context();
+  const resetForm = useResetForm();
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -51,6 +61,10 @@ export const Edit: FC = () => {
       });
     }
   }, [isEditting, boxOnRSS3]);
+
+  useEffect(() => {
+    resetForm();
+  }, [providerChainId]);
 
   useEffect(() => {
     if (isEditting && boxOnChain && paymentToken) {
