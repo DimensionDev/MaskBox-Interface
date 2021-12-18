@@ -5,7 +5,6 @@ import {
   Hint,
   Icon,
   Input,
-  LoadingIcon,
   SelectableNFTList,
   SelectableNFTListProps,
 } from '@/components';
@@ -139,7 +138,6 @@ export const NFTPickerDialog: FC<Props> = ({
               limit,
             })}
           </Hint>
-          {loading && <LoadingIcon size={14} />}
         </div>
         <div className={styles.buttonGroup}>
           <Button fullWidth onClick={() => onConfirm?.(pickedIds)} colorScheme="primary">
