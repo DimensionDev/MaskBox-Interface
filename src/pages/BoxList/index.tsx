@@ -69,16 +69,16 @@ export const BoxList: FC = () => {
       )}
       {page === 1 && maskboxes.length < PAGE_SIZE ? null : (
         <div className={styles.paginaton}>
-          <Button className={styles.button} disabled={page === 1 || loading} onClick={loadPrevPage}>
-            {t('Previous')}
-          </Button>
-          <Button
-            className={styles.button}
-            disabled={maskboxes.length < PAGE_SIZE || loading}
-            onClick={loadNextPage}
-          >
-            {t('Next')}
-          </Button>
+          {page > 1 && (
+            <Button className={styles.button} disabled={loading} onClick={loadPrevPage}>
+              {t('Previous')}
+            </Button>
+          )}
+          {maskboxes.length >= PAGE_SIZE && (
+            <Button className={styles.button} disabled={loading} onClick={loadNextPage}>
+              {t('Next')}
+            </Button>
+          )}
         </div>
       )}
     </>
