@@ -1,4 +1,4 @@
-import { ArticleSection, Button, LoadingIcon, NFTItem } from '@/components';
+import { RouteKeys } from '@/configs';
 import { useMBoxContract, useNFTName } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
 import { useBox, useERC721TokensByIds, useGetERC721TokensByIds } from '@/hooks';
@@ -9,26 +9,29 @@ import { EMPTY_LIST, useBoolean } from '@/utils';
 import { BigNumber } from 'ethers';
 import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { NavLink, Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { DescriptionTab } from './DescriptionTab';
 import styles from './index.module.less';
+import { TokenTab } from './TokenTab';
 import { useLocales } from './useLocales';
 
-const PAGE_SIZE = BigNumber.from(50);
+const PAGE_SIZE = BigNumber.from(25);
 export const Details: FC = memo(() => {
   const t = useLocales();
   const location = useLocation();
   const { getNftListForSale } = useMBoxContract();
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>(EMPTY_LIST);
+  const { search } = location;
 
   const { chainId, boxId } = useMemo(() => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(search);
     const chainId = params.get('chain');
     const boxId = params.get('box');
     return {
       chainId: chainId ? parseInt(chainId, 10) : null,
       boxId,
     };
-  }, [location.search]);
+  }, [search]);
 
   const { boxOnSubgraph, boxOnRSS3, boxOnChain, refetch } = useBox(boxId ?? '');
   const box = useMemo(
@@ -111,40 +114,46 @@ export const Details: FC = memo(() => {
           boxOnRSS3={boxOnRSS3}
           onPurchase={openBuyBox}
         />
-        {erc721Tokens.length + soldTokens.length > 0 && (
-          <ArticleSection title={t('Details')}>
-            <div className={styles.detailsContent}>
-              <ul className={styles.nftList}>
-                {soldTokens.map((token) => (
-                  <li key={token.tokenId}>
-                    <NFTItem contractName={contractName} token={token} sold />
-                  </li>
-                ))}
-                {erc721Tokens.map((token) => (
-                  <li key={token.tokenId}>
-                    <NFTItem contractName={contractName} token={token} sold={false} />
-                  </li>
-                ))}
-              </ul>
-              {PAGE_SIZE.lte(erc721Tokens.length) ? (
-                <Button
-                  className={styles.loadmore}
-                  disabled={allLoaded || isLoading}
-                  size="small"
-                  onClick={loadNfts}
-                  leftIcon={isLoading ? <LoadingIcon size={16} /> : null}
-                >
-                  {allLoaded ? t('All NFTs have been loaded :)') : t('Load more')}
-                </Button>
-              ) : null}
-            </div>
-          </ArticleSection>
-        )}
-        {activities.map((activity, index) => (
-          <ArticleSection title={activity.title} key={index}>
-            {activity.body}
-          </ArticleSection>
-        ))}
+        <ul className={styles.tabList}>
+          <li className={styles.tabItem}>
+            <NavLink
+              className={styles.tab}
+              activeClassName={styles.selected}
+              to={`${RouteKeys.DetailsTokenTab}${search}`}
+            >
+              {t('Details ({count} NFTs)', { count: box.total?.toString() || '??' })}
+            </NavLink>
+          </li>
+          {activities.map((activity, index) => (
+            <li className={styles.tab} key={index}>
+              <NavLink
+                className={styles.tab}
+                activeClassName={styles.selected}
+                to={`${RouteKeys.DetailsDescTab.replace(':index', `${index}`)}${search}`}
+              >
+                {activity.title}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <div className={styles.tabContents}>
+          <Switch>
+            <Route path={RouteKeys.DetailsTokenTab}>
+              <TokenTab
+                allLoaded={allLoaded}
+                isLoading={isLoading}
+                tokens={erc721Tokens}
+                soldTokens={soldTokens}
+                contractName={contractName}
+                onLoadmore={loadNfts}
+              />
+            </Route>
+            <Route path={RouteKeys.DetailsDescTab} component={DescriptionTab}>
+              <DescriptionTab activities={activities} />
+            </Route>
+            <Redirect to={`${RouteKeys.DetailsTokenTab}${search}`} />
+          </Switch>
+        </div>
       </main>
       {shareBoxVisible && (
         <ShareBox
