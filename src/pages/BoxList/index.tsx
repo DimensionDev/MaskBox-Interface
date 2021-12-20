@@ -1,8 +1,9 @@
-import { Button, Icon, LoadingIcon } from '@/components';
+import { Icon, LoadingIcon, Pagination } from '@/components';
 import { ThemeType, useTheme } from '@/contexts';
-import { MaskBoxesQuery, useMaskBoxesLazyQuery } from '@/graphql-hooks';
+import { MaskBoxesQuery, useMaskBoxesLazyQuery, useStatisticQuery } from '@/graphql-hooks';
+import { ZERO_ADDRESS } from '@/lib';
 import { WrapMaskbox } from '@/page-components';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.module.less';
 import { useLocales } from './useLocales';
@@ -12,6 +13,12 @@ const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
   const t = useLocales();
   const [fetchBoxes, { data: boxesData, loading }] = useMaskBoxesLazyQuery({});
+  const { data: statsData } = useStatisticQuery({
+    variables: {
+      id: ZERO_ADDRESS,
+    },
+  });
+  const total = statsData?.maskboxStatistic?.total || 0;
 
   const history = useHistory();
   const location = useLocation();
@@ -22,15 +29,10 @@ export const BoxList: FC = () => {
     return p ? parseInt(p, 10) : 1;
   }, [location.search]);
 
-  const loadPrevPage = () => {
-    if (!page) return;
-    const p = page > 1 ? page - 1 : 1;
-    history.push(`/list?page=${p}`);
-  };
-  const loadNextPage = () => {
-    if (!page) return;
-    history.push(`/list?page=${page + 1}`);
-  };
+  const navToPage = useCallback((page: number) => {
+    history.push(`/list?page=${page}`);
+  }, []);
+
   useEffect(() => {
     if (!page) return;
     fetchBoxes({
@@ -67,20 +69,13 @@ export const BoxList: FC = () => {
           ))}
         </ul>
       )}
-      {page === 1 && maskboxes.length < PAGE_SIZE ? null : (
-        <div className={styles.paginaton}>
-          {page > 1 && (
-            <Button className={styles.button} disabled={loading} onClick={loadPrevPage}>
-              {t('Previous')}
-            </Button>
-          )}
-          {maskboxes.length >= PAGE_SIZE && (
-            <Button className={styles.button} disabled={loading} onClick={loadNextPage}>
-              {t('Next')}
-            </Button>
-          )}
-        </div>
-      )}
+      <Pagination
+        className={styles.paginaton}
+        page={page}
+        total={total}
+        size={PAGE_SIZE}
+        onChange={navToPage}
+      />
     </>
   );
 };

@@ -16,6 +16,7 @@ export * from './NewsletterBox';
 export * from './NFTItem';
 export * from './NFTSelectList';
 export * from './Overlay';
+export * from './Pagination';
 export * from './SelectedBadge';
 export * from './SNSShare';
 export * from './Textarea';

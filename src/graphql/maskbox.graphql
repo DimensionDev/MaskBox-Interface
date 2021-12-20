@@ -97,3 +97,10 @@ query NFTContractsOf($addr: ID!) {
     }
   }
 }
+
+query Statistic($id: ID!) {
+  maskboxStatistic(id: $id) {
+    id
+    total
+  }
+}

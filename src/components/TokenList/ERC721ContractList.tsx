@@ -72,7 +72,7 @@ export const ERC721Contract: FC<ERC721TokenProps> = ({
   return (
     <div
       className={classnames(className, styles.token, { [styles.disabled]: hasNoToken })}
-      onClick={hasNoToken ? undefined : onClick}
+      onClick={onClick}
       title={hasNoToken && !loading ? t('You have no NFT of this kind for sale') : undefined}
       ref={containerRef}
       {...rest}
