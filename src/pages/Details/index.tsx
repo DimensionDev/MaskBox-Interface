@@ -102,6 +102,16 @@ export const Details: FC = memo(() => {
     );
   }
   const payment = box.payment?.[0];
+  const total = useMemo(() => {
+    // TODO If the box is set to sell all,
+    // and the creator get a new NFT after creating the box
+    // then remaining will be greater than total.
+    // This will be fixed from the contract later
+    if (box.total && box.remaining && box.remaining.gt(box.total)) {
+      return box.remaining;
+    }
+    return box.total;
+  }, [box.total, box.remaining]);
 
   return (
     <>
@@ -121,7 +131,7 @@ export const Details: FC = memo(() => {
               activeClassName={styles.selected}
               to={`${RouteKeys.DetailsTokenTab}${search}`}
             >
-              {t('Details ({count} NFTs)', { count: box.total?.toString() || '??' })}
+              {t('Details ({count} NFTs)', { count: total?.toString() || '??' })}
             </NavLink>
           </li>
           {activities.map((activity, index) => (
