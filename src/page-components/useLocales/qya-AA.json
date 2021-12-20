@@ -74,7 +74,7 @@
   "Cancel MaskBox": "crwdns9929:0crwdne9929:0",
   "Failed to cancel this MaskBox {message}": "crwdns9931:0{message}crwdne9931:0",
   "purchase-requirement": "crwdns9951:0{amount}crwdnd9951:0{symbol}crwdne9951:0",
-  "Creator: {creator}": "crwdns10651:0{creator}crwdne10651:0",
+  "Creator": "crwdns10653:0crwdne10653:0",
   "Account": "crwdns9975:0crwdne9975:0",
   "Recent Transactions": "crwdns9977:0crwdne9977:0",
   "Clear All": "crwdns9979:0crwdne9979:0",
