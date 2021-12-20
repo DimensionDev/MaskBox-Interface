@@ -6,7 +6,7 @@ import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
 import { ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
-import { formatBalance } from '@/utils';
+import { formatAddres, formatBalance } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -160,6 +160,11 @@ export const Maskbox: FC<MaskboxProps> = ({
                 amount: formatBalance(holder_min_token_amount ?? 0, holderToken?.decimals ?? 18, 6),
                 symbol: holderToken?.symbol ?? '??',
               })}
+            </dd>
+          ) : null}
+          {box.creator ? (
+            <dd className={styles.infoRow}>
+              {t('Creator: {creator}', { creator: formatAddres(box.creator) })}
             </dd>
           ) : null}
         </dl>

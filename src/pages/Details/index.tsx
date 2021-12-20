@@ -122,7 +122,7 @@ export const Details: FC = memo(() => {
                 ))}
                 {erc721Tokens.map((token) => (
                   <li key={token.tokenId}>
-                    <NFTItem contractName={contractName} token={token} />
+                    <NFTItem contractName={contractName} token={token} sold={false} />
                   </li>
                 ))}
               </ul>
