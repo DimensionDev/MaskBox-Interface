@@ -74,7 +74,7 @@
   "Cancel MaskBox": "Cancel MaskBox",
   "Failed to cancel this MaskBox {message}": "Failed to cancel this MaskBox {message}",
   "purchase-requirement": "*You have to hold at least <strong>{amount} {symbol}</strong> to draw the MaskBox.",
-  "Creator: {creator}": "Creator: {creator}",
+  "Creator": "Creator",
   "Account": "Account",
   "Recent Transactions": "Recent Transactions",
   "Clear All": "Clear All",

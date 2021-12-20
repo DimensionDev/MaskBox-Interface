@@ -4,7 +4,7 @@ import { useWeb3Context } from '@/contexts';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
-import { ZERO } from '@/lib';
+import { getNetworkColor, getNetworkExplorer, ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
 import { formatAddres, formatBalance } from '@/utils';
 import classnames from 'classnames';
@@ -111,6 +111,8 @@ export const Maskbox: FC<MaskboxProps> = ({
     return box.total;
   }, [box.total, box.remaining]);
 
+  const creatorExplorerUrl = `${getNetworkExplorer(chainId!)}/address/${box.creator}`;
+
   const BoxCover = (
     <div className={styles.media}>
       {(() => {
@@ -164,7 +166,17 @@ export const Maskbox: FC<MaskboxProps> = ({
           ) : null}
           {box.creator ? (
             <dd className={styles.infoRow}>
-              {t('Creator: {creator}', { creator: formatAddres(box.creator) })}
+              {t('Creator')}
+              {`: `}
+              <a
+                className={styles.creator}
+                href={creatorExplorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={box.creator}
+              >
+                {formatAddres(box.creator)}
+              </a>
             </dd>
           ) : null}
         </dl>
