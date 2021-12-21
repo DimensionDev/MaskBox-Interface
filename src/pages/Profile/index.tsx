@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import styles from './index.module.less';
 import { MaskboxCollections } from './MaskboxCollections';
+import { OtherCollections } from './OtherCollections';
 import { useLocales } from './useLocales';
 
 export const Profile: FC = () => {
@@ -25,9 +26,19 @@ export const Profile: FC = () => {
               {t('MaskBox Collectibles')}
             </NavLink>
           </li>
+          <li className={styles.tabItem}>
+            <NavLink
+              className={styles.tab}
+              activeClassName={styles.selected}
+              to={RouteKeys.ProfileOtherCollections}
+            >
+              {t('Other Collectibles')}
+            </NavLink>
+          </li>
         </ul>
         <Switch>
           <Route path={RouteKeys.ProfileMaskboxCollections} component={MaskboxCollections} />
+          <Route path={RouteKeys.ProfileOtherCollections} component={OtherCollections} />
           <Redirect to={RouteKeys.ProfileMaskboxCollections} />
         </Switch>
       </main>

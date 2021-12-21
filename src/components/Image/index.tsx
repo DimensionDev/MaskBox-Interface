@@ -1,8 +1,23 @@
-import { FC, ImgHTMLAttributes, ReactElement, useEffect, useState } from 'react';
+import {
+  FC,
+  forwardRef,
+  ImgHTMLAttributes,
+  memo,
+  ReactElement,
+  RefAttributes,
+  useEffect,
+  useState,
+} from 'react';
 import { LoadingCircle } from '../Icon';
 
 export interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   alternative?: ReactElement;
+}
+
+export interface LazyImageProps
+  extends ImgHTMLAttributes<HTMLImageElement>,
+    RefAttributes<HTMLImageElement> {
+  fallback?: string;
 }
 
 const lazyTrue = Promise.resolve(true);
@@ -21,10 +36,12 @@ function isImageValid(src?: string): Promise<boolean> {
       img = undefined!;
     };
     img.onerror = () => {
+      console.log('error', { src });
       resolve(false);
       cleanup();
     };
     img.onload = () => {
+      console.log({ src });
       cache[src] = lazyTrue;
       resolve(true);
       cleanup();
@@ -35,7 +52,7 @@ function isImageValid(src?: string): Promise<boolean> {
   return promise;
 }
 
-export const Image: FC<ImageProps> = ({ alternative, src, ...rest }) => {
+export const Image: FC<ImageProps> = memo(({ alternative, src, ...rest }) => {
   const [loaded, setLoaded] = useState(src ? loadedMap[src] : false);
   const [loading, setIsLoading] = useState(src ? !loadedMap[src] : true);
 
@@ -53,7 +70,22 @@ export const Image: FC<ImageProps> = ({ alternative, src, ...rest }) => {
       });
   }, [src]);
 
-  if (loading) return <LoadingCircle />;
+  if (loading) return <LoadingCircle className={rest.className} />;
 
   return loaded || !alternative ? <img {...rest} src={src} /> : alternative;
-};
+});
+
+export const LazyImage: FC<LazyImageProps> = forwardRef(({ fallback, src, ...rest }, ref) => {
+  const [loaded, setLoaded] = useState(src ? loadedMap[src] : false);
+
+  useEffect(() => {
+    isImageValid(src).then((isValid) => {
+      if (isValid && src) {
+        loadedMap[src] = true;
+      }
+      setLoaded(isValid);
+    });
+  }, [src]);
+
+  return <img {...rest} ref={ref} src={loaded ? src : fallback} />;
+});
