@@ -1,6 +1,7 @@
 import { FC, ImgHTMLAttributes, ReactElement, useEffect, useState } from 'react';
 import { LoadingCircle } from '../Icon';
-interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+
+export interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   alternative?: ReactElement;
 }
 

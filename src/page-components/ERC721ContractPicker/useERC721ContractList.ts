@@ -4,6 +4,10 @@ import { getStorage, StorageKeys } from '@/utils';
 import { uniqBy } from 'lodash-es';
 import { useCallback, useEffect, useState } from 'react';
 
+/**
+ * @deprecated
+ * use @/hooks/erc721/useERC721ContractList.ts
+ */
 export function useERC721ContractList() {
   const [erc721Contracts, setContracts] = useState<ERC721Contract[]>([]);
   const { providerChainId: chainId } = useWeb3Context();

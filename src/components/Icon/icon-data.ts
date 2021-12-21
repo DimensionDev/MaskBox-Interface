@@ -2,6 +2,7 @@ export type IconType =
   | 'add'
   | 'arrowDown'
   | 'arrowRight'
+  | 'arrowUp'
   | 'binanceChain'
   | 'binance'
   | 'c98'
@@ -50,6 +51,7 @@ export const iconNameMap = {
   add: 'add.svg',
   arrowDown: 'arrow-down.svg',
   arrowRight: 'arrow-right.svg',
+  arrowUp: 'arrow-up.svg',
   binanceChain: 'binance-chain.svg',
   binance: 'binance.svg',
   c98: 'c98.png',
@@ -101,6 +103,7 @@ export const arrowDownIcon =
   '<svg width="100%" height="100%" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M17.9571 9.29851C18.3476 9.68903 18.3476 10.3222 17.9571 10.7127L12.4571 16.2127C12.0666 16.6032 11.4334 16.6032 11.0429 16.2127L5.54289 10.7127C5.15237 10.3222 5.15237 9.68903 5.54289 9.29851C5.93342 8.90798 6.56658 8.90798 6.95711 9.29851L11.75 14.0914L16.5429 9.29851C16.9334 8.90798 17.5666 8.90798 17.9571 9.29851Z" fill="currentColor"/>\n</svg>';
 export const arrowRightIcon =
   '<svg width="100%" height="100%" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path fill-rule="evenodd" clip-rule="evenodd" d="M14.0909 7.27644C14.4968 6.90183 15.1294 6.92713 15.504 7.33295L18.7348 10.8329C19.0884 11.216 19.0884 11.8064 18.7348 12.1895L15.504 15.6895C15.1294 16.0953 14.4968 16.1206 14.091 15.746C13.6851 15.3714 13.6598 14.7388 14.0344 14.333L15.716 12.5112L6 12.5112C5.44771 12.5112 5 12.0635 5 11.5112C5 10.9589 5.44771 10.5112 6 10.5112L15.716 10.5112L14.0344 8.68952C13.6598 8.2837 13.6851 7.65104 14.0909 7.27644Z" fill="currentColor"/>\n</svg>';
+export const arrowUpIcon = new URL('./icons/arrow-up.svg', import.meta.url).href;
 export const binanceChainIcon = new URL('./icons/binance-chain.svg', import.meta.url).href;
 export const binanceIcon = new URL('./icons/binance.svg', import.meta.url).href;
 export const c98Icon = new URL('./icons/c98.png', import.meta.url).href;
@@ -206,6 +209,7 @@ const icons = {
   add: addIcon,
   arrowDown: arrowDownIcon,
   arrowRight: arrowRightIcon,
+  arrowUp: arrowUpIcon,
   binanceChain: binanceChainIcon,
   binance: binanceIcon,
   c98: c98Icon,

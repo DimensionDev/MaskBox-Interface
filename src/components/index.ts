@@ -1,6 +1,7 @@
 export * from './ArticleSection';
 export * from './Badge';
 export * from './Button';
+export * from './CollectionLogo';
 export * from './Countdown';
 export * from './Dialog';
 export * from './Empty';

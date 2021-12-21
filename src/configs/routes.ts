@@ -9,5 +9,7 @@ export enum RouteKeys {
   EditMeta = '/edit/meta',
   Faqs = '/faqs',
   Profile = '/profile',
+  ProfileMaskboxCollections = '/profile/maskbox',
+  ProfileOtherCollections = '/profile/others',
   MyMaskboxes = '/my-maskboxes',
 }

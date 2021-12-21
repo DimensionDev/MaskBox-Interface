@@ -12,23 +12,33 @@
     bottom: -48px;
   }
 }
-.main {
-  width: 1120px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 48px;
-  padding-bottom: 30px;
+// TODO extract to a component
+.tabList {
+  display: flex;
+  gap: 30px;
+  margin-top: 80px;
+  .tabItem {
+    display: flex;
+  }
 }
-.emptyContainer {
+.tab {
+  font-family: Helvetica Neue;
+  font-size: 24px;
+  line-height: 32px;
+  padding: 10px 0;
+  text-decoration: none;
+  color: var(--text-tab, #5b6178);
+  font-weight: bold;
+  &.selected {
+    color: var(--text-tab-active, #1e202c);
+    border-bottom: 4px solid var(--text-tab-active, #1e202c);
+  }
+}
+.statusContainer {
   display: flex;
   height: 550px;
   justify-content: center;
   align-items: center;
-}
-.nftList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
 }
 .status {
   display: flex;
@@ -44,12 +54,14 @@
     margin-bottom: 20px;
   }
 }
+.main {
+  width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 48px;
+  padding-bottom: 30px;
+}
 @media (max-width: @mid-screen) {
-  .main {
-    .nftList {
-      gap: 15px;
-    }
-  }
   .header {
     display: none;
   }
@@ -66,28 +78,5 @@
     width: auto;
     margin-left: 40px;
     margin-right: 40px;
-  }
-}
-
-.collection {
-  .listContainer {
-    max-height: 480px;
-    overflow: auto;
-    overscroll-behavior: contain;
-  }
-  .nftList {
-    grid-gap: 30px;
-  }
-  .loadmore {
-    display: flex;
-    width: 300px;
-    margin: 16px auto;
-  }
-  .bottom {
-    height: 30px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 }

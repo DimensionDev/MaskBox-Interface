@@ -33,7 +33,6 @@
 }
 
 .detailsContent {
-  overflow: auto;
   .nftList {
     display: flex;
     gap: 25px;
@@ -46,24 +45,17 @@
   }
 }
 
-.tabList {
-  display: flex;
-  gap: 30px;
-  margin-top: 80px;
-  .tabItem {
-    display: flex;
-  }
-}
 .tab {
   font-family: Helvetica Neue;
   font-size: 24px;
   line-height: 32px;
   padding: 10px 0;
   text-decoration: none;
-  color: var(--text-primary, #1e202c);
+  color: var(--text-tab, #5b6178);
   font-weight: bold;
   &.selected {
-    border-bottom: 4px solid var(--text-primary, #1e202c);
+    color: var(--text-tab-active, #1e202c);
+    border-bottom: 4px solid var(--text-tab-active, #1e202c);
   }
 }
 .tabContents {

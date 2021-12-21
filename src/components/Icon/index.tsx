@@ -70,4 +70,6 @@ export const LoadingCircle: FC<IconProps> = (props) => {
   );
 };
 
+export { icons };
+
 export type { IconType };
