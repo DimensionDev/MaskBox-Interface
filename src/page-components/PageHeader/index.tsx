@@ -85,73 +85,73 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
             {t('FAQs')}
           </NavLink>
         </nav>
-        <div className={styles.operations}>
-          {account ? (
-            <>
-              {isConnecting ? (
-                <Button circle>
-                  <LoadingIcon size={18} />
-                </Button>
-              ) : (
-                <Button
-                  className={styles.button}
-                  onClick={openConnectionDialog}
-                  colorScheme={isNotSupportedChain ? 'danger' : 'default'}
-                >
-                  <Icon
-                    className={styles.icon}
-                    type="dot"
-                    color={getNetworkColor(providerChainId!)}
-                    size={20}
-                  />
-                  {isNotSupportedChain ? t('Network error') : getNetworkName(providerChainId!)}
-                </Button>
-              )}
-              <Button className={styles.button} title={account} onClick={openAccountDialog}>
-                <Icon className={styles.icon} type={isMetaMask ? 'metamask' : 'wallet'} size={16} />
-                {formatAddres(account)}
-              </Button>
-              {myMaskboxesVisible && (
-                <Button
-                  className={styles.button}
-                  colorScheme="primary"
-                  onClick={() => {
-                    history.push(RouteKeys.MyMaskboxes);
-                  }}
-                >
-                  {t('My MaskBoxes')}
-                </Button>
-              )}
-            </>
-          ) : (
-            <LoadingButton
-              className={styles.button}
-              onClick={openConnectionDialog}
-              disabled={isConnecting}
-              loading={isConnecting}
-            >
-              {t('Connect Wallet')}
-            </LoadingButton>
-          )}
-          <Button
-            className={classnames(styles.button, styles.themeToggleButton)}
-            circle
-            colorScheme="light"
-            onClick={toggleTheme}
-          >
-            <Icon type={isDark ? 'sun' : 'moon'} size={20} />
-          </Button>
-          <div
-            className={styles.menuButton}
-            role="button"
-            ref={menuBtnRef}
-            onClick={() => (popupNavVisible ? closePopupNav() : openPopupNav())}
-          >
-            <Icon type="menu" />
-          </div>
-        </div>
       </div>
-      <LanguageSwitcher className={styles.langSwitch} />
+      <div className={styles.operations}>
+        {account ? (
+          <>
+            {isConnecting ? (
+              <Button circle>
+                <LoadingIcon size={18} />
+              </Button>
+            ) : (
+              <Button
+                className={styles.button}
+                onClick={openConnectionDialog}
+                colorScheme={isNotSupportedChain ? 'danger' : 'default'}
+              >
+                <Icon
+                  className={styles.icon}
+                  type="dot"
+                  color={getNetworkColor(providerChainId!)}
+                  size={20}
+                />
+                {isNotSupportedChain ? t('Network error') : getNetworkName(providerChainId!)}
+              </Button>
+            )}
+            <Button className={styles.button} title={account} onClick={openAccountDialog}>
+              <Icon className={styles.icon} type={isMetaMask ? 'metamask' : 'wallet'} size={16} />
+              {formatAddres(account)}
+            </Button>
+            {myMaskboxesVisible && (
+              <Button
+                className={styles.button}
+                colorScheme="primary"
+                onClick={() => {
+                  history.push(RouteKeys.MyMaskboxes);
+                }}
+              >
+                {t('My MaskBoxes')}
+              </Button>
+            )}
+          </>
+        ) : (
+          <LoadingButton
+            className={styles.button}
+            onClick={openConnectionDialog}
+            disabled={isConnecting}
+            loading={isConnecting}
+          >
+            {t('Connect Wallet')}
+          </LoadingButton>
+        )}
+        <Button
+          className={classnames(styles.button, styles.themeToggleButton)}
+          circle
+          colorScheme="light"
+          onClick={toggleTheme}
+        >
+          <Icon type={isDark ? 'sun' : 'moon'} size={20} />
+        </Button>
+        <div
+          className={styles.menuButton}
+          role="button"
+          ref={menuBtnRef}
+          onClick={() => (popupNavVisible ? closePopupNav() : openPopupNav())}
+        >
+          <Icon type="menu" />
+        </div>
+        <LanguageSwitcher className={styles.langSwitch} />
+      </div>
       <nav
         className={classnames(styles.popupNav, { [styles.open]: popupNavVisible })}
         ref={popupNavRef}

@@ -8,7 +8,7 @@ import styles from './index.module.less';
 interface Props extends HTMLProps<HTMLDivElement> {}
 
 const langMap: Record<Language, string> = {
-  [Language.En]: 'English',
+  [Language.En]: 'En',
   [Language.Zh]: '中文',
   [Language.Jp]: '日本語',
 };

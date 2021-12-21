@@ -15,22 +15,7 @@
     height: 100%;
   }
   .langSwitch {
-    position: absolute;
-    right: 10px;
-    top: 0;
-    bottom: 0;
-    margin-top: 20px;
-    margin-bottom: 20px;
     color: var(--text-primary, #1e202c);
-  }
-}
-@media (max-width: 1400px) {
-  .pageHeader {
-    display: flex;
-    .langSwitch {
-      position: relative;
-      margin-left: 10px;
-    }
   }
 }
 @media (max-width: @sm-screen) {
@@ -128,6 +113,12 @@
   align-items: center;
   flex-direction: row;
   justify-content: flex-end;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  bottom: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
   .button {
     margin-left: 10px;
     cursor: pointer;
@@ -139,6 +130,15 @@
   .menuButton {
     display: none;
     color: var(--text-primary, #1e202c);
+  }
+}
+@media (max-width: 1400px) {
+  .pageHeader {
+    display: flex;
+    .operations {
+      position: relative;
+      margin-left: 10px;
+    }
   }
 }
 @media (max-width: @mid-screen) {
