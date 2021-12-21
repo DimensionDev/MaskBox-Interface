@@ -23,8 +23,7 @@ export const Pagination: FC<Props> = ({ className, total, size = 5, page, onChan
 
   const loadNextPage = useCallback(() => {
     if (!page || !onChange) return;
-    const p = page > 1 ? page - 1 : 1;
-    onChange(p);
+    onChange(page + 1);
   }, [page, onChange]);
 
   if (pageCount <= 1) return null;
