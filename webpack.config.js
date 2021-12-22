@@ -46,6 +46,18 @@ const config = {
           },
         ],
       },
+      {
+        test: /\.css/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [

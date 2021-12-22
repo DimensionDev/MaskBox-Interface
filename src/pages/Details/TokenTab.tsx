@@ -1,6 +1,6 @@
 import { FC, HTMLProps } from 'react';
 import classnames from 'classnames';
-import { Button, LoadingIcon, NFTItem } from '@/components';
+import { Button, LoadingIcon, NFTItem, NFTItemSkeleton } from '@/components';
 import { ERC721Token } from '@/types';
 import { BigNumber } from 'ethers';
 import { useLocales } from './useLocales';
@@ -10,6 +10,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
   allLoaded: boolean;
   isLoading: boolean;
   tokens: ERC721Token[];
+  pendingSize: number;
   soldTokens: ERC721Token[];
   contractName: string;
   onLoadmore: () => void | Promise<void>;
@@ -18,6 +19,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 const PAGE_SIZE = BigNumber.from(25);
 export const TokenTab: FC<Props> = ({
   tokens,
+  pendingSize,
   soldTokens,
   allLoaded,
   isLoading,
@@ -27,7 +29,7 @@ export const TokenTab: FC<Props> = ({
   ...rest
 }) => {
   const t = useLocales();
-  if (tokens.length + soldTokens.length === 0) return null;
+  const loadedCount = tokens.length + soldTokens.length;
   return (
     <div className={classnames(className, styles.detailsContent)} {...rest}>
       <ul className={styles.nftList}>
@@ -41,8 +43,15 @@ export const TokenTab: FC<Props> = ({
             <NFTItem contractName={contractName} token={token} sold={false} />
           </li>
         ))}
+        {isLoading
+          ? Array.from({ length: pendingSize }, () => 0).map((_, index) => (
+              <li key={`skeleton${index}`}>
+                <NFTItemSkeleton sold={false} />
+              </li>
+            ))
+          : null}
       </ul>
-      {PAGE_SIZE.lte(tokens.length) ? (
+      {loadedCount > 0 && PAGE_SIZE.lte(tokens.length) ? (
         <Button
           className={styles.loadmore}
           disabled={allLoaded || isLoading}

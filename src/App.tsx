@@ -17,6 +17,7 @@ import {
   Web3Provider,
 } from './contexts';
 
+import 'react-loading-skeleton/dist/skeleton.css';
 import './base.less';
 import './variables.less';
 import './theme.module.less';

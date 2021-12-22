@@ -36,12 +36,10 @@ function isImageValid(src?: string): Promise<boolean> {
       img = undefined!;
     };
     img.onerror = () => {
-      console.log('error', { src });
       resolve(false);
       cleanup();
     };
     img.onload = () => {
-      console.log({ src });
       cache[src] = lazyTrue;
       resolve(true);
       cleanup();

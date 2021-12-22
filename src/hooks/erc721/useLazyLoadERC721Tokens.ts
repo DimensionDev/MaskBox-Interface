@@ -18,6 +18,8 @@ export function useLazyLoadERC721Tokens(
   const [loading, setIsLoading, setNotLoading] = useBoolean();
   const tokensMapRef = useRef<Record<string, ERC721Token[]>>({});
   const [tokens, setTokens] = useState<ERC721Token[]>([]);
+  // for rendering loading skeleton
+  const [pendingSize, setPendingSize] = useState(0);
   const getERC721Tokens = useGetERC721Tokens(address);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export function useLazyLoadERC721Tokens(
     setIsLoading();
     const size = remaining.gt(loadSize) ? loadSize : remaining.toNumber();
     const currentAddress = address;
+    setPendingSize(size);
     const result = await getERC721Tokens(tokens.length, size);
     setNotLoading();
     if (result.length && liveRef.current) {
@@ -63,6 +66,7 @@ export function useLazyLoadERC721Tokens(
     loading,
     finished,
     tokens,
+    pendingSize,
     loadMore,
   };
 }

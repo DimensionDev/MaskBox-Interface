@@ -1,6 +1,6 @@
 import { useShowup } from '@/hooks';
 import { FC, HTMLProps, useRef } from 'react';
-import { Icon } from '../Icon';
+import { Icon, LoadingCircle } from '../Icon';
 import { Image } from '../Image';
 import { VideoPlayer } from '../VideoPlayer';
 import styles from './index.module.less';
@@ -38,6 +38,18 @@ export const MediaViewer: FC<Props> = ({ name, image, animationUrl, ...rest }) =
   );
 };
 
-export const MockViewer = () => {
-  return <Icon type="mask" size={48} />;
+export const MockViewer: FC<HTMLProps<HTMLDivElement>> = (props) => {
+  return (
+    <div {...props}>
+      <Icon type="mask" size={48} />;
+    </div>
+  );
+};
+
+export const MediaViewerSkeleton: FC<HTMLProps<HTMLDivElement>> = (props) => {
+  return (
+    <div {...props}>
+      <LoadingCircle />
+    </div>
+  );
 };

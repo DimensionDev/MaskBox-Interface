@@ -2,8 +2,9 @@ import { useOnceShowup } from '@/hooks';
 import { ERC721Token, ERC721TokenMeta } from '@/types';
 import { fetchNFTTokenDetail } from '@/utils';
 import classnames from 'classnames';
-import { FC, HTMLProps, useCallback, useRef, useState } from 'react';
-import { MediaViewer } from '../MediaViewer';
+import { FC, HTMLProps, memo, useCallback, useRef, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import { MediaViewer, MediaViewerSkeleton } from '../MediaViewer';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
@@ -60,3 +61,30 @@ export const NFTItem: FC<NFTItemProps> = ({
     </div>
   );
 };
+
+interface NFTItemSkeletonProps extends HTMLProps<HTMLDivElement> {
+  sold?: boolean;
+}
+
+export const NFTItemSkeleton: FC<NFTItemSkeletonProps> = memo(({ className, sold, ...rest }) => {
+  return (
+    <div className={classnames(styles.nft, className)} {...rest}>
+      <div className={styles.media}>
+        <MediaViewerSkeleton className={styles.media} />
+      </div>
+      <div className={styles.info}>
+        <h3 className={styles.contractName}>
+          <Skeleton width="50%" />
+        </h3>
+        <h3 className={styles.name}>
+          <Skeleton width="40px" />
+        </h3>
+        {sold !== undefined && (
+          <h3 className={styles.saleStatus}>
+            <Skeleton width="20px" />
+          </h3>
+        )}
+      </div>
+    </div>
+  );
+});

@@ -11,9 +11,9 @@ import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { DescriptionTab } from './DescriptionTab';
-import styles from './index.module.less';
 import { TokenTab } from './TokenTab';
 import { useLocales } from './useLocales';
+import styles from './index.module.less';
 
 const PAGE_SIZE = BigNumber.from(25);
 export const Details: FC = memo(() => {
@@ -125,15 +125,18 @@ export const Details: FC = memo(() => {
           onPurchase={openBuyBox}
         />
         <ul className={styles.tabList}>
-          <li className={styles.tabItem}>
-            <NavLink
-              className={styles.tab}
-              activeClassName={styles.selected}
-              to={`${RouteKeys.DetailsTokenTab}${search}`}
-            >
-              {t('Details ({count} NFTs)', { count: total?.toString() || '??' })}
-            </NavLink>
-          </li>
+          {total?.gt(0) ? (
+            <li className={styles.tabItem} key="details-tab">
+              <NavLink
+                className={styles.tab}
+                activeClassName={styles.selected}
+                to={`${RouteKeys.DetailsTokenTab}${search}`}
+              >
+                {t('Details ({count} NFTs)', { count: total?.toString() || '??' })}
+                {isLoading}
+              </NavLink>
+            </li>
+          ) : null}
           {activities.map((activity, index) => (
             <li className={styles.tab} key={index}>
               <NavLink
@@ -153,6 +156,7 @@ export const Details: FC = memo(() => {
                 allLoaded={allLoaded}
                 isLoading={isLoading}
                 tokens={erc721Tokens}
+                pendingSize={25}
                 soldTokens={soldTokens}
                 contractName={contractName}
                 onLoadmore={loadNfts}
