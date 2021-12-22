@@ -24,7 +24,7 @@ import './theme.module.less';
 import styles from './app.module.less';
 
 console.log(
-  `%cMaskBox interface. version: ${process.env.VERSION}`,
+  `%cMaskBox interface.\nversion: ${process.env.VERSION}`,
   'background: #0057ff;color: #ffffff;',
 );
 

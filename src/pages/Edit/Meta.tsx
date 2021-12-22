@@ -56,6 +56,7 @@ export const Meta: FC = () => {
   const { isEnumable } = useEdit();
   const {
     tokens: ownedERC721Tokens,
+    pendingSize: pendingERC721TokenSize,
     balance,
     loading: nftLoading,
   } = useLazyLoadERC721Tokens(formData.nftContractAddress);
@@ -461,8 +462,10 @@ export const Meta: FC = () => {
       <NFTPickerDialog
         open={nftPickerVisible}
         tokens={ownedERC721Tokens}
+        pendingSize={pendingERC721TokenSize}
         loading={nftLoading}
         contractAddress={formData.nftContractAddress}
+        contractName={formData.erc721Contract?.name ?? ''}
         selectedTokenIds={formData.selectedNFTIds}
         onClose={closeNftPicker}
         onConfirm={(ids) => {

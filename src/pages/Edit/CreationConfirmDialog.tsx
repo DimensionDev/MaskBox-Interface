@@ -18,7 +18,6 @@ interface Props extends DialogProps {
 
 export const CreationConfirmDialog: FC<Props> = ({
   open,
-  loading,
   tokens,
   nftAddress,
   className,
@@ -65,10 +64,7 @@ export const CreationConfirmDialog: FC<Props> = ({
       </ul>
       <div className={styles.meta}>
         <div className={styles.name}>{t('Total Amount')}</div>
-        <div className={styles.value}>
-          {tokens.length}
-          {loading && <LoadingIcon size={14} />}
-        </div>
+        <div className={styles.value}>{tokens.length}</div>
       </div>
       <Button onClick={onConfirm} disabled={creating} fullWidth colorScheme="primary" size="large">
         {creating ? t('Creating...') : t('Confirm')}

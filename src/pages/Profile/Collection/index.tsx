@@ -5,6 +5,7 @@ import {
   Icon,
   LoadingCircle,
   NFTItem,
+  NFTItemSkeleton,
 } from '@/components';
 import { ThemeType, useTheme } from '@/contexts';
 import { useERC721Contract, useLazyLoadERC721Tokens } from '@/hooks';
@@ -21,7 +22,7 @@ interface Props extends Omit<ArticleSectionProps, 'title'> {
 export const Collection: FC<Props> = ({ className, contractAddress, defaultExpanded, ...rest }) => {
   const { theme } = useTheme();
   const t = useLocales();
-  const { tokens, balance, loadMore, loading, finished } = useLazyLoadERC721Tokens(
+  const { tokens, pendingSize, balance, loadMore, loading, finished } = useLazyLoadERC721Tokens(
     contractAddress,
     false,
     10,
@@ -46,12 +47,8 @@ export const Collection: FC<Props> = ({ className, contractAddress, defaultExpan
       </div>
       <div className={classnames(styles.content, isExpanded ? styles.expanded : undefined)}>
         {(() => {
-          if (tokens.length === 0) {
-            return loading ? (
-              <div className={styles.status}>
-                <LoadingCircle size={48} />
-              </div>
-            ) : (
+          if (tokens.length === 0 && !loading) {
+            return (
               <div className={styles.status}>
                 <p className={styles.text}>{t('No items to display.')}</p>
                 <Icon type={theme === ThemeType.Light ? 'empty' : 'emptyDark'} size={96} />
@@ -63,9 +60,15 @@ export const Collection: FC<Props> = ({ className, contractAddress, defaultExpan
               <ul className={styles.nftList}>
                 {tokens.map((token) => (
                   <li key={token.tokenId}>
-                    <NFTItem token={token} />
+                    <NFTItem contractName={collection?.name} token={token} />
                   </li>
                 ))}
+                {loading &&
+                  Array.from({ length: pendingSize }).map((_, index) => (
+                    <li key={`skeleton${index}`}>
+                      <NFTItemSkeleton />
+                    </li>
+                  ))}
               </ul>
               <div className={styles.bottom}>
                 {!finished && (

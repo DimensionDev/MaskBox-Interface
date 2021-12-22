@@ -43,7 +43,7 @@ export const TokenTab: FC<Props> = ({
             <NFTItem contractName={contractName} token={token} sold={false} />
           </li>
         ))}
-        {isLoading
+        {isLoading && !allLoaded
           ? Array.from({ length: pendingSize }, () => 0).map((_, index) => (
               <li key={`skeleton${index}`}>
                 <NFTItemSkeleton sold={false} />

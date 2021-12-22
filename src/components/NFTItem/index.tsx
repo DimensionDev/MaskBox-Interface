@@ -13,6 +13,7 @@ export interface NFTItemProps extends Omit<HTMLProps<HTMLDivElement>, 'disabled'
   token: ERC721Token;
   sold?: boolean;
   disabled?: boolean;
+  hoverEffect?: boolean;
 }
 
 export const NFTItem: FC<NFTItemProps> = ({
@@ -21,6 +22,7 @@ export const NFTItem: FC<NFTItemProps> = ({
   token,
   sold,
   disabled,
+  hoverEffect = true,
   ...rest
 }) => {
   const t = useLocales();
@@ -39,7 +41,12 @@ export const NFTItem: FC<NFTItemProps> = ({
   useOnceShowup(ref, fetchDetail);
   return (
     <div
-      className={classnames(styles.nft, className, disabled ? styles.disabled : null)}
+      className={classnames(
+        styles.nft,
+        className,
+        disabled ? styles.disabled : null,
+        hoverEffect ? styles.hoverEffect : null,
+      )}
       title={`${tokenMeta.name} #${token.tokenId}`}
       {...rest}
       ref={ref}

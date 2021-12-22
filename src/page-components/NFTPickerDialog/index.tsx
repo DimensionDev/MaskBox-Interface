@@ -21,12 +21,16 @@ import { Search } from './Search';
 interface Props extends DialogProps, Pick<SelectableNFTListProps, 'tokens' | 'selectedTokenIds'> {
   onConfirm?: (ids: string[]) => void;
   contractAddress: string;
+  contractName: string;
   loading: boolean;
+  pendingSize?: number;
 }
 const limit = 1000;
 export const NFTPickerDialog: FC<Props> = ({
   tokens,
+  pendingSize = 0,
   contractAddress,
+  contractName,
   selectedTokenIds = [],
   onConfirm,
   loading,
@@ -119,6 +123,8 @@ export const NFTPickerDialog: FC<Props> = ({
       <div style={{ display: searchVisible ? 'none' : 'block' }}>
         <SelectableNFTList
           tokens={tokens}
+          contractName={contractName}
+          pendingSize={pendingSize}
           loading={loading}
           limit={limit}
           selectedTokenIds={pickedIds}
