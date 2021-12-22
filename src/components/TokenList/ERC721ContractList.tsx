@@ -81,9 +81,9 @@ export const ERC721Contract: FC<ERC721TokenProps> = ({
         <TokenIcon height="24" width="24" token={token} />
       </div>
       <div className={styles.info}>
-        <div className={styles.symbol}>{token.symbol}</div>
+        <div className={styles.symbol}>{token.symbol || '<no symbol>'}</div>
         <div className={styles.name}>
-          {token.name}
+          {token.name || '<no name>'}
           {isCustomized && ` • ${t('Added by uesr')}`}
         </div>
       </div>

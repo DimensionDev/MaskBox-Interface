@@ -1,3 +1,4 @@
+import { useLiveRef } from '@/hooks';
 import {
   FC,
   forwardRef,
@@ -53,6 +54,7 @@ function isImageValid(src?: string): Promise<boolean> {
 export const Image: FC<ImageProps> = memo(({ alternative, src, ...rest }) => {
   const [loaded, setLoaded] = useState(src ? loadedMap[src] : false);
   const [loading, setIsLoading] = useState(src ? !loadedMap[src] : true);
+  const liveRef = useLiveRef();
 
   useEffect(() => {
     setIsLoading(true);
@@ -61,10 +63,14 @@ export const Image: FC<ImageProps> = memo(({ alternative, src, ...rest }) => {
         if (isValid && src) {
           loadedMap[src] = true;
         }
-        setLoaded(isValid);
+        if (liveRef.current) {
+          setLoaded(isValid);
+        }
       })
       .finally(() => {
-        setIsLoading(false);
+        if (liveRef.current) {
+          setIsLoading(false);
+        }
       });
   }, [src]);
 

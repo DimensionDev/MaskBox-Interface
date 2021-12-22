@@ -1,4 +1,3 @@
-import { useShowup } from '@/hooks';
 import { FC, HTMLProps, useRef } from 'react';
 import { Icon, LoadingCircle } from '../Icon';
 import { Image } from '../Image';
@@ -14,26 +13,20 @@ interface Props extends HTMLProps<HTMLDivElement> {
 export const MediaViewer: FC<Props> = ({ name, image, animationUrl, ...rest }) => {
   const mediaUrl = image || animationUrl || '';
   const ref = useRef<HTMLDivElement>(null);
-  const showup = useShowup(ref);
-  let hero: JSX.Element = <MockViewer />;
-  if (mediaUrl.match(/\.mp4$/)) {
-    hero = <VideoPlayer className={styles.videoPlayer} src={mediaUrl} alt={name} height="100%" />;
-  } else {
-    hero = (
-      <Image
-        className={styles.image}
-        loading="lazy"
-        src={image}
-        alt={name}
-        height="100%"
-        alternative={<Icon type="mask" size={48} />}
-      />
-    );
-  }
-
   return (
     <div {...rest} ref={ref}>
-      {showup ? hero : <MockViewer />}
+      {mediaUrl.match(/\.mp4$/i) ? (
+        <VideoPlayer className={styles.videoPlayer} src={mediaUrl} alt={name} height="100%" />
+      ) : (
+        <Image
+          className={styles.image}
+          loading="lazy"
+          src={image}
+          alt={name}
+          height="100%"
+          alternative={<Icon type="mask" size={48} />}
+        />
+      )}
     </div>
   );
 };

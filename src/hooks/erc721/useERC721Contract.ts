@@ -13,7 +13,7 @@ export function useGetERC721Contract() {
       const namePromise = contract.name().catch(() => null);
       const symbolPromise = contract.symbol().catch(() => null);
       const token = await Promise.all([namePromise, symbolPromise]).then(([name, symbol]) => {
-        if (!name && !symbol) return null;
+        if (name === null && symbol === null) return null;
         return {
           name: name as string,
           chainId,

@@ -1,4 +1,4 @@
-import { useOnceShowup } from '@/hooks';
+import { useLiveRef, useOnceShowup } from '@/hooks';
 import { ERC721Token, ERC721TokenMeta } from '@/types';
 import { fetchNFTTokenDetail } from '@/utils';
 import classnames from 'classnames';
@@ -31,12 +31,15 @@ export const NFTItem: FC<NFTItemProps> = ({
     name: token.name,
     image: token.image ?? '',
   });
+  const liveRef = useLiveRef();
   const fetchDetail = useCallback(async () => {
     if (!token.tokenURI) {
       return;
     }
     const meta = await fetchNFTTokenDetail(token.tokenURI);
-    setVerboseToken(meta);
+    if (liveRef.current) {
+      setVerboseToken(meta);
+    }
   }, [token.tokenId, token.tokenURI]);
   useOnceShowup(ref, fetchDetail);
   return (
