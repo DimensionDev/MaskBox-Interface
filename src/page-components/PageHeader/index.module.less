@@ -8,9 +8,11 @@
   .inner {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    max-width: 1120px;
+    max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
+    padding-left: 56px;
+    padding-right: 56px;
     align-items: center;
     height: 100%;
   }
@@ -58,6 +60,9 @@
       background-clip: text;
       -webkit-background-clip: text;
     }
+  }
+  @media (max-width: 960px) {
+    display: none;
   }
 }
 .popupNav {
@@ -113,12 +118,9 @@
   align-items: center;
   flex-direction: row;
   justify-content: flex-end;
-  position: absolute;
-  right: 10px;
-  top: 0;
-  bottom: 0;
   margin-top: 20px;
   margin-bottom: 20px;
+  grid-column: 3;
   @media (max-width: 650px) {
     .button:not(.themeToggleButton) {
       display: none;
@@ -137,15 +139,6 @@
     color: var(--text-primary, #1e202c);
   }
 }
-@media (max-width: 1400px) {
-  .pageHeader {
-    display: flex;
-    .operations {
-      position: relative;
-      margin-left: 10px;
-    }
-  }
-}
 @media (max-width: @mid-screen) {
   .pageHeader {
     .inner {
@@ -154,9 +147,6 @@
       display: flex;
       justify-content: space-between;
     }
-  }
-  .nav {
-    display: none;
   }
   .operations {
     .menuButton {
