@@ -1,4 +1,5 @@
 export * from './ArticleSection';
+export * from './NavTabs';
 export * from './Badge';
 export * from './Button';
 export * from './CollectionLogo';

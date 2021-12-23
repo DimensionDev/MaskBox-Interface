@@ -14,6 +14,7 @@ import { DescriptionTab } from './DescriptionTab';
 import { TokenTab } from './TokenTab';
 import { useLocales } from './useLocales';
 import styles from './index.module.less';
+import { NavTabOptions, NavTabs } from '@/components';
 
 const PAGE_SIZE = BigNumber.from(25);
 export const Details: FC = memo(() => {
@@ -112,6 +113,22 @@ export const Details: FC = memo(() => {
     }
     return box.total;
   }, [box.total, box.remaining]);
+  const tabs: NavTabOptions[] = useMemo(() => {
+    return [
+      {
+        key: 'details-tab',
+        to: `${RouteKeys.DetailsTokenTab}${search}`,
+        label: total?.gt(0)
+          ? t('Details ({count} NFTs)', { count: total.toString() })
+          : t('Details'),
+      },
+      ...activities.map((activity, index) => ({
+        key: `desc${index}`,
+        to: `${RouteKeys.DetailsDescTab.replace(':index', `${index}`)}${search}`,
+        label: activity.title,
+      })),
+    ];
+  }, [search, activities, total, t]);
 
   return (
     <>
@@ -124,31 +141,7 @@ export const Details: FC = memo(() => {
           boxOnRSS3={boxOnRSS3}
           onPurchase={openBuyBox}
         />
-        <ul className={styles.tabList}>
-          {total?.gt(0) ? (
-            <li className={styles.tabItem} key="details-tab">
-              <NavLink
-                className={styles.tab}
-                activeClassName={styles.selected}
-                to={`${RouteKeys.DetailsTokenTab}${search}`}
-              >
-                {t('Details ({count} NFTs)', { count: total?.toString() || '??' })}
-                {isLoading}
-              </NavLink>
-            </li>
-          ) : null}
-          {activities.map((activity, index) => (
-            <li className={styles.tab} key={index}>
-              <NavLink
-                className={styles.tab}
-                activeClassName={styles.selected}
-                to={`${RouteKeys.DetailsDescTab.replace(':index', `${index}`)}${search}`}
-              >
-                {activity.title}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+        <NavTabs tabs={tabs} />
         <div className={styles.tabContents}>
           <Switch>
             <Route path={RouteKeys.DetailsTokenTab}>
