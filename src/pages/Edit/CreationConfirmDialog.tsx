@@ -58,7 +58,7 @@ export const CreationConfirmDialog: FC<Props> = ({
       <ul className={classnames(styles.meta, styles.nftList)}>
         {tokens.map((token) => (
           <li key={token.tokenId}>
-            <NFTItem className={styles.nft} token={token}></NFTItem>
+            <NFTItem className={styles.nft} token={token} hoverEffect={false} />
           </li>
         ))}
       </ul>
