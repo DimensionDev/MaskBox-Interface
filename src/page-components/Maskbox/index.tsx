@@ -4,7 +4,7 @@ import { useWeb3Context } from '@/contexts';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
-import { getNetworkColor, getNetworkExplorer, ZERO } from '@/lib';
+import { getNetworkExplorer, ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
 import { formatAddres, formatBalance } from '@/utils';
 import classnames from 'classnames';
@@ -129,8 +129,6 @@ export const Maskbox: FC<MaskboxProps> = ({
                 src={box.mediaUrl}
                 alternative={<Icon type="mask" size={48} />}
                 loading="lazy"
-                width="480"
-                height="320"
                 alt={box.name ?? '-'}
               />
             );

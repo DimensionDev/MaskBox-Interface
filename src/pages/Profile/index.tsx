@@ -1,5 +1,5 @@
 import { avatarImage } from '@/assets';
-import { NavTab, NavTabs } from '@/components';
+import { NavTabOptions, NavTabs } from '@/components';
 import { RouteKeys } from '@/configs';
 import { FC, useMemo } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
@@ -11,7 +11,7 @@ import { useLocales } from './useLocales';
 export const Profile: FC = () => {
   const t = useLocales();
 
-  const tabs: NavTab[] = useMemo(
+  const tabs: NavTabOptions[] = useMemo(
     () => [
       {
         key: 'maskbox',

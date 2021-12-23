@@ -119,6 +119,11 @@
   bottom: 0;
   margin-top: 20px;
   margin-bottom: 20px;
+  @media (max-width: 650px) {
+    .button:not(.themeToggleButton) {
+      display: none;
+    }
+  }
   .button {
     margin-left: 10px;
     cursor: pointer;
@@ -154,9 +159,6 @@
     display: none;
   }
   .operations {
-    .button:not(.themeToggleButton) {
-      display: none;
-    }
     .menuButton {
       display: flex;
       align-items: center;
