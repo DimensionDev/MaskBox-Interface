@@ -30,7 +30,7 @@ jobs:
           cp public/CNAME dist
           cp public/logo.png dist
         env:
-          INFURA_ID: d74bd8586b9e44449cef131d39ceeefb
+          INFURA_ID: d65858b010d249419cf8687eca12b094,d74bd8586b9e44449cef131d39ceeefb
           COMMIT: ${{ github.sha }}
 
       - name: Deploy

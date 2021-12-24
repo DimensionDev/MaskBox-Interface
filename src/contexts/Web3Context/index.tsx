@@ -1,5 +1,5 @@
 import { showToast } from '@/components';
-import { ChainId, isSupportedChain } from '@/lib';
+import { ChainId, getJSONRPCUrl, isSupportedChain } from '@/lib';
 import { getStorage, StorageKeys, useBoolean, useStorage } from '@/utils';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ethers } from 'ethers';
@@ -102,9 +102,7 @@ export const Web3Provider: FC = ({ children }) => {
   );
 
   const setDefaultProvider = useCallback(() => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      `https://mainnet.infura.io/v3/${process.env.INFURA_ID}`,
-    );
+    const provider = new ethers.providers.JsonRpcProvider(getJSONRPCUrl());
     setWeb3State((state) => ({
       ...state,
       ethersProvider: provider,

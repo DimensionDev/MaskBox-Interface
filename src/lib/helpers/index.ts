@@ -1,7 +1,6 @@
 import { BigNumber } from 'ethers';
 import {
   chainShortNameMap,
-  chainUrls,
   contractAddresses,
   nativeTokens,
   networkExplorers,
@@ -9,11 +8,9 @@ import {
   networkNames,
   tokenListUrls,
   TokenType,
-} from './constants';
+} from '../constants';
 
-export const getRPCUrl = (chainId: keyof typeof chainUrls) => {
-  return chainUrls[chainId || 1].rpc;
-};
+export * from './providers';
 
 export const logError = (error: { [key: string]: Error }) => {
   console.error(error);
