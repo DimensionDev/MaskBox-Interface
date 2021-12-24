@@ -1,7 +1,7 @@
 import { Icon, LoadingIcon, Pagination } from '@/components';
 import { ThemeType, useTheme } from '@/contexts';
 import { MaskBoxesQuery, useMaskBoxesLazyQuery, useStatisticQuery } from '@/graphql-hooks';
-import { ZERO_ADDRESS } from '@/lib';
+import { SKIPS, ZERO_ADDRESS } from '@/lib';
 import { WrapMaskbox } from '@/page-components';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -18,7 +18,7 @@ export const BoxList: FC = () => {
       id: ZERO_ADDRESS,
     },
   });
-  const total = statsData?.maskboxStatistic?.total || 0;
+  const total = Math.max((statsData?.maskboxStatistic?.total || 0) - SKIPS, 0);
 
   const history = useHistory();
   const location = useLocation();

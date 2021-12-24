@@ -695,7 +695,7 @@ export const MaskBoxesDocument = gql`
       orderDirection: desc
       first: $first
       skip: $skip
-      where: { canceled: false, box_id_gt: 3 }
+      where: { canceled: false, box_id_gt: 10 }
     ) {
       id
       box_id
