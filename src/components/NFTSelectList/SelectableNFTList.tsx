@@ -2,7 +2,16 @@ import { ERC721Token } from '@/types';
 import { arrayRemove, EMPTY_LIST } from '@/utils';
 import classnames from 'classnames';
 import { noop } from 'lodash-es';
-import { ChangeEvent, FC, HTMLProps, useCallback, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  HTMLProps,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { LoadingIcon } from '../Icon';
 import { NFTItem, NFTItemSkeleton } from '../NFTItem';
 import { useLocales } from '../useLocales';
@@ -99,11 +108,19 @@ export const SelectableNFTList: FC<SelectableNFTListProps> = ({
     }
   };
 
+  const selectAllRef = useRef<HTMLInputElement>(null);
+  const selectedSome = !isSelectedAll && selectedTokenIds.length > 0;
+  useEffect(() => {
+    if (!selectAllRef.current) return;
+    selectAllRef.current.indeterminate = selectedSome;
+  }, [selectedSome]);
+
   return (
     <div className={classnames(className, styles.selectList)} {...rest}>
       <div className={styles.operations}>
         <label className={classnames(styles.toggleAll, loading ? styles.locked : null)}>
           <input
+            ref={selectAllRef}
             type="checkbox"
             disabled={loading}
             checked={isSelectedAll}
