@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogProps, Icon, LoadingIcon, NFTItem } from '@/components';
+import { Button, Dialog, DialogProps, Icon, NFTItem } from '@/components';
 import { useNFTName, useWeb3Context } from '@/contexts';
 import { getNetworkExplorer } from '@/lib';
 import { ERC721Token } from '@/types';
@@ -9,7 +9,6 @@ import styles from './dialog.module.less';
 import { useLocales } from './useLocales';
 
 interface Props extends DialogProps {
-  loading: boolean;
   tokens: ERC721Token[];
   nftAddress: string;
   onConfirm?: () => void;

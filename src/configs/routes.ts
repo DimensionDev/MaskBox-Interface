@@ -3,6 +3,7 @@ export enum RouteKeys {
   BoxList = '/list',
   Details = '/details',
   DetailsTokenTab = '/details/token',
+  DetailsDescTabPrefix = '/details/desc/',
   DetailsDescTab = '/details/desc/:index',
   Edit = '/edit',
   EditDescription = '/edit/desc',

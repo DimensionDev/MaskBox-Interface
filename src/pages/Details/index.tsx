@@ -124,7 +124,7 @@ export const Details: FC = memo(() => {
       },
       ...activities.map((activity, index) => ({
         key: `desc${index}`,
-        to: `${RouteKeys.DetailsDescTab.replace(':index', `${index}`)}${search}`,
+        to: `${RouteKeys.DetailsDescTabPrefix}${index}${search}`,
         label: activity.title,
       })),
     ];

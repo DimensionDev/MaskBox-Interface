@@ -427,7 +427,6 @@ export const Meta: FC = () => {
       <CreationConfirmDialog
         open={confirmDialogVisible}
         tokens={formData.sellAll ? ownedERC721Tokens : selectedERC721Tokens}
-        loading={nftLoading}
         onClose={closeConfirmDialog}
         nftAddress={formData.nftContractAddress}
         onConfirm={create}
