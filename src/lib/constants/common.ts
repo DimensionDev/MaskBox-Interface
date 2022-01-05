@@ -1,10 +1,26 @@
 import { BigNumber } from 'ethers';
+import { ChainId } from './chainId';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const ZERO = BigNumber.from(0);
 
 /**
- * skip dirty data, make sure same as `box_id_gt` field in `query MaskBoxes`
+ * ignore dirty data, pass to `id_not_in` field in `query MaskBoxes`
  */
-export const SKIPS = 10;
+export const IGNORE_IDS: Partial<Record<ChainId, number[]>> = {
+  [ChainId.Mainnet]: [12],
+  [ChainId.Matic]: [],
+  [ChainId.BSC]: [],
+  [ChainId.Rinkeby]: [],
+};
+
+/**
+ * skip dirty data, pass to `box_id_gt` field in `query MaskBoxes`
+ */
+export const SKIPS: Partial<Record<ChainId, number>> = {
+  [ChainId.Mainnet]: 10,
+  [ChainId.Matic]: 0,
+  [ChainId.BSC]: 0,
+  [ChainId.Rinkeby]: 0,
+};
