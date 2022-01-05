@@ -1,3 +1,4 @@
+import { getStorage, StorageKeys } from '@/utils';
 import { BigNumber } from 'ethers';
 import { ChainId } from './chainId';
 
@@ -8,8 +9,8 @@ export const ZERO = BigNumber.from(0);
 /**
  * ignore dirty data, pass to `id_not_in` field in `query MaskBoxes`
  */
-export const IGNORE_IDS: Partial<Record<ChainId, number[]>> = {
-  [ChainId.Mainnet]: [12],
+export const IGNORE_IDS: Partial<Record<ChainId, string[]>> = {
+  [ChainId.Mainnet]: ['12', '13'],
   [ChainId.Matic]: [],
   [ChainId.BSC]: [],
   [ChainId.Rinkeby]: [],
@@ -24,3 +25,6 @@ export const SKIPS: Partial<Record<ChainId, number>> = {
   [ChainId.BSC]: 0,
   [ChainId.Rinkeby]: 0,
 };
+
+export const DEV_MODE_ENABLED =
+  process.env.NODE_ENV === 'development' || getStorage(StorageKeys.DevMode);

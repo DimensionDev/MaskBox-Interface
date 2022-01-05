@@ -1,15 +1,16 @@
 import { Icon, LoadingIcon, Pagination } from '@/components';
-import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
-import { MaskBoxesQuery, useMaskBoxesLazyQuery, useStatisticQuery } from '@/graphql-hooks';
-import { getIgnoreIds, getSkips, ZERO_ADDRESS } from '@/lib';
+import { ThemeType, useTheme } from '@/contexts';
+import { useMaskBoxesLazyQuery, useStatisticQuery } from '@/graphql-hooks';
+import { useIgnoreBoxes } from '@/hooks';
+import { ZERO_ADDRESS } from '@/lib';
 import { WrapMaskbox } from '@/page-components';
+import { EMPTY_LIST } from '@/utils';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.module.less';
 import { useLocales } from './useLocales';
 
 const PAGE_SIZE = 5;
-const EMPTY_LIST: MaskBoxesQuery['maskboxes'] = [];
 export const BoxList: FC = () => {
   const t = useLocales();
   const [fetchBoxes, { data: boxesData, loading }] = useMaskBoxesLazyQuery({});
@@ -18,10 +19,8 @@ export const BoxList: FC = () => {
       id: ZERO_ADDRESS,
     },
   });
-  const { providerChainId: chainId } = useWeb3Context();
-  const skips = useMemo(() => (chainId ? getSkips(chainId) : 0), [chainId]);
-  const ignoreIds = useMemo(() => (chainId ? getIgnoreIds(chainId) : EMPTY_LIST), [chainId]);
-  const total = Math.max((statsData?.maskboxStatistic?.total || 0) - skips - ignoreIds.length, 0);
+  const { skips, ignoreIds, total: totalIgnored } = useIgnoreBoxes();
+  const total = Math.max((statsData?.maskboxStatistic?.total || 0) - totalIgnored, 0);
 
   const history = useHistory();
   const location = useLocation();

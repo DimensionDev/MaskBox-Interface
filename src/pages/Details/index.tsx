@@ -1,20 +1,21 @@
+import { Icon, NavTabOptions, NavTabs } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useMBoxContract, useNFTName } from '@/contexts';
+import { useMBoxContract, useNFTName, useTheme, ThemeType } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
-import { useBox, useERC721TokensByIds, useGetERC721TokensByIds } from '@/hooks';
-import { createShareUrl, ZERO } from '@/lib';
+import { useBox, useERC721TokensByIds, useGetERC721TokensByIds, useIgnoreBoxes } from '@/hooks';
+import { createShareUrl, DEV_MODE_ENABLED, ZERO } from '@/lib';
 import { BuyBox, BuyBoxProps, Maskbox, ShareBox } from '@/page-components';
 import { ERC721Token } from '@/types';
 import { EMPTY_LIST, useBoolean } from '@/utils';
+import classnames from 'classnames';
 import { BigNumber } from 'ethers';
 import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { DescriptionTab } from './DescriptionTab';
+import styles from './index.module.less';
 import { TokenTab } from './TokenTab';
 import { useLocales } from './useLocales';
-import styles from './index.module.less';
-import { NavTabOptions, NavTabs } from '@/components';
 
 const PAGE_SIZE = BigNumber.from(25);
 export const Details: FC = memo(() => {
@@ -24,7 +25,7 @@ export const Details: FC = memo(() => {
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>(EMPTY_LIST);
   const { search } = location;
 
-  const { chainId, boxId } = useMemo(() => {
+  const { boxId } = useMemo(() => {
     const params = new URLSearchParams(search);
     const chainId = params.get('chain');
     const boxId = params.get('box');
@@ -34,7 +35,10 @@ export const Details: FC = memo(() => {
     };
   }, [search]);
 
-  const { boxOnSubgraph, boxOnRSS3, boxOnChain, refetch } = useBox(boxId ?? '');
+  const { skips, ignoreIds } = useIgnoreBoxes();
+  const forbidden = boxId ? skips >= parseInt(boxId) || ignoreIds.includes(boxId) : true;
+
+  const { boxOnSubgraph, boxOnRSS3, boxOnChain, refetch, loading } = useBox(boxId ?? '');
   const box = useMemo(
     () => ({
       ...boxOnChain,
@@ -95,13 +99,6 @@ export const Details: FC = memo(() => {
     loadNfts();
   }, [loadNfts]);
 
-  if (!chainId || !boxId) {
-    return (
-      <main className={styles.main}>
-        <h1 className={styles.title}>Box is not found</h1>
-      </main>
-    );
-  }
   const payment = box.payment?.[0];
   const total = useMemo(() => {
     // TODO If the box is set to sell all,
@@ -129,6 +126,17 @@ export const Details: FC = memo(() => {
       })),
     ];
   }, [search, activities, total, t]);
+
+  const { theme } = useTheme();
+
+  if ((!DEV_MODE_ENABLED && forbidden) || (!loading && !boxOnSubgraph)) {
+    return (
+      <main className={classnames(styles.main, styles.notFound)}>
+        <h1 className={styles.title}>{t('MaskBox is not found')}</h1>
+        <Icon type={theme === ThemeType.Light ? 'empty' : 'emptyDark'} size={96} />
+      </main>
+    );
+  }
 
   return (
     <>

@@ -8,6 +8,7 @@ export * from './useCancelBox';
 export * from './useClaimPayment';
 export * from './useCreatedSomeBoxes';
 export * from './useGdpr';
+export * from './useIgnoreBoxes';
 export * from './useMaskboxContract';
 export * from './useMaskboxCreationEvent';
 export * from './useNFTIdsOfBox';

@@ -1,11 +1,14 @@
-import { ChainId } from '@/lib';
-import { getStorage, notEmpty, setStorage, StorageKeys } from '@/utils';
+import { ChainId, DEV_MODE_ENABLED } from '@/lib';
+import { notEmpty, setStorage, StorageKeys } from '@/utils';
 import { ProviderType } from '../providers';
-
-const devModeEnabled = process.env.NODE_ENV === 'development' || getStorage(StorageKeys.DevMode);
 
 window.enableDevMode = () => {
   setStorage(StorageKeys.DevMode, true);
+  location.reload();
+};
+
+window.disableDevMode = () => {
+  setStorage(StorageKeys.DevMode, false);
   location.reload();
 };
 
@@ -15,7 +18,7 @@ export const connectableChains = [
     chainId: ChainId.Mainnet,
     iconType: 'ethereumChain',
   },
-  devModeEnabled
+  DEV_MODE_ENABLED
     ? {
         name: 'Rinkeby',
         chainId: ChainId.Rinkeby,

@@ -3,7 +3,6 @@ import {
   Button,
   CollectionLogo,
   Icon,
-  LoadingCircle,
   NFTItem,
   NFTItemSkeleton,
 } from '@/components';
