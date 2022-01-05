@@ -10,7 +10,7 @@ export const ZERO = BigNumber.from(0);
  * ignore dirty data, pass to `id_not_in` field in `query MaskBoxes`
  */
 export const IGNORE_IDS: Partial<Record<ChainId, string[]>> = {
-  [ChainId.Mainnet]: ['12', '13'],
+  [ChainId.Mainnet]: ['12'],
   [ChainId.Matic]: [],
   [ChainId.BSC]: [],
   [ChainId.Rinkeby]: [],
