@@ -1,11 +1,15 @@
+import { EMPTY_LIST } from '@/utils';
 import { BigNumber } from 'ethers';
 import {
+  ChainId,
   chainShortNameMap,
   contractAddresses,
   nativeTokens,
   networkExplorers,
   networkIcons,
   networkNames,
+  SKIPS,
+  IGNORE_IDS,
   tokenListUrls,
   TokenType,
 } from '../constants';
@@ -18,6 +22,13 @@ export const logError = (error: { [key: string]: Error }) => {
 
 export const getNetworkName = (chainId: number) => {
   return networkNames[chainId] || 'Unknown';
+};
+
+export const getSkips = (chainId: ChainId) => {
+  return SKIPS[chainId] ?? 0;
+};
+export const getIgnoreIds = (chainId: ChainId) => {
+  return IGNORE_IDS[chainId] ?? EMPTY_LIST;
 };
 
 export const getContractAddressConfig = (chainId: number) => {

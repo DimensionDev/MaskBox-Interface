@@ -17,13 +17,13 @@ query MaskBox($id: ID!) {
   }
 }
 
-query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
+query MaskBoxes($first: Int! = 10, $skip: Int! = 0, $ignores: [ID!]!, $from: Int! = 10) {
   maskboxes(
     orderBy: create_time
     orderDirection: desc
     first: $first
     skip: $skip
-    where: { canceled: false, box_id_gt: 10 }
+    where: { canceled: false, box_id_gt: $from, id_not_in: $ignores }
   ) {
     id
     box_id

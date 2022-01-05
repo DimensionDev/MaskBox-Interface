@@ -9,7 +9,7 @@ import { EMPTY_LIST, useBoolean } from '@/utils';
 import { BigNumber } from 'ethers';
 import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { NavLink, Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { DescriptionTab } from './DescriptionTab';
 import { TokenTab } from './TokenTab';
 import { useLocales } from './useLocales';

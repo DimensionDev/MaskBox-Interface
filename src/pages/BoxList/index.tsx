@@ -1,7 +1,7 @@
 import { Icon, LoadingIcon, Pagination } from '@/components';
-import { ThemeType, useTheme } from '@/contexts';
+import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
 import { MaskBoxesQuery, useMaskBoxesLazyQuery, useStatisticQuery } from '@/graphql-hooks';
-import { SKIPS, ZERO_ADDRESS } from '@/lib';
+import { getIgnoreIds, getSkips, ZERO_ADDRESS } from '@/lib';
 import { WrapMaskbox } from '@/page-components';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -18,7 +18,10 @@ export const BoxList: FC = () => {
       id: ZERO_ADDRESS,
     },
   });
-  const total = Math.max((statsData?.maskboxStatistic?.total || 0) - SKIPS, 0);
+  const { providerChainId: chainId } = useWeb3Context();
+  const skips = useMemo(() => (chainId ? getSkips(chainId) : 0), [chainId]);
+  const ignoreIds = useMemo(() => (chainId ? getIgnoreIds(chainId) : EMPTY_LIST), [chainId]);
+  const total = Math.max((statsData?.maskboxStatistic?.total || 0) - skips - ignoreIds.length, 0);
 
   const history = useHistory();
   const location = useLocation();
@@ -39,9 +42,11 @@ export const BoxList: FC = () => {
       variables: {
         skip: (page - 1) * PAGE_SIZE,
         first: PAGE_SIZE,
+        from: skips,
+        ignores: ignoreIds,
       },
     });
-  }, [fetchBoxes, page]);
+  }, [fetchBoxes, page, skips, ignoreIds]);
 
   if (loading) {
     return (

@@ -534,6 +534,8 @@ export type MaskBoxQuery = {
 export type MaskBoxesQueryVariables = Exact<{
   first?: Scalars['Int'];
   skip?: Scalars['Int'];
+  ignores: Array<Scalars['ID']> | Scalars['ID'];
+  from?: Scalars['Int'];
 }>;
 
 export type MaskBoxesQuery = {
@@ -689,13 +691,13 @@ export type MaskBoxQueryHookResult = ReturnType<typeof useMaskBoxQuery>;
 export type MaskBoxLazyQueryHookResult = ReturnType<typeof useMaskBoxLazyQuery>;
 export type MaskBoxQueryResult = Apollo.QueryResult<MaskBoxQuery, MaskBoxQueryVariables>;
 export const MaskBoxesDocument = gql`
-  query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
+  query MaskBoxes($first: Int! = 10, $skip: Int! = 0, $ignores: [ID!]!, $from: Int! = 10) {
     maskboxes(
       orderBy: create_time
       orderDirection: desc
       first: $first
       skip: $skip
-      where: { canceled: false, box_id_gt: 10 }
+      where: { canceled: false, box_id_gt: $from, id_not_in: $ignores }
     ) {
       id
       box_id
@@ -728,11 +730,13 @@ export const MaskBoxesDocument = gql`
  *   variables: {
  *      first: // value for 'first'
  *      skip: // value for 'skip'
+ *      ignores: // value for 'ignores'
+ *      from: // value for 'from'
  *   },
  * });
  */
 export function useMaskBoxesQuery(
-  baseOptions?: Apollo.QueryHookOptions<MaskBoxesQuery, MaskBoxesQueryVariables>,
+  baseOptions: Apollo.QueryHookOptions<MaskBoxesQuery, MaskBoxesQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<MaskBoxesQuery, MaskBoxesQueryVariables>(MaskBoxesDocument, options);
