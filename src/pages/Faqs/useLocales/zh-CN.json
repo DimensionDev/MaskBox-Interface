@@ -19,7 +19,7 @@
   "what-is-the-platform": "什么是 Maskbox 平台？",
   "answer-to-what-is-the-platform": "Maskbox 是进行专业发行 NFT 的机构,由行业知名团队创建。和多家数字艺术出版商有较强的商业合作关系。为其提供数字艺术品 NFT 化提供技术和初始发行工作。",
   "how-to-contact": "如何联系我们发行 NFT ？",
-  "answer-to-how-to-contact": "目前仅适用于合作方进行发行。如有业务意向请填写 <a target='_blank' rel='noopener noreferrer' href='#'>cooperation form</a>。 我们会及时和您取得联系。",
+  "answer-to-how-to-contact": "目前仅适用于合作方进行发行。如有业务意向请填写 <a href='mailto:hi@mask.io'>cooperation form</a>。 我们会及时和您取得联系。",
   "is-contract-safe": "我们的合约是否安全？",
   "answer-to-is-contract-safe": "我们的合约是经过多年资深工程师.有行业一流的 Gas 费用优化方案。也有一流的合约安全的工程师进行多轮的合约检查。合约源码请查看我们 <a target='_blank' rel='noopener noreferrer' href='https://github.com/DimensionDev/MysteryBox'>Github</a>",
   "what-is-the-network": "我们的测试网络？",
