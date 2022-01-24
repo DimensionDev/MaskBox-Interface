@@ -1,19 +1,25 @@
 import { getStorage, StorageKeys } from '@/utils';
 import { BigNumber } from 'ethers';
+import { uniq } from 'lodash-es';
 import { ChainId } from './chainId';
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const ZERO = BigNumber.from(0);
 
+function getIgnoreIds(config: string, extendValue: string[] = []) {
+  const configIds = config ? config.split(',') : [];
+  return uniq([...extendValue, ...configIds]);
+}
+
 /**
  * ignore dirty data, pass to `id_not_in` field in `query MaskBoxes`
  */
 export const IGNORE_IDS: Partial<Record<ChainId, string[]>> = {
-  [ChainId.Mainnet]: ['12', '14'],
-  [ChainId.Matic]: [],
-  [ChainId.BSC]: [],
-  [ChainId.Rinkeby]: [],
+  [ChainId.Mainnet]: getIgnoreIds(process.env.IGNORE_IDS_ON_MAINNET, ['12', '14']),
+  [ChainId.Matic]: getIgnoreIds(process.env.IGNORE_IDS_ON_MATIC),
+  [ChainId.BSC]: getIgnoreIds(process.env.IGNORE_IDS_ON_BSC),
+  [ChainId.Rinkeby]: getIgnoreIds(process.env.IGNORE_IDS_ON_RINKEBY),
 };
 
 /**

@@ -2,6 +2,31 @@ name: Github Pages
 
 on:
   push:
+  workflow_dispatch:
+    inputs:
+      ignore_on_mainnet:
+        description: 'Ignore ids on Mainnet'
+        default: '12,14'
+        require: false
+        type: string
+
+      ignore_on_matic:
+        description: 'Ignore ids on matic'
+        default: ''
+        require: false
+        type: string
+
+      ignore_on_bsc:
+        description: 'Ignore ids on bsc'
+        default: ''
+        require: false
+        type: string
+
+      ignore_on_rinkeby:
+        description: 'Ignore ids on rinkeby'
+        default: ''
+        require: false
+        type: string
 
 jobs:
   deploy:
@@ -26,6 +51,10 @@ jobs:
 
       - name: Build
         run: |
+          IGNORE_IDS_ON_MAINNET=${{ inputs.ignore_on_mainnet }}
+          IGNORE_IDS_ON_MATIC=${{ inputs.ignore_on_matic }}
+          IGNORE_IDS_ON_BSC=${{ inputs.ignore_on_bsc }}
+          IGNORE_IDS_ON_RINKEBY=${{ inputs.ignore_on_rinkeby }}
           pnpm build
           cp public/CNAME dist
           cp public/logo.png dist
