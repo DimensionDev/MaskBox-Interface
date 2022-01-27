@@ -2,8 +2,31 @@ name: Github Pages
 
 on:
   push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      ignore_on_mainnet:
+        description: 'Ignore ids on Mainnet'
+        default: '12,14'
+        require: false
+        type: string
+
+      ignore_on_matic:
+        description: 'Ignore ids on matic'
+        default: ''
+        require: false
+        type: string
+
+      ignore_on_bsc:
+        description: 'Ignore ids on bsc'
+        default: ''
+        require: false
+        type: string
+
+      ignore_on_rinkeby:
+        description: 'Ignore ids on rinkeby'
+        default: ''
+        require: false
+        type: string
 
 jobs:
   deploy:
@@ -13,22 +36,31 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v2
-      - uses: actions/cache@v2
+
+      - uses: pnpm/action-setup@v2
         with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('yarn.lock') }}
+          version: '6.23.1'
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'pnpm'
 
       - name: Install
-        run: yarn install
+        run: pnpm install
 
       - name: Build
         run: |
-          yarn build
+          IGNORE_IDS_ON_MAINNET=${{ inputs.ignore_on_mainnet }}
+          IGNORE_IDS_ON_MATIC=${{ inputs.ignore_on_matic }}
+          IGNORE_IDS_ON_BSC=${{ inputs.ignore_on_bsc }}
+          IGNORE_IDS_ON_RINKEBY=${{ inputs.ignore_on_rinkeby }}
+          pnpm build
           cp public/CNAME dist
           cp public/logo.png dist
         env:
-          INFURA_ID: d74bd8586b9e44449cef131d39ceeefb
+          INFURA_ID: d65858b010d249419cf8687eca12b094,d74bd8586b9e44449cef131d39ceeefb
+          COMMIT: ${{ github.sha }}
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

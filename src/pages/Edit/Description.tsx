@@ -171,7 +171,7 @@ export const Description: FC = () => {
             history.replace(`${RouteKeys.EditMeta}${search}`);
           }}
         >
-          {uploading ? t('Uploading thumbnail') : t('Next')}
+          {uploading ? t('Uploading thumbnail...') : t('Next')}
         </Button>
       </div>
     </section>

@@ -1,15 +1,26 @@
 import { ERC721Token } from '@/types';
-import { arrayRemove } from '@/utils';
+import { arrayRemove, EMPTY_LIST } from '@/utils';
 import classnames from 'classnames';
 import { noop } from 'lodash-es';
-import { ChangeEvent, FC, HTMLProps, useCallback, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  HTMLProps,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { LoadingIcon } from '../Icon';
-import { NFTItem } from '../NFTItem';
+import { NFTItem, NFTItemSkeleton } from '../NFTItem';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
 export interface SelectableNFTListProps extends Omit<HTMLProps<HTMLDivElement>, 'onChange'> {
+  contractName: string;
   tokens: ERC721Token[];
+  pendingSize?: number;
   limit: number;
   loading?: boolean;
   selectedTokenIds?: string[];
@@ -18,10 +29,12 @@ export interface SelectableNFTListProps extends Omit<HTMLProps<HTMLDivElement>, 
 }
 
 export const SelectableNFTList: FC<SelectableNFTListProps> = ({
+  contractName,
   tokens,
+  pendingSize = 0,
   loading,
   limit,
-  selectedTokenIds = [],
+  selectedTokenIds = EMPTY_LIST,
   onChange,
   className,
   ...rest
@@ -50,12 +63,17 @@ export const SelectableNFTList: FC<SelectableNFTListProps> = ({
     if (!onChange) return;
     if (evt.currentTarget.checked) {
       if (isSelectedAll) {
-        onChange([]);
+        onChange(EMPTY_LIST);
       } else {
-        onChange(allIds);
+        const outOfBoundarySelectedIds = selectedTokenIds.filter((id) => {
+          const index = allIds.indexOf(id);
+          return index > limit - 1;
+        });
+        const withinBoundaryIds = allIds.slice(0, limit - outOfBoundarySelectedIds.length);
+        onChange([...withinBoundaryIds, ...outOfBoundarySelectedIds]);
       }
     } else {
-      onChange([]);
+      onChange(EMPTY_LIST);
     }
   };
 
@@ -90,11 +108,19 @@ export const SelectableNFTList: FC<SelectableNFTListProps> = ({
     }
   };
 
+  const selectAllRef = useRef<HTMLInputElement>(null);
+  const selectedSome = !isSelectedAll && selectedTokenIds.length > 0;
+  useEffect(() => {
+    if (!selectAllRef.current) return;
+    selectAllRef.current.indeterminate = selectedSome;
+  }, [selectedSome]);
+
   return (
     <div className={classnames(className, styles.selectList)} {...rest}>
       <div className={styles.operations}>
         <label className={classnames(styles.toggleAll, loading ? styles.locked : null)}>
           <input
+            ref={selectAllRef}
             type="checkbox"
             disabled={loading}
             checked={isSelectedAll}
@@ -111,9 +137,11 @@ export const SelectableNFTList: FC<SelectableNFTListProps> = ({
         {tokens.map((token, index) => (
           <li className={styles.item} key={token.tokenId}>
             <NFTItem
+              contractName={contractName}
               token={token}
               className={styles.nft}
               disabled={!selectedTokenIds.includes(token.tokenId) && reachedLimit}
+              hoverEffect={false}
               onClick={(evt) => {
                 handleItemClick(evt, token, index);
               }}
@@ -129,6 +157,12 @@ export const SelectableNFTList: FC<SelectableNFTListProps> = ({
             />
           </li>
         ))}
+        {loading &&
+          Array.from({ length: pendingSize }).map((_, index) => (
+            <li className={styles.item} key={`skeleton${index}`}>
+              <NFTItemSkeleton className={styles.nft} />
+            </li>
+          ))}
       </ul>
     </div>
   );

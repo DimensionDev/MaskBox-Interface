@@ -1,7 +1,7 @@
 import { Icon } from '@/components';
 import classnames from 'classnames';
 import { noop } from 'lodash-es';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styles from './adjustable.module.less';
 
 interface Props {
@@ -21,6 +21,10 @@ export const AdjustableInput: FC<Props> = ({
   disabled,
   onUpdate = noop,
 }) => {
+  const [val, setVal] = useState('');
+  useEffect(() => {
+    setVal(value.toString());
+  }, [value]);
   return (
     <span className={classnames(styles.container, className)}>
       <Icon
@@ -37,9 +41,12 @@ export const AdjustableInput: FC<Props> = ({
       <input
         className={styles.input}
         type="number"
-        value={value}
+        value={val}
         onChange={(evt) => {
-          onUpdate(parseInt(evt.target.value));
+          setVal(evt.target.value);
+          if (evt.target.value) {
+            onUpdate(parseInt(evt.target.value));
+          }
         }}
       />
       <Icon

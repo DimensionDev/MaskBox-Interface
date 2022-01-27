@@ -11,7 +11,7 @@ export function useBox(boxId: string | null) {
 
   const { box: boxOnChain, fetch: refetchBoxOnChain } = useBoxInfo(boxId);
 
-  const [fetchBox, { data: boxData }] = useMaskBoxLazyQuery();
+  const [fetchBox, { data: boxData, loading: loading }] = useMaskBoxLazyQuery();
 
   useEffect(() => {
     if (boxId)
@@ -52,5 +52,6 @@ export function useBox(boxId: string | null) {
     boxOnRSS3,
     boxOnChain,
     refetch: refetchBoxOnChain,
+    loading,
   };
 }

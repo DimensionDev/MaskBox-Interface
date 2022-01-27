@@ -71,7 +71,9 @@ export const PageFooter: FC<Props> = ({ className, ...rest }) => {
           </div>
         </div>
         <div className={styles.floor}>
-          <div className={styles.copyright}>{t('copyright')}</div>
+          <div className={styles.copyright}>
+            {t('copyright', { year: new Date().getFullYear() })}
+          </div>
           {!accepted && (
             <div className={styles.gdpr}>
               {t('We use cookies for better service.')}

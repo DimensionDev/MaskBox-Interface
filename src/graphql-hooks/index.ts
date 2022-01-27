@@ -44,6 +44,36 @@ export type Maskbox = {
   tx_hash: Scalars['Bytes'];
 };
 
+export type MaskboxStatistic = {
+  __typename?: 'MaskboxStatistic';
+  id: Scalars['ID'];
+  total: Scalars['Int'];
+};
+
+export type MaskboxStatistic_Filter = {
+  id?: Maybe<Scalars['ID']>;
+  id_gt?: Maybe<Scalars['ID']>;
+  id_gte?: Maybe<Scalars['ID']>;
+  id_in?: Maybe<Array<Scalars['ID']>>;
+  id_lt?: Maybe<Scalars['ID']>;
+  id_lte?: Maybe<Scalars['ID']>;
+  id_not?: Maybe<Scalars['ID']>;
+  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  total?: Maybe<Scalars['Int']>;
+  total_gt?: Maybe<Scalars['Int']>;
+  total_gte?: Maybe<Scalars['Int']>;
+  total_in?: Maybe<Array<Scalars['Int']>>;
+  total_lt?: Maybe<Scalars['Int']>;
+  total_lte?: Maybe<Scalars['Int']>;
+  total_not?: Maybe<Scalars['Int']>;
+  total_not_in?: Maybe<Array<Scalars['Int']>>;
+};
+
+export enum MaskboxStatistic_OrderBy {
+  Id = 'id',
+  Total = 'total',
+}
+
 export type Maskbox_Filter = {
   blockNumber?: Maybe<Scalars['BigInt']>;
   blockNumber_gt?: Maybe<Scalars['BigInt']>;
@@ -253,6 +283,8 @@ export type Query = {
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
   maskbox?: Maybe<Maskbox>;
+  maskboxStatistic?: Maybe<MaskboxStatistic>;
+  maskboxStatistics: Array<MaskboxStatistic>;
   maskboxes: Array<Maskbox>;
   nftcontract?: Maybe<NftContract>;
   nftcontracts: Array<NftContract>;
@@ -268,6 +300,22 @@ export type QueryMaskboxArgs = {
   block?: Maybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type QueryMaskboxStatisticArgs = {
+  block?: Maybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type QueryMaskboxStatisticsArgs = {
+  block?: Maybe<Block_Height>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<MaskboxStatistic_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  skip?: Maybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: Maybe<MaskboxStatistic_Filter>;
 };
 
 export type QueryMaskboxesArgs = {
@@ -317,6 +365,8 @@ export type Subscription = {
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
   maskbox?: Maybe<Maskbox>;
+  maskboxStatistic?: Maybe<MaskboxStatistic>;
+  maskboxStatistics: Array<MaskboxStatistic>;
   maskboxes: Array<Maskbox>;
   nftcontract?: Maybe<NftContract>;
   nftcontracts: Array<NftContract>;
@@ -332,6 +382,22 @@ export type SubscriptionMaskboxArgs = {
   block?: Maybe<Block_Height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type SubscriptionMaskboxStatisticArgs = {
+  block?: Maybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+export type SubscriptionMaskboxStatisticsArgs = {
+  block?: Maybe<Block_Height>;
+  first?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<MaskboxStatistic_OrderBy>;
+  orderDirection?: Maybe<OrderDirection>;
+  skip?: Maybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: Maybe<MaskboxStatistic_Filter>;
 };
 
 export type SubscriptionMaskboxesArgs = {
@@ -468,6 +534,8 @@ export type MaskBoxQuery = {
 export type MaskBoxesQueryVariables = Exact<{
   first?: Scalars['Int'];
   skip?: Scalars['Int'];
+  ignores: Array<Scalars['ID']> | Scalars['ID'];
+  from?: Scalars['Int'];
 }>;
 
 export type MaskBoxesQuery = {
@@ -559,6 +627,18 @@ export type NftContractsOfQuery = {
     | undefined;
 };
 
+export type StatisticQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type StatisticQuery = {
+  __typename?: 'Query';
+  maskboxStatistic?:
+    | { __typename?: 'MaskboxStatistic'; id: string; total: number }
+    | null
+    | undefined;
+};
+
 export const MaskBoxDocument = gql`
   query MaskBox($id: ID!) {
     maskbox(id: $id) {
@@ -611,13 +691,13 @@ export type MaskBoxQueryHookResult = ReturnType<typeof useMaskBoxQuery>;
 export type MaskBoxLazyQueryHookResult = ReturnType<typeof useMaskBoxLazyQuery>;
 export type MaskBoxQueryResult = Apollo.QueryResult<MaskBoxQuery, MaskBoxQueryVariables>;
 export const MaskBoxesDocument = gql`
-  query MaskBoxes($first: Int! = 10, $skip: Int! = 0) {
+  query MaskBoxes($first: Int! = 10, $skip: Int! = 0, $ignores: [ID!]!, $from: Int! = 10) {
     maskboxes(
       orderBy: create_time
       orderDirection: desc
       first: $first
       skip: $skip
-      where: { canceled: false, box_id_gt: 3 }
+      where: { canceled: false, box_id_gt: $from, id_not_in: $ignores }
     ) {
       id
       box_id
@@ -650,11 +730,13 @@ export const MaskBoxesDocument = gql`
  *   variables: {
  *      first: // value for 'first'
  *      skip: // value for 'skip'
+ *      ignores: // value for 'ignores'
+ *      from: // value for 'from'
  *   },
  * });
  */
 export function useMaskBoxesQuery(
-  baseOptions?: Apollo.QueryHookOptions<MaskBoxesQuery, MaskBoxesQueryVariables>,
+  baseOptions: Apollo.QueryHookOptions<MaskBoxesQuery, MaskBoxesQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<MaskBoxesQuery, MaskBoxesQueryVariables>(MaskBoxesDocument, options);
@@ -939,3 +1021,43 @@ export type NftContractsOfQueryResult = Apollo.QueryResult<
   NftContractsOfQuery,
   NftContractsOfQueryVariables
 >;
+export const StatisticDocument = gql`
+  query Statistic($id: ID!) {
+    maskboxStatistic(id: $id) {
+      id
+      total
+    }
+  }
+`;
+
+/**
+ * __useStatisticQuery__
+ *
+ * To run a query within a React component, call `useStatisticQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStatisticQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStatisticQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useStatisticQuery(
+  baseOptions: Apollo.QueryHookOptions<StatisticQuery, StatisticQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<StatisticQuery, StatisticQueryVariables>(StatisticDocument, options);
+}
+export function useStatisticLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<StatisticQuery, StatisticQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<StatisticQuery, StatisticQueryVariables>(StatisticDocument, options);
+}
+export type StatisticQueryHookResult = ReturnType<typeof useStatisticQuery>;
+export type StatisticLazyQueryHookResult = ReturnType<typeof useStatisticLazyQuery>;
+export type StatisticQueryResult = Apollo.QueryResult<StatisticQuery, StatisticQueryVariables>;

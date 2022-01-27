@@ -48,7 +48,7 @@ export const InfiniteLoading: FC<InfiniteLoadingProps> = ({
   }, [executeOnReachBottom]);
 
   return (
-    <div {...rest}>
+    <div className={styles.infiniteLoading} {...rest}>
       {children}
       <div ref={anchorRef} className={styles.bottomAnchor} />
     </div>

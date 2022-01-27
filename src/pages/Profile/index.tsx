@@ -1,27 +1,31 @@
 import { avatarImage } from '@/assets';
-import { useWeb3Context } from '@/contexts';
-import { useNftContractsOfQuery } from '@/graphql-hooks';
-import { useERC721ContractList } from '@/page-components/ERC721ContractPicker/useERC721ContractList';
-import { EMPTY_LIST } from '@/utils';
-import { uniqBy } from 'lodash-es';
+import { NavTabOptions, NavTabs } from '@/components';
+import { RouteKeys } from '@/configs';
 import { FC, useMemo } from 'react';
-import { Collection } from './Collection';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import styles from './index.module.less';
+import { MaskboxCollections } from './MaskboxCollections';
+import { OtherCollections } from './OtherCollections';
+import { useLocales } from './useLocales';
 
 export const Profile: FC = () => {
-  const { account } = useWeb3Context();
-  const { data: nftContractsData } = useNftContractsOfQuery({
-    variables: {
-      addr: account?.toLowerCase() ?? '',
-    },
-  });
-  const { erc721Contracts } = useERC721ContractList();
-  const contractAddresses = useMemo(() => {
-    if (!nftContractsData?.user) return EMPTY_LIST;
-    const onSubgraph = nftContractsData.user.nft_contracts.map((x) => x.address);
-    const atLocale = erc721Contracts.map((contract) => contract.address);
-    return uniqBy([...onSubgraph, ...atLocale], (addr) => addr.toLowerCase());
-  }, [nftContractsData, erc721Contracts]);
+  const t = useLocales();
+
+  const tabs: NavTabOptions[] = useMemo(
+    () => [
+      {
+        key: 'maskbox',
+        to: RouteKeys.ProfileMaskboxCollections,
+        label: t('MaskBox Collectibles'),
+      },
+      {
+        key: 'others',
+        to: RouteKeys.ProfileOtherCollections,
+        label: t('Other Collectibles'),
+      },
+    ],
+    [t],
+  );
 
   return (
     <article>
@@ -29,9 +33,12 @@ export const Profile: FC = () => {
         <img className={styles.avatar} height={96} width={96} src={avatarImage} />
       </header>
       <main className={styles.main}>
-        {contractAddresses.map((address) => (
-          <Collection key={address} contractAddress={address} />
-        ))}
+        <NavTabs tabs={tabs} />
+        <Switch>
+          <Route path={RouteKeys.ProfileMaskboxCollections} component={MaskboxCollections} />
+          <Route path={RouteKeys.ProfileOtherCollections} component={OtherCollections} />
+          <Redirect to={RouteKeys.ProfileMaskboxCollections} />
+        </Switch>
       </main>
     </article>
   );

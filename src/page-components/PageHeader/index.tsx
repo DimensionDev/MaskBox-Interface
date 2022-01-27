@@ -3,7 +3,7 @@ import { Button, Icon, LanguageSwitcher, LoadingButton, LoadingIcon } from '@/co
 import { RouteKeys } from '@/configs';
 import { ThemeType, useTheme, useWeb3Context } from '@/contexts';
 import { useCreatedSomeBoxes, usePermissionGranted } from '@/hooks';
-import { getNetworkColor, getNetworkName } from '@/lib';
+import { DEV_MODE_ENABLED, getNetworkColor, getNetworkName } from '@/lib';
 import { formatAddres, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useEffect, useRef } from 'react';
@@ -50,6 +50,7 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
         <div className={styles.brand}>
           <Link to="/" className={styles.logo} title="NFTBOX">
             <img src={logoImage} width="100%" height="100%" alt="MASKBOX" />
+            {DEV_MODE_ENABLED && <strong className={styles.dev}>dev</strong>}
           </Link>
         </div>
         <nav className={styles.nav}>
@@ -149,9 +150,9 @@ export const PageHeader: FC<Props> = ({ className, ...rest }) => {
           >
             <Icon type="menu" />
           </div>
+          <LanguageSwitcher className={styles.langSwitch} />
         </div>
       </div>
-      <LanguageSwitcher className={styles.langSwitch} />
       <nav
         className={classnames(styles.popupNav, { [styles.open]: popupNavVisible })}
         ref={popupNavRef}

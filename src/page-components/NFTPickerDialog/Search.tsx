@@ -2,7 +2,7 @@ import { Button, LoadingIcon, SelectableNFTList, SelectableNFTListProps } from '
 import { ERC721Token } from '@/types';
 import classnames from 'classnames';
 import { noop } from 'lodash-es';
-import { FC, HTMLProps, useCallback, useMemo, useState } from 'react';
+import { FC, HTMLProps, useCallback, useState } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
@@ -50,8 +50,10 @@ export const Search: FC<Props> = ({
       })()}
       {notOwnedIds.length && !loading ? (
         <div className={classnames(styles.notfound, tokens.length ? undefined : styles.expand)}>
-          {t('Token ID <span>{ids}</span> does not exist or belong to you.', {
-            ids: notOwnedIds.map((id) => `#${id}`).join(','),
+          {t('Token ID {ids} does not exist or belong to you.', {
+            ids: notOwnedIds
+              .map((id) => `<span class="${styles.hightlight}">#${id}</span>`)
+              .join(','),
           })}
         </div>
       ) : null}

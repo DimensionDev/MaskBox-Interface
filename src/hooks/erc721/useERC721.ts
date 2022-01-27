@@ -21,10 +21,10 @@ export function useERC721(address: string | undefined, owner?: string) {
       const result = await contract.isApprovedForAll(checkingAccount, maskboxAddress);
       setIsApproveAll(result as boolean);
     } catch (err) {
-      showToast({
-        title: `Fails to check approving, are you sure the contract address is correct?`,
-        variant: 'error',
-      });
+      // showToast({
+      //   title: `Fails to check approving, are you sure the contract address is correct?`,
+      //   variant: 'error',
+      // });
       console.log('Fails to check approving', err);
     }
     setCheckingApprove(false);

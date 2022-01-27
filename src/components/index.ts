@@ -1,6 +1,8 @@
 export * from './ArticleSection';
+export * from './NavTabs';
 export * from './Badge';
 export * from './Button';
+export * from './CollectionLogo';
 export * from './Countdown';
 export * from './Dialog';
 export * from './Empty';
@@ -16,6 +18,7 @@ export * from './NewsletterBox';
 export * from './NFTItem';
 export * from './NFTSelectList';
 export * from './Overlay';
+export * from './Pagination';
 export * from './SelectedBadge';
 export * from './SNSShare';
 export * from './Textarea';

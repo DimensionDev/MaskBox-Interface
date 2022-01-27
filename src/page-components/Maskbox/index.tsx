@@ -4,9 +4,9 @@ import { useWeb3Context } from '@/contexts';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
-import { ZERO } from '@/lib';
+import { getNetworkExplorer, ZERO } from '@/lib';
 import { BoxOnChain, MediaType } from '@/types';
-import { formatBalance } from '@/utils';
+import { formatAddres, formatBalance } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -72,6 +72,7 @@ export const Maskbox: FC<MaskboxProps> = ({
       if (box.expired) return t('Ended');
       if (!isApproveAll) return t('Canceled');
     }
+    if (box.canceled) return t('Canceled');
     if (inList) return t('View Details');
     if (!ethersProvider) return t('Connect Wallet');
 
@@ -110,6 +111,8 @@ export const Maskbox: FC<MaskboxProps> = ({
     return box.total;
   }, [box.total, box.remaining]);
 
+  const creatorExplorerUrl = `${getNetworkExplorer(chainId!)}/address/${box.creator}`;
+
   const BoxCover = (
     <div className={styles.media}>
       {(() => {
@@ -126,8 +129,6 @@ export const Maskbox: FC<MaskboxProps> = ({
                 src={box.mediaUrl}
                 alternative={<Icon type="mask" size={48} />}
                 loading="lazy"
-                width="480"
-                height="320"
                 alt={box.name ?? '-'}
               />
             );
@@ -161,6 +162,21 @@ export const Maskbox: FC<MaskboxProps> = ({
               })}
             </dd>
           ) : null}
+          {box.creator ? (
+            <dd className={styles.infoRow}>
+              {t('Creator')}
+              {`: `}
+              <a
+                className={styles.creator}
+                href={creatorExplorerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={box.creator}
+              >
+                {formatAddres(box.creator)}
+              </a>
+            </dd>
+          ) : null}
         </dl>
         {(() => {
           if (checkingApprove || isConnecting)
@@ -169,7 +185,7 @@ export const Maskbox: FC<MaskboxProps> = ({
                 <LoadingIcon />
               </Button>
             );
-          if (isStarted || !ethersProvider) {
+          if (isStarted || box.canceled || !ethersProvider) {
             return <Button {...buttonProps}>{buttonText}</Button>;
           }
           return <CountdownButton {...buttonProps} startTime={startTime!} />;

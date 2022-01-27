@@ -59,4 +59,17 @@ export const LoadingIcon: FC<IconProps> = (props) => {
   );
 };
 
+export const LoadingCircle: FC<IconProps> = (props) => {
+  return (
+    <Icon
+      size={24}
+      className={classnames(props.className, styles.spinning2x)}
+      type="loadingCircle"
+      {...props}
+    />
+  );
+};
+
+export { icons };
+
 export type { IconType };

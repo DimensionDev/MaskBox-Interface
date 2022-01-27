@@ -3,6 +3,11 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const packageJson = require('./package.json');
+
+const ignoreEnvs = Object.keys(process.env)
+  .filter((k) => k.startsWith('IGNORE_IDS_ON_'))
+  .reduce((ignores, k) => ({ ...ignores, [k]: process.env[k] }), {});
 
 /** import('webpack').Configuration */
 const config = {
@@ -45,6 +50,18 @@ const config = {
           },
         ],
       },
+      {
+        test: /\.css/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
     ],
   },
   plugins: [
@@ -60,6 +77,8 @@ const config = {
     }),
     new webpack.EnvironmentPlugin({
       INFURA_ID: process.env.INFURA_ID || 'd74bd8586b9e44449cef131d39ceeefb',
+      VERSION: `${packageJson.version}-${process.env.COMMIT ?? 'dev'}`,
+      ...ignoreEnvs,
     }),
   ],
   devServer: {

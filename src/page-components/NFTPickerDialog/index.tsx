@@ -5,11 +5,10 @@ import {
   Hint,
   Icon,
   Input,
-  LoadingIcon,
   SelectableNFTList,
   SelectableNFTListProps,
 } from '@/components';
-import { useCheckIsOwned, useGetERC721TokensByIds } from '@/hooks';
+import { useCheckIsOwned, useERC721Balance, useGetERC721TokensByIds } from '@/hooks';
 import { ERC721Token } from '@/types';
 import { useBoolean } from '@/utils';
 import classnames from 'classnames';
@@ -22,12 +21,16 @@ import { Search } from './Search';
 interface Props extends DialogProps, Pick<SelectableNFTListProps, 'tokens' | 'selectedTokenIds'> {
   onConfirm?: (ids: string[]) => void;
   contractAddress: string;
+  contractName: string;
   loading: boolean;
+  pendingSize?: number;
 }
 const limit = 1000;
 export const NFTPickerDialog: FC<Props> = ({
   tokens,
+  pendingSize = 0,
   contractAddress,
+  contractName,
   selectedTokenIds = [],
   onConfirm,
   loading,
@@ -35,6 +38,7 @@ export const NFTPickerDialog: FC<Props> = ({
   ...rest
 }) => {
   const t = useLocales();
+  const balance = useERC721Balance(contractAddress);
   const [keyword, setKeyword] = useState('');
   const [isSearching, setIsSearching, setNotSearching] = useBoolean();
   const [searchVisible, openSearch, closeSearch] = useBoolean();
@@ -119,6 +123,8 @@ export const NFTPickerDialog: FC<Props> = ({
       <div style={{ display: searchVisible ? 'none' : 'block' }}>
         <SelectableNFTList
           tokens={tokens}
+          contractName={contractName}
+          pendingSize={pendingSize}
           loading={loading}
           limit={limit}
           selectedTokenIds={pickedIds}
@@ -132,13 +138,12 @@ export const NFTPickerDialog: FC<Props> = ({
             </span>
           )}
           <span className={classnames(styles.picked, styles.error)}>{pickedIds.length}</span> /{' '}
-          <span className={styles.total}>{tokens.length}</span>
+          <span className={styles.total}>{balance.toString()}</span>
           <Hint width={256} position="right">
             {t('The maximum number of NFTs to be sold in one mystery box contract is {limit}.', {
               limit,
             })}
           </Hint>
-          {loading && <LoadingIcon size={14} />}
         </div>
         <div className={styles.buttonGroup}>
           <Button fullWidth onClick={() => onConfirm?.(pickedIds)} colorScheme="primary">

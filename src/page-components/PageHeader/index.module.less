@@ -8,29 +8,16 @@
   .inner {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    max-width: 1120px;
+    max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
+    padding-left: 56px;
+    padding-right: 56px;
     align-items: center;
     height: 100%;
   }
   .langSwitch {
-    position: absolute;
-    right: 10px;
-    top: 0;
-    bottom: 0;
-    margin-top: 20px;
-    margin-bottom: 20px;
     color: var(--text-primary, #1e202c);
-  }
-}
-@media (max-width: 1400px) {
-  .pageHeader {
-    display: flex;
-    .langSwitch {
-      position: relative;
-      margin-left: 10px;
-    }
   }
 }
 @media (max-width: @sm-screen) {
@@ -74,6 +61,9 @@
       -webkit-background-clip: text;
     }
   }
+  @media (max-width: 960px) {
+    display: none;
+  }
 }
 .popupNav {
   background-color: var(--background, #fff);
@@ -111,10 +101,21 @@
   align-items: center;
   width: 171px;
   height: 51px;
-  select {
-    height: 20px;
-    width: 100px;
-    margin-left: 16px;
+  align-items: center;
+  justify-content: center;
+  .logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  .dev {
+    font-size: 16px;
+    background-color: orange;
+    display: inline-block;
+    padding: 0 5px;
+    border-radius: 4px;
+    margin: 0 10px;
+    color: #333;
   }
 }
 @media (max-width: @mid-screen) {
@@ -128,6 +129,12 @@
   align-items: center;
   flex-direction: row;
   justify-content: flex-end;
+  grid-column: 3;
+  @media (max-width: 650px) {
+    .button:not(.themeToggleButton) {
+      display: none;
+    }
+  }
   .button {
     margin-left: 10px;
     cursor: pointer;
@@ -150,13 +157,7 @@
       justify-content: space-between;
     }
   }
-  .nav {
-    display: none;
-  }
   .operations {
-    .button:not(.themeToggleButton) {
-      display: none;
-    }
     .menuButton {
       display: flex;
       align-items: center;

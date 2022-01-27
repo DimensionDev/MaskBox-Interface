@@ -56,6 +56,7 @@ export const Meta: FC = () => {
   const { isEnumable } = useEdit();
   const {
     tokens: ownedERC721Tokens,
+    pendingSize: pendingERC721TokenSize,
     balance,
     loading: nftLoading,
   } = useLazyLoadERC721Tokens(formData.nftContractAddress);
@@ -148,7 +149,7 @@ export const Meta: FC = () => {
   }, [formData.pricePerBox]);
 
   const pickERC20 = usePickERC20();
-  const { tokens } = useTokenList();
+  const { tokens, updateTokens } = useTokenList();
   const selectedPaymentToken = useMemo(() => {
     return tokens.find((token) => isSameAddress(token.address, formData.tokenAddress));
   }, [tokens, formData.tokenAddress]);
@@ -192,6 +193,11 @@ export const Meta: FC = () => {
               onClick={async () => {
                 if (isEditting) return;
                 const token = await pickERC20();
+                // TODO move this checking into pickERC20
+                const existed = tokens.find((t) => isSameAddress(t.address, token.address));
+                if (!existed) {
+                  updateTokens();
+                }
                 updateField('tokenAddress', token.address);
                 updateField('token', token);
               }}
@@ -329,6 +335,7 @@ export const Meta: FC = () => {
           disabled={isEditting}
           fullWidth
           size="large"
+          spellCheck={false}
           value={formData.whiteList}
           onChange={bindField('whiteList')}
         />
@@ -359,6 +366,11 @@ export const Meta: FC = () => {
                 const token = await pickERC20({
                   exclude: [ZERO_ADDRESS],
                 });
+                // TODO move this checking into pickERC20
+                const existed = tokens.find((t) => isSameAddress(t.address, token.address));
+                if (!existed) {
+                  updateTokens();
+                }
                 updateField('holderTokenAddress', token.address);
                 updateField('holderToken', token);
               }}
@@ -415,7 +427,6 @@ export const Meta: FC = () => {
       <CreationConfirmDialog
         open={confirmDialogVisible}
         tokens={formData.sellAll ? ownedERC721Tokens : selectedERC721Tokens}
-        loading={nftLoading}
         onClose={closeConfirmDialog}
         nftAddress={formData.nftContractAddress}
         onConfirm={create}
@@ -450,8 +461,10 @@ export const Meta: FC = () => {
       <NFTPickerDialog
         open={nftPickerVisible}
         tokens={ownedERC721Tokens}
+        pendingSize={pendingERC721TokenSize}
         loading={nftLoading}
         contractAddress={formData.nftContractAddress}
+        contractName={formData.erc721Contract?.name ?? ''}
         selectedTokenIds={formData.selectedNFTIds}
         onClose={closeNftPicker}
         onConfirm={(ids) => {

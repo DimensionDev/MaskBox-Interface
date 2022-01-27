@@ -18,7 +18,7 @@
   "Drawing": "Drawing",
   "Insufficient balance": "Insufficient balance",
   "Insufficient allowance": "Insufficient allowance",
-  "Select an NFT": "Select an NFT",
+  "Seletct a Collection": "Seletct a Collection",
   "Search name or paste address": "Search name or paste address",
   "Import": "Import",
   "No results for": "No results for",
@@ -66,6 +66,7 @@
   "Withdraw NFT": "Withdraw NFT",
   "NFT withdrawn": "NFT withdrawn",
   "{symbol} Withdrawn": "{symbol} Withdrawn",
+  "Withdrawing": "Withdrawing",
   "Withdraw {symbol}": "Withdraw {symbol}",
   "Confirm": "Confirm",
   "Cancel": "Cancel",
@@ -74,6 +75,7 @@
   "Cancel MaskBox": "Cancel MaskBox",
   "Failed to cancel this MaskBox {message}": "Failed to cancel this MaskBox {message}",
   "purchase-requirement": "*You have to hold at least <strong>{amount} {symbol}</strong> to draw the MaskBox.",
+  "Creator": "Creator",
   "Account": "Account",
   "Recent Transactions": "Recent Transactions",
   "Clear All": "Clear All",
@@ -81,6 +83,7 @@
   "Select all": "Select all",
   "The mystery box contract supports up to {limit} NFTs for sale.": "The mystery box contract supports up to {limit} NFTs for sale.",
   "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "The maximum number of NFTs to be sold in one mystery box contract is {limit}.",
-  "Token ID <span>{ids}</span> does not exist or belong to you.": "Token ID <span>{ids}</span> does not exist or belong to you.",
-  "Add": "Add"
+  "Token ID {ids} does not exist or belong to you.": "Token ID {ids} does not exist or belong to you.",
+  "Add": "Add",
+  "The contract address is incorrect or does not exist": "The contract address is incorrect or does not exist"
 }

@@ -1,7 +1,11 @@
 {
   "My Collectibles": "My Collectibles",
   "No items to display.": "No items to display.",
+  "Loading": "Loading",
   "Loading more": "Loading more",
+  "Load more": "Load more",
   "All {count} NFTs loaded": "All {count} NFTs loaded",
-  "Loaded {count} NFTs": "Loaded {count} NFTs"
+  "Loaded {count} NFTs": "Loaded {count} NFTs",
+  "MaskBox Collectibles": "MaskBox Collectibles",
+  "Other Collectibles": "Other Collectibles"
 }

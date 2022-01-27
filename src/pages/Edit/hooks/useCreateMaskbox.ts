@@ -1,6 +1,5 @@
 import { MaskboxABI } from '@/abi';
 import { useRecentTransactions } from '@/atoms';
-import { MAX_CONFIRMATION } from '@/configs';
 import { useMaskboxContract, useWeb3Context } from '@/contexts';
 import { useERC20Token } from '@/hooks';
 import { ZERO_ADDRESS } from '@/lib';
@@ -56,27 +55,12 @@ export function useCreateMaskbox() {
       name: t('Create MaskBox'),
       status: TransactionStatus.Pending,
     });
-    let log;
-    let confirmation = 0;
-    while (!log) {
-      await tx.wait(1);
-      confirmation += 1;
-      console.log(`waited ${confirmation} block`);
-      const logs = await ethersProvider.getLogs(contract.filters.CreationSuccess());
-      log = logs[0];
-      if (!log && confirmation >= MAX_CONFIRMATION) {
-        updateTransactionBy({
-          txHash,
-          status: TransactionStatus.Fails,
-        });
-        throw new Error('Fails to get log of CreationSuccess');
-      }
-    }
+    const receipt = await tx.wait(1);
+    const log = receipt.events[0];
     updateTransactionBy({
       txHash,
       status: TransactionStatus.Success,
     });
-    console.info('useCreateMaskBox', { confirmation });
 
     const parsedLog = abiInterface.parseLog(log);
     return parsedLog;

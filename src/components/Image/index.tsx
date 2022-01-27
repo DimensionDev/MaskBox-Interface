@@ -1,6 +1,24 @@
-import { FC, ImgHTMLAttributes, ReactElement, useEffect, useState } from 'react';
-interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+import { useLiveRef } from '@/hooks';
+import {
+  FC,
+  forwardRef,
+  ImgHTMLAttributes,
+  memo,
+  ReactElement,
+  RefAttributes,
+  useEffect,
+  useState,
+} from 'react';
+import { LoadingCircle } from '../Icon';
+
+export interface ImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   alternative?: ReactElement;
+}
+
+export interface LazyImageProps
+  extends ImgHTMLAttributes<HTMLImageElement>,
+    RefAttributes<HTMLImageElement> {
+  fallback?: string;
 }
 
 const lazyTrue = Promise.resolve(true);
@@ -33,7 +51,35 @@ function isImageValid(src?: string): Promise<boolean> {
   return promise;
 }
 
-export const Image: FC<ImageProps> = ({ alternative, src, ...rest }) => {
+export const Image: FC<ImageProps> = memo(({ alternative, src, ...rest }) => {
+  const [loaded, setLoaded] = useState(src ? loadedMap[src] : false);
+  const [loading, setIsLoading] = useState(src ? !loadedMap[src] : true);
+  const liveRef = useLiveRef();
+
+  useEffect(() => {
+    setIsLoading(true);
+    isImageValid(src)
+      .then((isValid) => {
+        if (isValid && src) {
+          loadedMap[src] = true;
+        }
+        if (liveRef.current) {
+          setLoaded(isValid);
+        }
+      })
+      .finally(() => {
+        if (liveRef.current) {
+          setIsLoading(false);
+        }
+      });
+  }, [src]);
+
+  if (loading) return <LoadingCircle className={rest.className} />;
+
+  return loaded || !alternative ? <img {...rest} src={src} /> : alternative;
+});
+
+export const LazyImage: FC<LazyImageProps> = forwardRef(({ fallback, src, ...rest }, ref) => {
   const [loaded, setLoaded] = useState(src ? loadedMap[src] : false);
 
   useEffect(() => {
@@ -45,5 +91,5 @@ export const Image: FC<ImageProps> = ({ alternative, src, ...rest }) => {
     });
   }, [src]);
 
-  return loaded || !alternative ? <img {...rest} src={src} /> : alternative;
-};
+  return <img {...rest} ref={ref} src={loaded ? src : fallback} />;
+});

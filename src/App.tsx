@@ -17,10 +17,16 @@ import {
   Web3Provider,
 } from './contexts';
 
+import 'react-loading-skeleton/dist/skeleton.css';
 import './base.less';
 import './variables.less';
 import './theme.module.less';
 import styles from './app.module.less';
+
+console.log(
+  `%cMaskBox interface.\nversion: ${process.env.VERSION}`,
+  'background: #0057ff;color: #ffffff;',
+);
 
 function App() {
   return (

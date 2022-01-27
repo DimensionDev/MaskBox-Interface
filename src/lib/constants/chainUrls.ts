@@ -15,4 +15,18 @@ export const chainUrls = {
     chainId: ChainId.BSC,
     name: 'Binance Smart Chain',
   },
+  [ChainId.Matic]: {
+    rpc: '',
+    explorer: 'http://polygonscan.com/',
+    explorerName: 'polygon etherscan',
+    chainId: ChainId.Matic,
+    name: 'Rinkeby',
+  },
+  [ChainId.Rinkeby]: {
+    rpc: '',
+    explorer: 'http://rinkeby.etherscan.io/',
+    explorerName: 'rinkeby etherscan',
+    chainId: ChainId.Rinkeby,
+    name: 'Rinkeby',
+  },
 };

@@ -19,7 +19,7 @@ export function usePermissionGranted() {
     contract.admin(account).then((result: boolean) => {
       setIsAdmin(result);
     });
-  }, [account]);
+  }, [account, contract]);
 
   return isAdmin || inWhitelist;
 }

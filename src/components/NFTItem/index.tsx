@@ -1,10 +1,10 @@
-import { useOnceShowup } from '@/hooks';
+import { useLiveRef, useOnceShowup } from '@/hooks';
 import { ERC721Token, ERC721TokenMeta } from '@/types';
-import { fetchNFTTokenDetail, useBoolean } from '@/utils';
+import { fetchNFTTokenDetail } from '@/utils';
 import classnames from 'classnames';
-import { FC, HTMLProps, useCallback, useRef, useState } from 'react';
-import { LoadingIcon } from '../Icon';
-import { MediaViewer } from '../MediaViewer';
+import { FC, HTMLProps, memo, useCallback, useRef, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import { MediaViewer, MediaViewerSkeleton } from '../MediaViewer';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
 
@@ -13,6 +13,7 @@ export interface NFTItemProps extends Omit<HTMLProps<HTMLDivElement>, 'disabled'
   token: ERC721Token;
   sold?: boolean;
   disabled?: boolean;
+  hoverEffect?: boolean;
 }
 
 export const NFTItem: FC<NFTItemProps> = ({
@@ -21,6 +22,7 @@ export const NFTItem: FC<NFTItemProps> = ({
   token,
   sold,
   disabled,
+  hoverEffect = true,
   ...rest
 }) => {
   const t = useLocales();
@@ -29,21 +31,25 @@ export const NFTItem: FC<NFTItemProps> = ({
     name: token.name,
     image: token.image ?? '',
   });
-  const [fetching, setIsFetching, setNotFetching] = useBoolean(true);
+  const liveRef = useLiveRef();
   const fetchDetail = useCallback(async () => {
     if (!token.tokenURI) {
-      setNotFetching();
       return;
     }
-    setIsFetching();
     const meta = await fetchNFTTokenDetail(token.tokenURI);
-    setVerboseToken(meta);
-    setNotFetching();
+    if (liveRef.current) {
+      setVerboseToken(meta);
+    }
   }, [token.tokenId, token.tokenURI]);
   useOnceShowup(ref, fetchDetail);
   return (
     <div
-      className={classnames(styles.nft, className, disabled ? styles.disabled : null)}
+      className={classnames(
+        styles.nft,
+        className,
+        disabled ? styles.disabled : null,
+        hoverEffect ? styles.hoverEffect : null,
+      )}
       title={`${tokenMeta.name} #${token.tokenId}`}
       {...rest}
       ref={ref}
@@ -65,3 +71,30 @@ export const NFTItem: FC<NFTItemProps> = ({
     </div>
   );
 };
+
+interface NFTItemSkeletonProps extends HTMLProps<HTMLDivElement> {
+  sold?: boolean;
+}
+
+export const NFTItemSkeleton: FC<NFTItemSkeletonProps> = memo(({ className, sold, ...rest }) => {
+  return (
+    <div className={classnames(styles.nft, className)} {...rest}>
+      <div className={styles.media}>
+        <MediaViewerSkeleton className={styles.media} />
+      </div>
+      <div className={styles.info}>
+        <h3 className={styles.contractName}>
+          <Skeleton width="50%" />
+        </h3>
+        <h3 className={styles.name}>
+          <Skeleton width="40px" />
+        </h3>
+        {sold !== undefined && (
+          <h3 className={styles.saleStatus}>
+            <Skeleton width="20px" />
+          </h3>
+        )}
+      </div>
+    </div>
+  );
+});

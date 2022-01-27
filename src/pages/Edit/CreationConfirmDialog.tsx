@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogProps, Icon, LoadingIcon, NFTItem } from '@/components';
+import { Button, Dialog, DialogProps, Icon, NFTItem } from '@/components';
 import { useNFTName, useWeb3Context } from '@/contexts';
 import { getNetworkExplorer } from '@/lib';
 import { ERC721Token } from '@/types';
@@ -9,7 +9,6 @@ import styles from './dialog.module.less';
 import { useLocales } from './useLocales';
 
 interface Props extends DialogProps {
-  loading: boolean;
   tokens: ERC721Token[];
   nftAddress: string;
   onConfirm?: () => void;
@@ -18,7 +17,6 @@ interface Props extends DialogProps {
 
 export const CreationConfirmDialog: FC<Props> = ({
   open,
-  loading,
   tokens,
   nftAddress,
   className,
@@ -59,16 +57,13 @@ export const CreationConfirmDialog: FC<Props> = ({
       <ul className={classnames(styles.meta, styles.nftList)}>
         {tokens.map((token) => (
           <li key={token.tokenId}>
-            <NFTItem className={styles.nft} token={token}></NFTItem>
+            <NFTItem className={styles.nft} token={token} hoverEffect={false} />
           </li>
         ))}
       </ul>
       <div className={styles.meta}>
         <div className={styles.name}>{t('Total Amount')}</div>
-        <div className={styles.value}>
-          {tokens.length}
-          {loading && <LoadingIcon size={14} />}
-        </div>
+        <div className={styles.value}>{tokens.length}</div>
       </div>
       <Button onClick={onConfirm} disabled={creating} fullWidth colorScheme="primary" size="large">
         {creating ? t('Creating...') : t('Confirm')}

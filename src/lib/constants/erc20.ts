@@ -7,7 +7,7 @@ export const tokenListUrls: Record<number, string> = {
   4: 'https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/4/tokens.json',
   56: 'https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/56/tokens.json',
   97: 'https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/97/tokens.json',
-  137: 'https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/97/tokens.json',
+  137: 'https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/137/tokens.json',
   100: 'https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/100/tokens.json',
   80001:
     'https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/80001/tokens.json',

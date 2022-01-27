@@ -1,22 +1,25 @@
 import { ZERO } from '@/lib';
 import { ERC721Token } from '@/types';
-import { createDefer, DeferTuple, useBoolean } from '@/utils';
+import { EMPTY_LIST, useBoolean } from '@/utils';
 import { uniqBy } from 'lodash-es';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useERC721Balance } from './useERC721Balance';
 import { useGetERC721Tokens } from './useERC721Tokens';
 
-const SIZE = 50;
+// https://rpc-mainnet.maticvigil.com/ used by MetaMask, limit 40 per second
+const SIZE = 10;
 export function useLazyLoadERC721Tokens(
   address: string,
   autoLoadNext: boolean = true,
   loadSize: number = SIZE,
 ) {
   const balance = useERC721Balance(address);
-  const offsetRef = useRef(0);
   const liveRef = useRef(true);
   const [loading, setIsLoading, setNotLoading] = useBoolean();
+  const tokensMapRef = useRef<Record<string, ERC721Token[]>>({});
   const [tokens, setTokens] = useState<ERC721Token[]>([]);
+  // for rendering loading skeleton
+  const [pendingSize, setPendingSize] = useState(0);
   const getERC721Tokens = useGetERC721Tokens(address);
 
   useEffect(() => {
@@ -25,50 +28,45 @@ export function useLazyLoadERC721Tokens(
     };
   }, []);
 
-  const deferRef = useRef<DeferTuple<void>>();
-  const loadMore = useCallback(async () => {
-    if (balance.lte(offsetRef.current)) return;
-    const remaining = balance.sub(offsetRef.current);
-    if (remaining.lte(ZERO) || !liveRef.current) return;
+  const loadMore = async () => {
+    const tokens = tokensMapRef.current[address] ?? EMPTY_LIST;
+    if (balance.lte(tokens.length) || !address || !liveRef.current || loading) return;
+    const remaining = balance.sub(tokens.length);
+    if (remaining.lte(ZERO)) return;
 
     setIsLoading();
-    if (deferRef.current) {
-      await deferRef.current[0];
-    }
-
-    deferRef.current = createDefer<void>();
     const size = remaining.gt(loadSize) ? loadSize : remaining.toNumber();
-    const result = await getERC721Tokens(offsetRef.current, size);
+    const currentAddress = address;
+    setPendingSize(size);
+    const result = await getERC721Tokens(tokens.length, size);
+    setNotLoading();
     if (result.length && liveRef.current) {
-      setTokens((list) => {
-        const newList = uniqBy([...list, ...result], 'tokenId');
-        offsetRef.current = newList.length;
-        return newList;
-      });
+      const list = tokensMapRef.current[currentAddress] ?? [];
+      const newList = uniqBy([...list, ...result], 'tokenId');
+      tokensMapRef.current = {
+        ...tokensMapRef.current,
+        [currentAddress]: newList,
+      };
+      setTokens(newList);
     }
-    deferRef.current[1]();
     // continue loading more
-    if (loadSize === size && remaining.gt(0) && autoLoadNext) {
+    if (remaining.gt(0) && result.length && autoLoadNext) {
       await loadMore();
-    } else {
-      setNotLoading();
     }
-  }, [getERC721Tokens, balance, autoLoadNext, loadSize]);
+  };
 
   useEffect(() => {
     loadMore();
-    return () => {
-      offsetRef.current = 0;
-    };
-  }, [loadMore]);
+  }, [balance, getERC721Tokens]);
 
-  const finished = balance.lte(offsetRef.current);
+  const finished = balance.lte(tokens.length);
 
   return {
     balance,
     loading,
     finished,
     tokens,
+    pendingSize,
     loadMore,
   };
 }

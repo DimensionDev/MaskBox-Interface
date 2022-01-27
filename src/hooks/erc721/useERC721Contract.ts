@@ -8,9 +8,12 @@ export function useGetERC721Contract() {
   const { ethersProvider, providerChainId: chainId } = useWeb3Context();
   const getContract = useCallback(
     async (addr: string) => {
-      if (!ethersProvider || !chainId) return;
+      if (!ethersProvider || !chainId) return null;
       const contract = new Contract(addr, MaskboxNFTABI, ethersProvider);
-      const token = Promise.all([contract.name(), contract.symbol()]).then(([name, symbol]) => {
+      const namePromise = contract.name().catch(() => null);
+      const symbolPromise = contract.symbol().catch(() => null);
+      const token = await Promise.all([namePromise, symbolPromise]).then(([name, symbol]) => {
+        if (name === null && symbol === null) return null;
         return {
           name: name as string,
           chainId,

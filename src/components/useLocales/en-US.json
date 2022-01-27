@@ -13,5 +13,10 @@
   "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.": "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.",
   "Drag-and-drop file, or": "Drag-and-drop file, or",
   "Browse computer": "Browse computer",
-  "Select all": "Select all"
+  "Select all": "Select all",
+  "Close": "Close",
+  "Previous": "Previous",
+  "Next": "Next",
+  "<no symbol>": "<no symbol>",
+  "<no name>": "<no name>"
 }

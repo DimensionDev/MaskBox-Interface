@@ -36,6 +36,35 @@ type Maskbox {
   claimed: Boolean!
 }
 
+type MaskboxStatistic {
+  id: ID!
+  total: Int!
+}
+
+input MaskboxStatistic_filter {
+  id: ID
+  id_not: ID
+  id_gt: ID
+  id_lt: ID
+  id_gte: ID
+  id_lte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  total: Int
+  total_not: Int
+  total_gt: Int
+  total_lt: Int
+  total_gte: Int
+  total_lte: Int
+  total_in: [Int!]
+  total_not_in: [Int!]
+}
+
+enum MaskboxStatistic_orderBy {
+  id
+  total
+}
+
 input Maskbox_filter {
   id: ID
   id_not: ID
@@ -330,6 +359,36 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [User!]!
+  maskboxStatistic(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): MaskboxStatistic
+  maskboxStatistics(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: MaskboxStatistic_orderBy
+    orderDirection: OrderDirection
+    where: MaskboxStatistic_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [MaskboxStatistic!]!
 
   """
   Access to subgraph metadata
@@ -428,6 +487,36 @@ type Subscription {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [User!]!
+  maskboxStatistic(
+    id: ID!
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): MaskboxStatistic
+  maskboxStatistics(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: MaskboxStatistic_orderBy
+    orderDirection: OrderDirection
+    where: MaskboxStatistic_filter
+
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [MaskboxStatistic!]!
 
   """
   Access to subgraph metadata

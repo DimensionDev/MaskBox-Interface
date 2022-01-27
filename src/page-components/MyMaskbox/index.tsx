@@ -104,10 +104,13 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   }, [cancelBox, box.box_id, t]);
 
   const claimPayment = useClaimPayment();
+  const [isWithdrawing, startWithdrawing, finishWithdrawing] = useBoolean();
   const withdraw = useCallback(async () => {
+    startWithdrawing();
     const result = await claimPayment(boxId);
     console.log({ result });
     const { decimals, symbol } = paymentToken ?? { decimals: 1, symbol: '' };
+    finishWithdrawing();
     if (result) {
       fetchClaimeStatus();
       showToast({
@@ -212,11 +215,13 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
                 </Button>
                 <Button
                   colorScheme="primary"
-                  disabled={box.claimed || box.sold_nft_list.length === 0}
+                  disabled={box.claimed || box.sold_nft_list.length === 0 || isWithdrawing}
                   onClick={withdraw}
                 >
                   {box.claimed
                     ? t('{symbol} Withdrawn', { symbol: paymentSymbol! })
+                    : isWithdrawing
+                    ? t('Withdrawing')
                     : t('Withdraw {symbol}', { symbol: paymentSymbol! })}
                 </Button>
               </>
