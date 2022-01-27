@@ -18,7 +18,7 @@
   "Drawing": "crwdns9573:0crwdne9573:0",
   "Insufficient balance": "crwdns9575:0crwdne9575:0",
   "Insufficient allowance": "crwdns10035:0crwdne10035:0",
-  "Select an NFT": "crwdns9577:0crwdne9577:0",
+  "Seletct a Collection": "crwdns10609:0crwdne10609:0",
   "Search name or paste address": "crwdns9579:0crwdne9579:0",
   "Import": "crwdns9581:0crwdne9581:0",
   "No results for": "crwdns9583:0crwdne9583:0",
@@ -66,6 +66,7 @@
   "Withdraw NFT": "crwdns9841:0crwdne9841:0",
   "NFT withdrawn": "crwdns9843:0crwdne9843:0",
   "{symbol} Withdrawn": "crwdns9845:0{symbol}crwdne9845:0",
+  "Withdrawing": "crwdns10659:0crwdne10659:0",
   "Withdraw {symbol}": "crwdns9847:0{symbol}crwdne9847:0",
   "Confirm": "crwdns9849:0crwdne9849:0",
   "Cancel": "crwdns9851:0crwdne9851:0",
@@ -74,6 +75,7 @@
   "Cancel MaskBox": "crwdns9929:0crwdne9929:0",
   "Failed to cancel this MaskBox {message}": "crwdns9931:0{message}crwdne9931:0",
   "purchase-requirement": "crwdns9951:0{amount}crwdnd9951:0{symbol}crwdne9951:0",
+  "Creator": "crwdns10653:0crwdne10653:0",
   "Account": "crwdns9975:0crwdne9975:0",
   "Recent Transactions": "crwdns9977:0crwdne9977:0",
   "Clear All": "crwdns9979:0crwdne9979:0",
@@ -81,6 +83,7 @@
   "Select all": "crwdns10517:0crwdne10517:0",
   "The mystery box contract supports up to {limit} NFTs for sale.": "crwdns10579:0{limit}crwdne10579:0",
   "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "crwdns10581:0{limit}crwdne10581:0",
-  "Token ID <span>{ids}</span> does not exist or belong to you.": "crwdns10591:0{ids}crwdne10591:0",
-  "Add": "crwdns10593:0crwdne10593:0"
+  "Token ID {ids} does not exist or belong to you.": "crwdns10645:0{ids}crwdne10645:0",
+  "Add": "crwdns10593:0crwdne10593:0",
+  "The contract address is incorrect or does not exist": "crwdns10607:0crwdne10607:0"
 }

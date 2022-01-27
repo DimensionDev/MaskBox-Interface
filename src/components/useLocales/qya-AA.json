@@ -13,5 +13,10 @@
   "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.": "crwdns10023:0crwdne10023:0",
   "Drag-and-drop file, or": "crwdns10037:0crwdne10037:0",
   "Browse computer": "crwdns10027:0crwdne10027:0",
-  "Select all": "crwdns10577:0crwdne10577:0"
+  "Select all": "crwdns10577:0crwdne10577:0",
+  "Close": "crwdns10611:0crwdne10611:0",
+  "Previous": "crwdns10647:0crwdne10647:0",
+  "Next": "crwdns10649:0crwdne10649:0",
+  "<no symbol>": "crwdns10691:0crwdne10691:0",
+  "<no name>": "crwdns10693:0crwdne10693:0"
 }
