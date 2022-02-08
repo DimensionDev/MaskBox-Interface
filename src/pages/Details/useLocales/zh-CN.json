@@ -1,4 +1,9 @@
 {
   "Details": "详情",
-  "share-to-twitter": "我在 MaskBox 平台上抽了一个 NFT ，订阅@realMaskNetwork 以获取更多更新 - {link}"
+  "Load more": "显示更多",
+  "Loading more": "正在加载更多内容",
+  "All NFTs have been loaded :)": "所有NFT已加载 :)",
+  "share-to-twitter": "我在 MaskBox 平台上抽了一个 NFT ，订阅@realMaskNetwork 以获取更多更新 - {link}",
+  "Details ({count} NFTs)": "详细信息 ({count} NFTs)",
+  "MaskBox is not found": "找不到MaskBox"
 }
