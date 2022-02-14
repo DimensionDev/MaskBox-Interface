@@ -2,6 +2,8 @@ name: Github Pages
 
 on:
   push:
+    branches:
+      - master
   workflow_dispatch:
     inputs:
       ignore_on_mainnet:

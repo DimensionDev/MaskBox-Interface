@@ -68,6 +68,6 @@ export function useCreateMaskbox() {
 
     const parsedLog = abiInterface.parseLog(log);
     return parsedLog;
-  }, [formData, ethersProvider, chainId]);
+  }, [formData, ethersProvider, chainId, merkleTreeAddress]);
   return createBox;
 }
