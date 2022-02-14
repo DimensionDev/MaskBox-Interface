@@ -1,6 +1,6 @@
 import { MaskboxABI } from '@/abi';
 import { useRecentTransactions } from '@/atoms';
-import { useMaskboxContract, useWeb3Context } from '@/contexts';
+import { useMaskboxContract, useWeb3Context, useMerkleTreeAddress } from '@/contexts';
 import { useERC20Token } from '@/hooks';
 import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
@@ -18,6 +18,7 @@ export function useCreateMaskbox() {
   const formData = useAtomValue(formDataAtom);
   const { addTransaction, updateTransactionBy } = useRecentTransactions();
   const contract = useMaskboxContract();
+  const merkleTreeAddress = useMerkleTreeAddress();
   const holderToken = useERC20Token(formData.holderTokenAddress);
 
   const limit = formData.limit ?? 5;
@@ -39,12 +40,15 @@ export function useCreateMaskbox() {
       endTime,
       formData.sellAll,
       formData.selectedNFTIds,
-      formData.whiteList || ZERO_ADDRESS,
+      merkleTreeAddress,
+      //formData.whiteList || ZERO_ADDRESS,
       formData.holderTokenAddress || ZERO_ADDRESS,
       formData.holderMinTokenAmount
         ? utils.parseUnits(formData.holderMinTokenAmount, holderToken?.decimals ?? 18)
         : 0,
+      formData.merkleProof,
     ];
+    debugger;
     const connectedContract = contract.connect(ethersProvider.getSigner());
     const estimatedGas = await connectedContract.estimateGas.createBox(...createBoxOptions);
     const tx = await connectedContract.createBox(...createBoxOptions, { gasLimit: estimatedGas });

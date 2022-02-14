@@ -2,7 +2,7 @@ import { Button, Dialog, DialogProps, Icon, NFTItem } from '@/components';
 import { useNFTName, useWeb3Context } from '@/contexts';
 import { getNetworkExplorer } from '@/lib';
 import { ERC721Token } from '@/types';
-import { formatAddres } from '@/utils';
+import { formatAddres, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { FC, useMemo } from 'react';
 import styles from './dialog.module.less';
@@ -13,6 +13,8 @@ interface Props extends DialogProps {
   nftAddress: string;
   onConfirm?: () => void;
   creating?: boolean;
+  whitelistAddress?: string[];
+  fileName?: string;
 }
 
 export const CreationConfirmDialog: FC<Props> = ({
@@ -22,6 +24,8 @@ export const CreationConfirmDialog: FC<Props> = ({
   className,
   onConfirm,
   creating,
+  whitelistAddress,
+  fileName,
   ...rest
 }) => {
   const t = useLocales();
@@ -31,6 +35,8 @@ export const CreationConfirmDialog: FC<Props> = ({
     [account, chainId],
   );
   const contractName = useNFTName(nftAddress);
+
+  const [addressDialogOpen, openAddressDialog, closeAddressDialog] = useBoolean();
 
   return (
     <Dialog
@@ -65,9 +71,42 @@ export const CreationConfirmDialog: FC<Props> = ({
         <div className={styles.name}>{t('Total Amount')}</div>
         <div className={styles.value}>{tokens.length}</div>
       </div>
+      <div className={styles.meta}>
+        <div className={styles.name}>{t('Whitelist address')}</div>
+        <div className={styles.value}>
+          {fileName ? (
+            fileName
+          ) : whitelistAddress ? (
+            <>
+              <div className={styles.textButton} onClick={openAddressDialog}>
+                {t('View')}
+              </div>
+              <div className={styles.number}>{whitelistAddress?.length}</div>
+            </>
+          ) : null}
+        </div>
+      </div>
       <Button onClick={onConfirm} disabled={creating} fullWidth colorScheme="primary" size="large">
         {creating ? t('Creating...') : t('Confirm')}
       </Button>
+      <Dialog
+        title={t('Whitelist Address') as string}
+        className={styles.addressDialog}
+        open={addressDialogOpen}
+        onClose={closeAddressDialog}
+      >
+        <div className={styles.addressList}>
+          {whitelistAddress?.map((value) => (
+            <div className={styles.address} key={value}>
+              {value}
+            </div>
+          ))}
+        </div>
+        <div className={styles.addressNotify}>
+          *If you want to add or remove the whitelist address, please go back to the create page to
+          edit.
+        </div>
+      </Dialog>
     </Dialog>
   );
 };

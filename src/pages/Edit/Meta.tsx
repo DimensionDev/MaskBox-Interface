@@ -1,4 +1,14 @@
-import { Button, Field, Hint, Icon, Input, NFTList, showToast, TokenIcon } from '@/components';
+import {
+  Button,
+  Field,
+  Hint,
+  Icon,
+  Input,
+  NFTList,
+  showToast,
+  TokenIcon,
+  UploadButton,
+} from '@/components';
 import { RouteKeys } from '@/configs';
 import { usePickERC20, useRSS3, useWeb3Context } from '@/contexts';
 import { useERC721, useLazyLoadERC721Tokens, useTokenList } from '@/hooks';
@@ -13,6 +23,7 @@ import { isSameAddress, TZOffsetLabel, useBoolean } from '@/utils';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
+import { useAtom } from 'jotai';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -37,7 +48,7 @@ export const Meta: FC = () => {
   const t = useLocales();
   const history = useHistory();
 
-  const formData = useAtomValue(formDataAtom);
+  const [formData, setFormData] = useAtom(formDataAtom);
   const isReady = useAtomValue(readyToCreateAtom);
   const chain = useAtomValue(chainAtom);
   const isEditting = useAtomValue(isEdittingAtom);
@@ -50,6 +61,7 @@ export const Meta: FC = () => {
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, openNftPicker, closeNftPicker] = useBoolean();
   const [contractPickerVisible, openContractPicker, closeContractPicker] = useBoolean();
+  const [isWhitelistConfirmed, confirmWhitelist, editWhitelist] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
 
   const createBox = useCreateMaskbox();
@@ -78,8 +90,33 @@ export const Meta: FC = () => {
 
   const { saveBox } = useRSS3();
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useBoolean();
+  const [whiteListNumber, setWhiteListNumber] = useState<number>(0);
   const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
   const [creating, startCreating, finishCreating] = useBoolean();
+  const [uploading, setUploading, setNotUploading] = useBoolean();
+
+  const [uploadError, setUploadError] = useState<Error | null>(null);
+
+  const getMerkleProof = async (leaves: string[]) => {
+    try {
+      const res = await fetch(
+        'https://lf8d031acj.execute-api.ap-east-1.amazonaws.com/api/v1/merkle_tree/create',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            leaves,
+          }),
+        },
+      );
+      return res.json() as Promise<string>;
+    } catch (err) {
+      showToast({
+        title: t('Fails to get merkle proof: {reason}', { reason: (err as Error).message }),
+        variant: 'error',
+      });
+      throw err;
+    }
+  };
   const resetForm = useResetForm();
   const create = useCallback(async () => {
     setAllDirty();
@@ -103,7 +140,20 @@ export const Meta: FC = () => {
       setSellingNFTIds(
         formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : [...formData.selectedNFTIds],
       );
+
+      const leaves = formData?.fileAddressList
+        .map((address) =>
+          address
+            ?.replace(/0x/, '')
+            ?.match(/.{1,2}/g)
+            ?.map((byte) => parseInt(byte, 16)),
+        )
+        .filter((numbers) => numbers && numbers.length)
+        .map((numbers) => new Uint8Array(numbers as number[]))
+        .map((uint8Array) => Buffer.from(uint8Array).toString('base64'));
+      formData.merkleProof = await getMerkleProof(leaves);
       const result = await createBox();
+
       if (result) {
         const { args } = result;
         setCreatedBoxId(args.box_id.toString() as string);
@@ -157,6 +207,20 @@ export const Meta: FC = () => {
   const qualifyingToken = useMemo(() => {
     return tokens.find((token) => isSameAddress(token.address, formData.holderTokenAddress));
   }, [tokens, formData.holderTokenAddress]);
+
+  const handleWhiteListConfirm = () => {
+    const whiteListNum = formData?.whiteList ? formData.whiteList?.split(',')?.length : 0;
+    if (whiteListNum != null && whiteListNum > 0) {
+      setWhiteListNumber(whiteListNum);
+      confirmWhitelist();
+    }
+  };
+
+  const handleUploaded = useCallback(({ fileAddressList, fileName }: UploadResult) => {
+    setUploadError(null);
+    setNotUploading();
+    setFormData((fd) => ({ ...fd, fileAddressList, fileName }));
+  }, []);
 
   if (!providerChainId) return <RequestConnection />;
 
@@ -331,15 +395,58 @@ export const Meta: FC = () => {
         }
       >
         <Input
-          placeholder="eg. 0x0c8FB5C985E00fb1D232b7B9700089492Fb4B9A8"
-          disabled={isEditting}
+          placeholder="e.g.0x"
+          disabled={isEditting || isWhitelistConfirmed}
           fullWidth
-          size="large"
+          multiLine
           spellCheck={false}
           value={formData.whiteList}
           onChange={bindField('whiteList')}
         />
+
+        <div className={styles.rowFieldGroup}>
+          <div className={styles.buttonWrapper}>
+            <Button
+              className={styles.button}
+              disabled={!formData?.whiteList || isEditting}
+              colorScheme={isWhitelistConfirmed ? 'success' : 'primary'}
+              onClick={handleWhiteListConfirm}
+            >
+              {t('Confirm')}
+            </Button>
+            <Button
+              className={styles.button}
+              disabled={isEditting}
+              colorScheme="primary"
+              onClick={editWhitelist}
+            >
+              {t('Edit')}
+            </Button>
+          </div>
+          <div className={styles.commonText}>
+            {whiteListNumber > 0 && `total: ${whiteListNumber}`}
+          </div>
+        </div>
       </Field>
+
+      <div className={styles.commonText}>
+        *Multiple addresses can be entered, separated by commas in English (half-width). When
+        entering address and uploading a file at the same time, only the entered address is valid.
+        The maximum number of whitelists is 1000.
+      </div>
+
+      <UploadButton
+        fileName={formData.fileName}
+        tabIndex={0}
+        onStartUpload={setUploading}
+        onUploaded={handleUploaded}
+        onError={setUploadError}
+      />
+
+      <div className={styles.commonText}>
+        *Addresses should be separated by commas in English (half-width) or space. In Excel, one
+        cell can only be filled with one address.
+      </div>
 
       <Field
         className={styles.field}
@@ -428,6 +535,8 @@ export const Meta: FC = () => {
         open={confirmDialogVisible}
         tokens={formData.sellAll ? ownedERC721Tokens : selectedERC721Tokens}
         onClose={closeConfirmDialog}
+        whitelistAddress={formData?.whiteList?.split(',')}
+        fileName={formData?.fileName}
         nftAddress={formData.nftContractAddress}
         onConfirm={create}
         creating={creating}

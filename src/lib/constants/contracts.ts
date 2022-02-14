@@ -14,7 +14,9 @@ export const contractAddresses: Record<string, Record<string, string>> = {
   },
   Rinkeby: {
     Maskbox: '0xF8ED169BC0cdA735A88d32AC10b88AA5B69181ac',
+    //Maskbox: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
     MaskboxNFT: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
+    MerkleProof: '0xA5F6347bA1ee2a849131E8b64584A1ca847bC180',
   },
   Matic: {
     Maskbox: '0x02F98667b3A1202a320F67a669a5e4e451fD0cc1',

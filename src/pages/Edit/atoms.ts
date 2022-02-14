@@ -11,6 +11,8 @@ export interface FormData {
   name: string;
   mediaUrl: string;
   mediaType: MediaType;
+  whiteListFileUrl: string;
+  whiteListFileType: string;
   activities: Activity[];
   pricePerBox: string;
   // TODO rename to paymentTokenAddress
@@ -23,6 +25,9 @@ export interface FormData {
   startAt: string;
   endAt: string;
   whiteList: string;
+  merkleProof: string;
+  fileAddressList: string[];
+  fileName: string;
   holderTokenAddress: string;
   holderMinTokenAmount: string;
   holderToken: TokenType | null;

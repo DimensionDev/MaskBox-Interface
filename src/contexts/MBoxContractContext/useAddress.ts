@@ -5,3 +5,8 @@ export function useMaskboxAddress() {
   const { providerChainId } = useWeb3Context();
   return providerChainId ? getContractAddressConfig(providerChainId)?.Maskbox : '';
 }
+
+export function useMerkleTreeAddress() {
+  const { providerChainId } = useWeb3Context();
+  return providerChainId ? getContractAddressConfig(providerChainId)?.merkleProof : '';
+}
