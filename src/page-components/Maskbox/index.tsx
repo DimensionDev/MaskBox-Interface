@@ -44,7 +44,10 @@ export const Maskbox: FC<MaskboxProps> = ({
   const { holder_min_token_amount, holder_token_addr } = box;
   const chainId = box.chain_id;
   const boxId = box.box_id;
-  const qualification = box?.qualification_data;
+  const qualification =
+    box?.qualification_data === '0x0000000000000000000000000000000000000000000000000000000000000000'
+      ? undefined
+      : box.qualification_data;
   const payment = box.payment?.[0];
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
@@ -83,7 +86,9 @@ export const Maskbox: FC<MaskboxProps> = ({
     return price ? t('Draw ( {price}/Time )', { price }) : <LoadingIcon size={24} />;
   }, [inList, price, isSoldout, isApproveAll, t, isQualified, ethersProvider]);
 
-  const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}&qualification=${qualification}`;
+  const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}${
+    qualification ? `&qualification=${qualification}` : ''
+  }`;
   const notReadyToView = !isStarted || isSoldout || box.expired || box.canceled || !isApproveAll;
   const allowToBuy = price && !notReadyToView && isQualified;
   const buttonProps: ButtonProps = {

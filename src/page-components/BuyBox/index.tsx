@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogProps, LoadingIcon, TokenIcon } from '@/components';
+import { Button, Dialog, DialogProps, LoadingIcon, TokenIcon, showToast } from '@/components';
 import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
 import {
   useBalance,
@@ -89,17 +89,33 @@ export const BuyBox: FC<BuyBoxProps> = ({
   const { open: openBox, loading } = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
 
   const getHashRoot = async (leaf: string, root: string) => {
+    let response: { proof?: string[]; message?: string; module?: string } = {};
+    let ok = false;
     try {
       const res = await fetch(
         `https://lf8d031acj.execute-api.ap-east-1.amazonaws.com/api/v1/merkle_tree/leaf_exists?leaf=${leaf}&root=${root}`,
       );
-      return res.json() as Promise<{ proof: string[] }>;
-    } catch (err) {
-      console.log(err);
+      response = await res.json();
+      ok = res.ok;
+    } catch (err: any) {
+      console.log('error', err);
     }
+
+    if (!ok) {
+      showToast({
+        title: t('Fails to draw the box: {message}', {
+          message: response?.message ?? 'unknown error',
+        }),
+        variant: 'error',
+      });
+
+      throw new Error(response?.message);
+    }
+
+    return response;
   };
   const handleDraw = useCallback(async () => {
-    let proof = '0x';
+    let proof = '0x00';
     if (qualification) {
       const leafArray = account
         ?.replace(/0x/, '')
@@ -107,9 +123,8 @@ export const BuyBox: FC<BuyBoxProps> = ({
         ?.map((byte) => parseInt(byte, 16));
       const leaf = Buffer.from(new Uint8Array(leafArray as number[])).toString('base64');
       const resp = await getHashRoot(leaf as string, qualification?.replace(/0x/, ''));
-
       const abiCoder = new ethers.utils.AbiCoder();
-      proof = abiCoder.encode(['bytes32[]'], [resp?.proof.map((p) => '0x' + p)]);
+      proof = abiCoder.encode(['bytes32[]'], [resp?.proof?.map((p) => '0x' + p)]);
     }
 
     const result = await openBox(proof);

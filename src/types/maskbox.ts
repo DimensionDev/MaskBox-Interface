@@ -11,7 +11,7 @@ export interface BoxInfoOnChain {
   nft_address: string;
   name: string;
   personal_limit: number;
-  qualification: string;
+  qualification_data: string;
   holder_token_addr: string;
   holder_min_token_amount: BigNumber;
 }

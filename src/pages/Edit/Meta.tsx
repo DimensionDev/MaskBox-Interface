@@ -162,7 +162,7 @@ export const Meta: FC = () => {
         const res = await getMerkleProof(leaves);
         formData.merkleProof = '0x' + res?.root;
       } else {
-        formData.merkleProof = '0x0000000000000000000000000000000000000000000000000000000000000000';
+        formData.merkleProof = '0x0';
       }
 
       const result = await createBox();
@@ -177,7 +177,6 @@ export const Meta: FC = () => {
           mediaUrl: formData.mediaUrl,
           activities: formData.activities,
           whitelistFileName: formData.whitelistFileName,
-          whitelist: formData.whitelist,
         });
         closeConfirmDialog();
         openShareBox();
