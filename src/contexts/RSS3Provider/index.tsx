@@ -13,6 +13,9 @@ export interface BoxRSS3Node {
     title: string;
     body: string;
   }[];
+  whitelistFileName?: string;
+  whitelist?: string;
+  qualification?: string;
 }
 
 interface IRSS3Context {
@@ -53,6 +56,8 @@ export function useBoxOnRSS3(creator: string | undefined, boxId: string | undefi
               mediaType: data.mediaType as MediaType,
               mediaUrl: data.mediaUrl,
               activities: data.activities,
+              whitelist: data?.whitelist,
+              whitelistFileName: data?.whitelistFileName,
             });
           } else {
             throw new Error(`Meta info was not found`);

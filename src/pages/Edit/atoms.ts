@@ -11,8 +11,6 @@ export interface FormData {
   name: string;
   mediaUrl: string;
   mediaType: MediaType;
-  whiteListFileUrl: string;
-  whiteListFileType: string;
   activities: Activity[];
   pricePerBox: string;
   // TODO rename to paymentTokenAddress
@@ -24,10 +22,10 @@ export interface FormData {
   sellAll: boolean;
   startAt: string;
   endAt: string;
-  whiteList: string;
+  whitelist?: string;
   merkleProof: string;
-  fileAddressList: string[];
-  fileName: string;
+  fileAddressList?: string[];
+  whitelistFileName?: string;
   holderTokenAddress: string;
   holderMinTokenAmount: string;
   holderToken: TokenType | null;
@@ -55,7 +53,7 @@ export const defaultFormData: FormData = {
   nftContractAddress: '',
   startAt,
   endAt,
-  whiteList: '',
+  whitelist: '',
   holderTokenAddress: '',
   holderMinTokenAmount: '',
   holderToken: null,

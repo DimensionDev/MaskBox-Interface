@@ -3,17 +3,16 @@ import { MediaType } from '@/types';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
 import { Icon, LoadingIcon } from '../Icon';
-import { Image } from '../Image';
 import { useLocales } from '../useLocales';
-import { VideoPlayer } from '../VideoPlayer';
 import styles from './index.module.less';
 
 interface Props extends Omit<HTMLProps<HTMLDivElement>, 'onError'> {
   fileName?: string;
   onDragUpload?: (file: File) => void;
   onStartUpload?: () => void;
-  onUploaded?: (opts: { fileAddressList: string[]; fileName: string }) => void;
+  onUploaded?: (opts: { fileAddressList: string[] | undefined; whitelistFileName: string }) => void;
   onError?: (err: Error) => void;
+  disabled?: boolean;
 }
 
 const getMaxSize = (mediaType: MediaType) => {
@@ -36,6 +35,7 @@ export const UploadButton: FC<Props> = ({
   onUploaded,
   onStartUpload,
   onError,
+  disabled = false,
   ...rest
 }) => {
   const t = useLocales();
@@ -43,17 +43,10 @@ export const UploadButton: FC<Props> = ({
   const [invalidMessage, setInvalidMessage] = useState('');
   const [dragingIn, setDragingIn] = useState(false);
   const handleUpload = async (file?: File) => {
-    console.log('file11', file);
-    // const fileReader = new FileReader();
-    // fileReader.readAsText(file);
-    // fileReader.onload = function(){
-    //   console.log(this.result)
-    // }
     setInvalidMessage('');
     try {
       onStartUpload?.();
-      const result = await upload(file, (f) => {
-        console.log('f', f);
+      await upload(file, (f) => {
         const mediaType = getMediaType(f.name);
         const maxSize = getMaxSize(mediaType);
         if (f.size > maxSize) {
@@ -68,8 +61,8 @@ export const UploadButton: FC<Props> = ({
 
             if (onUploaded) {
               onUploaded({
-                fileAddressList: addressList || [''],
-                fileName: f.name,
+                fileAddressList: addressList,
+                whitelistFileName: f.name,
               });
             }
           };
@@ -106,7 +99,7 @@ export const UploadButton: FC<Props> = ({
           setInvalidMessage(t('You should upload a file, only csv is supposed'));
         }
       }}
-      onClick={() => handleUpload()}
+      onClick={() => (disabled ? undefined : handleUpload())}
       onKeyDown={(evt) => {
         if (evt.code === 'Enter') {
           handleUpload();
@@ -118,7 +111,11 @@ export const UploadButton: FC<Props> = ({
         <div className={classnames(styles.uploadBox, styles.uploadedBox)}>
           <div>{fileName}</div>
           <Icon
-            onClick={() => onUploaded && onUploaded({ addressInfo: '', fileName: '' })}
+            onClick={() =>
+              disabled
+                ? undefined
+                : onUploaded && onUploaded({ fileAddressList: [''], fileName: '' })
+            }
             size={24}
             type="close"
           />

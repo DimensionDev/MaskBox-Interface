@@ -11,7 +11,7 @@ import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, ExtendedBoxInfo } from '@/types';
 import { formatAddres, formatBalance, useBoolean } from '@/utils';
 import classnames from 'classnames';
-import { BigNumber, utils } from 'ethers';
+import { BigNumber, ethers, utils } from 'ethers';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
 import { AdjustableInput } from './AdjustableInput';
@@ -20,13 +20,21 @@ import { useOpenBox } from './useOpenBox';
 
 export interface BuyBoxProps extends DialogProps {
   boxId: string;
+  qualification?: string;
   box: Partial<ExtendedBoxInfo>;
   payment: BoxPayment;
   onPurchased?: ({ boxId, nftIds }: { boxId: string; nftIds: string[] }) => void;
 }
 
 const paymentTokenIndex = 0;
-export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurchased, ...rest }) => {
+export const BuyBox: FC<BuyBoxProps> = ({
+  boxId,
+  box,
+  payment: payment,
+  onPurchased,
+  qualification,
+  ...rest
+}) => {
   const t = useLocales();
   const { account } = useWeb3Context();
   const purchasedNft = usePurchasedNft(boxId, account);
@@ -79,8 +87,32 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   }, [approve, payment.token_addr, contractAddress, costAmount, getAllowance]);
 
   const { open: openBox, loading } = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
+
+  const getHashRoot = async (leaf: string, root: string) => {
+    try {
+      const res = await fetch(
+        `https://lf8d031acj.execute-api.ap-east-1.amazonaws.com/api/v1/merkle_tree/leaf_exists?leaf=${leaf}&root=${root}`,
+      );
+      return res.json() as Promise<{ proof: string[] }>;
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleDraw = useCallback(async () => {
-    const result = await openBox();
+    let proof = '0x';
+    if (qualification) {
+      const leafArray = account
+        ?.replace(/0x/, '')
+        ?.match(/.{1,2}/g)
+        ?.map((byte) => parseInt(byte, 16));
+      const leaf = Buffer.from(new Uint8Array(leafArray as number[])).toString('base64');
+      const resp = await getHashRoot(leaf as string, qualification?.replace(/0x/, ''));
+
+      const abiCoder = new ethers.utils.AbiCoder();
+      proof = abiCoder.encode(['bytes32[]'], [resp?.proof.map((p) => '0x' + p)]);
+    }
+
+    const result = await openBox(proof);
     if (result && onPurchased) {
       onPurchased(result);
     }

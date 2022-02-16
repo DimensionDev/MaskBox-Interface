@@ -25,13 +25,15 @@ export const Details: FC = memo(() => {
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>(EMPTY_LIST);
   const { search } = location;
 
-  const { boxId } = useMemo(() => {
+  const { boxId, qualification } = useMemo(() => {
     const params = new URLSearchParams(search);
     const chainId = params.get('chain');
     const boxId = params.get('box');
+    const qualification = params.get('qualification') || undefined;
     return {
       chainId: chainId ? parseInt(chainId, 10) : null,
       boxId,
+      qualification,
     };
   }, [search]);
 
@@ -187,6 +189,7 @@ export const Details: FC = memo(() => {
         <BuyBox
           open={buyBoxVisible}
           boxId={boxId}
+          qualification={qualification}
           box={box}
           payment={payment}
           onPurchased={handlePurchased}

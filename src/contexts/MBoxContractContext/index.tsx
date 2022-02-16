@@ -17,7 +17,7 @@ interface ContextOptions {
     boxId: string,
     quantity: number,
     paymentTokenIndex: number,
-    proof: string[],
+    proof: string,
     overrides: Record<string, any>,
   ) => Promise<any>;
   getPurchasedNft: (boxId: string, customer: string) => Promise<string[]>;
@@ -81,7 +81,7 @@ export const MBoxContractProvider: FC = memo(({ children }) => {
       boxId: string,
       quantity: number,
       paymentTokenIndex: number,
-      proof: string[],
+      proof: string,
       overrides: Record<string, any>,
     ) => {
       if (!contract || !ethersProvider) {

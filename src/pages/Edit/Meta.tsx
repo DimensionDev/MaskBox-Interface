@@ -61,7 +61,7 @@ export const Meta: FC = () => {
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, openNftPicker, closeNftPicker] = useBoolean();
   const [contractPickerVisible, openContractPicker, closeContractPicker] = useBoolean();
-  const [isWhitelistConfirmed, confirmWhitelist, editWhitelist] = useBoolean();
+  const [iswhitelistConfirmed, confirmwhitelist, editwhitelist] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
 
   const createBox = useCreateMaskbox();
@@ -90,7 +90,7 @@ export const Meta: FC = () => {
 
   const { saveBox } = useRSS3();
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useBoolean();
-  const [whiteListNumber, setWhiteListNumber] = useState<number>(0);
+  const [whitelistNumber, setwhitelistNumber] = useState<number>(0);
   const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
   const [creating, startCreating, finishCreating] = useBoolean();
   const [uploading, setUploading, setNotUploading] = useBoolean();
@@ -108,7 +108,7 @@ export const Meta: FC = () => {
           }),
         },
       );
-      return res.json() as Promise<string>;
+      return res.json() as Promise<{ root: string }>;
     } catch (err) {
       showToast({
         title: t('Fails to get merkle proof: {reason}', { reason: (err as Error).message }),
@@ -141,17 +141,30 @@ export const Meta: FC = () => {
         formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : [...formData.selectedNFTIds],
       );
 
-      const leaves = formData?.fileAddressList
-        .map((address) =>
-          address
-            ?.replace(/0x/, '')
-            ?.match(/.{1,2}/g)
-            ?.map((byte) => parseInt(byte, 16)),
-        )
-        .filter((numbers) => numbers && numbers.length)
-        .map((numbers) => new Uint8Array(numbers as number[]))
-        .map((uint8Array) => Buffer.from(uint8Array).toString('base64'));
-      formData.merkleProof = await getMerkleProof(leaves);
+      const whitelist =
+        formData?.fileAddressList && formData?.fileAddressList?.length > 0
+          ? formData?.fileAddressList
+          : formData?.whitelist
+          ? formData?.whitelist?.split(',')
+          : undefined;
+
+      if (whitelist) {
+        const leaves = whitelist
+          .map((address) =>
+            address
+              ?.replace(/0x/, '')
+              ?.match(/.{1,2}/g)
+              ?.map((byte) => parseInt(byte, 16)),
+          )
+          .filter((numbers) => numbers && numbers.length)
+          .map((numbers) => new Uint8Array(numbers as number[]))
+          .map((uint8Array) => Buffer.from(uint8Array).toString('base64'));
+        const res = await getMerkleProof(leaves);
+        formData.merkleProof = '0x' + res?.root;
+      } else {
+        formData.merkleProof = '0x0000000000000000000000000000000000000000000000000000000000000000';
+      }
+
       const result = await createBox();
 
       if (result) {
@@ -163,6 +176,8 @@ export const Meta: FC = () => {
           mediaType: formData.mediaType,
           mediaUrl: formData.mediaUrl,
           activities: formData.activities,
+          whitelistFileName: formData.whitelistFileName,
+          whitelist: formData.whitelist,
         });
         closeConfirmDialog();
         openShareBox();
@@ -188,6 +203,8 @@ export const Meta: FC = () => {
       mediaType: formData.mediaType,
       mediaUrl: formData.mediaUrl,
       activities: formData.activities,
+      whitelist: formData?.whitelist,
+      whitelistFileName: formData?.whitelistFileName,
     });
     history.replace(`/details?chain=${providerChainId}&box=${editingBoxId}`);
   }, [history, editingBoxId, formData]);
@@ -208,19 +225,28 @@ export const Meta: FC = () => {
     return tokens.find((token) => isSameAddress(token.address, formData.holderTokenAddress));
   }, [tokens, formData.holderTokenAddress]);
 
-  const handleWhiteListConfirm = () => {
-    const whiteListNum = formData?.whiteList ? formData.whiteList?.split(',')?.length : 0;
-    if (whiteListNum != null && whiteListNum > 0) {
-      setWhiteListNumber(whiteListNum);
-      confirmWhitelist();
+  const handlewhitelistConfirm = () => {
+    const whitelistNum = formData?.whitelist ? formData.whitelist?.split(',')?.length : 0;
+    if (whitelistNum != null && whitelistNum > 0) {
+      setwhitelistNumber(whitelistNum);
+      confirmwhitelist();
     }
   };
 
-  const handleUploaded = useCallback(({ fileAddressList, fileName }: UploadResult) => {
-    setUploadError(null);
-    setNotUploading();
-    setFormData((fd) => ({ ...fd, fileAddressList, fileName }));
-  }, []);
+  const handleUploaded = useCallback(
+    ({
+      fileAddressList,
+      whitelistFileName,
+    }: {
+      fileAddressList?: string[];
+      whitelistFileName: string;
+    }) => {
+      setUploadError(null);
+      setNotUploading();
+      setFormData((fd) => ({ ...fd, fileAddressList, whitelistFileName }));
+    },
+    [],
+  );
 
   if (!providerChainId) return <RequestConnection />;
 
@@ -396,21 +422,21 @@ export const Meta: FC = () => {
       >
         <Input
           placeholder="e.g.0x"
-          disabled={isEditting || isWhitelistConfirmed}
+          disabled={isEditting || iswhitelistConfirmed}
           fullWidth
           multiLine
           spellCheck={false}
-          value={formData.whiteList}
-          onChange={bindField('whiteList')}
+          value={formData.whitelist}
+          onChange={bindField('whitelist')}
         />
 
         <div className={styles.rowFieldGroup}>
           <div className={styles.buttonWrapper}>
             <Button
               className={styles.button}
-              disabled={!formData?.whiteList || isEditting}
-              colorScheme={isWhitelistConfirmed ? 'success' : 'primary'}
-              onClick={handleWhiteListConfirm}
+              disabled={!formData?.whitelist || isEditting}
+              colorScheme={iswhitelistConfirmed ? 'success' : 'primary'}
+              onClick={handlewhitelistConfirm}
             >
               {t('Confirm')}
             </Button>
@@ -418,13 +444,13 @@ export const Meta: FC = () => {
               className={styles.button}
               disabled={isEditting}
               colorScheme="primary"
-              onClick={editWhitelist}
+              onClick={editwhitelist}
             >
               {t('Edit')}
             </Button>
           </div>
           <div className={styles.commonText}>
-            {whiteListNumber > 0 && `total: ${whiteListNumber}`}
+            {whitelistNumber > 0 && `total: ${whitelistNumber}`}
           </div>
         </div>
       </Field>
@@ -436,8 +462,9 @@ export const Meta: FC = () => {
       </div>
 
       <UploadButton
-        fileName={formData.fileName}
+        fileName={formData.whitelistFileName}
         tabIndex={0}
+        disabled={isEditting}
         onStartUpload={setUploading}
         onUploaded={handleUploaded}
         onError={setUploadError}
@@ -535,8 +562,8 @@ export const Meta: FC = () => {
         open={confirmDialogVisible}
         tokens={formData.sellAll ? ownedERC721Tokens : selectedERC721Tokens}
         onClose={closeConfirmDialog}
-        whitelistAddress={formData?.whiteList?.split(',')}
-        fileName={formData?.fileName}
+        whitelistAddress={formData?.whitelist?.split(',')}
+        fileName={formData?.whitelistFileName}
         nftAddress={formData.nftContractAddress}
         onConfirm={create}
         creating={creating}

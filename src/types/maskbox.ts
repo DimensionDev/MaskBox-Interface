@@ -54,6 +54,8 @@ export interface BoxMetas {
   mediaType: MediaType;
   mediaUrl: string;
   activities: Activity[];
+  whitelistFileName?: string;
+  whitelist?: string;
 }
 
 export interface ExtendedBoxInfo extends BoxOnChain, BoxMetas {}

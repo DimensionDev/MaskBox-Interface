@@ -40,7 +40,9 @@ export function useCreateMaskbox() {
       endTime,
       formData.sellAll,
       formData.selectedNFTIds,
-      merkleTreeAddress,
+      formData.merkleProof === '0x0000000000000000000000000000000000000000000000000000000000000000'
+        ? ZERO_ADDRESS
+        : merkleTreeAddress,
       //formData.whiteList || ZERO_ADDRESS,
       formData.holderTokenAddress || ZERO_ADDRESS,
       formData.holderMinTokenAmount
@@ -48,7 +50,6 @@ export function useCreateMaskbox() {
         : 0,
       formData.merkleProof,
     ];
-    debugger;
     const connectedContract = contract.connect(ethersProvider.getSigner());
     const estimatedGas = await connectedContract.estimateGas.createBox(...createBoxOptions);
     const tx = await connectedContract.createBox(...createBoxOptions, { gasLimit: estimatedGas });

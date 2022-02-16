@@ -37,6 +37,8 @@ export function useBox(boxId: string | null) {
             mediaType: data.mediaType as MediaType,
             mediaUrl: data.mediaUrl,
             activities: data.activities,
+            whitelistFileName: data?.whitelistFileName,
+            whitelist: data?.whitelist,
           });
         } else {
           throw new Error(`Meta info was not found`);
