@@ -58,7 +58,7 @@ export const Edit: FC = () => {
           mediaUrl: boxOnRSS3.mediaUrl,
           activities: boxOnRSS3.activities,
           whitelistFileName: boxOnRSS3?.whitelistFileName,
-          whitelist: boxOnRSS3?.whitelist,
+          whitelist: localStorage.getItem(`${boxId}whitelist`) as string,
         };
       });
     }

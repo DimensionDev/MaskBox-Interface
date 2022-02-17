@@ -144,7 +144,7 @@ export const Meta: FC = () => {
       const whitelist =
         formData?.fileAddressList && formData?.fileAddressList?.length > 0
           ? formData?.fileAddressList
-          : formData?.whitelist
+          : formData?.whitelist && formData?.whitelist?.length > 0
           ? formData?.whitelist?.split(',')
           : undefined;
 
@@ -178,6 +178,7 @@ export const Meta: FC = () => {
           activities: formData.activities,
           whitelistFileName: formData.whitelistFileName,
         });
+        localStorage.setItem(`${args.box_id.toString()}whitelist`, formData.whitelist || '');
         closeConfirmDialog();
         openShareBox();
         resetForm();
@@ -202,7 +203,6 @@ export const Meta: FC = () => {
       mediaType: formData.mediaType,
       mediaUrl: formData.mediaUrl,
       activities: formData.activities,
-      whitelist: formData?.whitelist,
       whitelistFileName: formData?.whitelistFileName,
     });
     history.replace(`/details?chain=${providerChainId}&box=${editingBoxId}`);
@@ -561,7 +561,11 @@ export const Meta: FC = () => {
         open={confirmDialogVisible}
         tokens={formData.sellAll ? ownedERC721Tokens : selectedERC721Tokens}
         onClose={closeConfirmDialog}
-        whitelistAddress={formData?.whitelist?.split(',')}
+        whitelistAddressList={
+          formData?.whitelist && formData?.whitelist?.length > 0
+            ? formData?.whitelist?.split(',')
+            : undefined
+        }
         fileName={formData?.whitelistFileName}
         nftAddress={formData.nftContractAddress}
         onConfirm={create}

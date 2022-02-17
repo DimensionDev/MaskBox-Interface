@@ -13,7 +13,7 @@ interface Props extends DialogProps {
   nftAddress: string;
   onConfirm?: () => void;
   creating?: boolean;
-  whitelistAddress?: string[];
+  whitelistAddressList?: string[];
   fileName?: string;
 }
 
@@ -24,7 +24,7 @@ export const CreationConfirmDialog: FC<Props> = ({
   className,
   onConfirm,
   creating,
-  whitelistAddress,
+  whitelistAddressList,
   fileName,
   ...rest
 }) => {
@@ -72,16 +72,18 @@ export const CreationConfirmDialog: FC<Props> = ({
         <div className={styles.value}>{tokens.length}</div>
       </div>
       <div className={styles.meta}>
-        <div className={styles.name}>{t('Whitelist address')}</div>
+        {(fileName || whitelistAddressList) && (
+          <div className={styles.name}>{t('Whitelist address')}</div>
+        )}
         <div className={styles.value}>
           {fileName ? (
             fileName
-          ) : whitelistAddress ? (
+          ) : whitelistAddressList ? (
             <>
               <div className={styles.textButton} onClick={openAddressDialog}>
                 {t('View')}
               </div>
-              <div className={styles.number}>{whitelistAddress?.length}</div>
+              <div className={styles.number}>{whitelistAddressList?.length}</div>
             </>
           ) : null}
         </div>
@@ -96,7 +98,7 @@ export const CreationConfirmDialog: FC<Props> = ({
         onClose={closeAddressDialog}
       >
         <div className={styles.addressList}>
-          {whitelistAddress?.map((value) => (
+          {whitelistAddressList?.map((value) => (
             <div className={styles.address} key={value}>
               {value}
             </div>
