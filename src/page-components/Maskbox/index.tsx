@@ -17,7 +17,9 @@ import styles from './index.module.less';
 export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxQuery['maskbox'];
   boxOnChain: Partial<BoxOnChain> | null;
-  boxOnRSS3: Partial<Pick<BoxRSS3Node, 'name' | 'mediaType' | 'mediaUrl' | 'activities'>> | null;
+  boxOnRSS3: Partial<
+    Pick<BoxRSS3Node, 'name' | 'mediaType' | 'mediaUrl' | 'activities' | 'qualification_rss3'>
+  > | null;
   inList?: boolean;
   onPurchase?: () => void;
 }
@@ -47,7 +49,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   const qualification =
     box?.qualification_data === '0x0000000000000000000000000000000000000000000000000000000000000000'
       ? undefined
-      : box.qualification_data;
+      : box.qualification_data || box.qualification_rss3;
   const payment = box.payment?.[0];
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);

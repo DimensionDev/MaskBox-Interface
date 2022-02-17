@@ -56,6 +56,7 @@ export interface BoxMetas {
   activities: Activity[];
   whitelistFileName?: string;
   whitelist?: string;
+  qualification_rss3: string;
 }
 
 export interface ExtendedBoxInfo extends BoxOnChain, BoxMetas {}

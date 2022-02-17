@@ -177,6 +177,7 @@ export const Meta: FC = () => {
           mediaUrl: formData.mediaUrl,
           activities: formData.activities,
           whitelistFileName: formData.whitelistFileName,
+          qualification_rss3: formData.merkleProof,
         });
         localStorage.setItem(`${args.box_id.toString()}whitelist`, formData.whitelist || '');
         closeConfirmDialog();

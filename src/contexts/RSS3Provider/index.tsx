@@ -15,7 +15,7 @@ export interface BoxRSS3Node {
   }[];
   whitelistFileName?: string;
   whitelist?: string;
-  qualification?: string;
+  qualification_rss3: string;
 }
 
 interface IRSS3Context {
