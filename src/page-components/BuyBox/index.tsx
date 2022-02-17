@@ -121,7 +121,9 @@ export const BuyBox: FC<BuyBoxProps> = ({
         ?.replace(/0x/, '')
         ?.match(/.{1,2}/g)
         ?.map((byte) => parseInt(byte, 16));
-      const leaf = Buffer.from(new Uint8Array(leafArray as number[])).toString('base64');
+      const leaf = encodeURIComponent(
+        Buffer.from(new Uint8Array(leafArray as number[])).toString('base64'),
+      );
       const resp = await getHashRoot(leaf as string, qualification?.replace(/0x/, ''));
       const abiCoder = new ethers.utils.AbiCoder();
       proof = abiCoder.encode(['bytes32[]'], [resp?.proof?.map((p) => '0x' + p)]);
