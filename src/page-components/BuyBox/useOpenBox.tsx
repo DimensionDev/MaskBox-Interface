@@ -13,7 +13,7 @@ export function useOpenBox(
   quantity: number,
   payment: BoxPayment,
   paymentTokenIndex: number,
-  proof: string = '0x',
+  proof: string = '0x0000000000000000000000000000000000000000000000000000000000000000',
 ) {
   const t = useLocales();
   const { ethersProvider, providerChainId: chainId, account } = useWeb3Context();

@@ -162,7 +162,7 @@ export const Meta: FC = () => {
         const res = await getMerkleProof(leaves);
         formData.merkleProof = '0x' + res?.root;
       } else {
-        formData.merkleProof = '0x0';
+        formData.merkleProof = '0x0000000000000000000000000000000000000000000000000000000000000000';
       }
 
       const result = await createBox();
