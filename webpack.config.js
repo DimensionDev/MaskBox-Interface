@@ -99,7 +99,7 @@ const config = {
       stream: 'stream-browserify',
       util: 'util',
       assert: false,
-      buffer: false,
+      buffer: require.resolve('buffer'),
     },
   },
   node: {
