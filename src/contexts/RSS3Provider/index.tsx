@@ -34,6 +34,7 @@ const RSS3Context = createContext<IRSS3Context>({
       mediaUrl: '',
       mediaType: MediaType.Unknown,
       activities: [],
+      qualification_rss3: '0x0000000000000000000000000000000000000000000000000000000000000000',
     });
   },
 });
@@ -58,6 +59,7 @@ export function useBoxOnRSS3(creator: string | undefined, boxId: string | undefi
               activities: data.activities,
               whitelist: data?.whitelist,
               whitelistFileName: data?.whitelistFileName,
+              qualification_rss3: data?.qualification_rss3,
             });
           } else {
             throw new Error(`Meta info was not found`);

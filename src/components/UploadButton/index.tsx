@@ -114,7 +114,7 @@ export const UploadButton: FC<Props> = ({
             onClick={() =>
               disabled
                 ? undefined
-                : onUploaded && onUploaded({ fileAddressList: [''], fileName: '' })
+                : onUploaded && onUploaded({ fileAddressList: [''], whitelistFileName: '' })
             }
             size={24}
             type="close"

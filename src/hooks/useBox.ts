@@ -39,6 +39,7 @@ export function useBox(boxId: string | null) {
             activities: data.activities,
             whitelistFileName: data?.whitelistFileName,
             whitelist: data?.whitelist,
+            qualification_rss3: data?.qualification_rss3,
           });
         } else {
           throw new Error(`Meta info was not found`);
