@@ -582,7 +582,7 @@ export const Meta: FC = () => {
           history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
         }}
         onShare={() => {
-          const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}`;
+          const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}&box=${formData.merkleProof}`;
           const text = t('share-text', { name: formData.name, link: link });
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
