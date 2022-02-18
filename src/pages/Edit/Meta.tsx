@@ -422,7 +422,7 @@ export const Meta: FC = () => {
       >
         <Input
           placeholder="e.g.0x"
-          disabled={isEditting || iswhitelistConfirmed}
+          disabled={isEditting || iswhitelistConfirmed || Boolean(formData?.whitelistFileName)}
           fullWidth
           multiLine
           spellCheck={false}
@@ -442,7 +442,7 @@ export const Meta: FC = () => {
             </Button>
             <Button
               className={styles.button}
-              disabled={isEditting}
+              disabled={isEditting || Boolean(formData?.whitelistFileName)}
               colorScheme="primary"
               onClick={editwhitelist}
             >
@@ -464,7 +464,7 @@ export const Meta: FC = () => {
       <UploadButton
         fileName={formData.whitelistFileName}
         tabIndex={0}
-        disabled={isEditting}
+        disabled={isEditting || Boolean(formData?.whitelist)}
         onStartUpload={setUploading}
         onUploaded={handleUploaded}
         onError={setUploadError}
