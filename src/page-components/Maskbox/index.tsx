@@ -187,7 +187,7 @@ export const Maskbox: FC<MaskboxProps> = ({
           ) : null}
         </dl>
         {(() => {
-          if (checkingApprove || isConnecting)
+          if (checkingApprove || isConnecting || !qualification)
             return (
               <Button {...buttonProps} disabled>
                 <LoadingIcon />
