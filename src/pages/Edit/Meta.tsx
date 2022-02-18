@@ -63,6 +63,9 @@ export const Meta: FC = () => {
   const [contractPickerVisible, openContractPicker, closeContractPicker] = useBoolean();
   const [iswhitelistConfirmed, confirmwhitelist, editwhitelist] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
+  const [qualification, setQualification] = useState(
+    '0x0000000000000000000000000000000000000000000000000000000000000000',
+  );
 
   const createBox = useCreateMaskbox();
   const { isEnumable } = useEdit();
@@ -164,6 +167,7 @@ export const Meta: FC = () => {
       } else {
         formData.merkleProof = '0x0000000000000000000000000000000000000000000000000000000000000000';
       }
+      setQualification(formData.merkleProof);
 
       const result = await createBox();
 
@@ -582,7 +586,7 @@ export const Meta: FC = () => {
           history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
         }}
         onShare={() => {
-          const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}&box=${formData.merkleProof}`;
+          const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}&qualification=${qualification}`;
           const text = t('share-text', { name: formData.name, link: link });
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');

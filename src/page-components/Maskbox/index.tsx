@@ -205,6 +205,9 @@ export const Maskbox: FC<MaskboxProps> = ({
           chainId={chainId!}
           boxId={boxId!}
           boxName={box.name ?? ''}
+          qualification={
+            qualification || '0x0000000000000000000000000000000000000000000000000000000000000000'
+          }
         />
       )}
     </div>
