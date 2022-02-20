@@ -85,8 +85,25 @@ export const metaFullfilledAtom = atom((get) => {
     formData.endAt &&
     new Date(formData.endAt).getTime() > new Date(formData.startAt).getTime();
   const limitIsOk = formData.limit && formData.limit > 0 && formData.limit < 256;
+  const whitelist = formData?.whitelist;
+  const fileAddressList = formData?.fileAddressList;
+  const whitelistIsOk =
+    !whitelist ||
+    (whitelist?.split(',')?.length <= 1000 &&
+      whitelist?.split(',')?.every((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address)));
+  const fileAddressListIsOk =
+    !fileAddressList ||
+    (fileAddressList?.length <= 1000 &&
+      fileAddressList?.every((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address)));
+
   return (
-    formData.pricePerBox && limitIsOk && formData.nftContractAddress && sellListIsOk && datesIsOk
+    formData.pricePerBox &&
+    limitIsOk &&
+    formData.nftContractAddress &&
+    sellListIsOk &&
+    datesIsOk &&
+    whitelistIsOk &&
+    fileAddressListIsOk
   );
 });
 
@@ -152,6 +169,26 @@ export const validationsAtom = atom<string[]>((get) => {
     new Date(formData.endAt).getTime() <= new Date(formData.startAt).getTime()
   ) {
     validations.push('End date should be later than start date');
+  }
+  if (formData?.fileAddressList && formData.fileAddressList?.length > 0) {
+    if (formData?.fileAddressList?.length > 1000)
+      validations.push('Please limit whitelist address number less than 1000');
+    if (
+      formData.fileAddressList?.some((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address) === false)
+    ) {
+      validations.push('Please input or upload correct address');
+    }
+  }
+  if (formData?.whitelist && formData.whitelist?.length > 0) {
+    if (formData?.whitelist?.length > 1000)
+      validations.push('Please limit whitelist address number less than 1000');
+    if (
+      formData.whitelist
+        ?.split(',')
+        ?.some((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address) === false)
+    ) {
+      validations.push('Please input or upload correct address');
+    }
   }
 
   return validations;

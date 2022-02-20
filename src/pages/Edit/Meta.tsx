@@ -247,6 +247,12 @@ export const Meta: FC = () => {
     }) => {
       setUploadError(null);
       setNotUploading();
+      if (fileAddressList && fileAddressList?.length > 1000) {
+        setUploadError(new Error(t('Max limit of address')));
+      }
+      if (fileAddressList?.some((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address) === false)) {
+        setUploadError(new Error(t('File contains unvalid addrdss')));
+      }
       setFormData((fd) => ({ ...fd, fileAddressList, whitelistFileName }));
     },
     [],
@@ -424,6 +430,10 @@ export const Meta: FC = () => {
           </Hint>
         }
       >
+        <div className={styles.commonText}>
+          When entering address or uploading CSV file, another uploading whitelist method is
+          disabled.
+        </div>
         <Input
           placeholder="e.g.0x"
           disabled={isEditting || iswhitelistConfirmed || Boolean(formData?.whitelistFileName)}
@@ -460,9 +470,8 @@ export const Meta: FC = () => {
       </Field>
 
       <div className={styles.commonText}>
-        *Multiple addresses can be entered, separated by commas in English (half-width). When
-        entering address and uploading a file at the same time, only the entered address is valid.
-        The maximum number of whitelists is 1000.
+        *Addresses should be separated by commas in English (half-width) or space. In Excel, one
+        cell can only be filled with one address, max to 1000.
       </div>
 
       <UploadButton
@@ -473,6 +482,7 @@ export const Meta: FC = () => {
         onUploaded={handleUploaded}
         onError={setUploadError}
       />
+      {uploadError && <div className={styles.uploadWarning}>{uploadError?.message}</div>}
 
       <div className={styles.commonText}>
         *Addresses should be separated by commas in English (half-width) or space. In Excel, one

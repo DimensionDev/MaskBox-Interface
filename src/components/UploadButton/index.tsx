@@ -58,7 +58,6 @@ export const UploadButton: FC<Props> = ({
           fileReader.readAsText(f);
           fileReader.onload = function () {
             const addressList = this.result?.toString()?.split(/\s+/);
-
             if (onUploaded) {
               onUploaded({
                 fileAddressList: addressList,
@@ -97,6 +96,7 @@ export const UploadButton: FC<Props> = ({
           handleUpload(firstFile);
         } else {
           setInvalidMessage(t('You should upload a file, only csv is supposed'));
+          onError?.(new Error(t('You should upload a file, only csv is supposed')));
         }
       }}
       onClick={() => (disabled ? undefined : handleUpload())}
@@ -109,12 +109,12 @@ export const UploadButton: FC<Props> = ({
     >
       {fileName ? (
         <div className={classnames(styles.uploadBox, styles.uploadedBox)}>
-          <div>{fileName}</div>
+          {fileName}
           <Icon
             onClick={() =>
               disabled
                 ? undefined
-                : onUploaded && onUploaded({ fileAddressList: [''], whitelistFileName: '' })
+                : onUploaded && onUploaded({ fileAddressList: undefined, whitelistFileName: '' })
             }
             size={24}
             type="close"
