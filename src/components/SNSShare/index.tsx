@@ -24,7 +24,7 @@ export const SNSShare: FC<Props> = ({
   const t = useLocales();
   const twText = t('sns-share-to-twitter', {
     boxName,
-    link: `${location.origin}/#${RouteKeys.Details}?chain=${chainId}&box=${boxId}&qualification=${qualification}`,
+    link: `${location.origin}/#${RouteKeys.Details}?chain=${chainId}&box=${boxId}&rootHash=${qualification}`,
   });
   const handleShareToTwitter = useCallback(() => {
     const shareLink = createShareUrl(twText);
