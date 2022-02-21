@@ -180,7 +180,7 @@ export const validationsAtom = atom<string[]>((get) => {
     }
   }
   if (formData?.whitelist && formData.whitelist?.length > 0) {
-    if (formData?.whitelist?.length > 1000)
+    if (formData?.whitelist?.split(',')?.length > 1000)
       validations.push('Please limit whitelist address number less than 1000');
     if (
       formData.whitelist
