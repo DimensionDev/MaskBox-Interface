@@ -29,7 +29,7 @@ export const Details: FC = memo(() => {
     const params = new URLSearchParams(search);
     const chainId = params.get('chain');
     const boxId = params.get('box');
-    const qualification = params.get('qualification') || undefined;
+    const qualification = params.get('rootHash') || undefined;
     return {
       chainId: chainId ? parseInt(chainId, 10) : null,
       boxId,

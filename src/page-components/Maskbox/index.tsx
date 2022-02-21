@@ -89,7 +89,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   }, [inList, price, isSoldout, isApproveAll, t, isQualified, ethersProvider]);
 
   const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}${
-    qualification ? `&qualification=${qualification}` : ''
+    qualification ? `&rootHash=${qualification}` : ''
   }`;
   const notReadyToView = !isStarted || isSoldout || box.expired || box.canceled || !isApproveAll;
   const allowToBuy = price && !notReadyToView && isQualified;
