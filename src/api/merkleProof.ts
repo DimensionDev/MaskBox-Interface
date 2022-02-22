@@ -1,0 +1,12 @@
+import { MERKLE_PROOF_ENDPOINT } from '../constants';
+
+export async function getMerkleProof(leaf: string, root: string) {
+  try {
+    const response = await fetch(
+      `${MERKLE_PROOF_ENDPOINT}?leaf=${leaf}&root=${root.replace(/^0x/, '')}`,
+    );
+    return (await response.json()) as { proof?: string[]; message?: string; module?: string };
+  } catch (err: any) {
+    throw new Error(err?.message);
+  }
+}

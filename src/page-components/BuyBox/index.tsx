@@ -11,7 +11,7 @@ import { getCoingeckoTokenId, TokenType, ZERO, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, ExtendedBoxInfo } from '@/types';
 import { formatAddres, formatBalance, useBoolean } from '@/utils';
 import classnames from 'classnames';
-import { BigNumber, ethers, utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocales } from '../useLocales';
 import { AdjustableInput } from './AdjustableInput';
@@ -20,7 +20,7 @@ import { useOpenBox } from './useOpenBox';
 
 export interface BuyBoxProps extends DialogProps {
   boxId: string;
-  qualification?: string;
+  proof?: string;
   box: Partial<ExtendedBoxInfo>;
   payment: BoxPayment;
   onPurchased?: ({ boxId, nftIds }: { boxId: string; nftIds: string[] }) => void;
@@ -32,7 +32,7 @@ export const BuyBox: FC<BuyBoxProps> = ({
   box,
   payment: payment,
   onPurchased,
-  qualification,
+  proof,
   ...rest
 }) => {
   const t = useLocales();
@@ -88,48 +88,8 @@ export const BuyBox: FC<BuyBoxProps> = ({
 
   const { open: openBox, loading } = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
 
-  const getHashRoot = async (leaf: string, root: string) => {
-    let response: { proof?: string[]; message?: string; module?: string } = {};
-    let ok = false;
-    try {
-      const res = await fetch(
-        `https://lf8d031acj.execute-api.ap-east-1.amazonaws.com/api/v1/merkle_tree/leaf_exists?leaf=${leaf}&root=${root}`,
-      );
-      response = await res.json();
-      ok = res.ok;
-    } catch (err: any) {
-      console.log('error', err);
-    }
-
-    if (!ok) {
-      showToast({
-        title: t('Fails to draw the box: {message}', {
-          message: response?.message ?? 'unknown error',
-        }),
-        variant: 'error',
-      });
-
-      throw new Error(response?.message);
-    }
-
-    return response;
-  };
   const handleDraw = useCallback(async () => {
-    let proof = '0x00';
-    if (qualification) {
-      const leafArray = account
-        ?.replace(/0x/, '')
-        ?.match(/.{1,2}/g)
-        ?.map((byte) => parseInt(byte, 16));
-      const leaf = encodeURIComponent(
-        Buffer.from(new Uint8Array(leafArray as number[])).toString('base64'),
-      );
-      const resp = await getHashRoot(leaf as string, qualification?.replace(/0x/, ''));
-      const abiCoder = new ethers.utils.AbiCoder();
-      proof = abiCoder.encode(['bytes32[]'], [resp?.proof?.map((p) => '0x' + p)]);
-    }
-
-    const result = await openBox(proof);
+    const result = await openBox(proof ?? '0x00');
     if (result && onPurchased) {
       onPurchased(result);
     }

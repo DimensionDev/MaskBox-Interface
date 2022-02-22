@@ -1,14 +1,15 @@
 import { Icon, NavTabOptions, NavTabs } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useMBoxContract, useNFTName, useTheme, ThemeType } from '@/contexts';
+import { useMBoxContract, useNFTName, useTheme, ThemeType, useWeb3Context } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
 import { useBox, useERC721TokensByIds, useGetERC721TokensByIds, useIgnoreBoxes } from '@/hooks';
 import { createShareUrl, DEV_MODE_ENABLED, ZERO } from '@/lib';
 import { BuyBox, BuyBoxProps, Maskbox, ShareBox } from '@/page-components';
 import { ERC721Token } from '@/types';
 import { EMPTY_LIST, useBoolean } from '@/utils';
+import { getMerkleProof } from '@/api/merkleProof';
 import classnames from 'classnames';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { uniqBy } from 'lodash-es';
 import { FC, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
@@ -59,7 +60,11 @@ export const Details: FC = memo(() => {
 
   const cursorRef = useRef<BigNumber>(ZERO);
   const [allLoaded, setAllLoaded] = useState(false);
+  const [isWhitelisted, setIsWhitelisted, setNotWhitelisted] = useBoolean(true);
+  const [isFetchingProof, setIsFetchingProof, setIsNotFetchingProof] = useBoolean(true);
+  const [proof, setProof] = useState<string>();
   const getERC721TokensByIds = useGetERC721TokensByIds(box.nft_address);
+  const { account } = useWeb3Context();
   const [isLoading, setIsLoading, setNotLoading] = useBoolean();
   const loadNfts = useCallback(async () => {
     if (!getERC721TokensByIds || !boxId) return;
@@ -100,6 +105,34 @@ export const Details: FC = memo(() => {
   useEffect(() => {
     loadNfts();
   }, [loadNfts]);
+
+  useEffect(() => {
+    if (qualification && account) {
+      const leafArray = account
+        ?.replace(/0x/, '')
+        ?.match(/.{1,2}/g)
+        ?.map((byte) => parseInt(byte, 16));
+      const leaf = encodeURIComponent(
+        Buffer.from(new Uint8Array(leafArray as number[])).toString('base64'),
+      );
+      setIsFetchingProof();
+      try {
+        getMerkleProof(leaf as string, qualification?.replace(/0x/, ''))?.then((data) => {
+          setIsNotFetchingProof();
+          if (data?.message === 'leaf not found') {
+            setNotWhitelisted();
+          }
+          if (data?.proof) {
+            setIsWhitelisted();
+          }
+          const abiCoder = new ethers.utils.AbiCoder();
+          setProof(abiCoder.encode(['bytes32[]'], [data?.proof?.map((p) => '0x' + p)]));
+        });
+      } catch (error) {
+        setIsNotFetchingProof();
+      }
+    }
+  }, [qualification, account]);
 
   const payment = box.payment?.[0];
   const total = useMemo(() => {
@@ -150,6 +183,8 @@ export const Details: FC = memo(() => {
           boxOnChain={boxOnChain}
           boxOnRSS3={boxOnRSS3}
           onPurchase={openBuyBox}
+          isWhitelisted={isWhitelisted}
+          isFetchingProof={isFetchingProof}
         />
         <NavTabs tabs={tabs} />
         <div className={styles.tabContents}>
@@ -188,8 +223,8 @@ export const Details: FC = memo(() => {
       {payment && (
         <BuyBox
           open={buyBoxVisible}
-          boxId={boxId}
-          qualification={qualification}
+          boxId={boxId as string}
+          proof={proof}
           box={box}
           payment={payment}
           onPurchased={handlePurchased}

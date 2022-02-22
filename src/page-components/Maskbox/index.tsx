@@ -22,6 +22,8 @@ export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
   > | null;
   inList?: boolean;
   onPurchase?: () => void;
+  isWhitelisted?: boolean;
+  isFetchingProof?: boolean;
 }
 
 export const Maskbox: FC<MaskboxProps> = ({
@@ -31,6 +33,8 @@ export const Maskbox: FC<MaskboxProps> = ({
   className,
   inList,
   onPurchase,
+  isWhitelisted = true,
+  isFetchingProof = false,
   ...rest
 }) => {
   const t = useLocales();
@@ -78,6 +82,7 @@ export const Maskbox: FC<MaskboxProps> = ({
       if (box.expired) return t('Ended');
       if (!isApproveAll) return t('Canceled');
     }
+    if (!isWhitelisted) return t('You are not in the whitelist');
     if (box.canceled) return t('Canceled');
     if (inList) return t('View Details');
     if (!ethersProvider) return t('Connect Wallet');
@@ -86,7 +91,7 @@ export const Maskbox: FC<MaskboxProps> = ({
       return t(`Not enough {symbol} to draw`, { symbol: holderToken?.symbol ?? '??' });
 
     return price ? t('Draw ( {price}/Time )', { price }) : <LoadingIcon size={24} />;
-  }, [inList, price, isSoldout, isApproveAll, t, isQualified, ethersProvider]);
+  }, [inList, price, isSoldout, isApproveAll, t, isQualified, ethersProvider, isWhitelisted]);
 
   const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}${
     qualification ? `&rootHash=${qualification}` : ''
@@ -96,7 +101,10 @@ export const Maskbox: FC<MaskboxProps> = ({
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: inList ? notReadyToView : ethersProvider ? !allowToBuy : isConnecting,
+    disabled:
+      (inList ? notReadyToView : ethersProvider ? !allowToBuy : isConnecting) ||
+      isFetchingProof ||
+      !isWhitelisted,
     onClick: () => {
       if (inList) {
         history.push(boxLink);
@@ -187,7 +195,7 @@ export const Maskbox: FC<MaskboxProps> = ({
           ) : null}
         </dl>
         {(() => {
-          if (checkingApprove || isConnecting || !qualification)
+          if (checkingApprove || isConnecting || !qualification || isFetchingProof)
             return (
               <Button {...buttonProps} disabled>
                 <LoadingIcon />
