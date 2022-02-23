@@ -50,10 +50,10 @@ export const Maskbox: FC<MaskboxProps> = ({
   const { holder_min_token_amount, holder_token_addr } = box;
   const chainId = box.chain_id;
   const boxId = box.box_id;
-  const qualification =
-    box?.qualification_data === '0x0000000000000000000000000000000000000000000000000000000000000000'
-      ? undefined
-      : box.qualification_data || box.qualification_rss3;
+  const rootHash =
+    box.qualification_data ||
+    box.qualification_rss3 ||
+    '0x0000000000000000000000000000000000000000000000000000000000000000';
   const payment = box.payment?.[0];
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
@@ -94,7 +94,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   }, [inList, price, isSoldout, isApproveAll, t, isQualified, ethersProvider, isWhitelisted]);
 
   const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}${
-    qualification ? `&rootHash=${qualification}` : ''
+    rootHash ? `&rootHash=${rootHash}` : ''
   }`;
   const notReadyToView = !isStarted || isSoldout || box.expired || box.canceled || !isApproveAll;
   const allowToBuy = price && !notReadyToView && isQualified;
@@ -195,12 +195,13 @@ export const Maskbox: FC<MaskboxProps> = ({
           ) : null}
         </dl>
         {(() => {
-          if (checkingApprove || isConnecting || !qualification || isFetchingProof)
+          if (checkingApprove || isConnecting || !rootHash || isFetchingProof) {
             return (
               <Button {...buttonProps} disabled>
                 <LoadingIcon />
               </Button>
             );
+          }
           if (isStarted || box.canceled || !ethersProvider) {
             return <Button {...buttonProps}>{buttonText}</Button>;
           }
@@ -213,8 +214,8 @@ export const Maskbox: FC<MaskboxProps> = ({
           chainId={chainId!}
           boxId={boxId!}
           boxName={box.name ?? ''}
-          qualification={
-            qualification || '0x0000000000000000000000000000000000000000000000000000000000000000'
+          rootHash={
+            rootHash || '0x0000000000000000000000000000000000000000000000000000000000000000'
           }
         />
       )}

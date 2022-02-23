@@ -430,10 +430,7 @@ export const Meta: FC = () => {
           </Hint>
         }
       >
-        <div className={styles.commonText}>
-          When entering address or uploading CSV file, another uploading whitelist method is
-          disabled.
-        </div>
+        <div className={styles.commonText}>{t('Whitelist Input method limit')}</div>
         <Input
           placeholder="e.g.0x"
           disabled={isEditting || iswhitelistConfirmed || Boolean(formData?.whitelistFileName)}
@@ -469,10 +466,7 @@ export const Meta: FC = () => {
         </div>
       </Field>
 
-      <div className={styles.commonText}>
-        *Addresses should be separated by commas in English (half-width) or space. In Excel, one
-        cell can only be filled with one address, max to 1000.
-      </div>
+      <div className={styles.commonText}>{t('Whitelist address limit')}</div>
 
       <UploadButton
         fileName={formData.whitelistFileName}
@@ -484,10 +478,7 @@ export const Meta: FC = () => {
       />
       {uploadError && <div className={styles.uploadWarning}>{uploadError?.message}</div>}
 
-      <div className={styles.commonText}>
-        *Addresses should be separated by commas in English (half-width) or space. In Excel, one
-        cell can only be filled with one address.
-      </div>
+      <div className={styles.commonText}>{t('Whitelist address file limit')}</div>
 
       <Field
         className={styles.field}

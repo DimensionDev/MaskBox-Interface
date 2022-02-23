@@ -10,21 +10,14 @@ interface Props extends HTMLProps<HTMLDivElement> {
   chainId: string | number;
   boxId: string | number;
   boxName: string;
-  qualification: string;
+  rootHash: string;
 }
 
-export const SNSShare: FC<Props> = ({
-  className,
-  chainId,
-  boxId,
-  boxName,
-  qualification,
-  ...rest
-}) => {
+export const SNSShare: FC<Props> = ({ className, chainId, boxId, boxName, rootHash, ...rest }) => {
   const t = useLocales();
   const twText = t('sns-share-to-twitter', {
     boxName,
-    link: `${location.origin}/#${RouteKeys.Details}?chain=${chainId}&box=${boxId}&rootHash=${qualification}`,
+    link: `${location.origin}/#${RouteKeys.Details}?chain=${chainId}&box=${boxId}&rootHash=${rootHash}`,
   });
   const handleShareToTwitter = useCallback(() => {
     const shareLink = createShareUrl(twText);
