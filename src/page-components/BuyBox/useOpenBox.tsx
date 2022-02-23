@@ -4,6 +4,7 @@ import { useMBoxContract, useWeb3Context } from '@/contexts';
 import { useMaskboxContract } from '@/hooks';
 import { getNetworkExplorer, ZERO_ADDRESS } from '@/lib';
 import { BoxPayment, TransactionStatus } from '@/types';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import { useCallback, useState } from 'react';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
@@ -13,7 +14,7 @@ export function useOpenBox(
   quantity: number,
   payment: BoxPayment,
   paymentTokenIndex: number,
-  proof: string = '0x0000000000000000000000000000000000000000000000000000000000000000',
+  proof: string = DEFAULT_MERKLE_PROOF,
 ) {
   const t = useLocales();
   const { ethersProvider, providerChainId: chainId, account } = useWeb3Context();

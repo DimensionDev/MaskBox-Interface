@@ -20,6 +20,7 @@ import {
   ShareBox,
 } from '@/page-components';
 import { isSameAddress, TZOffsetLabel, useBoolean } from '@/utils';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
@@ -63,9 +64,7 @@ export const Meta: FC = () => {
   const [contractPickerVisible, openContractPicker, closeContractPicker] = useBoolean();
   const [iswhitelistConfirmed, confirmwhitelist, editwhitelist] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
-  const [qualification, setQualification] = useState(
-    '0x0000000000000000000000000000000000000000000000000000000000000000',
-  );
+  const [qualification, setQualification] = useState(DEFAULT_MERKLE_PROOF);
 
   const createBox = useCreateMaskbox();
   const { isEnumable } = useEdit();
@@ -157,15 +156,15 @@ export const Meta: FC = () => {
             address
               ?.replace(/0x/, '')
               ?.match(/.{1,2}/g)
-              ?.map((byte) => parseInt(byte, 16)),
+              ?.map((byte) => Number.parseInt(byte, 16)),
           )
-          .filter((numbers) => numbers && numbers.length)
+          .filter((numbers) => numbers?.length)
           .map((numbers) => new Uint8Array(numbers as number[]))
           .map((uint8Array) => Buffer.from(uint8Array).toString('base64'));
         const res = await getMerkleProof(leaves);
-        formData.merkleProof = '0x' + res?.root;
+        formData.merkleProof = res?.root?.length > 0 ? '0x' + res.root : DEFAULT_MERKLE_PROOF;
       } else {
-        formData.merkleProof = '0x0000000000000000000000000000000000000000000000000000000000000000';
+        formData.merkleProof = DEFAULT_MERKLE_PROOF;
       }
       setQualification(formData.merkleProof);
 
@@ -247,7 +246,7 @@ export const Meta: FC = () => {
     }) => {
       setUploadError(null);
       setNotUploading();
-      if (fileAddressList && fileAddressList?.length > 1000) {
+      if (fileAddressList && fileAddressList.length > 1000) {
         setUploadError(new Error(t('Max limit of address')));
       }
       if (fileAddressList?.some((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address) === false)) {
@@ -461,7 +460,7 @@ export const Meta: FC = () => {
             </Button>
           </div>
           <div className={styles.commonText}>
-            {whitelistNumber > 0 && `total: ${whitelistNumber}`}
+            {whitelistNumber > 0 && t(`total: ${whitelistNumber}`)}
           </div>
         </div>
       </Field>

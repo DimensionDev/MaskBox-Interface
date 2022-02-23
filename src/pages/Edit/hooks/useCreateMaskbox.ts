@@ -4,6 +4,7 @@ import { useMaskboxContract, useWeb3Context, useMerkleTreeAddress } from '@/cont
 import { useERC20Token } from '@/hooks';
 import { ZERO_ADDRESS } from '@/lib';
 import { TransactionStatus } from '@/types';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
 import { useCallback } from 'react';
@@ -40,10 +41,7 @@ export function useCreateMaskbox() {
       endTime,
       formData.sellAll,
       formData.selectedNFTIds,
-      formData.merkleProof === '0x0000000000000000000000000000000000000000000000000000000000000000'
-        ? ZERO_ADDRESS
-        : merkleTreeAddress,
-      //formData.whiteList || ZERO_ADDRESS,
+      formData.merkleProof === DEFAULT_MERKLE_PROOF ? ZERO_ADDRESS : merkleTreeAddress,
       formData.holderTokenAddress || ZERO_ADDRESS,
       formData.holderMinTokenAmount
         ? utils.parseUnits(formData.holderMinTokenAmount, holderToken?.decimals ?? 18)

@@ -2,6 +2,7 @@ import { BoxMetas, MediaType } from '@/types';
 import { utils } from 'ethers';
 import { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
 import RSS3 from 'rss3-next';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import { useWeb3Context } from '../Web3Context';
 
 export interface BoxRSS3Node {
@@ -34,7 +35,7 @@ const RSS3Context = createContext<IRSS3Context>({
       mediaUrl: '',
       mediaType: MediaType.Unknown,
       activities: [],
-      qualification_rss3: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      qualification_rss3: DEFAULT_MERKLE_PROOF,
     });
   },
 });

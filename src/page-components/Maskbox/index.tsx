@@ -1,6 +1,7 @@
 import { Button, ButtonProps, Icon, Image, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useWeb3Context } from '@/contexts';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
@@ -50,10 +51,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   const { holder_min_token_amount, holder_token_addr } = box;
   const chainId = box.chain_id;
   const boxId = box.box_id;
-  const rootHash =
-    box.qualification_data ||
-    box.qualification_rss3 ||
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
+  const rootHash = box.qualification_data || box.qualification_rss3 || DEFAULT_MERKLE_PROOF;
   const payment = box.payment?.[0];
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
