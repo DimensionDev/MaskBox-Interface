@@ -33,3 +33,8 @@ export const EMPTY_LIST: never[] = Object.freeze([]) as never[];
 export const wait = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export function unreachable(value: never): never {
+  console.error('Unhandled value: ', value);
+  throw new Error('Unreachable case:' + value);
+}

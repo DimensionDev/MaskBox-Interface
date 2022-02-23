@@ -1,5 +1,6 @@
 import { getMediaType, useUpload } from '@/contexts';
 import { MediaType } from '@/types';
+import { unreachable } from '@/utils';
 import classnames from 'classnames';
 import { FC, HTMLProps, useState } from 'react';
 import { Icon, LoadingIcon } from '../Icon';
@@ -25,6 +26,8 @@ const getMaxSize = (mediaType: MediaType) => {
       return 2 * 1024 * 1024;
     case MediaType.Csv:
       return 10 * 1024 * 1024;
+    default:
+      unreachable(mediaType);
   }
 };
 
@@ -58,12 +61,14 @@ export const UploadButton: FC<Props> = ({
           fileReader.readAsText(f);
           fileReader.onload = function () {
             const addressList = this.result?.toString()?.split(/\s+/);
-            if (onUploaded) {
-              onUploaded({
-                fileAddressList: addressList,
-                whitelistFileName: f.name,
-              });
-            }
+            onUploaded?.({
+              fileAddressList: addressList,
+              whitelistFileName: f.name,
+            });
+          };
+          fileReader.onerror = function () {
+            console.log('Failed to read file!' + fileReader.error);
+            throw new Error(`Failed to read file: ${fileReader.error}`);
           };
         }
       });
