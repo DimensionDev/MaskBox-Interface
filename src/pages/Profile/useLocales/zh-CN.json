@@ -1,4 +1,11 @@
 {
-  "My Collectibles": "收藏品",
-  "No items to display.": "暂无数据"
+  "My Collectibles": "我的收藏品",
+  "No items to display.": "暂无数据",
+  "Loading": "加载中",
+  "Loading more": "正在加载更多内容",
+  "Load more": "加载更多",
+  "All {count} NFTs loaded": "所有 {count} NFT已加载",
+  "Loaded {count} NFTs": "已加载 {count} NFTs",
+  "MaskBox Collectibles": "MaskBox 收藏品",
+  "Other Collectibles": "其他收藏品"
 }

@@ -1,4 +1,18 @@
 {
   "Connect Wallet": "连接钱包",
-  "1.Choose Network": "1. 选择网络"
+  "1.Choose Network": "1. 选择网络",
+  "2.Choose Wallet": "2. 选择钱包",
+  "Seletct a Token": "选择代币",
+  "Search name or paste address": "搜索名称或粘贴合约地址",
+  "Import": "导入",
+  "Account": "账户",
+  "Connected with {wallet}": "已连接 {wallet}",
+  "Disconnect": "断开连接",
+  "View in your browser": "在您的区块链浏览器中查看",
+  "Copied": "已复制",
+  "Copy Address": "复制地址",
+  "Recent Transactions": "近期交易",
+  "Clear All": "清空",
+  "Your transactions will appear here...": "您的交易历史记录将在此处显示...",
+  "The contract address is incorrect or does not exist": "此合约地址不正确或不存在"
 }

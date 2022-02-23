@@ -12,5 +12,9 @@
   "You have no NFT of this kind for sale": "您没有此类型的 NFT 可供售卖",
   "JPG, PNG, SVG,GIF, BMP, WEBP, Max 2MB, MP4 Max 30MB.": "JPG, PNG, SVG, GIF, BMP, WEBP格式的文件大小最多不超过2MB, MP4格式的文件大小最多不超过30MB.",
   "Drag-and-drop file, or": "拖放文件或者",
-  "Browse computer": "浏览计算机"
+  "Browse computer": "浏览计算机",
+  "Select all": "选择全部",
+  "Close": "关闭",
+  "Previous": "上一页",
+  "Next": "下一页"
 }
