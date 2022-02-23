@@ -39,7 +39,7 @@ export enum MediaType {
   Image = 'image',
   Video = 'video',
   Unknown = 'unknown',
-  csv = 'csv',
+  Csv = 'csv',
 }
 
 export interface Activity {

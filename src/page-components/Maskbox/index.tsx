@@ -214,9 +214,7 @@ export const Maskbox: FC<MaskboxProps> = ({
           chainId={chainId!}
           boxId={boxId!}
           boxName={box.name ?? ''}
-          rootHash={
-            rootHash || '0x0000000000000000000000000000000000000000000000000000000000000000'
-          }
+          rootHash={rootHash}
         />
       )}
     </div>

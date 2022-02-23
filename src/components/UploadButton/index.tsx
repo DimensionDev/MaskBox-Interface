@@ -23,7 +23,7 @@ const getMaxSize = (mediaType: MediaType) => {
     case MediaType.Image:
     case MediaType.Unknown:
       return 2 * 1024 * 1024;
-    case MediaType.csv:
+    case MediaType.Csv:
       return 10 * 1024 * 1024;
   }
 };
