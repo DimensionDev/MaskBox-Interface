@@ -259,6 +259,8 @@ export const Meta: FC = () => {
 
   if (!providerChainId) return <RequestConnection />;
 
+  const urlParams = `chain=${providerChainId}&box=${createdBoxId}&rootHash=${qualification}`;
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>
@@ -583,14 +585,14 @@ export const Meta: FC = () => {
         title="Successful"
         onClose={() => {
           closeShareBox();
-          history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
+          history.replace(`/details?${urlParams}`);
         }}
         onShare={() => {
-          const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}&rootHash=${qualification}`;
+          const link = `${window.location.origin}/#/details?${urlParams}`;
           const text = t('share-text', { name: formData.name, link: link });
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
-          history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
+          history.replace(`/details?${urlParams}`);
         }}
       />
       <ERC721ContractPicker
