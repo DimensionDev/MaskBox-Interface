@@ -6,7 +6,6 @@ import { format, isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
 import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { eq } from 'lodash-es';
-import { useLocales } from './useLocales';
 import { FormEvent, useCallback, useEffect } from 'react';
 import { utils } from 'ethers';
 
@@ -41,7 +40,6 @@ const date = new Date();
 const startAt = format(date, "yyyy-MM-dd'T'HH:mm");
 date.setDate(date.getDate() + 30);
 const endAt = format(date, "yyyy-MM-dd'T'HH:mm");
-const t = useLocales();
 
 export const defaultFormData: FormData = {
   name: '',
@@ -140,58 +138,58 @@ export const validationsAtom = atom<string[]>((get) => {
   const formData = get(formDataAtom);
   const dirtyFileds = get(fieldDirtyAtom);
   const validations: string[] = [];
-  if (!formData.name && dirtyFileds.name) validations.push(t('Please input mystery box name'));
+  if (!formData.name && dirtyFileds.name) validations.push('Please input mystery box name');
   if (!formData.mediaUrl && dirtyFileds.mediaUrl)
-    validations.push(t('Please provide Mystery thumbnail'));
+    validations.push('Please provide Mystery thumbnail');
   if (!formData.pricePerBox && dirtyFileds.pricePerBox) {
-    validations.push(t('Please provide price for a box'));
+    validations.push('Please provide price for a box');
   }
   if (formData.pricePerBox && parseFloat(formData.pricePerBox) < 0) {
-    validations.push(t('Price box must be positive'));
+    validations.push('Price box must be positive');
   }
   if (dirtyFileds.limit) {
     if (!formData.limit || formData.limit < 1) {
-      validations.push(t('Limit of purchase per wallet is at least 1'));
+      validations.push('Limit of purchase per wallet is at least 1');
     } else if (formData.limit > 255) {
-      validations.push(t('Limit of purchase per wallet is up to 255'));
+      validations.push('Limit of purchase per wallet is up to 255');
     }
   }
 
   if (!formData.nftContractAddress && dirtyFileds.nftContractAddress) {
-    validations.push(t('Please select a contract'));
+    validations.push('Please select a contract');
   }
 
   if (!formData.sellAll && formData.selectedNFTIds.length < 1) {
-    validations.push(t('Please select some NFTs'));
+    validations.push('Please select some NFTs');
   }
 
   const startDateValid = isValidDate(new Date(formData.startAt));
   if (!formData.startAt || !startDateValid) {
-    validations.push(t('Please set a valid start date'));
+    validations.push('Please set a valid start date');
   }
   const endDateValid = isValidDate(new Date(formData.endAt));
   if (!formData.endAt || !endDateValid) {
-    validations.push(t('Please set a valid end date'));
+    validations.push('Please set a valid end date');
   }
   if (
     startDateValid &&
     endDateValid &&
     new Date(formData.endAt).getTime() <= new Date(formData.startAt).getTime()
   ) {
-    validations.push(t('End date should be later than start date'));
+    validations.push('End date should be later than start date');
   }
   if (formData?.fileAddressList && formData.fileAddressList?.length > 0) {
     if (formData?.fileAddressList?.length > 1000)
-      validations.push(t('Please limit whitelist address number less than 1000'));
+      validations.push('Please limit whitelist address number less than 1000');
     if (existInvalidEthereumAddress(formData.fileAddressList)) {
-      validations.push(t('Please input or upload correct address'));
+      validations.push('Please input or upload correct address');
     }
   }
   if (formData?.whitelist && formData.whitelist.length > 0) {
     if (formData?.whitelist?.split(',')?.length > 1000)
-      validations.push(t('Please limit whitelist address number less than 1000'));
+      validations.push('Please limit whitelist address number less than 1000');
     if (existInvalidEthereumAddress(formData.whitelist.split(','))) {
-      validations.push(t('Please input or upload correct address'));
+      validations.push('Please input or upload correct address');
     }
   }
 
