@@ -15,12 +15,12 @@ export function useMerkleProof(rootHash?: string) {
       const leafArray = account
         ?.replace(/0x/, '')
         ?.match(/.{1,2}/g)
-        ?.map((byte) => parseInt(byte, 16));
+        ?.map((byte) => Number.parseInt(byte, 16));
       const leaf = encodeURIComponent(
         Buffer.from(new Uint8Array(leafArray as number[])).toString('base64'),
       );
       setIsFetchingProof();
-      getMerkleProof(leaf as string, rootHash?.replace(/0x/, ''))
+      getMerkleProof(leaf as string, rootHash?.replace(/^0x/, ''))
         ?.then((data) => {
           setIsNotFetchingProof();
           if (data?.message === 'leaf not found') {

@@ -1,11 +1,14 @@
 import { ERC721Contract, TokenType, ZERO_ADDRESS } from '@/lib';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import { Activity, MediaType } from '@/types';
 import { setStorage, StorageKeys } from '@/utils';
 import { format, isValid as isValidDate } from 'date-fns';
 import { atom } from 'jotai';
 import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { eq } from 'lodash-es';
+import { useLocales } from './useLocales';
 import { FormEvent, useCallback, useEffect } from 'react';
+import { utils } from 'ethers';
 
 export interface FormData {
   name: string;
@@ -38,6 +41,7 @@ const date = new Date();
 const startAt = format(date, "yyyy-MM-dd'T'HH:mm");
 date.setDate(date.getDate() + 30);
 const endAt = format(date, "yyyy-MM-dd'T'HH:mm");
+const t = useLocales();
 
 export const defaultFormData: FormData = {
   name: '',
@@ -58,6 +62,7 @@ export const defaultFormData: FormData = {
   holderMinTokenAmount: '',
   holderToken: null,
   selectedNFTIds: [],
+  merkleProof: DEFAULT_MERKLE_PROOF,
 };
 export const initFormData: FormData = defaultFormData;
 
@@ -76,6 +81,10 @@ export const descriptionFullfilledAtom = atom((get) => {
 
 export const fieldDirtyAtom = atom<Partial<Record<keyof FormData, boolean>>>({});
 
+const isEthereumAddressList = (addressList: string[]) => {
+  return addressList?.every((address) => utils.isAddress(address));
+};
+
 export const metaFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);
   const sellListIsOk =
@@ -89,12 +98,9 @@ export const metaFullfilledAtom = atom((get) => {
   const fileAddressList = formData?.fileAddressList;
   const whitelistIsOk =
     !whitelist ||
-    (whitelist?.split(',')?.length <= 1000 &&
-      whitelist?.split(',')?.every((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address)));
+    (whitelist?.split(',')?.length <= 1000 && isEthereumAddressList(whitelist?.split(',')));
   const fileAddressListIsOk =
-    !fileAddressList ||
-    (fileAddressList?.length <= 1000 &&
-      fileAddressList?.every((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address)));
+    !fileAddressList || (fileAddressList.length <= 1000 && isEthereumAddressList(fileAddressList));
 
   return (
     formData.pricePerBox &&
@@ -126,68 +132,66 @@ export function useSetAllDirty() {
   }, []);
 }
 
+const existInvalidEthereumAddress = (addressList: string[]) => {
+  return addressList.some((address) => !utils.isAddress(address));
+};
+
 export const validationsAtom = atom<string[]>((get) => {
   const formData = get(formDataAtom);
   const dirtyFileds = get(fieldDirtyAtom);
   const validations: string[] = [];
-  if (!formData.name && dirtyFileds.name) validations.push('Please input mystery box name');
+  if (!formData.name && dirtyFileds.name) validations.push(t('Please input mystery box name'));
   if (!formData.mediaUrl && dirtyFileds.mediaUrl)
-    validations.push('Please provide Mystery thumbnail');
+    validations.push(t('Please provide Mystery thumbnail'));
   if (!formData.pricePerBox && dirtyFileds.pricePerBox) {
-    validations.push('Please provide price for a box');
+    validations.push(t('Please provide price for a box'));
   }
   if (formData.pricePerBox && parseFloat(formData.pricePerBox) < 0) {
-    validations.push('Price box must be positive');
+    validations.push(t('Price box must be positive'));
   }
   if (dirtyFileds.limit) {
     if (!formData.limit || formData.limit < 1) {
-      validations.push('Limit of purchase per wallet is at least 1');
+      validations.push(t('Limit of purchase per wallet is at least 1'));
     } else if (formData.limit > 255) {
-      validations.push('Limit of purchase per wallet is up to 255');
+      validations.push(t('Limit of purchase per wallet is up to 255'));
     }
   }
 
   if (!formData.nftContractAddress && dirtyFileds.nftContractAddress) {
-    validations.push('Please select a contract');
+    validations.push(t('Please select a contract'));
   }
 
   if (!formData.sellAll && formData.selectedNFTIds.length < 1) {
-    validations.push('Please select some NFTs');
+    validations.push(t('Please select some NFTs'));
   }
 
   const startDateValid = isValidDate(new Date(formData.startAt));
   if (!formData.startAt || !startDateValid) {
-    validations.push('Please set a valid start date');
+    validations.push(t('Please set a valid start date'));
   }
   const endDateValid = isValidDate(new Date(formData.endAt));
   if (!formData.endAt || !endDateValid) {
-    validations.push('Please set a valid end date');
+    validations.push(t('Please set a valid end date'));
   }
   if (
     startDateValid &&
     endDateValid &&
     new Date(formData.endAt).getTime() <= new Date(formData.startAt).getTime()
   ) {
-    validations.push('End date should be later than start date');
+    validations.push(t('End date should be later than start date'));
   }
   if (formData?.fileAddressList && formData.fileAddressList?.length > 0) {
     if (formData?.fileAddressList?.length > 1000)
-      validations.push('Please limit whitelist address number less than 1000');
-    if (
-      formData.fileAddressList?.some((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address) === false)
-    ) {
-      validations.push('Please input or upload correct address');
+      validations.push(t('Please limit whitelist address number less than 1000'));
+    if (existInvalidEthereumAddress(formData.fileAddressList)) {
+      validations.push(t('Please input or upload correct address'));
     }
   }
-  if (formData?.whitelist && formData.whitelist?.length > 0) {
+  if (formData?.whitelist && formData.whitelist.length > 0) {
     if (formData?.whitelist?.split(',')?.length > 1000)
-      validations.push('Please limit whitelist address number less than 1000');
-    if (
-      formData.whitelist
-        ?.split(',')
-        ?.some((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address) === false)
-    ) {
-      validations.push('Please input or upload correct address');
+      validations.push(t('Please limit whitelist address number less than 1000'));
+    if (existInvalidEthereumAddress(formData.whitelist.split(','))) {
+      validations.push(t('Please input or upload correct address'));
     }
   }
 
