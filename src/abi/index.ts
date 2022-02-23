@@ -1,4 +1,4 @@
-import MaskboxABI from './Maskbox.json';
+import MaskboxABI from './MaskBox.json';
 import MaskboxNFTABI from './MaskboxNFT.json';
 
 export { MaskboxABI, MaskboxNFTABI };

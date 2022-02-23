@@ -9,22 +9,15 @@ export const chainShortNameMap: Record<number, string> = {
 
 export const contractAddresses: Record<string, Record<string, string>> = {
   Mainnet: {
-    Maskbox: '0x294428f04b0F9EbC49B7Ad61E2736ebD6808c145',
-    //MaskboxNFT: '0x56136E69A5771436a9598804c5eA792230c21181',
-    MaskboxNFT: '0xD12ce073961447Df9B8FF73bD995C338426aB816',
+    MaskBox: '0x294428f04b0F9EbC49B7Ad61E2736ebD6808c145',
     MerkleProof: '0x5bd8e7Ff275B1e31aD00f61B4A3E467fd4687682',
   },
   Rinkeby: {
-    Maskbox: '0xF8ED169BC0cdA735A88d32AC10b88AA5B69181ac',
-    //Maskbox: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
-    //MaskboxNFT: '0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8',
-    MaskboxNFT: '0xD12ce073961447Df9B8FF73bD995C338426aB816',
-    //MerkleProof: '0x450A11854F41d6E958e258665e593929E3bf111D',
+    MaskBox: '0xF8ED169BC0cdA735A88d32AC10b88AA5B69181ac',
     MerkleProof: '0xFDd8a034EAFE61136E98C0AAAE0A927D4198A999',
   },
   Matic: {
-    Maskbox: '0x02F98667b3A1202a320F67a669a5e4e451fD0cc1',
-    MaskboxNFT: '0x49C2a3D93C4B94eAd101d9936f1ebCA634394a78',
+    MaskBox: '0x02F98667b3A1202a320F67a669a5e4e451fD0cc1',
   },
 };
 

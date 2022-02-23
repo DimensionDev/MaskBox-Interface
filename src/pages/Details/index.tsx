@@ -39,7 +39,6 @@ export const Details: FC = memo(() => {
   }, [search]);
 
   const { isWhitelisted, isFetchingProof, proof } = useMerkleProof(rootHash);
-  console.log({ isWhitelisted, isFetchingProof, proof });
   const { skips, ignoreIds } = useIgnoreBoxes();
   const forbidden = boxId ? skips >= parseInt(boxId) || ignoreIds.includes(boxId) : true;
 

@@ -4,7 +4,7 @@ import { Contract, ContractInterface } from 'ethers';
 import { useCallback, useEffect, useRef } from 'react';
 import { useWeb3Context } from '../Web3Context';
 
-const contractAddress = contractAddresses.Rinkeby.Maskbox;
+const contractAddress = contractAddresses.Rinkeby.MaskBox;
 const mboxContract = new Contract(contractAddress, MaskboxABI as unknown as ContractInterface);
 
 interface PaymentOption {

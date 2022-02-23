@@ -33,7 +33,6 @@ export function useOpenBox(
       });
       try {
         const purchasedNfts = await getPurchasedNft(boxId, account);
-        // TODO the proof parameter
         const tx = await openBox(boxId, quantity, paymentTokenIndex, qualification || proof, {
           value: isNative ? payment.price.mul(quantity) : undefined,
         });
@@ -69,7 +68,6 @@ export function useOpenBox(
         const newlyPurchasedNfts = (await getPurchasedNft(boxId, account)).filter(
           (id) => !purchasedNfts.includes(id),
         );
-        console.log({ newlyPurchasedNfts });
         closeToast();
         showToast({
           title: t('Draw Success'),
