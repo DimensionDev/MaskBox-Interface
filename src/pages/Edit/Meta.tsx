@@ -92,7 +92,7 @@ export const Meta: FC = () => {
 
   const { saveBox } = useRSS3();
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useBoolean();
-  const [whitelistNumber, setwhitelistNumber] = useState<number>(0);
+  const [whitelistNumber, setwhitelistNumber] = useState(0);
   const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
   const [creating, startCreating, finishCreating] = useBoolean();
   const [uploading, setUploading, setNotUploading] = useBoolean();
