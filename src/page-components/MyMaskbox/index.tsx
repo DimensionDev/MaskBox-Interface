@@ -336,7 +336,11 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             colorScheme="primary"
             size="large"
             onClick={() => {
-              history.push(`${RouteKeys.Edit}/desc?chain=${box.chain_id}&box=${box.box_id}`);
+              history.push(
+                `${RouteKeys.Edit}/desc?chain=${box.chain_id}&box=${box.box_id}&rootHash=${
+                  rootHash ?? DEFAULT_MERKLE_PROOF
+                }`,
+              );
             }}
           >
             {t('Confirm')}
