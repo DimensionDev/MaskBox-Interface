@@ -131,7 +131,7 @@ export const UploadButton: FC<Props> = ({
           <div className={styles.description}>{t('Drag or Choose file')}</div>
         </div>
       )}
-      <div className={styles.leftEnd}>(.csv)</div>
+      <div className={styles.rightEnd}>(.csv)</div>
     </div>
   );
 };
