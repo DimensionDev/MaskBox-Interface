@@ -26,6 +26,8 @@
   background-color: var(--input-bg, #fff);
   box-sizing: border-box;
   color: var(--text-primary, #1e202c);
+  white-space: wrap;
+
   &.small {
     height: 32px;
     padding: 8px 16px;
@@ -74,4 +76,16 @@
   &[type='number'] {
     -moz-appearance: textfield; /* Firefox */
   }
+}
+
+.textarea {
+  width: 600px;
+  border-radius: 6px;
+  border: 1px solid var(--light-border, #c1c7de);
+  background-color: var(--input-bg, #fff);
+  box-sizing: border-box;
+  color: var(--text-primary, #0f1419);
+  overflow: scroll;
+  font-size: 18px;
+  resize: none;
 }

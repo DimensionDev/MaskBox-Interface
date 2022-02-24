@@ -27,3 +27,4 @@ export * from './TokenIcon';
 export * from './TokenList';
 export * from './UploadBox';
 export * from './VideoPlayer';
+export * from './UploadButton';

@@ -33,3 +33,17 @@ export const EMPTY_LIST: never[] = Object.freeze([]) as never[];
 export const wait = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
+
+export function unreachable(value: never): never {
+  console.error('Unhandled value: ', value);
+  throw new Error('Unreachable case:' + value);
+}
+
+export function switchAddressToBase64(address: string): string {
+  const hex = address
+    ?.replace(/^0x/, '')
+    ?.match(/.{1,2}/g)
+    ?.map((byte) => Number.parseInt(byte, 16));
+  const uint8Array = new Uint8Array(hex ?? []);
+  return Buffer.from(uint8Array).toString('base64');
+}

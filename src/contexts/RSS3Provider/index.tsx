@@ -2,6 +2,7 @@ import { BoxMetas, MediaType } from '@/types';
 import { utils } from 'ethers';
 import { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
 import RSS3 from 'rss3-next';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import { useWeb3Context } from '../Web3Context';
 
 export interface BoxRSS3Node {
@@ -13,6 +14,9 @@ export interface BoxRSS3Node {
     title: string;
     body: string;
   }[];
+  whitelistFileName?: string;
+  whitelist?: string;
+  qualification_rss3: string;
 }
 
 interface IRSS3Context {
@@ -31,6 +35,7 @@ const RSS3Context = createContext<IRSS3Context>({
       mediaUrl: '',
       mediaType: MediaType.Unknown,
       activities: [],
+      qualification_rss3: DEFAULT_MERKLE_PROOF,
     });
   },
 });
@@ -53,6 +58,9 @@ export function useBoxOnRSS3(creator: string | undefined, boxId: string | undefi
               mediaType: data.mediaType as MediaType,
               mediaUrl: data.mediaUrl,
               activities: data.activities,
+              whitelist: data?.whitelist,
+              whitelistFileName: data?.whitelistFileName,
+              qualification_rss3: data?.qualification_rss3,
             });
           } else {
             throw new Error(`Meta info was not found`);

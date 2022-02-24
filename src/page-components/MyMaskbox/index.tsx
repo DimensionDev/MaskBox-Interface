@@ -19,6 +19,7 @@ import { FC, HTMLProps, useCallback, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useLocales } from '../useLocales';
 import styles from './index.module.less';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 
 interface Props extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxesOfQuery['maskboxes'][number];
@@ -55,6 +56,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const payment = box.payment?.[0];
   const paymentToken = useERC20Token(payment?.token_addr);
   const erc721Token = useERC721Contract(box.nft_address);
+  const rootHash = box.qualification_data || box.qualification_rss3 || DEFAULT_MERKLE_PROOF;
 
   const {
     unitPrice,
@@ -244,6 +246,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
           chainId={chainId!}
           boxId={box.id}
           boxName={box.name}
+          rootHash={rootHash}
         />
       )}
       {!box.canceled && box.started === false ? (

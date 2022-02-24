@@ -1,6 +1,6 @@
 import { Icon, NavTabOptions, NavTabs } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useMBoxContract, useNFTName, useTheme, ThemeType } from '@/contexts';
+import { useMBoxContract, useNFTName, useTheme, ThemeType, useWeb3Context } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
 import { useBox, useERC721TokensByIds, useGetERC721TokensByIds, useIgnoreBoxes } from '@/hooks';
 import { createShareUrl, DEV_MODE_ENABLED, ZERO } from '@/lib';
@@ -16,6 +16,7 @@ import { DescriptionTab } from './DescriptionTab';
 import styles from './index.module.less';
 import { TokenTab } from './TokenTab';
 import { useLocales } from './useLocales';
+import { useMerkleProof } from './useMerkleProof';
 
 const PAGE_SIZE = BigNumber.from(25);
 export const Details: FC = memo(() => {
@@ -25,16 +26,19 @@ export const Details: FC = memo(() => {
   const [erc721Tokens, setErc721Tokens] = useState<ERC721Token[]>(EMPTY_LIST);
   const { search } = location;
 
-  const { boxId } = useMemo(() => {
+  const { boxId, rootHash } = useMemo(() => {
     const params = new URLSearchParams(search);
     const chainId = params.get('chain');
     const boxId = params.get('box');
+    const rootHash = params.get('rootHash') || undefined;
     return {
       chainId: chainId ? parseInt(chainId, 10) : null,
       boxId,
+      rootHash,
     };
   }, [search]);
 
+  const { isWhitelisted, isFetchingProof, proof } = useMerkleProof(rootHash);
   const { skips, ignoreIds } = useIgnoreBoxes();
   const forbidden = boxId ? skips >= parseInt(boxId) || ignoreIds.includes(boxId) : true;
 
@@ -148,6 +152,8 @@ export const Details: FC = memo(() => {
           boxOnChain={boxOnChain}
           boxOnRSS3={boxOnRSS3}
           onPurchase={openBuyBox}
+          isWhitelisted={isWhitelisted}
+          isFetchingProof={isFetchingProof}
         />
         <NavTabs tabs={tabs} />
         <div className={styles.tabContents}>
@@ -186,7 +192,8 @@ export const Details: FC = memo(() => {
       {payment && (
         <BuyBox
           open={buyBoxVisible}
-          boxId={boxId}
+          boxId={boxId!}
+          proof={proof}
           box={box}
           payment={payment}
           onPurchased={handlePurchased}

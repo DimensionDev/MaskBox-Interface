@@ -4,7 +4,7 @@ import { LoadingIcon } from '../Icon';
 import styles from './index.module.less';
 
 type VariantType = 'default';
-type ColorScheme = 'default' | 'primary' | 'light' | 'danger';
+type ColorScheme = 'default' | 'primary' | 'light' | 'danger' | 'success';
 type SizeType = 'small' | 'middle' | 'large';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -26,6 +26,7 @@ const schemeMap: Record<ColorScheme, string> = {
   primary: styles.schemePrimary,
   light: styles.schemeLight,
   danger: styles.schemeDanger,
+  success: styles.schemeSuccess,
 };
 
 export const Button: FC<ButtonProps> = memo(

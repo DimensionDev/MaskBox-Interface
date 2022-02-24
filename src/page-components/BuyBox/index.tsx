@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogProps, LoadingIcon, TokenIcon } from '@/components';
+import { Button, Dialog, DialogProps, LoadingIcon, TokenIcon, showToast } from '@/components';
 import { useMaskboxAddress, usePurchasedNft, useWeb3Context } from '@/contexts';
 import {
   useBalance,
@@ -20,13 +20,21 @@ import { useOpenBox } from './useOpenBox';
 
 export interface BuyBoxProps extends DialogProps {
   boxId: string;
+  proof?: string;
   box: Partial<ExtendedBoxInfo>;
   payment: BoxPayment;
   onPurchased?: ({ boxId, nftIds }: { boxId: string; nftIds: string[] }) => void;
 }
 
 const paymentTokenIndex = 0;
-export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurchased, ...rest }) => {
+export const BuyBox: FC<BuyBoxProps> = ({
+  boxId,
+  box,
+  payment: payment,
+  onPurchased,
+  proof,
+  ...rest
+}) => {
   const t = useLocales();
   const { account } = useWeb3Context();
   const purchasedNft = usePurchasedNft(boxId, account);
@@ -79,8 +87,9 @@ export const BuyBox: FC<BuyBoxProps> = ({ boxId, box, payment: payment, onPurcha
   }, [approve, payment.token_addr, contractAddress, costAmount, getAllowance]);
 
   const { open: openBox, loading } = useOpenBox(boxId, quantity, payment, paymentTokenIndex);
+
   const handleDraw = useCallback(async () => {
-    const result = await openBox();
+    const result = await openBox(proof ?? '0x00');
     if (result && onPurchased) {
       onPurchased(result);
     }

@@ -11,7 +11,7 @@ export interface BoxInfoOnChain {
   nft_address: string;
   name: string;
   personal_limit: number;
-  qualification: string;
+  qualification_data: string;
   holder_token_addr: string;
   holder_min_token_amount: BigNumber;
 }
@@ -39,6 +39,7 @@ export enum MediaType {
   Image = 'image',
   Video = 'video',
   Unknown = 'unknown',
+  Csv = 'csv',
 }
 
 export interface Activity {
@@ -53,6 +54,9 @@ export interface BoxMetas {
   mediaType: MediaType;
   mediaUrl: string;
   activities: Activity[];
+  whitelistFileName?: string;
+  whitelist?: string;
+  qualification_rss3: string;
 }
 
 export interface ExtendedBoxInfo extends BoxOnChain, BoxMetas {}

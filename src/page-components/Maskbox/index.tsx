@@ -1,6 +1,7 @@
 import { Button, ButtonProps, Icon, Image, LoadingIcon, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
 import { useWeb3Context } from '@/contexts';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import { BoxRSS3Node } from '@/contexts/RSS3Provider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
@@ -17,9 +18,13 @@ import styles from './index.module.less';
 export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxQuery['maskbox'];
   boxOnChain: Partial<BoxOnChain> | null;
-  boxOnRSS3: Partial<Pick<BoxRSS3Node, 'name' | 'mediaType' | 'mediaUrl' | 'activities'>> | null;
+  boxOnRSS3: Partial<
+    Pick<BoxRSS3Node, 'name' | 'mediaType' | 'mediaUrl' | 'activities' | 'qualification_rss3'>
+  > | null;
   inList?: boolean;
   onPurchase?: () => void;
+  isWhitelisted?: boolean;
+  isFetchingProof?: boolean;
 }
 
 export const Maskbox: FC<MaskboxProps> = ({
@@ -29,6 +34,8 @@ export const Maskbox: FC<MaskboxProps> = ({
   className,
   inList,
   onPurchase,
+  isWhitelisted = true,
+  isFetchingProof = false,
   ...rest
 }) => {
   const t = useLocales();
@@ -44,6 +51,7 @@ export const Maskbox: FC<MaskboxProps> = ({
   const { holder_min_token_amount, holder_token_addr } = box;
   const chainId = box.chain_id;
   const boxId = box.box_id;
+  const rootHash = box.qualification_data || box.qualification_rss3 || DEFAULT_MERKLE_PROOF;
   const payment = box.payment?.[0];
   const history = useHistory();
   const paymentToken = useERC20Token(payment?.token_addr);
@@ -72,6 +80,7 @@ export const Maskbox: FC<MaskboxProps> = ({
       if (box.expired) return t('Ended');
       if (!isApproveAll) return t('Canceled');
     }
+    if (!isWhitelisted) return t('You are not in the whitelist');
     if (box.canceled) return t('Canceled');
     if (inList) return t('View Details');
     if (!ethersProvider) return t('Connect Wallet');
@@ -80,15 +89,20 @@ export const Maskbox: FC<MaskboxProps> = ({
       return t(`Not enough {symbol} to draw`, { symbol: holderToken?.symbol ?? '??' });
 
     return price ? t('Draw ( {price}/Time )', { price }) : <LoadingIcon size={24} />;
-  }, [inList, price, isSoldout, isApproveAll, t, isQualified, ethersProvider]);
+  }, [inList, price, isSoldout, isApproveAll, t, isQualified, ethersProvider, isWhitelisted]);
 
-  const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}`;
+  const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}${
+    rootHash ? `&rootHash=${rootHash}` : ''
+  }`;
   const notReadyToView = !isStarted || isSoldout || box.expired || box.canceled || !isApproveAll;
   const allowToBuy = price && !notReadyToView && isQualified;
   const buttonProps: ButtonProps = {
     className: styles.drawButton,
     colorScheme: 'primary',
-    disabled: inList ? notReadyToView : ethersProvider ? !allowToBuy : isConnecting,
+    disabled:
+      (inList ? notReadyToView : ethersProvider ? !allowToBuy : isConnecting) ||
+      isFetchingProof ||
+      !isWhitelisted,
     onClick: () => {
       if (inList) {
         history.push(boxLink);
@@ -179,12 +193,13 @@ export const Maskbox: FC<MaskboxProps> = ({
           ) : null}
         </dl>
         {(() => {
-          if (checkingApprove || isConnecting)
+          if (checkingApprove || isConnecting || !rootHash || isFetchingProof) {
             return (
               <Button {...buttonProps} disabled>
                 <LoadingIcon />
               </Button>
             );
+          }
           if (isStarted || box.canceled || !ethersProvider) {
             return <Button {...buttonProps}>{buttonText}</Button>;
           }
@@ -197,6 +212,7 @@ export const Maskbox: FC<MaskboxProps> = ({
           chainId={chainId!}
           boxId={boxId!}
           boxName={box.name ?? ''}
+          rootHash={rootHash}
         />
       )}
     </div>

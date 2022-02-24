@@ -42,7 +42,7 @@ export const BoxList: FC = () => {
         skip: (page - 1) * PAGE_SIZE,
         first: PAGE_SIZE,
         from: skips,
-        ignores: ignoreIds,
+        ignores: ignoreIds?.length === 0 ? [' '] : ignoreIds,
       },
     });
   }, [fetchBoxes, page, skips, ignoreIds]);

@@ -1,4 +1,14 @@
-import { Button, Field, Hint, Icon, Input, NFTList, showToast, TokenIcon } from '@/components';
+import {
+  Button,
+  Field,
+  Hint,
+  Icon,
+  Input,
+  NFTList,
+  showToast,
+  TokenIcon,
+  UploadButton,
+} from '@/components';
 import { RouteKeys } from '@/configs';
 import { usePickERC20, useRSS3, useWeb3Context } from '@/contexts';
 import { useERC721, useLazyLoadERC721Tokens, useTokenList } from '@/hooks';
@@ -9,10 +19,12 @@ import {
   RequestConnection,
   ShareBox,
 } from '@/page-components';
-import { isSameAddress, TZOffsetLabel, useBoolean } from '@/utils';
+import { isSameAddress, TZOffsetLabel, useBoolean, switchAddressToBase64 } from '@/utils';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import classnames from 'classnames';
 import { utils } from 'ethers';
 import { useAtomValue } from 'jotai/utils';
+import { useAtom } from 'jotai';
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -37,7 +49,7 @@ export const Meta: FC = () => {
   const t = useLocales();
   const history = useHistory();
 
-  const formData = useAtomValue(formDataAtom);
+  const [formData, setFormData] = useAtom(formDataAtom);
   const isReady = useAtomValue(readyToCreateAtom);
   const chain = useAtomValue(chainAtom);
   const isEditting = useAtomValue(isEdittingAtom);
@@ -50,7 +62,9 @@ export const Meta: FC = () => {
   const { providerChainId } = useWeb3Context();
   const [nftPickerVisible, openNftPicker, closeNftPicker] = useBoolean();
   const [contractPickerVisible, openContractPicker, closeContractPicker] = useBoolean();
+  const [iswhitelistConfirmed, confirmwhitelist, editwhitelist] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
+  const [qualification, setQualification] = useState(DEFAULT_MERKLE_PROOF);
 
   const createBox = useCreateMaskbox();
   const { isEnumable } = useEdit();
@@ -78,8 +92,33 @@ export const Meta: FC = () => {
 
   const { saveBox } = useRSS3();
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useBoolean();
+  const [whitelistNumber, setwhitelistNumber] = useState(0);
   const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
   const [creating, startCreating, finishCreating] = useBoolean();
+  const [uploading, setUploading, setNotUploading] = useBoolean();
+
+  const [uploadError, setUploadError] = useState<Error | null>(null);
+
+  const getMerkleProof = async (leaves: string[]) => {
+    try {
+      const res = await fetch(
+        'https://lf8d031acj.execute-api.ap-east-1.amazonaws.com/api/v1/merkle_tree/create',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            leaves,
+          }),
+        },
+      );
+      return res.json() as Promise<{ root: string }>;
+    } catch (err) {
+      showToast({
+        title: t('Fails to get merkle proof: {reason}', { reason: (err as Error).message }),
+        variant: 'error',
+      });
+      throw err;
+    }
+  };
   const resetForm = useResetForm();
   const create = useCallback(async () => {
     setAllDirty();
@@ -103,7 +142,25 @@ export const Meta: FC = () => {
       setSellingNFTIds(
         formData.sellAll ? ownedERC721Tokens.map((t) => t.tokenId) : [...formData.selectedNFTIds],
       );
+
+      const whitelist =
+        formData?.fileAddressList && formData?.fileAddressList?.length > 0
+          ? formData?.fileAddressList
+          : formData?.whitelist && formData?.whitelist?.length > 0
+          ? formData?.whitelist?.split(',')
+          : undefined;
+
+      if (whitelist) {
+        const leaves = whitelist.map((address) => switchAddressToBase64(address));
+        const res = await getMerkleProof(leaves);
+        formData.merkleProof = res?.root?.length > 0 ? '0x' + res.root : DEFAULT_MERKLE_PROOF;
+      } else {
+        formData.merkleProof = DEFAULT_MERKLE_PROOF;
+      }
+      setQualification(formData.merkleProof);
+
       const result = await createBox();
+
       if (result) {
         const { args } = result;
         setCreatedBoxId(args.box_id.toString() as string);
@@ -113,7 +170,10 @@ export const Meta: FC = () => {
           mediaType: formData.mediaType,
           mediaUrl: formData.mediaUrl,
           activities: formData.activities,
+          whitelistFileName: formData.whitelistFileName,
+          qualification_rss3: formData.merkleProof,
         });
+        localStorage.setItem(`${args.box_id.toString()}whitelist`, formData.whitelist || '');
         closeConfirmDialog();
         openShareBox();
         resetForm();
@@ -138,6 +198,7 @@ export const Meta: FC = () => {
       mediaType: formData.mediaType,
       mediaUrl: formData.mediaUrl,
       activities: formData.activities,
+      whitelistFileName: formData?.whitelistFileName,
     });
     history.replace(`/details?chain=${providerChainId}&box=${editingBoxId}`);
   }, [history, editingBoxId, formData]);
@@ -158,7 +219,38 @@ export const Meta: FC = () => {
     return tokens.find((token) => isSameAddress(token.address, formData.holderTokenAddress));
   }, [tokens, formData.holderTokenAddress]);
 
+  const handlewhitelistConfirm = () => {
+    const whitelistNum = formData?.whitelist ? formData.whitelist?.split(',')?.length : 0;
+    if (whitelistNum != null && whitelistNum > 0) {
+      setwhitelistNumber(whitelistNum);
+      confirmwhitelist();
+    }
+  };
+
+  const handleUploaded = useCallback(
+    ({
+      fileAddressList,
+      whitelistFileName,
+    }: {
+      fileAddressList?: string[];
+      whitelistFileName: string;
+    }) => {
+      setUploadError(null);
+      setNotUploading();
+      if (fileAddressList && fileAddressList.length > 1000) {
+        setUploadError(new Error(t('Max limit of address')));
+      }
+      if (fileAddressList?.some((address) => /^(0x)?[0-9a-zA-Z]{40}$/.test(address) === false)) {
+        setUploadError(new Error(t('File contains unvalid addrdss')));
+      }
+      setFormData((fd) => ({ ...fd, fileAddressList, whitelistFileName }));
+    },
+    [],
+  );
+
   if (!providerChainId) return <RequestConnection />;
+
+  const urlParams = `chain=${providerChainId}&box=${createdBoxId}&rootHash=${qualification}`;
 
   return (
     <section className={styles.section}>
@@ -330,16 +422,55 @@ export const Meta: FC = () => {
           </Hint>
         }
       >
+        <div className={styles.commonText}>{t('Whitelist Input method limit')}</div>
         <Input
-          placeholder="eg. 0x0c8FB5C985E00fb1D232b7B9700089492Fb4B9A8"
-          disabled={isEditting}
+          placeholder="e.g.0x"
+          disabled={isEditting || iswhitelistConfirmed || Boolean(formData?.whitelistFileName)}
           fullWidth
-          size="large"
+          multiLine
           spellCheck={false}
-          value={formData.whiteList}
-          onChange={bindField('whiteList')}
+          value={formData.whitelist}
+          onChange={bindField('whitelist')}
         />
+
+        <div className={styles.rowFieldGroup}>
+          <div className={styles.buttonWrapper}>
+            <Button
+              className={styles.button}
+              disabled={!formData?.whitelist || isEditting}
+              colorScheme={iswhitelistConfirmed ? 'success' : 'primary'}
+              onClick={handlewhitelistConfirm}
+            >
+              {t('Confirm')}
+            </Button>
+            <Button
+              className={styles.button}
+              disabled={isEditting || Boolean(formData?.whitelistFileName)}
+              colorScheme="primary"
+              onClick={editwhitelist}
+            >
+              {t('Edit')}
+            </Button>
+          </div>
+          <div className={styles.commonText}>
+            {whitelistNumber > 0 && t(`total: ${whitelistNumber}`)}
+          </div>
+        </div>
       </Field>
+
+      <div className={styles.commonText}>{t('Whitelist address limit')}</div>
+
+      <UploadButton
+        fileName={formData.whitelistFileName}
+        tabIndex={0}
+        disabled={isEditting || Boolean(formData?.whitelist)}
+        onStartUpload={setUploading}
+        onUploaded={handleUploaded}
+        onError={setUploadError}
+      />
+      {uploadError && <div className={styles.uploadWarning}>{uploadError?.message}</div>}
+
+      <div className={styles.commonText}>{t('Whitelist address file limit')}</div>
 
       <Field
         className={styles.field}
@@ -428,6 +559,12 @@ export const Meta: FC = () => {
         open={confirmDialogVisible}
         tokens={formData.sellAll ? ownedERC721Tokens : selectedERC721Tokens}
         onClose={closeConfirmDialog}
+        whitelistAddressList={
+          formData?.whitelist && formData?.whitelist?.length > 0
+            ? formData?.whitelist?.split(',')
+            : undefined
+        }
+        fileName={formData?.whitelistFileName}
         nftAddress={formData.nftContractAddress}
         onConfirm={create}
         creating={creating}
@@ -439,14 +576,14 @@ export const Meta: FC = () => {
         title="Successful"
         onClose={() => {
           closeShareBox();
-          history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
+          history.replace(`/details?${urlParams}`);
         }}
         onShare={() => {
-          const link = `${window.location.origin}/#/details?chain=${providerChainId}&box=${createdBoxId}`;
+          const link = `${window.location.origin}/#/details?${urlParams}`;
           const text = t('share-text', { name: formData.name, link: link });
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
-          history.replace(`/details?chain=${providerChainId}&box=${createdBoxId}`);
+          history.replace(`/details?${urlParams}`);
         }}
       />
       <ERC721ContractPicker

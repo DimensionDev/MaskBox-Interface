@@ -1,4 +1,5 @@
 import { ERC721Contract, TokenType, ZERO_ADDRESS } from '@/lib';
+import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import { Activity, MediaType } from '@/types';
 import { setStorage, StorageKeys } from '@/utils';
 import { format, isValid as isValidDate } from 'date-fns';
@@ -6,6 +7,7 @@ import { atom } from 'jotai';
 import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { eq } from 'lodash-es';
 import { FormEvent, useCallback, useEffect } from 'react';
+import { utils } from 'ethers';
 
 export interface FormData {
   name: string;
@@ -22,7 +24,10 @@ export interface FormData {
   sellAll: boolean;
   startAt: string;
   endAt: string;
-  whiteList: string;
+  whitelist?: string;
+  merkleProof: string;
+  fileAddressList?: string[];
+  whitelistFileName?: string;
   holderTokenAddress: string;
   holderMinTokenAmount: string;
   holderToken: TokenType | null;
@@ -50,11 +55,12 @@ export const defaultFormData: FormData = {
   nftContractAddress: '',
   startAt,
   endAt,
-  whiteList: '',
+  whitelist: '',
   holderTokenAddress: '',
   holderMinTokenAmount: '',
   holderToken: null,
   selectedNFTIds: [],
+  merkleProof: DEFAULT_MERKLE_PROOF,
 };
 export const initFormData: FormData = defaultFormData;
 
@@ -73,6 +79,10 @@ export const descriptionFullfilledAtom = atom((get) => {
 
 export const fieldDirtyAtom = atom<Partial<Record<keyof FormData, boolean>>>({});
 
+const isEthereumAddressList = (addressList: string[]) => {
+  return addressList?.every((address) => utils.isAddress(address));
+};
+
 export const metaFullfilledAtom = atom((get) => {
   const formData = get(formDataAtom);
   const sellListIsOk =
@@ -82,8 +92,22 @@ export const metaFullfilledAtom = atom((get) => {
     formData.endAt &&
     new Date(formData.endAt).getTime() > new Date(formData.startAt).getTime();
   const limitIsOk = formData.limit && formData.limit > 0 && formData.limit < 256;
+  const whitelist = formData?.whitelist;
+  const fileAddressList = formData?.fileAddressList;
+  const whitelistIsOk =
+    !whitelist ||
+    (whitelist?.split(',')?.length <= 1000 && isEthereumAddressList(whitelist?.split(',')));
+  const fileAddressListIsOk =
+    !fileAddressList || (fileAddressList.length <= 1000 && isEthereumAddressList(fileAddressList));
+
   return (
-    formData.pricePerBox && limitIsOk && formData.nftContractAddress && sellListIsOk && datesIsOk
+    formData.pricePerBox &&
+    limitIsOk &&
+    formData.nftContractAddress &&
+    sellListIsOk &&
+    datesIsOk &&
+    whitelistIsOk &&
+    fileAddressListIsOk
   );
 });
 
@@ -105,6 +129,10 @@ export function useSetAllDirty() {
     });
   }, []);
 }
+
+const existInvalidEthereumAddress = (addressList: string[]) => {
+  return addressList.some((address) => !utils.isAddress(address));
+};
 
 export const validationsAtom = atom<string[]>((get) => {
   const formData = get(formDataAtom);
@@ -149,6 +177,20 @@ export const validationsAtom = atom<string[]>((get) => {
     new Date(formData.endAt).getTime() <= new Date(formData.startAt).getTime()
   ) {
     validations.push('End date should be later than start date');
+  }
+  if (formData?.fileAddressList && formData.fileAddressList?.length > 0) {
+    if (formData?.fileAddressList?.length > 1000)
+      validations.push('Please limit whitelist address number less than 1000');
+    if (existInvalidEthereumAddress(formData.fileAddressList)) {
+      validations.push('Please input or upload correct address');
+    }
+  }
+  if (formData?.whitelist && formData.whitelist.length > 0) {
+    if (formData?.whitelist?.split(',')?.length > 1000)
+      validations.push('Please limit whitelist address number less than 1000');
+    if (existInvalidEthereumAddress(formData.whitelist.split(','))) {
+      validations.push('Please input or upload correct address');
+    }
   }
 
   return validations;

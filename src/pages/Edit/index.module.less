@@ -73,12 +73,18 @@
 .rowFieldGroup {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   .field {
     width: 286px;
   }
 }
 .warning {
   margin-top: 16px;
+  line-height: 24px;
+  font-weight: normal;
+  color: var(--text-error, #fb2047);
+}
+.uploadWarning {
   line-height: 24px;
   font-weight: normal;
   color: var(--text-error, #fb2047);
@@ -93,6 +99,20 @@
   .button {
     margin-right: 16px;
   }
+}
+
+.buttonWrapper {
+  display: flex;
+  margin-top: 10px;
+  .button {
+    margin-right: 16px;
+    min-width: 76px;
+  }
+}
+
+.commonText {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .selectedNft {
