@@ -12,15 +12,15 @@ interface ShareProps {
   rightAddon?: React.ReactNode;
 }
 
-interface SinglelinInputProps extends Omit<HTMLProps<HTMLInputElement>, 'size'>, ShareProps {
+interface SinglelineInputProps extends Omit<HTMLProps<HTMLInputElement>, 'size'>, ShareProps {
   multiLine?: false;
 }
 
-interface MultilinInputProps extends Omit<HTMLProps<HTMLTextAreaElement>, 'size'>, ShareProps {
+interface MultilineInputProps extends Omit<HTMLProps<HTMLTextAreaElement>, 'size'>, ShareProps {
   multiLine: true;
 }
 
-export type InputProps = SinglelinInputProps | MultilinInputProps;
+export type InputProps = SinglelineInputProps | MultilineInputProps;
 
 export const Input: FC<InputProps> = memo(
   ({
