@@ -16,7 +16,7 @@ function getIgnoreIds(config: string, extendValue: string[] = []) {
  * ignore dirty data, pass to `id_not_in` field in `query MaskBoxes`
  */
 export const IGNORE_IDS: Partial<Record<ChainId, string[]>> = {
-  [ChainId.Mainnet]: getIgnoreIds(process.env.IGNORE_IDS_ON_MAINNET, ['12', '14']),
+  [ChainId.Mainnet]: getIgnoreIds(process.env.IGNORE_IDS_ON_MAINNET, ['12', '14', '16', '17']),
   [ChainId.Matic]: getIgnoreIds(process.env.IGNORE_IDS_ON_MATIC),
   [ChainId.BSC]: getIgnoreIds(process.env.IGNORE_IDS_ON_BSC),
   [ChainId.Rinkeby]: getIgnoreIds(process.env.IGNORE_IDS_ON_RINKEBY),
