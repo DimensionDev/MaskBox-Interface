@@ -91,9 +91,7 @@ export const Maskbox: FC<MaskboxProps> = ({
     return price ? t('Draw ( {price}/Time )', { price }) : <LoadingIcon size={24} />;
   }, [inList, price, isSoldout, isApproveAll, t, isQualified, ethersProvider, isWhitelisted]);
 
-  const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}${
-    rootHash ? `&rootHash=${rootHash}` : ''
-  }`;
+  const boxLink = `${RouteKeys.Details}?chain=${chainId}&box=${boxId}&rootHash=${rootHash}`;
   const notReadyToView = !isStarted || isSoldout || box.expired || box.canceled || !isApproveAll;
   const allowToBuy = price && !notReadyToView && isQualified;
   const buttonProps: ButtonProps = {

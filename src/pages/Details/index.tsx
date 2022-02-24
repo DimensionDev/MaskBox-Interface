@@ -1,6 +1,6 @@
 import { Icon, NavTabOptions, NavTabs } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useMBoxContract, useNFTName, useTheme, ThemeType, useWeb3Context } from '@/contexts';
+import { useMBoxContract, useNFTName, useTheme, ThemeType } from '@/contexts';
 import { useSoldNftListQuery } from '@/graphql-hooks';
 import { useBox, useERC721TokensByIds, useGetERC721TokensByIds, useIgnoreBoxes } from '@/hooks';
 import { createShareUrl, DEV_MODE_ENABLED, ZERO } from '@/lib';
