@@ -2,7 +2,7 @@
   "name": "maskbox-interface",
   "version": "0.1.0",
   "scripts": {
-    "dev": "webpack serve --mode=development --port 5000",
+    "dev": "webpack serve --mode=development --port 5050",
     "build": "webpack --mode=production",
     "eslint": "eslint \"src/**/*.{ts,tsx}\"",
     "prettier": "prettier \"src/**/*.{css,less,ts,tsx}\"",
