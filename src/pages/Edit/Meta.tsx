@@ -65,6 +65,7 @@ export const Meta: FC = () => {
   const [iswhitelistConfirmed, confirmwhitelist, editwhitelist] = useBoolean();
   const [createdBoxId, setCreatedBoxId] = useState('');
   const [qualification, setQualification] = useState(DEFAULT_MERKLE_PROOF);
+  const [createdBoxName, setCreatedBoxName] = useState('');
 
   const createBox = useCreateMaskbox();
   const { isEnumable } = useEdit();
@@ -164,6 +165,7 @@ export const Meta: FC = () => {
       if (result) {
         const { args } = result;
         setCreatedBoxId(args.box_id.toString() as string);
+        setCreatedBoxName(formData.name);
         await saveBox({
           id: args.box_id.toString(),
           name: args.name,
@@ -580,7 +582,7 @@ export const Meta: FC = () => {
         }}
         onShare={() => {
           const link = `${window.location.origin}/#/details?${urlParams}`;
-          const text = t('share-text', { name: formData.name, link: link });
+          const text = t('share-text', { name: createdBoxName, link: link });
           const shareLink = createShareUrl(text);
           window.open(shareLink, 'noopener noreferrer');
           history.replace(`/details?${urlParams}`);

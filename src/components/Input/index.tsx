@@ -4,14 +4,23 @@ import styles from './index.module.less';
 
 type SizeType = 'small' | 'middle' | 'large';
 
-export interface InputProps extends Omit<HTMLProps<HTMLInputElement>, 'size'> {
+interface ShareProps {
   size?: SizeType;
   fullWidth?: boolean;
   round?: boolean;
   leftAddon?: React.ReactNode;
   rightAddon?: React.ReactNode;
-  multiLine?: boolean;
 }
+
+interface SinglelineInputProps extends Omit<HTMLProps<HTMLInputElement>, 'size'>, ShareProps {
+  multiLine?: false;
+}
+
+interface MultilineInputProps extends Omit<HTMLProps<HTMLTextAreaElement>, 'size'>, ShareProps {
+  multiLine: true;
+}
+
+export type InputProps = SinglelineInputProps | MultilineInputProps;
 
 export const Input: FC<InputProps> = memo(
   ({
@@ -37,10 +46,7 @@ export const Input: FC<InputProps> = memo(
             })}
             rows={4}
             cols={25}
-            disabled={rest?.disabled}
-            value={rest?.value}
-            placeholder={rest?.placeholder}
-            onChange={rest?.onChange}
+            {...rest}
           />
         ) : (
           <input
