@@ -202,7 +202,11 @@ export const Meta: FC = () => {
       activities: formData.activities,
       whitelistFileName: formData?.whitelistFileName,
     });
-    history.replace(`/details?chain=${providerChainId}&box=${editingBoxId}`);
+    history.replace(
+      `/details?chain=${providerChainId}&box=${editingBoxId}&rootHash=${
+        formData?.merkleProof || DEFAULT_MERKLE_PROOF
+      }`,
+    );
   }, [history, editingBoxId, formData]);
 
   useEffect(() => {

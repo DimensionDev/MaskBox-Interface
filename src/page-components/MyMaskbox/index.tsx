@@ -167,7 +167,11 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
 
   return (
     <div className={classnames(className, styles.maskbox)} {...rest}>
-      <Link to={`${RouteKeys.Details}?chain=${box.chain_id}&box=${box.box_id}`}>{BoxCover}</Link>
+      <Link
+        to={`${RouteKeys.Details}?chain=${box.chain_id}&box=${box.box_id}&rootHash=${rootHash}`}
+      >
+        {BoxCover}
+      </Link>
       <div className={styles.interaction}>
         <dl className={styles.infoList}>
           <dt className={styles.name} title={box.name}>
@@ -337,9 +341,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
             size="large"
             onClick={() => {
               history.push(
-                `${RouteKeys.Edit}/desc?chain=${box.chain_id}&box=${box.box_id}&rootHash=${
-                  rootHash ?? DEFAULT_MERKLE_PROOF
-                }`,
+                `${RouteKeys.Edit}/desc?chain=${box.chain_id}&box=${box.box_id}&rootHash=${rootHash}`,
               );
             }}
           >
