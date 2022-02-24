@@ -19,7 +19,7 @@ import {
   RequestConnection,
   ShareBox,
 } from '@/page-components';
-import { isSameAddress, TZOffsetLabel, useBoolean } from '@/utils';
+import { isSameAddress, TZOffsetLabel, useBoolean, switchAddressToBase64 } from '@/utils';
 import { DEFAULT_MERKLE_PROOF } from '@/constants';
 import classnames from 'classnames';
 import { utils } from 'ethers';
@@ -151,16 +151,7 @@ export const Meta: FC = () => {
           : undefined;
 
       if (whitelist) {
-        const leaves = whitelist
-          .map((address) =>
-            address
-              ?.replace(/0x/, '')
-              ?.match(/.{1,2}/g)
-              ?.map((byte) => Number.parseInt(byte, 16)),
-          )
-          .filter((numbers) => numbers?.length)
-          .map((numbers) => new Uint8Array(numbers as number[]))
-          .map((uint8Array) => Buffer.from(uint8Array).toString('base64'));
+        const leaves = whitelist.map((address) => switchAddressToBase64(address));
         const res = await getMerkleProof(leaves);
         formData.merkleProof = res?.root?.length > 0 ? '0x' + res.root : DEFAULT_MERKLE_PROOF;
       } else {
