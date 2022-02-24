@@ -43,8 +43,6 @@
   "Please input mystery box name": "请输入盲盒名称",
   "Please provide Mystery thumbnail": "请提供盲盒缩略图",
   "Please provide price for a box": "请为提供每个盲盒的售价",
-  "Please limit whitelist address number less than 1000": "请限制白名单地址在1000内",
-  "Please input or upload correct address": "请输入正确的地址",
   "Price box must be positive": "每个盲盒价格必须为正数",
   "Limit of purchase per wallet is at least 1": "每个钱包的购买限额至少 1",
   "Limit of purchase per wallet is up to 255": "每个钱包的购买限额最多为 255",
