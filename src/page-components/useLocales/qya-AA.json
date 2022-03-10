@@ -23,6 +23,7 @@
   "Import": "crwdns9581:0crwdne9581:0",
   "No results for": "crwdns9583:0crwdne9583:0",
   "No result for <strong>{keyword}</strong>": "crwdns9973:0{keyword}crwdne9973:0",
+  "You are not in the whitelist": "crwdns14554:0crwdne14554:0",
   "Sold out": "crwdns9585:0crwdne9585:0",
   "Canceled": "crwdns9815:0crwdne9815:0",
   "Ended": "crwdns9587:0crwdne9587:0",
@@ -70,6 +71,7 @@
   "Withdraw {symbol}": "crwdns9847:0{symbol}crwdne9847:0",
   "Confirm": "crwdns9849:0crwdne9849:0",
   "Cancel": "crwdns9851:0crwdne9851:0",
+  "Edit": "crwdns14556:0crwdne14556:0",
   "Withdraw success": "crwdns9853:0crwdne9853:0",
   "You got {value}": "crwdns9855:0{value}crwdne9855:0",
   "Cancel MaskBox": "crwdns9929:0crwdne9929:0",
@@ -85,5 +87,6 @@
   "The maximum number of NFTs to be sold in one mystery box contract is {limit}.": "crwdns10581:0{limit}crwdne10581:0",
   "Token ID {ids} does not exist or belong to you.": "crwdns10645:0{ids}crwdne10645:0",
   "Add": "crwdns10593:0crwdne10593:0",
-  "The contract address is incorrect or does not exist": "crwdns10607:0crwdne10607:0"
+  "The contract address is incorrect or does not exist": "crwdns10607:0crwdne10607:0",
+  "Whitelist Address": "crwdns14558:0crwdne14558:0"
 }
