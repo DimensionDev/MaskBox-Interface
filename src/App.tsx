@@ -11,7 +11,7 @@ import {
   I18nProvider,
   MBoxContractProvider,
   NFTContractProvider,
-  RSS3Provider,
+  StringStorageProvider,
   ThemeProvider,
   UploadProvider,
   Web3Provider,
@@ -41,11 +41,11 @@ function App() {
                     <ApolloProvider>
                       <NFTContractProvider>
                         <MBoxContractProvider>
-                          <RSS3Provider>
+                          <StringStorageProvider>
                             <Layout>
                               <Routes />
                             </Layout>
-                          </RSS3Provider>
+                          </StringStorageProvider>
                         </MBoxContractProvider>
                       </NFTContractProvider>
                     </ApolloProvider>

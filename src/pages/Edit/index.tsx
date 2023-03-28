@@ -27,7 +27,7 @@ export const Edit: FC = () => {
   const [, updateChain] = useAtom(chainAtom);
   const [boxId, updateBoxId] = useAtom(boxIdAtom);
   const updateFormData = useUpdateAtom(formDataAtom);
-  const { boxOnSubgraph, boxOnRSS3, boxOnChain } = useBox(boxId);
+  const { boxOnSubgraph, boxOnStorage, boxOnChain } = useBox(boxId);
   const paymentToken = useERC20Token(boxOnChain?.payment?.[0]?.token_addr);
   const erc721Contract = useERC721Contract(boxOnChain?.nft_address);
   const { providerChainId } = useWeb3Context();
@@ -49,20 +49,20 @@ export const Edit: FC = () => {
   }, [isEditting]);
 
   useEffect(() => {
-    if (isEditting && boxOnRSS3) {
+    if (isEditting && boxOnStorage) {
       updateFormData((fd) => {
         return {
           ...fd,
-          name: boxOnRSS3.name,
-          mediaType: boxOnRSS3.mediaType,
-          mediaUrl: boxOnRSS3.mediaUrl,
-          activities: boxOnRSS3.activities,
-          whitelistFileName: boxOnRSS3?.whitelistFileName,
+          name: boxOnStorage.name,
+          mediaType: boxOnStorage.mediaType,
+          mediaUrl: boxOnStorage.mediaUrl,
+          activities: boxOnStorage.activities,
+          whitelistFileName: boxOnStorage?.whitelistFileName,
           whitelist: localStorage.getItem(`${boxId}whitelist`) as string,
         };
       });
     }
-  }, [isEditting, boxOnRSS3]);
+  }, [isEditting, boxOnStorage]);
 
   useEffect(() => {
     resetForm();

@@ -3,7 +3,7 @@ export * from './ERC20';
 export * from './I18n';
 export * from './MBoxContractContext';
 export * from './NFTContractContext';
-export * from './RSS3Provider';
+export * from './StorageProvider';
 export * from './ThemeProvider';
 export * from './UploadProvider';
 export * from './Web3Context';

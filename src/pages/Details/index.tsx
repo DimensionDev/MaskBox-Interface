@@ -42,14 +42,14 @@ export const Details: FC = memo(() => {
   const { skips, ignoreIds } = useIgnoreBoxes();
   const forbidden = boxId ? skips >= parseInt(boxId) || ignoreIds.includes(boxId) : true;
 
-  const { boxOnSubgraph, boxOnRSS3, boxOnChain, refetch, loading } = useBox(boxId ?? '');
+  const { boxOnSubgraph, boxOnStorage, boxOnChain, refetch, loading } = useBox(boxId ?? '');
   const box = useMemo(
     () => ({
       ...boxOnChain,
-      ...boxOnRSS3,
+      ...boxOnStorage,
       ...boxOnSubgraph,
     }),
-    [boxOnChain, boxOnRSS3, boxOnSubgraph],
+    [boxOnChain, boxOnStorage, boxOnSubgraph],
   );
 
   const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();
@@ -150,7 +150,7 @@ export const Details: FC = memo(() => {
           className={styles.maskbox}
           boxOnSubgraph={boxOnSubgraph}
           boxOnChain={boxOnChain}
-          boxOnRSS3={boxOnRSS3}
+          boxOnStorage={boxOnStorage}
           onPurchase={openBuyBox}
           isWhitelisted={isWhitelisted}
           isFetchingProof={isFetchingProof}

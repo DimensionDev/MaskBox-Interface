@@ -2,7 +2,7 @@ import { Button, ButtonProps, Icon, Image, LoadingIcon, SNSShare, VideoPlayer } 
 import { RouteKeys } from '@/configs';
 import { useWeb3Context } from '@/contexts';
 import { DEFAULT_MERKLE_PROOF } from '@/constants';
-import { BoxRSS3Node } from '@/contexts/RSS3Provider';
+import { BoxStringStorageNode } from '@/contexts/StorageProvider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
 import { getNetworkExplorer, ZERO } from '@/lib';
@@ -18,8 +18,8 @@ import styles from './index.module.less';
 export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
   boxOnSubgraph: MaskBoxQuery['maskbox'];
   boxOnChain: Partial<BoxOnChain> | null;
-  boxOnRSS3: Partial<
-    Pick<BoxRSS3Node, 'name' | 'mediaType' | 'mediaUrl' | 'activities' | 'qualification_rss3'>
+  boxOnStorage: Partial<
+    Pick<BoxStorageNode, 'name' | 'mediaType' | 'mediaUrl' | 'activities' | 'qualification_rss3'>
   > | null;
   inList?: boolean;
   onPurchase?: () => void;
@@ -29,7 +29,7 @@ export interface MaskboxProps extends HTMLProps<HTMLDivElement> {
 
 export const Maskbox: FC<MaskboxProps> = ({
   boxOnSubgraph,
-  boxOnRSS3,
+  boxOnStorage,
   boxOnChain,
   className,
   inList,
@@ -42,11 +42,11 @@ export const Maskbox: FC<MaskboxProps> = ({
   const box = useMemo(
     () => ({
       ...boxOnChain,
-      ...boxOnRSS3,
+      ...boxOnStorage,
       ...boxOnSubgraph,
-      name: boxOnRSS3?.name ?? boxOnSubgraph?.name ?? boxOnChain?.name,
+      name: boxOnStorage?.name ?? boxOnSubgraph?.name ?? boxOnChain?.name,
     }),
-    [boxOnChain, boxOnRSS3, boxOnSubgraph],
+    [boxOnChain, boxOnStorage, boxOnSubgraph],
   );
   const { holder_min_token_amount, holder_token_addr } = box;
   const chainId = box.chain_id;

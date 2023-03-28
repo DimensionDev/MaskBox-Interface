@@ -1,4 +1,4 @@
-import { useRSS3 } from '@/contexts';
+import { useStringStorage } from '@/contexts';
 import { useMaskBoxLazyQuery } from '@/graphql-hooks';
 import { BoxMetas, MediaType } from '@/types';
 import { getAddress } from 'ethers/lib/utils';
@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { useBoxInfo } from './useBoxInfo';
 
 export function useBox(boxId: string | null) {
-  const [boxOnRSS3, setBoxOnRSS3] = useState<BoxMetas | null>(null);
-  const { getBoxMetas } = useRSS3();
+  const [boxOnStorage, setBoxOnStorage] = useState<BoxMetas | null>(null);
+  const { getBoxMetas } = useStringStorage();
 
   const { box: boxOnChain, fetch: refetchBoxOnChain } = useBoxInfo(boxId);
 
@@ -25,13 +25,13 @@ export function useBox(boxId: string | null) {
   const box = boxData?.maskbox;
   useEffect(() => {
     if (!box?.creator || !box?.box_id) {
-      setBoxOnRSS3(null);
+      setBoxOnStorage(null);
       return;
     }
     getBoxMetas(getAddress(box.creator), box.box_id)
       .then((data) => {
         if (data) {
-          setBoxOnRSS3({
+          setBoxOnStorage({
             id: data.id,
             name: data.name,
             mediaType: data.mediaType as MediaType,
@@ -52,7 +52,7 @@ export function useBox(boxId: string | null) {
 
   return {
     boxOnSubgraph: boxData?.maskbox,
-    boxOnRSS3,
+    boxOnStorage,
     boxOnChain,
     refetch: refetchBoxOnChain,
     loading,
