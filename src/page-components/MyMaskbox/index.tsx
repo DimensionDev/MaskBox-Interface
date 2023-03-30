@@ -110,7 +110,6 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const withdraw = useCallback(async () => {
     startWithdrawing();
     const result = await claimPayment(boxId);
-    console.log({ result });
     const { decimals, symbol } = paymentToken ?? { decimals: 1, symbol: '' };
     finishWithdrawing();
     if (result) {

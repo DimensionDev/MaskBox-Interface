@@ -81,7 +81,7 @@ export const StringStorageProvider: FC = ({ children }) => {
     async (key: string, value: string, address: string) => {
       if (!key || !value || !address) return;
       const signer = ethersProvider?.getSigner();
-      const signature = await signer.signMessage(value);
+      const signature = await signer?.signMessage(value);
       if (!signature) throw new Error('signature error!');
 
       const response = await fetch(`${endpoint}/set`, {
@@ -104,19 +104,14 @@ export const StringStorageProvider: FC = ({ children }) => {
   );
 
   const getFromStringStorage = useCallback(async (key: string, address: string) => {
-    if (!key || !address) return '';
-    const response = await fetch(
-      urlcat(`${endpoint}/get`, {
-        key: `MaskBox-${key}`,
-        address,
-      }),
-    );
+    if (!key || !address) return;
+    const response = await fetch(`${endpoint}/get?key=MaskBox-${key}&address=${address}`);
     if (!response.ok) return;
     const result: { code: number; reason: string; message: string; metaData: { value: string } } =
       await response.json();
-
-    return result.metaData.value;
-  });
+    if (!result.metaData?.value) return;
+    return JSON.parse(result.metaData.value);
+  }, []);
 
   const saveBox = useCallback(
     async <T extends { id: string }>(box: T) => {
@@ -129,10 +124,9 @@ export const StringStorageProvider: FC = ({ children }) => {
 
   const getBoxMetas = useCallback(async (owner: string, boxId: string | number) => {
     const checksumAddress = utils.getAddress(owner);
-    const result = getFromStringStorage(boxId, owner);
+    const result = getFromStringStorage(boxId.toString(), checksumAddress);
     if (!result) throw new Error(`Meta info for box ${boxId} was not found`);
-
-    return JSON.parse(result);
+    return result;
   }, []);
 
   const contextValue = {
@@ -144,6 +138,3 @@ export const StringStorageProvider: FC = ({ children }) => {
     <StringStorageContext.Provider value={contextValue}>{children}</StringStorageContext.Provider>
   );
 };
-function urlcat(arg0: string, arg1: { key: string; address: string }): RequestInfo | URL {
-  throw new Error('Function not implemented.');
-}

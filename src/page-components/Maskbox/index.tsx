@@ -2,7 +2,7 @@ import { Button, ButtonProps, Icon, Image, LoadingIcon, SNSShare, VideoPlayer } 
 import { RouteKeys } from '@/configs';
 import { useWeb3Context } from '@/contexts';
 import { DEFAULT_MERKLE_PROOF } from '@/constants';
-import { BoxStringStorageNode } from '@/contexts/StorageProvider';
+import { BoxStorageNode } from '@/contexts/StorageProvider';
 import { MaskBoxQuery } from '@/graphql-hooks';
 import { useBalance, useERC20Token, useERC721 } from '@/hooks';
 import { getNetworkExplorer, ZERO } from '@/lib';
