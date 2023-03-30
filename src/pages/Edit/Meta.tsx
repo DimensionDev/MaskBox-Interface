@@ -10,7 +10,7 @@ import {
   UploadButton,
 } from '@/components';
 import { RouteKeys } from '@/configs';
-import { usePickERC20, useRSS3, useWeb3Context } from '@/contexts';
+import { usePickERC20, useStringStorage, useWeb3Context } from '@/contexts';
 import { useERC721, useLazyLoadERC721Tokens, useTokenList } from '@/hooks';
 import { createShareUrl, ZERO_ADDRESS } from '@/lib';
 import {
@@ -91,7 +91,7 @@ export const Meta: FC = () => {
     [ownedERC721Tokens, selectedNFTIds],
   );
 
-  const { saveBox } = useRSS3();
+  const { saveBox } = useStringStorage();
   const [confirmDialogVisible, openConfirmDialog, closeConfirmDialog] = useBoolean();
   const [whitelistNumber, setwhitelistNumber] = useState(0);
   const [shareBoxVisible, openShareBox, closeShareBox] = useBoolean();

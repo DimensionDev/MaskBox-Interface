@@ -1,6 +1,6 @@
 import { Badge, Button, Dialog, Icon, Image, showToast, SNSShare, VideoPlayer } from '@/components';
 import { RouteKeys } from '@/configs';
-import { useBoxOnRSS3, useWeb3Context } from '@/contexts';
+import { useBoxOnStorage, useWeb3Context } from '@/contexts';
 import { MaskBoxesOfQuery, useMaskBoxClaimedStatusLazyQuery } from '@/graphql-hooks';
 import {
   useBoxInfo,
@@ -37,7 +37,7 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const [cancelDialogVisible, openCancelDialog, closeCancelDialog] = useBoolean();
   const [editDialogVisible, openEditDialog, closeEditDialog] = useBoolean();
 
-  const boxOnRSS3 = useBoxOnRSS3(boxOnSubgraph?.creator, boxIdOnSubgraph);
+  const boxOnStorage = useBoxOnStorage(boxOnSubgraph?.creator, boxIdOnSubgraph);
   const [fetchClaimeStatus] = useMaskBoxClaimedStatusLazyQuery({
     variables: {
       id: boxOnSubgraph.id,
@@ -47,11 +47,11 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const box = useMemo(
     () => ({
       ...boxOnChain,
-      ...boxOnRSS3,
+      ...boxOnStorage,
       ...boxOnSubgraph,
-      name: boxOnRSS3.name ?? boxOnSubgraph.name ?? boxOnChain?.name,
+      name: boxOnStorage.name ?? boxOnSubgraph.name ?? boxOnChain?.name,
     }),
-    [boxOnChain, boxOnRSS3, boxOnSubgraph],
+    [boxOnChain, boxOnStorage, boxOnSubgraph],
   );
   const payment = box.payment?.[0];
   const paymentToken = useERC20Token(payment?.token_addr);
@@ -110,7 +110,6 @@ export const MyMaskbox: FC<Props> = ({ className, boxOnSubgraph, ...rest }) => {
   const withdraw = useCallback(async () => {
     startWithdrawing();
     const result = await claimPayment(boxId);
-    console.log({ result });
     const { decimals, symbol } = paymentToken ?? { decimals: 1, symbol: '' };
     finishWithdrawing();
     if (result) {

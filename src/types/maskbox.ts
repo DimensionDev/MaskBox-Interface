@@ -47,7 +47,7 @@ export interface Activity {
   body: string;
 }
 
-// TODO inherits from BoxRSS3Node
+// TODO inherits from BoxStorageNode
 export interface BoxMetas {
   id: string;
   name: string;
