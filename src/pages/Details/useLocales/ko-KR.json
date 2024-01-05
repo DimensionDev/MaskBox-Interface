@@ -1,1 +1,9 @@
-{}
+{
+  "Details": "디테일",
+  "Load more": "좀 더 로딩",
+  "Loading more": "좀 더 로딩",
+  "All NFTs have been loaded :)": "모든 NFTs 로딩됩니다.",
+  "share-to-twitter": "MaskBox에서 NFT 하나를 뽑았습니다. @realMaskNetwork 팔로우하고 더 많은 업데이트를 확인하세요. - {link}",
+  "Details ({count} NFTs)": "디테일 ({count} NFTs)",
+  "MaskBox is not found": "생성된 MaskBox가 없습니다."
+}

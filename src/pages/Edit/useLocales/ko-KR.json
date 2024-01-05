@@ -1,1 +1,27 @@
-{}
+{
+  "Create MaskBox": "MaskBox 만들기",
+  "Wallet account": "월렛 계정",
+  "Collections": "컬렉션",
+  "Total Amount": "수량",
+  "Creating...": "생성 중...",
+  "Confirm": "확인",
+  "Description": "설명",
+  "MaskBox name": "MaskBox 이름",
+  "eg. Punk & Mask Special Edition": "eg. Punk & Mask Special Edition",
+  "Mystery thumbnail": "미스터리 섬네일",
+  "Recommendation: 480*320/960*640": "추전 양식: 480*320/960*640",
+  "Activity description": "이벤트 설명",
+  "eg.Rule Introduction": "예: 규칙 설명",
+  "Write Something..": "무언가 더 적어보세요.",
+  "Reset": "초기화",
+  "Add": "추가",
+  "Delete": "삭제",
+  "Next": "다음",
+  "Uploading thumbnail...": "섬네일 업로드",
+  "Drag or Choose file": "파일을 선택하거나 끌어 놓으세요.",
+  "Creating Mystery Box": "미스터리 박스 만들기",
+  "Fails to create: {reason}": "생성 실패: {reason}",
+  "Contract": "컨트랙트",
+  "Go back": "돌아가기",
+  "Price per box": "박스당 가격"
+}
